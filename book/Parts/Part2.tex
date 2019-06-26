@@ -1,0 +1,145 @@
+\part{Part 2: Conservation Laws}
+
+\chapterimage{chapter_head_2.pdf} % Chapter heading image
+
+\chapter{Conservation Laws}
+Some of the most powerful tools in classical mechanics, including fluid mechanics, are conservation laws. Arising from the profound physical insights of Newton, Leibniz, and others, these laws ensure that the total amount of certain physical quantities within a volume are conserved. For example, conservation of mass ensures that the total mass of a system remains constant, conservation of momentum ensures that the total momentum of a system remains constant, and conservation of energy ensures that the total energy of a system remains constant. That is, given an isolated physical system, the total mass, momentum, and energy should remain constant and, conversely, for an open system the change in mass, momentum, and energy is equal to the amount that enters/leaves the system across its boundaries.
+
+While these concepts can be applied by a high-school student for simple systems, such as elastic/inelastic collisions between partciles, their application to fluid mechanics is less trivial. Nevertheless, the fundamental concepts of conservation of mass, momentum, and energy still apply to fluids just as well as they do to individual particles, it is only the mathematics that becomes more complex. It is expected that students reading this book have already taken an undergraduate course in fluid mechanics and are familiar with conservation laws. Nevertheless, this chapter reviews these concepts for completeness, and to establish the notation used in the rest of the book.
+
+\section{Integral Form}\index{Integral Form}
+Before tackling conservation of mass, momentum, and energy in their entirety, we will first consider an arbitrary conserved scalar quantity $u(\vec{x},t)$, where $\vec{x}$ and $t$ are the spatial coordinate and time, respectively. In the first instance it can be intuitive, but not necessary, to think of this conserved scalar as density. We start by imagining an arbitrary stationary control volume, denoted by $\Omega$, which is embedded in a larger fluid flow. We also denote the surface of this volume by $S$ and the outward pointing normal vector on this surface by $\hat{n}$. This is the entire geometry needed to create a general conservation law: a volume over which the conservation law will apply, the surface of that volume, and the normal vector to the surface.
+
+With the geometry definition completed, we can now work on the conserved quantity $u$. The first thing we can determine is the total amount of $u$ within the volume at any moment in time. We will denote this total amount by $U(t)$, which is only a function of time. If we were to think of $u(\vec{x},t)$ as density, then $U(t)$ would be the mass of the fluid contained within the volume $\Omega$ at time $t$. We can get $U(t)$ by simply adding up, or integrating, the conserved quantity $u$ over the control volume. This can be written as
+\begin{equation}
+	\label{eqn:totalcons}
+	U(t) = \int_\Omega u(\vec{x},t) d\vec{x},
+\end{equation}
+noticing that the dependence on space is lost after integration. Since $u$ is a conserved quantity, then the total amount $U$ should not change with time unless some amount of it is crossing the surface of the volume. To quantify this, we must first introduce the concept of a flux.
+
+One of the most fundamental observations in fluid mechanics is that conserved quantities, including mass, momentum, and energy move around with time. At any point in space we can denote this motion by a flux vector $\vec{F}(\vec{x},t)$. The alignment of the flux vector denotes what direction the conserved quantity $u$ is moving in at any point in space. Furthermore, the magnitude of the flux, denoted by $|\vec{F}|$, is the total rate of transfer of the conserved quantity per unit area. Concisely, $\vec{F}$ tells us what direction the conserved quantity is moving in, and how much of it is being moved per unit area.
+
+With the concept of a flux established, we can now quantify the rate at which the conserved quantity is entering/leaving the control volume. As noted previously, the only way for $u$ to enter/leave our closed control volume is by crossing the surface $S$. However, in order for something to cross a surface it must be moving {\it normal} to it, otherwise it will just move along the surface and not enter the control volume. Hence, we can get the normal flux at any point on the surface via the normal vector. Then we can get the total amount of $u$ crossing the surface $S$ by adding up, or integrating, the normal flux at every point on the surface
+\begin{equation}
+	\label{eqn:totalflux}
+	F(t) = \oint_S \vec{F}(\vec{x},t) \cdot \hat{n} ds,
+\end{equation}
+where $F(t)$ is the total rate of the conserved quantity entering/leaving the control at a given time. Hence, we are able to determine the rate at which the conserved variable is entering/leaving the control volume.
+
+Finally, to create our conservation law we combined the concepts in Equations \ref{eqn:totalcons} and \ref{eqn:totalflux}. We note that the rate of change of the total amount of the conserved variable within the control volume is equal to the rate at which the conserved variable enters/leaves across the surface. For example, if the conserved variable is density, than the rate at which the mass of our control volume changes is equal to the rate that mass crosses the control volume surface. Mathematically this can be written as
+\begin{equation}
+	\frac{dU(t)}{dt} + F(t) = 0,
+\end{equation}
+noting that the positive in front of the total flux is due to our normal vector being outward pointing. Expanding this we obtain the final statement for our general conservation law in integral form
+\begin{equation}
+	\label{eqn:totalcons}
+	\frac{d}{dt}\int_\Omega u d\vec{x} + \oint_S \vec{F} \cdot \hat{n} ds = 0.
+\end{equation}
+\begin{remark}
+Concepts from this section will arise later when we explore on the finite-volume method. It is also worth noting that deriving a conservation law requires one to know only the conserved quantity of interest and its corresponding flux function.
+\end{remark}
+
+\section{Divergence Form}\index{Divergence Form}
+Looking back at the previous section, we note that Equation \ref{eqn:totalcons} is a general conservation law for a finite control volume. In some contexts, specifically when using the finite-volume method, this is the form of governing equations that is used. However, other approaches in CFD use an equivalent {\it divergence form} of Equation \ref{eqn:totalcons}. To derive this form we rely on the divergence theorem, also known as Gauss theorem.
+\begin{theorem}[Divergence Theorem]
+Divergence theorem states that integrals of the following form are equivalent for a continuously differentiable vector field $\vec{F}$
+\begin{align}
+\int_\Omega \nabla \cdot \vec{F} d\vec{x} = \oint_S \vec{F} \cdot \hat{n} ds,
+\end{align}
+which allows us to transform volume integrals into surface integrals, and the opposite.
+\end{theorem}
+Hence, via the divergence theorem, we can rewrite Equation \ref{eqn:totalcons} as
+\begin{equation}
+	\frac{d}{dt}\int_\Omega u(\vec{x},t) d\vec{x} + \int_\Omega \nabla \cdot \vec{F}(\vec{x},t) d\vec{x} = 0,
+\end{equation}
+and noting the differentiation and integration in the first term commute
+\begin{equation}
+	\int_\Omega \frac{\partial}{\partial t} u(\vec{x},t) d\vec{x} + \int_\Omega \nabla \cdot \vec{F}(\vec{x},t) d\vec{x} = 0,
+\end{equation}
+and then grouping the two integrands
+\begin{equation}
+	\label{eqn:divergencepart}
+	\int_\Omega \left( \frac{\partial}{\partial t} u(\vec{x},t) + \nabla \cdot \vec{F}(\vec{x},t) \right) d\vec{x} = 0.
+\end{equation}
+Considering Equation \ref{eqn:divergencepart}, in order for this equality hold for general functions we require that the integrand be zero, ensuring that the total integral is zero. Hence, the divergence form of a general conservation law is
+\begin{equation}
+	\label{eqn:divergencedone}
+	\frac{\partial u}{\partial t} + \nabla \cdot \vec{F} = 0.
+\end{equation}
+Enforcing that the integrand is zero in Equation \ref{eqn:divergencedone} ensures that the divergence form of the conservation law applies at every point in the domain. Also, just like the integral form, the divergence form is easily applied for any conserved quantity for which we know the flux function.
+
+\begin{remark}
+A subtle difference between the two forms of the conservation law is that the integral form applies to control volumes and the divergence form applies at points. This will become important in choosing what form to use for CFD, and will be explored later.
+\end{remark}
+
+\chapter{The Euler Equations}
+Widely used for aerospace design, the Euler equations are suitable for inviscid compressible flows. While more expensive than simpler vortex panel methods, they are often preferred due to their ability to handle non-linear compressibility effects such as shockwaves. However, since they neglect all diffusive terms, the Euler equations are not suitable for flows involving significant viscous effects, such as boundary layers and flow separation.
+
+\section{Integral Form}\index{Integral Form}
+
+\subsection{Conservation of Mass}
+When considering conservation of mass, the conserved variable is the density $\rho(\vec{x},t)$. Furthermore, this local density is moved by the local velocity field. Hence, the flux function for conservation of mass is 
+\begin{equation}
+	\vec{F} = \rho \vec{v},
+\end{equation}
+where $\vec{v} = \vec{v}(\vec{x},t)$ is the velocity field. Plugging these into Equation \ref{eqn:totalcons} yields conservation of mass in integral form for the Euler equations
+\begin{equation}
+	\frac{d}{dt}\int_\Omega \rho d\vec{x} + \oint_S (\rho \vec{v}) \cdot \hat{n} ds = 0.
+\end{equation}
+
+
+\subsection{Conservation of Momentum}
+When considering conservation of mass, the conserved variable is the momentum per unit volume $\rho \vec{v}$. Since the velocity field is a vector, there are the same number of momentum terms as there are physical dimensions, one per coordinate direction. For the flux function, each component of the momentum is moved by the fluid due to the local fluid velocity. Hence, 
+
+\subsection{Conservation of Energy}
+
+\section{Divergence Form}\index{Divergence Form}
+
+\subsection{Conservation of Mass}
+Using the same conserved variable and flux function as the integral form, we can derive the divergence form of conservation of mass using Equation \ref{eqn:divergencedone}
+\begin{equation}
+	\label{eqn:divergencedone}
+	\frac{\partial \rho}{\partial t} + \nabla \cdot (\rho \vec{v}) = 0.
+\end{equation}
+
+\subsection{Conservation of Momentum}
+
+\subsection{Conservation of Energy}
+
+\chapter{The Navier-Stokes Equations}
+
+\section{Integral Form}\index{Integral Form}
+
+\subsection{Conservation of Mass}
+
+\subsection{Conservation of Momentum}
+
+\subsection{Conservation of Energy}
+
+\section{Divergence Form}\index{Divergence Form}
+
+\subsection{Conservation of Mass}
+
+\subsection{Conservation of Momentum}
+
+\subsection{Conservation of Energy}
+
+\chapter{Simplified Systems}
+
+\section{Linear Advection}\index{Linear Advection}
+
+\section{Integral Form}\index{Integral Form}
+
+\section{Divergence Form}\index{Divergence Form}
+
+\section{Burgers Equation}\index{Burgers Equation}
+
+\section{Integral Form}\index{Integral Form}
+
+\section{Divergence Form}\index{Divergence Form}
+
+\section{Linear Diffusion}\index{Linear Diffusion}
+
+\section{Integral Form}\index{Integral Form}
+
+\section{Divergence Form}\index{Divergence Form}

@@ -338,6 +338,18 @@ rightmargin=0cm,
 linewidth=4pt,
 innerbottommargin=5pt]{cBox}
 
+% Equation box
+\newmdenv[skipabove=2pt,
+skipbelow=7pt,
+backgroundcolor=black!5,
+linecolor=ocre,
+innerleftmargin=5pt,
+innerrightmargin=5pt,
+innertopmargin=-8pt,
+leftmargin=0cm,
+rightmargin=0cm,
+innerbottommargin=5pt]{eqBox}
+
 % Creates an environment for each type of theorem and assigns it a theorem text style from the "Theorem Styles" section above and a colored box from above
 \newenvironment{theorem}{\begin{tBox}\begin{theoremeT}}{\end{theoremeT}\end{tBox}}
 \newenvironment{exercise}{\begin{eBox}\begin{exerciseT}}{\hfill{\color{ocre}\tiny\ensuremath{\blacksquare}}\end{exerciseT}\end{eBox}}				  

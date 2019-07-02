@@ -1,0 +1,41 @@
+\part{Part 3: Finite Difference Methods}
+
+\chapterimage{chapter_head_2.pdf} % Chapter heading image
+
+\chapter{Taylor-Series}
+To begin our exploration of CFD we will state with the so-called Finite Difference Method (FDM). This approach uses conservation laws in {\it divergence form}. We start by recalling a few of the simplified conservation laws we derived in the previous section, specifically the linear advection, Burgers, and linear diffusion equations
+\begin{eqBox}
+\begin{equation}
+	\frac{\partial u}{\partial t} +  \alpha \frac{\partial u}{\partial x} = 0,
+\end{equation}
+\begin{equation}
+	\frac{\partial u}{\partial t} +  \frac{1}{2} \frac{\partial u^2}{\partial x} = 0,
+\end{equation}
+\begin{equation}
+	\frac{\partial u}{\partial t} - \alpha \frac{\partial^2 u}{\partial x^2} = 0.
+\end{equation}
+\end{eqBox}
+We notice that the form of all of these equations is very similar. All three involve a time derivative combined with a constant coefficient multiplied by a spatial derivative. It turns out that the Finite Difference Method uses well-known concepts from applied mathematics, specifically the Taylor-Series, by effectively using it backwards. Hence, before deriving the Finite Difference Method we will start by reviewing Taylor-Series first.
+
+Taylor series, arises from Taylors theorem, says that, for any smooth function, the value of a function at some point $x + \Delta x$ can be predicted by using the value of the solution at the point $x$ along with knowledge of all derivatives at that point.
+\begin{theorem}[Taylor's Theorem]
+Let $k \geq 1$ and letting $f(x)$ be smooth and differentiable $k$ times then
+\begin{align}
+f(x + \Delta x) = f(x) + \frac{\partial f}{\partial x}\frac{\Delta x}{1!} + \frac{\partial^2 f}{\partial x^2}\frac{\Delta x}{2!} + \hdots + \frac{\partial^k f}{\partial x^k}\frac{\Delta x}{k!},
+\end{align}
+\end{theorem}
+For example, one can imagine trying to predict what the weather will be tomorrow based on the weather today. Without any other information, the simplest answer one could give is that the weather tomorrow will be the same as the weather today. This is effectively the first term of a Taylor-Series. This will be reasonable accurate, for example, two days in the same season should have relatively similar temperatures. However, if we also know that the weather today was warmer that yesterday, then it is likely that the weather tomorrow will be even warmer than today. Hence, by knowing the derivative, it is getting warmer, we effectively add one term to our Taylor-Series to improve the accuracy of our prediction of the weather.
+	
+\section{Grid Spacing}\index{Grid Spacing}
+
+\section{Number of Terms}\index{Number of Terms}
+
+\chapter{Finite Difference Methods}
+
+\chapter{Examples}
+
+\section{Linear Advection}\index{Linear Advection}
+
+\section{Burgers Equation}\index{Burgers Equation}
+
+\section{Linear Diffusion}\index{Linear Diffusion}

@@ -34,9 +34,6 @@ To create our conservation law we combine the concepts in Equations \ref{eqn:tot
 	\frac{dU_{System}}{dt} = \frac{d}{dt}\int_\Omega u d\vec{x} + \oint_S u (\vec{v} \cdot \hat{n}) ds,
 \end{equation}
 noting that the positive in front of the surface term is due to our normal vector being outward pointing. Known as Reynolds Transport Theorem, this will be the foundation for deriving our conservation of mass, momentum, and energy equations for fluid flows.
-\begin{remark}
-Concepts from this section will arise later when we explore on the finite-volume method. It is also worth noting that deriving a conservation law requires one to know only the conserved quantity of interest and its corresponding flux function.
-\end{remark}
 
 \chapter{The Navier Stokes Equations}
 
@@ -115,7 +112,7 @@ Similarly, the work done by viscous forces, $\dot{W}_v$, is due to the product o
 \end{equation}
 In the above equations note that, by convention, work is defined as from the system to the surroundings.
 
-The second what that energy can be transferred to the system across the surfaces is thermal diffusion via conduction, denoted by $\dot{Q}$. From Fourier's law the heat diffused at any point in the fluid is
+The second way that energy can be transferred to the system across the surfaces is thermal diffusion via conduction, denoted by $\dot{Q}$. From Fourier's law the heat diffused at any point in the fluid is
 \begin{equation}
 	\vec{q} = -k \nabla T,
 \end{equation}
@@ -231,10 +228,105 @@ Considering the compact integral form given in Equation \ref{eqn:compactintegral
 
 \chapter{Simplified Systems}
 
+One might notice that the Navier-Stokes equations derived in the previous chapter are a complex system of coupled non-linear partial differential equations. This is not something that sounds particularly easy to solve! Hence, in CFD we often consider {\it simplified} systems of equations first, neglecting or decoupling some of the physical mechanisms that are involved in the full Navier-Stokes equations. This allows us to play with different ideas quickly and with relative ease. Then, once we understand of how to solve different parts of these simplified equations, we will combine these ideas later to solve the full Navier-Stokes equations. 
+
 \section{Euler Equations}\index{Euler Equations}
+The Euler equations, although they were actually derived prior Navier-Stokes, can be obtained by simply neglecting viscous effects. Hence, we can ignore physical viscosity and thermal diffusion. While historically the Euler equations were the state-of-the-art in CFD, their lack of viscosity means they are unsuitable for predicting boundary layers. Nevertheless, they are still useful for predicting many flow phenomena, such as shockwaves.
+
+In integral form the Euler equations are
+\begin{eqBox}
+\begin{equation}
+	 \frac{d}{dt}\int_\Omega \rho d\vec{x} + \oint_S \rho \vec{v} \cdot \hat{n} ds = 0,
+\end{equation}
+\begin{equation}
+	\frac{d}{dt}\int_\Omega \rho \vec{v} d\vec{x} + \oint_S \left[ \rho \vec{v} \oplus \vec{v} + p \mathbf{I} \right]\cdot \hat{n} ds =  0,
+\end{equation}
+\begin{equation}
+	\frac{d}{dt}\int_\Omega \rho e d\vec{x} + \oint_S \left[ \rho e \vec{v} + p\vec{v} \right] \cdot \hat{n} ds = 0,
+\end{equation}
+\end{eqBox}
+for conservation of mass, momentum, and energy, respectively. Similarly, in divergence form the Euler equations are
+\begin{eqBox}
+\begin{equation}
+	 \frac{\partial \rho}{\partial t} + \nabla \cdot (\rho \vec{v}) = 0,
+\end{equation}
+\begin{equation}
+	\frac{\partial \rho \vec{v}}{\partial t} + \nabla \cdot \left[ \rho \vec{v} \oplus \vec{v} + p \mathbf{I} \right] =  0,
+\end{equation}
+\begin{equation}
+	\frac{\partial \rho e}{\partial t} + \nabla \cdot \left[ \rho e \vec{v} + p\vec{v} \right] = 0,
+\end{equation}
+\end{eqBox}
+for conservation of mass, momentum, and energy.
 
 \section{Linear Advection}\index{Linear Advection}
+Even if we consider the Euler equations, we notice that they are still relatively complex and difficult to solve. In what follows we will use a set of thought experiments to generate a set of three much simpler equations that will be a starting point for our initial exploration of CFD. To start, we will derive the so-called linear advection equation. We begin our thought experiment by considering a fluid flow that has uniform velocity throughout the domain. Furthermore, we will decouple conservation of mass from the other two conservation laws. 
+
+Now we can imagine that our fluid flow, with constant velocity everywhere such that $\vec{v}(\vec{x},t) = \vec{\alpha}$, has some blob of fluid that is dense relative to the rest of the fluid around it. For example, it could be slightly colder, increasing its density. What should happen to this blob of fluid over time? Well since the fluid is all moving at the same velocity $\vec{\alpha}$ we would expect the blob of dense fluid to simply move along with the rest of the flow and, hence, the blob should move at velocity $\vec{\alpha}$.
+
+Mathematically this yields the following integral and differential forms for the linear advection equation by using conservation of mass and replacing the velocity by a constant velocity field $\vec{\alpha}$ and the density by a general scalar $u$ we obtain,
+\begin{eqBox}
+\begin{equation}
+	\frac{d}{dt}\int_\Omega u d\vec{x} + \oint_S (\vec{\alpha}u) \cdot \hat{n} ds = 0.
+\end{equation}
+and
+\begin{equation}
+	\frac{\partial u}{\partial t} + \nabla \cdot (\vec{\alpha} u) = 0.
+\end{equation}
+\end{eqBox}
+Furthermore, if we restrict ourselves to one-dimensional problems we obtain the following integral and differential forms for linear advection
+\begin{eqBox}
+\begin{equation}
+	\frac{d}{dt}\int_\Omega u dx + \alpha \oint_S u \cdot \hat{n} ds = 0,
+\end{equation}
+and
+\begin{equation}
+	\frac{\partial u}{\partial t} +  \alpha \frac{\partial u}{\partial x} = 0.
+\end{equation}
+\end{eqBox}
 
 \section{Burgers Equation}\index{Burgers Equation}
+Our second simplified system, known as Burgers equation, is useful as a simplified model for compressible flow features such as shocks and expansion fans. To derive Burgers equation we start with the momentum equation, decoupled from conservation of mass and conservation of energy. Then, neglecting the effects of viscosity and pressure, we replace the momentum with an arbitrary conserved variable $u$, and restrict ourselves to one physical dimension. 
+
+This yields the following integral and differential forms of the Burgers equation
+\begin{eqBox}
+\begin{equation}
+	 \frac{d}{dt}\int_\Omega u dx + \frac{1}{2}\oint_S u^2 \cdot \hat{n} ds =  0,
+\end{equation}
+and
+\begin{equation}
+	\frac{\partial u}{\partial t} +  \frac{1}{2} \frac{\partial u^2}{\partial x} = 0.
+\end{equation}
+\end{eqBox}
+noting that the factor of one half is added to the spatial term by convention.
+
+If we consider the divergence form of Burgers' equation, applying chain rule to the spatial derivative operator yields
+\begin{equation}
+	\frac{\partial u}{\partial t} +  u \frac{\partial u}{\partial x} = 0.
+\end{equation}
+We note that this looks remarkably similar to the divergence form of the linear advection equation, also in one dimension. However, the advection velocity $\alpha$, which appears infront of the spatial derivative for linear advection, has instead been replaced by $u$, the value of the solution. Hence, Burgers equation has similar behaviour to linear advection, except the velocity at any point in space is {\it equal} to the value of the solution at that point, rather than being a constant value throughout the domain.
 
 \section{Linear Diffusion}\index{Linear Diffusion}
+Our third and final simplified equation, known as linear diffusion, starts again from a simple thought experiment. First, we will consider only the energy equation decoupled from conservation of mass and momentum. We will now imagine that we have a stationary fluid with zero velocity everywhere in the domain. Similar to linear advection, we will consider a flow with some blob of fluid with more energy than the fluid around it. Since all of the fluid is stationary, this extra energy must come in the form of heat. As time goes on, we would expect that this local region of hot fluid would diffuse some of its heat over time to the cold fluid that is adjacent to it. Hence, over time an initially concentrated blob of heat would spread out, until eventually all of the fluid is at the same temperature.
+
+Mathematically, the equation describing this can be obtained by taking $\alpha = k/{\rho c_v}$ as a constant scalar and replacing $e$ with a generic scalar $u$. We can then rewrite the energy equation in multiple dimensions as
+\begin{eqBox}
+\begin{equation}
+\frac{d}{dt}\int_\Omega u d\vec{x} + \oint_S \left[ - \alpha \nabla u \right] \cdot \hat{n} ds = 0.
+\end{equation}
+and
+\begin{equation}
+\frac{\partial u}{\partial t} - \nabla \cdot (\alpha \nabla u) = 0,
+\end{equation}
+\end{eqBox}
+in integral and divergence form, respectively. Furthermore, if we restrict ourselves to one dimension we obtain
+\begin{eqBox}
+\begin{equation}
+\frac{d}{dt}\int_\Omega u dx + \oint_S \left[ - \alpha  \frac{\partial u}{x} \right] \cdot \hat{n} ds = 0.
+\end{equation}
+and
+\begin{equation}
+\frac{\partial u}{\partial t} - \alpha \frac{\partial^2 u}{\partial x^2} = 0.
+\end{equation}
+\end{eqBox}
+At this point it is worth noting that the form of the linear diffusion equation is similar to the linear advection equation, except we are taking the second derivative rather than the first.

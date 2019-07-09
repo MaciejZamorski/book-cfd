@@ -15,21 +15,53 @@ To begin our exploration of CFD we will state with the so-called Finite Differen
 	\frac{\partial u}{\partial t} - \alpha \frac{\partial^2 u}{\partial x^2} = 0.
 \end{equation}
 \end{eqBox}
-We notice that the form of all of these equations is very similar. All three involve a time derivative combined with a constant coefficient multiplied by a spatial derivative. It turns out that the Finite Difference Method uses well-known concepts from applied mathematics, specifically the Taylor-Series, by effectively using it backwards. Hence, before deriving the Finite Difference Method we will start by reviewing Taylor-Series first.
+We notice that the form of all of these equations is very similar. All three involve a time derivative combined with a coefficient multiplied by a spatial derivative. The Finite Difference Method uses well-known concepts from applied mathematics, specifically Taylor-Series. Hence, before deriving the Finite Difference Method we will start by reviewing Taylor-Series.
 
-Taylor series, arises from Taylors theorem, says that, for any smooth function, the value of a function at some point $x + \Delta x$ can be predicted by using the value of the solution at the point $x$ along with knowledge of all derivatives at that point.
+Arising from Taylors theorem, Taylor series says that the value of a smooth function at some point $x + \Delta x$ can be predicted by using the value of the solution at the point $x$ along with knowledge of all derivatives at the point $x$.
 \begin{theorem}[Taylor's Theorem]
 Let $k \geq 1$ and letting $f(x)$ be smooth and differentiable $k$ times then
 \begin{align}
-f(x + \Delta x) = f(x) + \frac{\partial f}{\partial x}\frac{\Delta x}{1!} + \frac{\partial^2 f}{\partial x^2}\frac{\Delta x}{2!} + \hdots + \frac{\partial^k f}{\partial x^k}\frac{\Delta x}{k!},
+f(x + \Delta x) = f(x) + \frac{\partial f}{\partial x}\frac{\Delta x^1}{1!} + \frac{\partial^2 f}{\partial x^2}\frac{\Delta x^2}{2!} + \hdots + \frac{\partial^k f}{\partial x^k}\frac{\Delta x^k}{k!},
+\end{align}
+which can be written compactly for an expansion truncated to n terms as
+\begin{align}
+f(x + \Delta x) = \sum_{i=0}^{k} \frac{\partial^i f}{\partial x^i}\frac{\Delta x^i}{i!}.
 \end{align}
 \end{theorem}
-For example, one can imagine trying to predict what the weather will be tomorrow based on the weather today. Without any other information, the simplest answer one could give is that the weather tomorrow will be the same as the weather today. This is effectively the first term of a Taylor-Series. This will be reasonable accurate, for example, two days in the same season should have relatively similar temperatures. However, if we also know that the weather today was warmer that yesterday, then it is likely that the weather tomorrow will be even warmer than today. Hence, by knowing the derivative, it is getting warmer, we effectively add one term to our Taylor-Series to improve the accuracy of our prediction of the weather.
+It is worth taking a moment to consider just how powerful Taylor series is. It allows us to represent the entirety of a smooth function using the value of the solution and its derivatives at only one point in the domain. In addition, similar to Fourier series, we often find that a truncated expansion, which omits high-order terms in the summation, is sufficient for many applications.
+
+We will demonstrate the utility of Taylor series via example. Consider a simple sine wave 
+\begin{equation}
+	f(x) = \sin(x),
+\end{equation}
+which is periodic on the interval $[- \pi, \pi]$. We first note that sine functions are sufficiently smooth for Taylor series to be applied up to an infinite number of derivatives. Now we will explore the behaviour of the Taylor series as we add more terms. When we use a finite number of terms in the expansion we are {\it truncating} all of the higher-order terms. We will form our expansion about the point $x = 0$. If we include just the first term and truncate all others we obtain
+\begin{equation}
+	f_0(\Delta x) = 0,
+\end{equation}
+which is not a particularly accurate approximation of a sine wave. However, as we start to add more terms we obtain the following expressions for two, four, six, eight, and ten term expansions respectively
+\begin{equation}
+	f_1(\Delta x) = \Delta x,
+\end{equation}
+\begin{equation}
+	f_3(\Delta x) = \Delta x - \frac{\Delta x^3}{6},
+\end{equation}
+\begin{equation}
+	f_5(\Delta x) = \Delta x - \frac{\Delta x^3}{6} + \frac{\Delta x^5}{120},
+\end{equation}
+\begin{equation}
+	f_7(\Delta x) = \Delta x - \frac{\Delta x^3}{6} + \frac{\Delta x^5}{120} - \frac{\Delta x^7}{5040},
+\end{equation}
+\begin{equation}
+	f_{9}(\Delta x) = \Delta x - \frac{\Delta x^3}{6} + \frac{\Delta x^5}{120} - \frac{\Delta x^7}{5040} + \frac{\Delta x^9}{362880},
+\end{equation}
+where the subscript denotes the number of expansion terms included in the approximation. Each of these is a Taylor series polynomial approximation of a sine wave about the point $x=0$. We can make a few observations about the behaviour of Taylor series in general. First, when we are close to the expansion point $x=0$, even approximations with a small number of terms are close to the true function. For example, the two term expansion is the well-known small angle approximation of a sine wave. Then, as we add more terms the accuracy of the expansion improves rapidly. For example, by ten terms the approximation is nearly indistinguishable from the true function on the entire interval. Hence, we note that Taylor series becomes more accurate as we get closer to the expansion point and/or as we increase the number of terms.
+
+To understand the behaviour of these truncated expansions, we note that their error arises from truncating the higher-order terms of the expansion. Furthermore, when $\Delta x$ is relatively small the error is dominated by the first truncated term, since the higher-order terms rapidly approximate zero as $\Delta x$ decreases. Hence, if we consider an infinite expansion
+\begin{equation}
+	f(\Delta x) = \Delta x - \frac{\Delta x^3}{6} + \frac{\Delta x^5}{120} - \frac{\Delta x^7}{5040} + \frac{\Delta x^9}{362880} - \frac{\Delta x^{11}}{39916800} + \hdots,
+\end{equation}
+we note that the leading term omitted from the $f_1(\Delta x)$ approximation behaves like $\Delta x^3$, the leading error term of the $f_1(\Delta x)$ approximation behaves like $\Delta x^5$, and so on. Hence, as we get closer to the expansion point $x=0$ we expect that the error shrinks, and that the rate at which the error shrinks will be proportional to the exponent of the leading truncated term of the expansion. We can test this by creating a convergence table.
 	
-\section{Grid Spacing}\index{Grid Spacing}
-
-\section{Number of Terms}\index{Number of Terms}
-
 \chapter{Finite Difference Methods}
 
 \chapter{Examples}

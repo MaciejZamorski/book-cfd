@@ -3,7 +3,7 @@
 \chapterimage{chapter_head_2.pdf} % Chapter heading image
 
 \chapter{Taylor-Series}
-To begin our exploration of CFD we will state with the so-called Finite Difference Method (FDM). This approach uses conservation laws in {\it divergence form}. We start by recalling a few of the simplified conservation laws we derived in the previous section, specifically the linear advection, Burgers, and linear diffusion equations
+To begin our exploration of CFD we will state with the Finite Difference Method (FDM). This approach uses conservation laws in {\it divergence form}. We start by recalling a few of the simplified conservation laws we derived in the previous section, specifically the linear advection, Burgers, and linear diffusion equations
 \begin{eqBox}
 \begin{equation}
 	\frac{\partial u}{\partial t} +  \alpha \frac{\partial u}{\partial x} = 0,
@@ -15,9 +15,9 @@ To begin our exploration of CFD we will state with the so-called Finite Differen
 	\frac{\partial u}{\partial t} - \alpha \frac{\partial^2 u}{\partial x^2} = 0.
 \end{equation}
 \end{eqBox}
-We notice that the form of all of these equations is very similar. All three involve a time derivative combined with a coefficient multiplied by a spatial derivative. The Finite Difference Method uses well-known concepts from applied mathematics, specifically Taylor-Series. Hence, before deriving the Finite Difference Method we will start by reviewing Taylor-Series.
+We notice that the form of all of these equations is very similar. All three involve a time derivative combined with a coefficient multiplied by a spatial derivative. The Finite Difference Method uses well-known concepts from applied mathematics, specifically Taylor-Series. Hence, before deriving the Finite Difference Method we will start by reviewing some concepts from Taylor-Series.
 
-Arising from Taylors theorem, Taylor series says that the value of a smooth function at some point $x + \Delta x$ can be predicted by using the value of the solution at the point $x$ along with knowledge of all derivatives at the point $x$.
+Arising from Taylors theorem, Taylor series says that the value of a sufficiently smooth function at some point $x + \Delta x$ can be predicted by using the value of the solution at the point $x$ along with knowledge of all derivatives at the point $x$.
 \begin{theorem}[Taylor's Theorem]
 Let $k \geq 1$ and letting $f(x)$ be smooth and differentiable $k$ times then
 \begin{align}
@@ -28,7 +28,7 @@ which can be written compactly for an expansion truncated to n terms as
 f(x + \Delta x) = \sum_{i=0}^{k} \frac{\partial^i f}{\partial x^i}\frac{\Delta x^i}{i!}.
 \end{align}
 \end{theorem}
-It is worth taking a moment to consider just how powerful Taylor series is. It allows us to represent the entirety of a smooth function using the value of the solution and its derivatives at only one point in the domain. In addition, similar to Fourier series, we often find that a truncated expansion, which omits high-order terms in the summation, is sufficient for many applications.
+While there are some limitations, particularly around the smoothness of the function and its derivatives, it is worth taking a moment to consider just how powerful Taylor series can be. It allows us to represent the entirety of a smooth function using the value of the solution and its derivatives at only one point in the domain. In addition, similar to Fourier series, we often find that a truncated expansion, which omits high-order terms in the summation, is sufficient for many applications.
 
 We will demonstrate the utility of Taylor series via example. Consider a simple sine wave 
 \begin{equation}
@@ -38,7 +38,7 @@ which is periodic on the interval $[- \pi, \pi]$. We first note that sine functi
 \begin{equation}
 	f_0(\Delta x) = 0,
 \end{equation}
-which is not a particularly accurate approximation of a sine wave. However, as we start to add more terms we obtain the following expressions for two, four, six, eight, and ten term expansions respectively
+which is not a particularly accurate approximation of a sine wave except very close to the origin. However, as we start to add more terms we obtain the following expressions,
 \begin{equation}
 	f_1(\Delta x) = \Delta x,
 \end{equation}
@@ -54,7 +54,7 @@ which is not a particularly accurate approximation of a sine wave. However, as w
 \begin{equation}
 	f_{9}(\Delta x) = \Delta x - \frac{\Delta x^3}{6} + \frac{\Delta x^5}{120} - \frac{\Delta x^7}{5040} + \frac{\Delta x^9}{362880},
 \end{equation}
-where the subscript denotes the number of expansion terms included in the approximation. Each of these is a Taylor series polynomial approximation of a sine wave about the point $x=0$. We can make a few observations about the behaviour of Taylor series in general. First, when we are close to the expansion point $x=0$, even approximations with a small number of terms are close to the true function. For example, the two term expansion is the well-known small angle approximation of a sine wave. Then, as we add more terms the accuracy of the expansion improves rapidly. For example, by ten terms the approximation is nearly indistinguishable from the true function on the entire interval. Hence, we note that Taylor series becomes more accurate as we get closer to the expansion point and/or as we increase the number of terms.
+where the subscript denotes the power of the highest degree expansion term included in the approximation. Each of these is a polynomial approximation of a sine wave about the point $x=0$. We can make a few observations about the behaviour of Taylor series in general. First, when we are close to the expansion point $x=0$, even approximations with a small number of terms are close to the true function. For example, the $f_1$ expansion is the well-known small angle approximation of a sine wave. Then, as we add more terms the accuracy of the expansion improves rapidly. For example, by ten terms the approximation is nearly indistinguishable from the true function on the entire interval. Hence, we note that Taylor series becomes more accurate as we get closer to the expansion point and/or as we increase the number of terms.
 
 To understand the behaviour of these truncated expansions, we note that their error arises from truncating the higher-order terms of the expansion. Furthermore, when $\Delta x$ is relatively small the error is dominated by the first truncated term, since the higher-order terms rapidly approximate zero as $\Delta x$ decreases. Hence, if we consider an infinite expansion
 \begin{equation}
@@ -63,6 +63,82 @@ To understand the behaviour of these truncated expansions, we note that their er
 we note that the leading term omitted from the $f_1(\Delta x)$ approximation behaves like $\Delta x^3$, the leading error term of the $f_1(\Delta x)$ approximation behaves like $\Delta x^5$, and so on. Hence, as we get closer to the expansion point $x=0$ we expect that the error shrinks, and that the rate at which the error shrinks will be proportional to the exponent of the leading truncated term of the expansion. We can test this by creating a convergence table.
 	
 \chapter{Finite Difference Methods}
+\section{Introductory Schemes}
+To introduce the finite difference method we start with a general function $u(x)$. In general this function can be in any number of dimensions, but for simplicity we will first consider the one-dimensional case. We note that a function can generally be {\it approximated} by its values at a {\it discrete} set of points. An example of this is shown in Figure \ref{} where $\Delta x$ is the grid spacing between the points. We now imagine that we are at some point $i$ whose solution is $u_i = u(x_i)$ where $x_i$ is the physical location of the point. Using Taylor series we can compute the value of the solution one grid point to the left from the expansion
+\begin{equation}
+	u_{i-1} = u_i - \Delta x \Eval{\frac{\partial u}{\partial x}}{x_i}{} + \frac{\Delta x^2}{2} \Eval{\frac{\partial^2 u}{\partial x^2}}{x_i}{} - \frac{\Delta x^3}{6} \Eval{\frac{\partial^3 u}{\partial x^3}}{x_i}{} + \mathcal{O}(\Delta x^4),
+	\label{eqn:fdmup}
+\end{equation}
+where $\mathcal{O}(\Delta x^4)$ denotes the order of the next highest term in the expansion. We can also use another Taylor series to predict the value of the solution one point to the right
+\begin{equation}
+	u_{i+1} = u_i + \Delta x \Eval{\frac{\partial u}{\partial x}}{x_i}{} + \frac{\Delta x^2}{2} \Eval{\frac{\partial^2 u}{\partial x^2}}{x_i}{} + \frac{\Delta x^3}{6} \Eval{\frac{\partial^3 u}{\partial x^3}}{x_i}{} + \mathcal{O}(\Delta x^4).
+	\label{eqn:fdmdwn}
+\end{equation}
+
+So far, we have just applied Taylor series to try to determine the solution at points around our initial point $u_i$. However, if we look at Equation \ref{eqn:fdmup} we can use it in a different way. Rearranging we get
+\begin{equation}
+	\Eval{\frac{\partial u}{\partial x}}{x_i}{} = \frac{u_i - u_{i-1}}{\Delta x} + \frac{\Delta x}{2} \Eval{\frac{\partial^2 u}{\partial x^2}}{x_i}{} - \frac{\Delta x^2}{6} \Eval{\frac{\partial^3 u}{\partial x^3}}{x_i}{} + \mathcal{O}(\Delta x^3).
+	\label{eqn:fdmup1}
+\end{equation}
+We note that as the grid spacing gets smaller the terms with leading $\Delta x$, $\Delta x^2$, and so on will tend to zero and the approximation
+\begin{equation}
+	\Eval{\frac{\partial u}{\partial x}}{x_i}{} = \frac{u_i - u_{i-1}}{\Delta x} + \mathcal{O}(\Delta x),
+\end{equation}
+will converge to the true value of the derivative at the point $x_i$ as $\Delta x$ tends to zero. We can also do the same trick with Equation \ref{eqn:fdmdwn}. Rearranging we get
+\begin{equation}
+	\Eval{\frac{\partial u}{\partial x}}{x_i}{} = \frac{u_{i+1} - u_{i}}{\Delta x} - \frac{\Delta x}{2} \Eval{\frac{\partial^2 u}{\partial x^2}}{x_i}{} - \frac{\Delta x^2}{6} \Eval{\frac{\partial^3 u}{\partial x^3}}{x_i}{} + \mathcal{O}(\Delta x^3),
+	\label{eqn:fdmdwn1}
+\end{equation}
+and again if the grid spacing is small then the higher-order terms tend to zero and we are left with
+\begin{equation}
+	\Eval{\frac{\partial u}{\partial x}}{x_i}{} = \frac{u_{i+1} - u_{i}}{\Delta x} + \mathcal{O}(\Delta x),
+\end{equation}
+which also allows us to approximate the derivative at $x_i$. Hence, if we know that value of the solution at $x_i$ and either $x_{i-1}$ or $x_{i+1}$ we can approximate the derivative at $x_i$. We note that for both of these approximations the error in the derivative approximation will decrease proportional to the grid spacing, since the leading term in the truncation error is of $\mathcal{O}(\Delta x)$. We refer to a scheme of this form as a {\it first-order} finite difference method.
+
+While the above examples are useful they converge rather slowly to the exact value of the derivative at the point $x_i$. However, if we take an average of Equation \ref{eqn:fdmup1} and Equation \ref{eqn:fdmdwn1} we obtain
+\begin{equation}
+	\begin{aligned}
+	\Eval{\frac{\partial u}{\partial x}}{x_i}{} = &\frac{1}{2}\left(\frac{u_i - u_{i-1}}{\Delta x} + \frac{\Delta x}{2} \Eval{\frac{\partial^2 u}{\partial x^2}}{x_i}{} - \frac{\Delta x^2}{6} \Eval{\frac{\partial^3 u}{\partial x^3}}{x_i}{} \right) + \\
+	& \frac{1}{2}\left(\frac{u_{i+1} - u_{i}}{\Delta x} - \frac{\Delta x}{2} \Eval{\frac{\partial^2 u}{\partial x^2}}{x_i}{} - \frac{\Delta x^2}{6} \Eval{\frac{\partial^3 u}{\partial x^3}}{x_i}{} \right) + \mathcal{O}(\Delta x^3)
+	\end{aligned}
+\end{equation}
+which simplifies to
+\begin{equation}
+	\Eval{\frac{\partial u}{\partial x}}{x_i}{} = \frac{u_{i+1} - u_{i-1}}{2 \Delta x} - \frac{\Delta x^2}{6} \Eval{\frac{\partial^3 u}{\partial x^3}}{x_i}{} + \mathcal{O}(\Delta x^3),
+\end{equation}
+noting that the leading truncation error terms conveniently cancelled each other out. Hence, if we assume that $\Delta x$ is relatively small we obtain
+\begin{equation}
+	\Eval{\frac{\partial u}{\partial x}}{x_i}{} = \frac{u_{i+1} - u_{i-1}}{2 \Delta x} + \mathcal{O}(\Delta x^2).
+\end{equation}
+Using this equation we can approximate the value of the derivative of the function at $x_i$ using the values of the solution at two neighbouring points $x_{i-1}$ and $x_{i+1}$. However, unlike the previous finite difference methods, the truncation error of this approximation is $\mathcal{O}(\Delta x^2)$, meaning that as the grid spacing is reduced the error will converge like the grid spacing squared. We refer to a scheme of this form as a {\it second-order} finite difference method.
+
+\section{A General Approach}
+In the previous section we derived three different finite difference methods for computing the derivative at a point $x_i$ using the values of the solution at that point and neighbouring points. We have shown that we can create at least two first-order schemes and one second-order scheme. In the current section we will demonstrate how to generalize this approach to allow us to obtain schemes of any order and for higher-order derivatives.
+
+To start with, we will derive a second-order finite difference method to approximate the first derivative using $u_i$, $u_{i-1}$, and $u_{i-2}$. This procedure can be broken down into four basic steps.
+
+\subsection{Step 1: Generate the Taylor Series}
+The first step is to expand a Taylor series about each of the points that will be used to approximate the derivative. The Taylor series for $u_{i-1}$ was given before and is
+\begin{equation}
+	u_{i-1} = u_i - \Delta x \Eval{\frac{\partial u}{\partial x}}{x_i}{} + \frac{\Delta x^2}{2} \Eval{\frac{\partial^2 u}{\partial x^2}}{x_i}{} - \frac{\Delta x^3}{6} \Eval{\frac{\partial^3 u}{\partial x^3}}{x_i}{} + \mathcal{O}(\Delta x^4).
+	\label{fdm:general1}
+\end{equation}
+Similarly, since the distance between $u_i$ and $u_{i-2}$ is $2 \Delta x$ we get the following Taylor series for that point
+\begin{equation}
+	u_{i-2} = u_i - 2 \Delta x \Eval{\frac{\partial u}{\partial x}}{x_i}{} + \frac{(2\Delta x)^2}{2} \Eval{\frac{\partial^2 u}{\partial x^2}}{x_i}{} - \frac{(2\Delta x)^3}{6} \Eval{\frac{\partial^3 u}{\partial x^3}}{x_i}{} + \mathcal{O}(\Delta x^4).
+	\label{fdm:general2}
+\end{equation}
+
+\subsection{Step 2: Rearrange the Taylor Series}
+The second step is to rearrange each of the Taylor series generated in Step 1 to obtain the derivative of interest on the LHS with everything else on the RHS. Since we are interested in finding an approximation for the first derivative we rearrange Equation \ref{fdm:general1}
+\begin{equation}
+	\Eval{\frac{\partial u}{\partial x}}{x_i}{} = \frac{u_i - u_{i-1}}{\Delta x} + \frac{\Delta x}{2}\Eval{\frac{\partial^2 u}{\partial x^2}}{x_i}{} - \frac{\Delta x^2}{6}\Eval{\frac{\partial^3 u}{\partial x^3}}{x_i}{} + \mathcal{O}(\Delta x^3),
+\end{equation}
+and rearrange Equation \ref{fdm:general1}
+\begin{equation}
+	\Eval{\frac{\partial u}{\partial x}}{x_i}{} = \frac{u_i - u_{i-2}}{2\Delta x} + \frac{2\Delta x}{2}\Eval{\frac{\partial^2 u}{\partial x^2}}{x_i}{} - \frac{(2\Delta x)^2}{6}\Eval{\frac{\partial^3 u}{\partial x^3}}{x_i}{} + \mathcal{O}(\Delta x^3),
+\end{equation}
+which gives two expressions for the first derivative.
 
 \chapter{Examples}
 

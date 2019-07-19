@@ -1,4 +1,4 @@
-\part{Part 3: Finite Difference Methods}
+\part{Part 3: Numerics}
 
 \chapterimage{chapter_head_2.pdf} % Chapter heading image
 
@@ -63,7 +63,7 @@ To understand the behaviour of these truncated expansions, we note that their er
 we note that the leading term omitted from the $f_1(\Delta x)$ approximation behaves like $\Delta x^3$, the leading error term of the $f_1(\Delta x)$ approximation behaves like $\Delta x^5$, and so on. Hence, as we get closer to the expansion point $x=0$ we expect that the error shrinks, and that the rate at which the error shrinks will be proportional to the exponent of the leading truncated term of the expansion. We can test this by creating a convergence table.
 	
 \chapter{Finite Difference Methods}
-\section{Introductory Schemes}
+\section{Derivation}
 To introduce the finite difference method we start with a general function $u(x)$. In general this function can be in any number of dimensions, but for simplicity we will first consider the one-dimensional case. We note that a function can generally be {\it approximated} by its values at a {\it discrete} set of points. An example of this is shown in Figure \ref{} where $\Delta x$ is the grid spacing between the points. We now imagine that we are at some point $i$ whose solution is $u_i = u(x_i)$ where $x_i$ is the physical location of the point. Using Taylor series we can compute the value of the solution one grid point to the left from the expansion
 \begin{equation}
 	u_{i-1} = u_i - \Delta x \Eval{\frac{\partial u}{\partial x}}{x_i}{} + \frac{\Delta x^2}{2} \Eval{\frac{\partial^2 u}{\partial x^2}}{x_i}{} - \frac{\Delta x^3}{6} \Eval{\frac{\partial^3 u}{\partial x^3}}{x_i}{} + \mathcal{O}(\Delta x^4),
@@ -81,18 +81,22 @@ So far, we have just applied Taylor series to try to determine the solution at p
 	\label{eqn:fdmup1}
 \end{equation}
 We note that as the grid spacing gets smaller the terms with leading $\Delta x$, $\Delta x^2$, and so on will tend to zero and the approximation
+\begin{eqBox}
 \begin{equation}
 	\Eval{\frac{\partial u}{\partial x}}{x_i}{} = \frac{u_i - u_{i-1}}{\Delta x} + \mathcal{O}(\Delta x),
 \end{equation}
+\end{eqBox}
 will converge to the true value of the derivative at the point $x_i$ as $\Delta x$ tends to zero. We can also do the same trick with Equation \ref{eqn:fdmdwn}. Rearranging we get
 \begin{equation}
 	\Eval{\frac{\partial u}{\partial x}}{x_i}{} = \frac{u_{i+1} - u_{i}}{\Delta x} - \frac{\Delta x}{2} \Eval{\frac{\partial^2 u}{\partial x^2}}{x_i}{} - \frac{\Delta x^2}{6} \Eval{\frac{\partial^3 u}{\partial x^3}}{x_i}{} + \mathcal{O}(\Delta x^3),
 	\label{eqn:fdmdwn1}
 \end{equation}
 and again if the grid spacing is small then the higher-order terms tend to zero and we are left with
+\begin{eqBox}
 \begin{equation}
 	\Eval{\frac{\partial u}{\partial x}}{x_i}{} = \frac{u_{i+1} - u_{i}}{\Delta x} + \mathcal{O}(\Delta x),
 \end{equation}
+\end{eqBox}
 which also allows us to approximate the derivative at $x_i$. Hence, if we know that value of the solution at $x_i$ and either $x_{i-1}$ or $x_{i+1}$ we can approximate the derivative at $x_i$. We note that for both of these approximations the error in the derivative approximation will decrease proportional to the grid spacing, since the leading term in the truncation error is of $\mathcal{O}(\Delta x)$. We refer to a scheme of this form as a {\it first-order} finite difference method.
 
 While the above examples are useful they converge rather slowly to the exact value of the derivative at the point $x_i$. However, if we take an average of Equation \ref{eqn:fdmup1} and Equation \ref{eqn:fdmdwn1} we obtain
@@ -107,9 +111,11 @@ which simplifies to
 	\Eval{\frac{\partial u}{\partial x}}{x_i}{} = \frac{u_{i+1} - u_{i-1}}{2 \Delta x} - \frac{\Delta x^2}{6} \Eval{\frac{\partial^3 u}{\partial x^3}}{x_i}{} + \mathcal{O}(\Delta x^3),
 \end{equation}
 noting that the leading truncation error terms conveniently cancelled each other out. Hence, if we assume that $\Delta x$ is relatively small we obtain
+\begin{eqBox}
 \begin{equation}
 	\Eval{\frac{\partial u}{\partial x}}{x_i}{} = \frac{u_{i+1} - u_{i-1}}{2 \Delta x} + \mathcal{O}(\Delta x^2).
 \end{equation}
+\end{eqBox}
 Using this equation we can approximate the value of the derivative of the function at $x_i$ using the values of the solution at two neighbouring points $x_{i-1}$ and $x_{i+1}$. However, unlike the previous finite difference methods, the truncation error of this approximation is $\mathcal{O}(\Delta x^2)$, meaning that as the grid spacing is reduced the error will converge like the grid spacing squared. We refer to a scheme of this form as a {\it second-order} finite difference method.
 
 \section{A General Approach}
@@ -140,10 +146,37 @@ and rearrange Equation \ref{fdm:general1}
 \end{equation}
 which gives two expressions for the first derivative.
 
-\chapter{Examples}
+\section{Example Schemes}
+\subsection{Linear Advection}
+\subsection{Burgers Equation}
+\subsection{Linear Diffusion}
 
-\section{Linear Advection}\index{Linear Advection}
+\chapter{Finite Volume Methods}
+\section{Derivation}
+\section{The Riemann Problem}
+\section{Example Schemes}
+\subsection{Linear Advection}
+\subsection{Burgers Equation}
+\subsection{Linear Diffusion}
 
-\section{Burgers Equation}\index{Burgers Equation}
+\chapter{Consistency, Stability, and Convergence}
+\section{Consistency}
+\section{Stability}
+\section{Convergence}
 
-\section{Linear Diffusion}\index{Linear Diffusion}
+\chapter{Time-Stepping}
+\section{Explicit}
+\section{Implicit}
+
+\chapter{Spectral Properties}
+\section{Dissipation}
+\section{Dispersion}
+
+\chapter{Modified Equation Analysis}
+
+\chapter{Iterative Methods}
+\section{Jacobi Iteration}
+\section{Gauss Seidel Iteration}
+\section{Successive Over-Relaxation}
+\section{Krylov Subspace Methods}
+\section{Multigrid}

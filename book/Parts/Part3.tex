@@ -375,11 +375,16 @@ and, in order for the magnitude of the solution to not be amplified at the next 
 which describes a unit circle in the complex plane. Referred to as the amplification factor, we will next determine under what conditions our numerical schemes satisfy this stability constraint.
 
 \subsection{Explicit Linear Advection}
-As our first example, we consider our first-order scheme for linear advection
+For a methodological approach, we will break von Neumann down into a number of steps.
+
+\subsubsection{Step 1: Choose the Discrete Scheme}
+The first step in von Neumann analysis is to determine what scheme we are interested in analyzing. In this case we will consider our simple first-order scheme for linear advection
 \begin{equation}
 	\frac{u_i^{t+1} - u_{i}^t}{\Delta t} +  \alpha \frac{u_i^t - u_{i-1}^t}{\Delta x} = 0.
 \end{equation}
-Since we know the prescribed form of the solution, the grid spacing $\Delta x$, and the time step size $\Delta t$, we can write expressions for the solution for a particular wavenumber $\kappa_m$ at each grid point and time level as
+
+\subsubsection{Step 2: Apply the Wavelike Solution}
+Since we know the prescribed wave-like form of the solution, the grid spacing $\Delta x$, and the time step size $\Delta t$, we can write expressions for the solution for a particular wavenumber $\kappa_m$ at each grid point and time level as
 \begin{equation}
 	u_{i}^t = e^{at} e^{i \kappa_m x},
 \end{equation}
@@ -393,6 +398,8 @@ Substituting these into our finite difference approximation yields
 \begin{equation}
 	\frac{e^{a(t+\Delta t)} e^{i \kappa_m x} - e^{at} e^{i \kappa_m x}}{\Delta t} +  \alpha \frac{e^{at} e^{i \kappa_m x} - e^{at} e^{i \kappa_m (x-\Delta x)}}{\Delta x} = 0.
 \end{equation}
+
+\subsubsection{Step 3: Solve for the Amplification Factor}
 Noting that all of these terms has a common factor of $e^{at} e^{i \kappa_m x}$ we can simply divide through yielding
 \begin{equation}
 	\frac{e^{a\Delta t} - 1}{\Delta t} +  \alpha \frac{1 - e^{-i \kappa_m \Delta x}}{\Delta x} = 0.
@@ -413,7 +420,69 @@ is the {\it Courant-Friedrichs-Lewy} (CFL) number. Hence, the amplification fact
 \end{eqBox}
 and our scheme will be stable whenever this is contained within the unit circle in the complex plane. We note that this is a function of two parameters, specifically the wavenumber and the CFL number. Hence, we expect that the amount our solution gets amplified/damped each time step will depend on these two parameters.
 
+\subsubsection{Step 4: Determine the Stability Conditions}
+Based on these results, we can conclude that the first-order finite difference scheme for linear advection is stable whenever
+\begin{eqBox}
+\begin{equation}
+	0 \leq \sigma \leq 1.
+\end{equation}
+\end{eqBox}
+That is, it is only stable for CFL numbers less than one. Hence, for a given grid spacing and advection velocity, there is a limit on how large the time step can be. This clearly has implications in terms of computational cost, as the smaller the time step is the more steps must be taken to reach a desired final solution time. Schemes of this type are referred to as being {\it conditionally stable}.
+
 \subsection{Implicit Linear Advection}
+In the last section we saw that our first-order finite difference scheme has a stability limit. In this section we will explore a slightly different first-order scheme for linear advection.
+
+\subsubsection{Step 1: Choose the Discrete Scheme}
+In this case we use the following finite difference approximation of the linear advection equation
+\begin{equation}
+	\frac{u_i^{t+1} - u_{i}^t}{\Delta t} +  \alpha \frac{u_i^{t+1} - u_{i-1}^{t+1}}{\Delta x} = 0,
+\end{equation}
+noting that it is simple the original scheme, but we evaluate the spatial derivative at the next time step rather than the current time step.
+
+\subsubsection{Step 2: Apply the Wavelike Solution}
+Our expressions for wavelike solutions at each point are
+\begin{equation}
+	u_{i}^t = e^{at} e^{i \kappa_m x},
+\end{equation}
+\begin{equation}
+	u_{i}^{t+1} = e^{a(t + \Delta t)} e^{i \kappa_m x},
+\end{equation}
+\begin{equation}
+	u_{i-1}^{t+1} = e^{a(t + \Delta t)} e^{i \kappa_m (x - \Delta x)}.
+\end{equation}
+Substituting these into our discrete scheme yields
+\begin{equation}
+	\frac{e^{a(t + \Delta t)} e^{i \kappa_m x} - e^{at} e^{i \kappa_m x}}{\Delta t} +  \alpha \frac{e^{a(t + \Delta t)} e^{i \kappa_m x} - e^{a(t + \Delta t)} e^{i \kappa_m (x - \Delta x)}}{\Delta x} = 0.
+\end{equation}
+
+\subsubsection{Step 3: Solve for the Amplification Factor}
+Again we note a common factor of $e^{at} e^{i \kappa_m x}$ in all terms, allowing us divide through yielding
+\begin{equation}
+	\frac{e^{a\Delta t} - 1}{\Delta t} +  \alpha \frac{e^{a\Delta t} - e^{a\Delta t} e^{-i \kappa_m \Delta x}}{\Delta x} = 0.
+\end{equation}
+Rearranging yields
+\begin{equation}
+	e^{a\Delta t} = \frac{1}{1 + \sigma \left( 1 - e^{-i \kappa_m \Delta x} \right)},
+\end{equation}
+where $\sigma$ is again the CFL number. Hence, the amplification factor is
+\begin{eqBox}
+\begin{equation}
+	|e^{a\Delta t}| = \left| \frac{1}{1 + \sigma \left( 1 - e^{-i \kappa_m \Delta x} \right)} \right|.
+\end{equation}
+\end{eqBox}
+
+\subsubsection{Step 4: Determine the Stability Conditions}
+Based on these results, we can conclude that this finite difference scheme for the linear advection equation is stable provided
+\begin{eqBox}
+\begin{equation}
+	0 \leq \sigma \leq \infty.
+\end{equation}
+\end{eqBox}
+Hence, we are able to take arbitrarily large time steps and maintain stability using this approach. Schemes of this type are referred to as being {\it unconditionally stable}.
+
+\begin{remark}
+Although this scheme is unconditionally stable, making at appealing since it allows for arbitrarily large time-steps, it also becomes more difficult/expensive for each time-step. This will be explored in the forthcoming time stepping section.
+\end{remark}
 
 \subsection{Explicit Linear Diffusion}
 

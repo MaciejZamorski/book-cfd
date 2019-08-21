@@ -63,7 +63,7 @@ To understand the behaviour of these truncated expansions, we note that their er
 we note that the leading term omitted from the $f_1(\Delta x)$ approximation behaves like $\Delta x^3$, the leading error term of the $f_1(\Delta x)$ approximation behaves like $\Delta x^5$, and so on. Hence, as we get closer to the expansion point $x=0$ we expect that the error shrinks, and that the rate at which the error shrinks will be proportional to the exponent of the leading truncated term of the expansion. We can test this by creating a convergence table.
 	
 \chapter{Finite Difference Methods}
-\section{Derivation}
+\section{The First Derivative}
 To introduce the finite difference method we start with a general function $u(x)$. In general this function can be in any number of dimensions, but for simplicity we will first consider the one-dimensional case. We note that a function can generally be {\it approximated} by its values at a {\it discrete} set of points. An example of this is shown in Figure \ref{} where $\Delta x$ is the grid spacing between the points. We now imagine that we are at some point $i$ whose solution is $u_i = u(x_i)$ where $x_i$ is the physical location of the point. Using Taylor series we can compute the value of the solution one grid point to the left from the expansion
 \begin{equation}
 	u_{i-1} = u_i - \Delta x \Eval{\frac{\partial u}{\partial x}}{x_i}{} + \frac{\Delta x^2}{2} \Eval{\frac{\partial^2 u}{\partial x^2}}{x_i}{} - \frac{\Delta x^3}{6} \Eval{\frac{\partial^3 u}{\partial x^3}}{x_i}{} + \mathcal{O}(\Delta x^4),
@@ -139,30 +139,288 @@ Similarly, since the distance between $u_i$ and $u_{i-2}$ is $2 \Delta x$ we get
 The second step is to rearrange each of the Taylor series generated in Step 1 to obtain the derivative of interest on the LHS with everything else on the RHS. Since we are interested in finding an approximation for the first derivative we rearrange Equation \ref{fdm:general1}
 \begin{equation}
 	\Eval{\frac{\partial u}{\partial x}}{x_i}{} = \frac{u_i - u_{i-1}}{\Delta x} + \frac{\Delta x}{2}\Eval{\frac{\partial^2 u}{\partial x^2}}{x_i}{} - \frac{\Delta x^2}{6}\Eval{\frac{\partial^3 u}{\partial x^3}}{x_i}{} + \mathcal{O}(\Delta x^3),
+	\label{eqn:aHK8G4M7}
 \end{equation}
 and rearrange Equation \ref{fdm:general1}
 \begin{equation}
 	\Eval{\frac{\partial u}{\partial x}}{x_i}{} = \frac{u_i - u_{i-2}}{2\Delta x} + \frac{2\Delta x}{2}\Eval{\frac{\partial^2 u}{\partial x^2}}{x_i}{} - \frac{(2\Delta x)^2}{6}\Eval{\frac{\partial^3 u}{\partial x^3}}{x_i}{} + \mathcal{O}(\Delta x^3),
+	\label{eqn:6sbrhgAM}
 \end{equation}
 which gives two expressions for the first derivative.
 
-\section{Example Schemes}
+\subsection{Step 3: Determine a Suitable Combination}
+If we look at the previous two expressions for the first derivative we will notice that they are both first-order accurate, since the leading term that will get truncated is $\mathcal{O}(\Delta x)$. However, we were tasked with finding a second-order accurate scheme. In order to achieve this we will try to combine Equation \ref{eqn:aHK8G4M7} and Equation \ref{eqn:6sbrhgAM} in such a way the this first-order error term cancels out.
+
+We want to combine them is such a way that
+\begin{equation}
+	\Eval{\frac{\partial u}{\partial x}}{x_i}{} = a(\ref{eqn:aHK8G4M7}) + b(\ref{eqn:6sbrhgAM})
+	\label{eqn:2KGWrZa5}
+\end{equation}
+gives a second-order approximating for the first derivative, and we need to find the coefficients $a$ and $b$ to achieve this. If we look at the left hand side, we want to keep the first derivative there. This can be achieve if we ensure that
+\begin{equation}
+	a + b = 1.
+	\label{eqn:3Wxy2aCD}
+\end{equation}
+The second thing we need to do is cancel out the $\mathcal{O}(\Delta x)$ term to ensure that the leading truncation error term is $\mathcal{O}(\Delta x^2)$. Looking at the $\mathcal{O}(\Delta x)$ terms, in order for them to cancel out we require
+\begin{equation}
+	\frac{a}{2} + b = 0,
+	\label{eqn:rWD4Hs8v}
+\end{equation}
+to cancel them out. Equations \ref{eqn:3Wxy2aCD} and \ref{eqn:rWD4Hs8v} are recognizable as a linear system of equations with two equations and two unknowns. This can be readily solved using substitution yielding $a=2$ and $b=-1$.
+
+\subsection{Step 3: Combine the Schemes}
+Now that we have determine the constants in Equation \ref{eqn:2KGWrZa5}, the last step is to just go ahead and add things together. Doing this will yield that following finite difference approximation
+\begin{eqBox}
+\begin{equation}
+	\Eval{\frac{\partial u}{\partial x}}{x_i}{} = \frac{3u_i - 4u_{i-1} + u_{i-2}}{2 \Delta x} + \mathcal{O}(\Delta x^2),
+	\label{eqn:aHK8G4M7}
+\end{equation}
+\end{eqBox}
+which is a second-order approximation of the first derivative use three points. Hence, we have accomplished our task.
+
+\section{The Second Derivative}
+In the previous sections we derived four difference schemes for the first derivative, two that were first-order accurate, and two that were second-order accurate. However, if we go back and look at the Navier-Stokes equations, we will note that we also need to approximate second-derivatives for the diffusive terms. We will derive and example scheme here, which also demonstrates another application of the four basic steps of creating a finite difference scheme. Our objective will be to derive a second-order finite difference method to approximate the second derivative using $u_i$, $u_{i-1}$, and $u_{i+1}$.
+
+We now recall that the first step was to simply expand a Taylor series about all of the points that are not $u_i$. We have already derived these expansions for $u_{i-1}$ and $u_{i+1}$, which are
+\begin{equation}
+	u_{i-1} = u_i - \Delta x \Eval{\frac{\partial u}{\partial x}}{x_i}{} + \frac{\Delta x^2}{2} \Eval{\frac{\partial^2 u}{\partial x^2}}{x_i}{} - \frac{\Delta x^3}{6} \Eval{\frac{\partial^3 u}{\partial x^3}}{x_i}{} + \mathcal{O}(\Delta x^4),
+	\label{eqn:Bm6Tq8Ah}
+\end{equation}
+and
+\begin{equation}
+	u_{i+1} = u_i + \Delta x \Eval{\frac{\partial u}{\partial x}}{x_i}{} + \frac{\Delta x^2}{2} \Eval{\frac{\partial^2 u}{\partial x^2}}{x_i}{} + \frac{\Delta x^3}{6} \Eval{\frac{\partial^3 u}{\partial x^3}}{x_i}{} + \mathcal{O}(\Delta x^4).
+	\label{eqn:93Nxbhtu}
+\end{equation}
+So that is step one done.
+
+In step two we needed to rearrange these equations such that the derivative of interest is on the LHS. This yields two possible expressions for the second derivative by rearranging Equation \ref{eqn:Bm6Tq8Ah}
+\begin{equation}
+	\Eval{\frac{\partial^2 u}{\partial x^2}}{x_i}{} = \frac{2(u_{i-1} - u_i)}{\Delta x^2} + \frac{2}{\Delta x} \Eval{\frac{\partial u}{\partial x}}{x_i}{} + \frac{\Delta x}{3} \Eval{\frac{\partial^3 u}{\partial x^3}}{x_i}{} + \mathcal{O}(\Delta x^2),
+\end{equation}
+and Equation \ref{eqn:93Nxbhtu}
+\begin{equation}
+	\Eval{\frac{\partial^2 u}{\partial x^2}}{x_i}{} = \frac{2(u_{i+1} - u_i)}{\Delta x^2} - \frac{2}{\Delta x} \Eval{\frac{\partial u}{\partial x}}{x_i}{} - \frac{\Delta x}{3} \Eval{\frac{\partial^3 u}{\partial x^3}}{x_i}{} + \mathcal{O}(\Delta x^2),
+\end{equation}
+noting that the $\mathcal{O}(\Delta x^4)$ terms are now $\mathcal{O}(\Delta x^2)$ since we had to divide the RHS by $\Delta x^2$. That marks the end of step two.
+
+In the third step we have to determine a linear combination of these two equations that will give us an expression for the second derivative with a truncation error of $\mathcal{O}(\Delta x^2)$. Since we want to keep the second derivative on the LHS we require
+\begin{equation}
+	a + b = 1.
+\end{equation}
+And, in order for the truncation error to be of $\mathcal{O}(\Delta x^2)$ we need to cancel the second and third terms on the RHS of the equations, which are $\mathcal{O}(\Delta x^{-1})$ and $\mathcal{O}(\Delta x)$, respectively. Interestingly, cancelling out both of these terms requires
+\begin{equation}
+	a - b = 0.
+\end{equation}
+Once again, we have a linear system with two equations and two unknowns. Solving this system yields $a=b=1/2$, which finishes part three.
+
+Finally, in part four we simply combine the two equations multiplied by their respective $a$ and $b$ coefficients. This yields our second-order accurate expression for the second-derivative as
+\begin{eqBox}
+\begin{equation}
+	\Eval{\frac{\partial^2 u}{\partial x^2}}{x_i}{} = \frac{u_{i-1} - 2u_i + u_{i+1}}{\Delta x^2} + \mathcal{O}(\Delta x^2).
+\end{equation}
+\end{eqBox}
+
+\section{Example Applications}
+Now that we have created a few introductory finite difference methods, it is time to put them to work on our three simplified systems.
 \subsection{Linear Advection}
+We recall that the one-dimensional linear advection equation in differential form was
+\begin{equation}
+	\frac{\partial u}{\partial t} +  \alpha \frac{\partial u}{\partial x} = 0.
+\end{equation}
+In the previous sections we derived a few options for this, but to start we will use the simple first-order upwind scheme to approximate the spatial derivative at each grid point, such that
+\begin{equation}
+	\Eval{\frac{\partial u}{\partial x}}{x_i}{} = \frac{u_i^t - u_{i-1}^t}{\Delta x} + \mathcal{O}(\Delta x),
+\end{equation}
+where the superscript $t$ denotes that we are using the solution at the current time. We will also use a first-order finite difference approach in time to approximate the temporal derivative as well. Hence,
+\begin{equation}
+	\Eval{\frac{\partial u}{\partial t}}{x_i}{} = \frac{u_i^{t+1} - u_{i}^t}{\Delta t} + \mathcal{O}(\Delta t),
+\end{equation}
+where $\Delta t$ is the time step size and the superscript $t+1$ is the solution at the next time step.
+
+Now we simply insert these approximations into the linear advection equation, yielding
+\begin{equation}
+	\frac{u_i^{t+1} - u_{i}^t}{\Delta t} +  \alpha \frac{u_i^t - u_{i-1}^t}{\Delta x} + \mathcal{O}(\Delta x, \Delta t) = 0.
+\end{equation}
+By inspecting this equation, and assuming that we know the solution at each grid point at the current instant in time, we can rearrange this to make a prediction for the solution at the next time step
+\begin{eqBox}
+\begin{equation}
+	u_i^{t+1} = u_{i}^t -\frac{\alpha \Delta t}{\Delta x} \left( u_i^t - u_{i-1}^t \right) + \mathcal{O}(\Delta x, \Delta t).
+	\label{eqn:7hH8UBeG}
+\end{equation}
+\end{eqBox}
+
+Looking at Equation \ref{eqn:7hH8UBeG} we note that, provided we know the current solution at all grid points at time $t$, we can predict the solution at time $t+\Delta t$ with an error term of $\mathcal{O}(\Delta x, \Delta t)$. Then we will have an approximation of the solution at all grid points at time $t+\Delta t$, and we can use this to find an approximation of the solution at time $t+2\Delta t$ by applying the same equation, and so on. Hence, we are able to advance the linear advection equation to any final time we desire, noting that each time step we take will introduce some numerical error.
+
 \subsection{Burgers Equation}
+We recall that the one-dimensional Burgers equation was
+\begin{equation}
+	\frac{\partial u}{\partial t} +  \frac{1}{2} \frac{\partial u^2}{\partial x} = 0.
+\end{equation}
+We can now use the exact same approach for Burgers as we used for the linear advection equation. First, we will use a first-order upwind approach to approximate the spatial derivative of $u^2$ at each grid point $x_i$, such that
+\begin{equation}
+	\Eval{\frac{\partial u^2}{\partial x}}{x_i}{} = \frac{(u_i^t)^2 - (u_{i-1}^t)^2}{\Delta x} + \mathcal{O}(\Delta x),
+\end{equation}
+where again the superscript $t$ denotes that we are using the solution at the current time. We will also use a first-order finite difference approach in time to approximate the temporal derivative as well. Hence,
+\begin{equation}
+	\Eval{\frac{\partial u}{\partial t}}{x_i}{} = \frac{u_i^{t+1} - u_{i}^t}{\Delta t} + \mathcal{O}(\Delta t).
+\end{equation}
+
+Now we simply insert our finite difference approximations of these two derivatives into the Burgers equation
+\begin{equation}
+	\frac{u_i^{t+1} - u_{i}^t}{\Delta t} +  \frac{(u_i^t)^2 - (u_{i-1}^t)^2}{\Delta x} + \mathcal{O}(\Delta x, \Delta t) = 0,
+\end{equation}
+and, just like for linear advection, we can now find an expression for the solution at any grid point at the next time step as
+\begin{eqBox}
+\begin{equation}
+	u_i^{t+1} = u_{i}^t - \frac{\Delta t}{\Delta x} \left( \left(u_i^t \right)^2 - \left( u_{i-1}^t \right)^2 \right) + \mathcal{O}(\Delta x, \Delta t).
+\end{equation}
+\end{eqBox}
+Looking at this expression we note it is remarkably similar to the expression for linear advection, which is not particularly surprising as the two initial partial differential equations are also quite similar. Again, if we know the solution at each grid point at some time $t$, we can approximate the solution at some time $t+\Delta t$ using this expression. Then, to approximate the solution at the time $t+2\Delta t$ we simply re-apply the expression. This allows us to approximate the behaviour of Burgers equation up to any desired final time, and the error of the approximation is expected to be first-order accurate in both space and time, with errors on the order of $\mathcal{O}(\Delta x, \Delta t)$.
+
 \subsection{Linear Diffusion}
+We recall that our third and final simplified system of equations was the linear diffusion equation
+\begin{equation}
+\frac{\partial u}{\partial t} - \beta \frac{\partial^2 u}{\partial x^2} = 0,
+\end{equation}
+which described how some conserved quantity, such as heat, diffuses into the surrounding fluid. To approximate this using the finite difference method we follow the exact same steps as for linear advection and Burgers equation. First, we will use our second-order accurate finite difference approximation for the second derivative as
+\begin{equation}
+	\Eval{\frac{\partial^2 u}{\partial x^2}}{x_i}{} = \frac{u_{i-1} - 2u_i + u_{i+1}}{\Delta x^2} + \mathcal{O}(\Delta x^2).
+\end{equation}
+We will also use a first-order finite difference approach in time to approximate the temporal derivative as well. Hence,
+\begin{equation}
+	\Eval{\frac{\partial u}{\partial t}}{x_i}{} = \frac{u_i^{t+1} - u_{i}^t}{\Delta t} + \mathcal{O}(\Delta t).
+\end{equation}
+
+Now we simply replace the exact derivatives in the linear diffusion equation with our finite difference approximations, such that
+\begin{equation}
+\frac{u_i^{t+1} - u_{i}^t}{\Delta t} - \beta \frac{u_{i-1} - 2u_i + u_{i+1}}{\Delta x^2} + \mathcal{O}(\Delta x^2,\Delta t) = 0.
+\end{equation}
+Again, by simply rearranging we can arrive at an expression for the solution at any grid point $i$ at the next time step as
+\begin{eqBox}
+\begin{equation}
+u_i^{t+1}  = u_{i}^t + \frac{\beta \Delta t}{\Delta x^2} \left(u_{i-1} - 2u_i + u_{i+1}\right) + \mathcal{O}(\Delta x^2,\Delta t).
+\end{equation}
+\end{eqBox}
+Again, this is very similar to the approximations for linear advection and Burgers equations. However, one important thing to note is that the error in space is of $\mathcal{O}(\Delta x^2)$ instead of $\mathcal{O}(\Delta x)$, meaning that as we refine the grid the solution will converge more quickly to the exact solution of the linear diffusion equation.
 
 \chapter{Finite Volume Methods}
 \section{Derivation}
 \section{The Riemann Problem}
-\section{Example Schemes}
+\section{Example Applications}
 \subsection{Linear Advection}
 \subsection{Burgers Equation}
 \subsection{Linear Diffusion}
 
-\chapter{Consistency, Stability, and Convergence}
+\chapter{Consistency, Stability, Convergence}
+Now that we have derived a few different schemes for solving linear advection, Burgers equation, and linear diffusion, we should now ask ourselves whether they will give us accurate predictions, and are there any restrictions on when they can be used. We have already discussed the importance of order of accuracy, which governs the rate at which the error will converge to zero. Now we will introduce the concepts of consistency, stability, and convergence. If we can prove that our numerical scheme satisfies all three of these properties we can be confident that it is promising approach for the Euler or Navier-Stokes equations. In the current section we will explore these properties in the context of finite difference methods, but the exact same steps can be taken to check whether a finite volume method is suitable or not.
+
 \section{Consistency}
+A numerical scheme is consistent if it recovers the exact initial partial differential equation as the grid spacing and time step size are reduced. In other words, the truncation error of the scheme must go to zero in the limit $\Delta x \rightarrow 0$ and $\Delta t \rightarrow 0$. This is usually the case, and it is left as an exercise for the reader to check that our previous finite difference schemes for linear advection, Burgers equation, and linear diffusion satisfy this property. 
+
+However, this is not always the case. To demonstrate this we consider the Dufort-Frankel scheme for linear diffusion
+\begin{equation}
+u_i^{t+1}  = u_{i}^{t-1} + \frac{2 \beta \Delta t}{\Delta x^2} \left(u_{i-1}^t - u_i^{t+1} - u_i^{t-1} + u_{i+1}^t\right) + \mathcal{O}(\Delta x^2,\Delta t^2,(\Delta t/\Delta x)^2).
+\end{equation}
+This differs from our example scheme for linear diffusion in that it uses central differences for the time-derivative, and when computing the second-derivative in space it uses the solution at the current grid point at the previous and current time steps. While this scheme may have some useful properties, we note that it has a peculiar term in the truncation error of $\mathcal{O}((\Delta t/\Delta x)^2)$. This can be obtained from a Taylor series expansion of the second derivative. This is concerning, as for any scheme to be consistent with the original partial differential equation we require the truncation error to go to zero. However, if we use a naive approach and simply refine $\Delta x$ and $\Delta t$ at the same rate, this term will not go to zero, and the scheme will not be consistent. For example, if we reduced both the grid spacing and time step size by a half this $\mathcal{O}((\Delta t/\Delta x)^2)$ will remain the same. Hence, in order for the Dufort-Frankel scheme to be consistent with our original partial differential equation we should refine the grid spacing {\it faster} than the time step size. For example, if we reduce $\Delta t$ by a half we should reduce $\Delta x$ by a factor of four. This does not mean the Dufort-Frankel scheme is bad, per-se, but it does mean that care needs to be taken when using it.
+
 \section{Stability}
+If we can demonstrate our schemes is consistent, then we know that in the limit $\Delta x \rightarrow 0$ and $\Delta t \rightarrow 0$ we recover the exact partial differential equation. However, this is impossible to achieve in practice as it would require an infinite number of grid points and time steps. When considering stability, we are concerned with whether our numerical scheme will provide {\it physical} solutions when both $\Delta x$ and $\Delta t$ are finite. Lets start by considering what we mean by a physical solution.
+
+In order to advance our solution in time we start with some initial condition. Then, by inserting this initial condition into our scheme we approximate the solution at the next timestep $t+\Delta t$. Then, we insert this approximation back into our scheme to approximate the solution at time $t+2\Delta t$, and this process is repeated over an over again until we reach our final desired time. Hence, the way we advance our simulation in time is effectively a feedback loop, with the output of each time step being recycled back through the numerical scheme to get the solution at each consecutive time step. 
+
+As an analogy we can consider what happens in other simple feedback loops, such as a microphone and speaker. When a performer sings into a microphone their voice is amplified and played bach through the speaker. We expect that this produces a physical replication of their voice, just at a louder volume for the audience. However, if the sound from the speaker is louder than the singers voice at the microphone it will get amplified, played through the speaker at a louder volume, and this cycle then repeats. This results in feedback noise, usually a high-pitched ringing that sounds nothing like the original performer, and usually happens when the performer moves to close to the speaker.
+
+Since our numerical scheme is applied as a feedback loop, the exact same kind of thing can happen. If it amplifies our solution each time step, then the solution will continue to grow, eventually leading to non-physical values such as near-infinite density or pressure. This is colloquially referred to as the solution {\it blowing up}. In contrast, if the scheme damps our solution at each time step it will tend towards physical values, such as the background density or pressure. While this is perhaps not desirable in terms of accuracy, which will be explored later, it is a desirable property in that the solution remains stable and bounded between the initial condition and background state.
+
+Proving stability for non-linear problems, such as Burgers equation, is a relatively daunting task. However, if we restrict ourselves to linear equations, such as linear advection or linear diffusion, then stability can be explored more readily. In order to do this we introduce {\it Von Neumann Analysis}, also commonly referred to as Fourier Analysis. We first assume that our solution $u(x,t)$ can be represented via a Fourier Series, such that
+\begin{equation}
+	u(x,t) = \sum_{m} b_m(t) e^{i \kappa_m x},
+\end{equation}
+where $b_m(t)$ is the Fourier coefficients that vary with time as the solution evolves, $\kappa_m$ is a wavenumber, and in this context $i = \sqrt{-1}$. This is the exact same as a conventional Fourer series, with the exception that the coefficients are a function of time describing the time evolution of the system of equations. Furthermore, we take
+\begin{equation}
+	\kappa_m = \frac{2 \pi m}{2 L}, \: m=0,1,2,\hdots,M,
+\end{equation}
+where $M$ is chosen based on the maximum wavenumber that can be represented on the grid based on its Nyquist criteria, and $L$ is the length of the domain. Hence, small values of $\kappa_m$ correspond to large waves, and large values of $\kappa_m$ correspond to very compact waves.
+
+Following this approach, we are taking our solution and decomposing it into a number of different waves via a Fourier series. Now, since we have restricted ourselves to linear systems of equations, we can apply the property of superposition. This means that we can analyze each wave independently as a function of time, and the final solution is simply the superposition of all of these waves. This allows us to analyze the behaviour of our numerical scheme for each wavenumber independently, since they are not coupled. Hence, we can write the solution for one particular wave of the Fourier series as
+\begin{equation}
+	u_m(x,t) = b_m(t) e^{i \kappa_m x},
+\end{equation}
+where the complete solution is
+\begin{equation}
+	u(x,t) = \sum_{m} u_m(x,t).
+\end{equation}
+We will also assume that the time-dependence of the solution is also wavelike with a prescribed frequency in time such that
+\begin{eqBox}
+\begin{equation}
+	u_m(x,t) = e^{at} e^{i \kappa_m x},
+\end{equation}
+\end{eqBox}
+where $a$ is a complex number, referred to as the numerical frequency, that describes how the solution evolves in time. In order to justify this assumption we can consider the linear advection equation applied to an arbitrary wavenumber $\kappa_m$. We note that this wave will propagate at velocity $\alpha$ from left to right. Now if we consider some fixed point in space, denoted by $u_1{t}$, we note that the value of the solution in time will alose behave like a sine wave. Hence, at a fixed point in time, the solution has a wavelike structure in space and, at a fixed point in space, the solution has a wavelike structure in time. Hence, the dual wavelike structure taken for $u_m(x,t)$.
+
+With the wavelike structure of the solution described, we can now explore how that wave will change with time. Of primary importance, at least in terms of stability, is to determine whether the wave will be amplified or damped as the solution evolves. Our objective in this section is to determine whether, and under what conditions, numerical schemes satisfy this stability condition. We note that the solution at time $t+\Delta t$ is simply
+\begin{equation}
+	u_m(x,t+\Delta t) = e^{a(t+\Delta t)} e^{i \kappa_m x},
+\end{equation}
+which can be re-written as
+\begin{equation}
+	u_m(x,t+\Delta t) = e^{at}e^{a\Delta t} e^{i \kappa_m x},
+\end{equation}
+and, in order for the magnitude of the solution to not be amplified at the next time step, we have the stability constraint
+\begin{eqBox}
+\begin{equation}
+	|e^{a\Delta t}| \leq 1,
+\end{equation}
+\end{eqBox}
+which describes a unit circle in the complex plane. Referred to as the amplification factor, we will next determine under what conditions our numerical schemes satisfy this stability constraint.
+
+\subsection{Explicit Linear Advection}
+As our first example, we consider our first-order scheme for linear advection
+\begin{equation}
+	\frac{u_i^{t+1} - u_{i}^t}{\Delta t} +  \alpha \frac{u_i^t - u_{i-1}^t}{\Delta x} = 0.
+\end{equation}
+Since we know the prescribed form of the solution, the grid spacing $\Delta x$, and the time step size $\Delta t$, we can write expressions for the solution for a particular wavenumber $\kappa_m$ at each grid point and time level as
+\begin{equation}
+	u_{i}^t = e^{at} e^{i \kappa_m x},
+\end{equation}
+\begin{equation}
+	u_{i}^{t+1} = e^{a(t+\Delta t)} e^{i \kappa_m x},
+\end{equation}
+\begin{equation}
+	u_{i-1}^t = e^{at} e^{i \kappa_m (x-\Delta x)}.
+\end{equation}
+Substituting these into our finite difference approximation yields
+\begin{equation}
+	\frac{e^{a(t+\Delta t)} e^{i \kappa_m x} - e^{at} e^{i \kappa_m x}}{\Delta t} +  \alpha \frac{e^{at} e^{i \kappa_m x} - e^{at} e^{i \kappa_m (x-\Delta x)}}{\Delta x} = 0.
+\end{equation}
+Noting that all of these terms has a common factor of $e^{at} e^{i \kappa_m x}$ we can simply divide through yielding
+\begin{equation}
+	\frac{e^{a\Delta t} - 1}{\Delta t} +  \alpha \frac{1 - e^{-i \kappa_m \Delta x}}{\Delta x} = 0.
+\end{equation}
+Rearranging yields
+\begin{equation}
+	e^{a\Delta t} = 1 - \sigma + \sigma e^{-i \kappa_m \Delta x},
+\end{equation}
+where
+\begin{equation}
+	\sigma = \frac{\alpha \Delta t}{\Delta x},
+\end{equation}
+is the {\it Courant-Friedrichs-Lewy} (CFL) number. Hence, the amplification factor of our first-order linear advection scheme is 
+\begin{eqBox}
+\begin{equation}
+	|e^{a\Delta t}| = |1 - \sigma + \sigma e^{-i \kappa_m \Delta x}|,
+\end{equation}
+\end{eqBox}
+and our scheme will be stable whenever this is contained within the unit circle in the complex plane. We note that this is a function of two parameters, specifically the wavenumber and the CFL number. Hence, we expect that the amount our solution gets amplified/damped each time step will depend on these two parameters.
+
+\subsection{Implicit Linear Advection}
+
+\subsection{Explicit Linear Diffusion}
+
+\subsection{Implicit Linear Diffusion}
+
 \section{Convergence}
+If a scheme is consistent, recovering the exact partial differential equation in the limit $\Delta x \rightarrow 0$ and $\Delta t \rightarrow 0$, and stable, in that the approximate solution does not grow unbounded with time, then Lax's equivalence theorem can be applied. In summary, the theorem states that when given a properly-posed initial value problem, and a numerical scheme that is consistent, stability is the necessary and sufficient condition for convergence. In other words, if we can show that our numerical schemes is consistent and stable, then we can be sure that it will {\it converge} to the true solution of the partial differential equation in the limit $\Delta x \rightarrow 0$ and $\Delta t \rightarrow 0$.
 
 \chapter{Time-Stepping}
 \section{Explicit}

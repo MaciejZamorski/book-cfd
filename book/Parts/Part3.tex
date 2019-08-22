@@ -456,7 +456,7 @@ Substituting these into our discrete scheme yields
 \end{equation}
 
 \subsubsection{Step 3: Solve for the Amplification Factor}
-Again we note a common factor of $e^{at} e^{i \kappa_m x}$ in all terms, allowing us divide through yielding
+Again we note a common factor of $e^{at} e^{i \kappa_m x}$ in all terms, allowing us to divide through yielding
 \begin{equation}
 	\frac{e^{a\Delta t} - 1}{\Delta t} +  \alpha \frac{e^{a\Delta t} - e^{a\Delta t} e^{-i \kappa_m \Delta x}}{\Delta x} = 0.
 \end{equation}
@@ -485,13 +485,133 @@ Although this scheme is unconditionally stable, making at appealing since it all
 \end{remark}
 
 \subsection{Explicit Linear Diffusion}
+Similar to the linear advection equation, we can also use von Neumann analysis to analyze the stability of the linear diffusion equation. 
+
+\subsubsection{Step 1: Choose the Discrete Scheme}
+We will start with the example scheme we derived in the finite difference section
+\begin{equation}
+  \frac{u_i^{t+1} - u_{i}^t}{\Delta t} - \beta \frac{u_{i-1}^t - 2u_i^t + u_{i+1}^t}{\Delta x^2} = 0.
+\end{equation}
+
+\subsubsection{Step 2: Apply the Wavelike Solution}
+Our expressions for wavelike solutions at each point are
+\begin{equation}
+	u_{i}^t = e^{at} e^{i \kappa_m x},
+\end{equation}
+\begin{equation}
+	u_{i}^{t+1} = e^{a(t + \Delta t)} e^{i \kappa_m x},
+\end{equation}
+\begin{equation}
+	u_{i-1}^{t} = e^{at} e^{i \kappa_m (x - \Delta x)},
+\end{equation}
+\begin{equation}
+	u_{i+1}^{t} = e^{at} e^{i \kappa_m (x + \Delta x)}.
+\end{equation}
+Substituting these into our discrete scheme yields
+\begin{equation}
+  \frac{e^{a(t + \Delta t)} e^{i \kappa_m x} - e^{at} e^{i \kappa_m x}}{\Delta t} -  \beta \frac{e^{at} e^{i \kappa_m (x - \Delta x)} - 2e^{at} e^{i \kappa_m x} + e^{at} e^{i \kappa_m (x + \Delta x)}}{\Delta x ^2} = 0.
+\end{equation}
+
+\subsubsection{Step 3: Solve for the Amplification Factor}
+Again we note a common factor of $e^{at} e^{i \kappa_m x}$ in all terms, allowing us to divide through yielding
+\begin{equation}
+  \frac{e^{a\Delta t} - 1}{\Delta t} -  \beta \frac{e^{-i \kappa_m \Delta x} - 2 + e^{i \kappa_m \Delta x}}{\Delta x ^2} = 0.
+\end{equation}
+Rearranging yields
+\begin{equation}
+	e^{a\Delta t} = 1 + r \left( e^{-i \kappa_m \Delta x} - 2 + e^{i \kappa_m \Delta x} \right), 
+\end{equation}
+where
+\begin{equation}
+	r = \frac{\beta \Delta t}{\Delta x^2},
+\end{equation}
+is similar to the CFL number but for diffusion rather than advection. Finally, the amplification factor is
+\begin{eqBox}
+\begin{equation}
+	|e^{a\Delta t}| = \left| 1 + r \left( e^{-i \kappa_m \Delta x} - 2 + e^{i \kappa_m \Delta x} \right) \right|.
+\end{equation}
+\end{eqBox}
+
+\subsubsection{Step 4: Determine the Stability Conditions}
+Based on this amplification factor, we demonstrate graphically that this scheme will be stable provided
+\begin{eqBox}
+\begin{equation}
+	0 \leq r \leq \frac{1}{2}.
+\end{equation}
+\end{eqBox}
+We note that this scheme is {\it conditionally stable}, similar to the first linear advection scheme we considered. This means if the grid is refined then the time step size must be reduced accordingly to maintain stability. However, we note that the factor of $\Delta x^2$ in $r$ will require the time step size to be reduced with the square of the grid spacing, which can become expensive on finer meshes.
+
+\begin{remark}
+The Navier-Stokes equations have both advective and diffusive terms. Hence, the time step is usually limited by the stricter of the stability constraints of the advective and diffusive schemes that are being used.
+\end{remark}
 
 \subsection{Implicit Linear Diffusion}
+Similar to the modified linear advection scheme, we can also modify our initial linear diffusion scheme by evaluating the spatial operator at the future unknown solution time.
+
+\subsubsection{Step 1: Choose the Discrete Scheme}
+This yields the following scheme
+\begin{equation}
+  \frac{u_i^{t+1} - u_{i}^t}{\Delta t} - \beta \frac{u_{i-1}^{t+1} - 2u_i^{t+1} + u_{i+1}^{t+1}}{\Delta x^2} = 0.
+\end{equation}
+
+\subsubsection{Step 2: Apply the Wavelike Solution}
+Our expressions for wavelike solutions at each point are
+\begin{equation}
+	u_{i}^t = e^{at} e^{i \kappa_m x},
+\end{equation}
+\begin{equation}
+	u_{i}^{t+1} = e^{a(t + \Delta t)} e^{i \kappa_m x},
+\end{equation}
+\begin{equation}
+	u_{i-1}^{t+1} = e^{a(t + \Delta t)} e^{i \kappa_m (x - \Delta x)},
+\end{equation}
+\begin{equation}
+	u_{i+1}^{t+1} = e^{a(t + \Delta t)} e^{i \kappa_m (x + \Delta x)}.
+\end{equation}
+Substituting these into our discrete scheme yields
+\begin{equation}
+  \frac{e^{a(t + \Delta t)} e^{i \kappa_m x} - e^{at} e^{i \kappa_m x}}{\Delta t} - \beta \frac{e^{a(t + \Delta t)} e^{i \kappa_m (x - \Delta x)} - 2e^{a(t + \Delta t)} e^{i \kappa_m x} + e^{a(t + \Delta t)} e^{i \kappa_m (x + \Delta x)}}{\Delta x^2} = 0.
+\end{equation}
+
+\subsubsection{Step 3: Solve for the Amplification Factor}
+Again we note a common factor of $e^{at} e^{i \kappa_m x}$ in all terms, allowing us to divide through yielding
+\begin{equation}
+  \frac{e^{a\Delta t} - 1}{\Delta t} - \beta \frac{e^{a\Delta t} e^{-i \kappa_m \Delta x} - 2e^{a\Delta t} + e^{a\Delta t} e^{i \kappa_m \Delta x}}{\Delta x^2} = 0.
+\end{equation}
+Rearranging yields
+\begin{equation}
+e^{a\Delta t}	= \frac{1}{\left[ 1 - r \left(e^{-i \kappa_m \Delta x} - 2 + e^{i \kappa_m \Delta x} \right)  \right]},
+\end{equation}
+where $r$ is the same as the original linear diffusion scheme. Finally, the amplification factor is
+\begin{eqBox}
+\begin{equation}
+	|e^{a\Delta t}|	= \left| \frac{1}{\left[ 1 - r \left(e^{-i \kappa_m \Delta x} - 2 + e^{i \kappa_m \Delta x} \right)  \right]} \right|.
+\end{equation}
+\end{eqBox}
+
+\subsubsection{Step 4: Determine the Stability Conditions}
+Based on the form of the amplification factor, we can conclude that this scheme will be stable for
+\begin{eqBox}
+\begin{equation}
+	0 \leq r \leq \infty.
+\end{equation}
+\end{eqBox}
+Hence, this linear diffusion scheme is {\it unconditionally stable}.
 
 \section{Convergence}
 If a scheme is consistent, recovering the exact partial differential equation in the limit $\Delta x \rightarrow 0$ and $\Delta t \rightarrow 0$, and stable, in that the approximate solution does not grow unbounded with time, then Lax's equivalence theorem can be applied. In summary, the theorem states that when given a properly-posed initial value problem, and a numerical scheme that is consistent, stability is the necessary and sufficient condition for convergence. In other words, if we can show that our numerical schemes is consistent and stable, then we can be sure that it will {\it converge} to the true solution of the partial differential equation in the limit $\Delta x \rightarrow 0$ and $\Delta t \rightarrow 0$.
 
 \chapter{Time-Stepping}
+In the previous sections we have always approximated the time derivative using first-order finite differences, assuming
+\begin{equation}
+	\frac{\partial u}{\partial t} = \frac{u_i^{t+1} - u_{i}^t}{\Delta t} + \mathcal{O}(\Delta t).
+\end{equation}
+In the von Neumann analysis section we demonstrated that two linear advection schemes and two linear diffusion schemes are either conditionally or unconditionally stable using this approach. However, if we try to use this finite difference approach to get higher-order accurate schemes in time, such as a central in time approach
+\begin{equation}
+	\frac{\partial u}{\partial t} = \frac{u_i^{t+1} - u_{i}^{t-1}}{2 \Delta t} + \mathcal{O}(\Delta t^2),
+\end{equation}
+we find it is almost always {\it unstable}. Hence, getting higher than first-order accurate solutions in time requires something other than finite differences. Furthermore, for both of the unconditionally stable schemes in the von Neumann section, we have not yet discussed how to actually advance them in time, and how to get higher-order accuracy in time, while maintaining this unconditional stability. Hence, in this section we will discuss more appropriate discretizations for the time derivative.
+
 \section{Explicit}
 \section{Implicit}
 
@@ -502,8 +622,218 @@ If a scheme is consistent, recovering the exact partial differential equation in
 \chapter{Modified Equation Analysis}
 
 \chapter{Iterative Methods}
+In this implicit time stepping section we reduced each time step to the solution of a linear system of $N$ equations of the form
+\begin{equation}
+	A \vec{x} = \vec{b},
+\end{equation}
+when solving either linear advection or linear diffusion, where $N$ is the number of grid points in the domain. The extra cost of solving this linear system was introduced in order to obtain unconditionally stable schemes, allowing very large time steps to be taken. However, this will only be faster than an explicit approach if the linear system of equations can be solved efficiently. Hence, this section is dedicated to exploring different methods of solving linear systems of equations.
+
+\section{Gaussian Elimination}
+Perhaps the most straightforward method for solving a linear system of equations is Guassian elimination. This requires us to invert $A$ and obtain
+\begin{equation}
+	 \vec{x} = A^{-1} \vec{b}.
+\end{equation}
+Gaussian elimination is the workhorse of most undergraduate linear algebra courses, and is a straightforward extension of the substitution approach for solving systems of equations taught in highschool. This requires inverting $A$ or an LU decomposition of $A$ and $\vec{b}$ to be formed, and then backsubstitution to solve for the unknown components of $\vec{x}$.
+
+While Gaussian elimination is well known, its computational cost scales like $\mathcal{O}(N^3)$ where $N$ is the number of unknowns. Hence, as the system of equations, and in our case number of grid points, grows, the computational cost of Gaussian elimination grows cubicly. Any undergraduate student should be familiar with trying to solve even $3 \times 3$ linear systems in an exam, let alone $4 \times 4$, or $5 \times 5$. With each additional equation, doing this by hand takes significantly more time. Hence, in the context of CFD, where thousands or millions of equations is common practice, Gaussian elimination is rarely used.
+
 \section{Jacobi Iteration}
+Since the formation of $A^{-1}$ is prohibitively expensive for large systems of equations, we will try to find an approximate solution $\vec{x}$, without actually forming $A^{-1}$. This can be done iteratively, and the first approach we will introduce is Jacobi iteration. In Jacobi iteration we start by splitting $A$ into $L$, $D$, and $U$, and are its strictly lower-triangular, diagonal, and strictly upper-triangular components. This allows us to write our linear system as
+\begin{equation}
+	(L+D+U) \vec{x} = \vec{b},
+\end{equation}
+where
+\begin{equation}
+	A = 
+	\begin{bmatrix}
+	    a_{11} & a_{12} & a_{13} & \dots  & a_{1n} \\
+	    a_{21} & a_{22} & a_{23} & \dots  & a_{2n} \\
+			a_{31} & a_{32} & a_{33} & \dots  & a_{3n} \\
+	    \vdots & \vdots & \vdots & \ddots & \vdots \\
+	    a_{n1} & a_{n2} & a_{n3} & \dots  & a_{nn}
+	\end{bmatrix},
+\end{equation}
+\begin{equation}
+	L = 
+	\begin{bmatrix}
+	    0 & 0 & 0 & \dots  & 0 \\
+	    a_{21} & 0 & 0 & \dots  & 0 \\
+			a_{31} & a_{32} & 0 & \dots  & 0 \\
+	    \vdots & \vdots & \vdots & \ddots & \vdots \\
+	    a_{n1} & a_{n2} & a_{n3} & \dots  & 0
+	\end{bmatrix},
+\end{equation}
+\begin{equation}
+	D = 
+	\begin{bmatrix}
+	    a_{11} & 0 & 0 & \dots  & 0 \\
+	    0 & a_{22} & 0 & \dots  & 0 \\
+			0 & 0 & a_{33} & \dots  & 0 \\
+	    \vdots & \vdots & \vdots & \ddots & \vdots \\
+	    0 & 0 & 0 & \dots  & a_{nn}
+	\end{bmatrix},
+\end{equation}
+\begin{equation}
+	U = 
+	\begin{bmatrix}
+	    0 & a_{12} & a_{13} & \dots  & a_{1n} \\
+	    0 & 0 & a_{23} & \dots  & a_{2n} \\
+			0 & 0 & 0 & \dots  & a_{3n} \\
+	    \vdots & \vdots & \vdots & \ddots & \vdots \\
+	    0 & 0 & 0 & \dots  & 0
+	\end{bmatrix}.
+\end{equation}
+Now if $\vec{x}$ is a solution to the linear system then the following is valid
+\begin{equation}
+	L\vec{x} + D\vec{x} + U\vec{x} = \vec{b}.
+\end{equation}
+We can now rearrange this expression
+\begin{equation}
+	D\vec{x} = \vec{b} - (L+U)\vec{x},
+\end{equation}
+and by inverting $D$ we get
+\begin{equation}
+	\vec{x} = D^{-1}\left[ \vec{b} - (L+U)\vec{x} \right].
+	\label{eqn:f928bs7g}
+\end{equation}
+At this point it is important to now that while inverting $A$ is very expensive, inverting just its diagonal values in $D$ is trivial.
+
+We note that if $\vec{x}$ is a solution to the linear system of equations, then Equation \ref{eqn:f928bs7g} will be satisfied exactly, but if we already had the exact solution there would be no point in this exercise. However, if we look again at Equation \ref{eqn:f928bs7g} it has an interesting form. We note that if we insert some guess for $\vec{x}$ into the right hand side, we get out a modified $\vec{x}$ on the left hand side. This allows us to define Jacobi iteration as
+\begin{eqBox}
+\begin{equation}
+	\vec{x}_{n+1} = D^{-1}\left[ \vec{b} - (L+U)\vec{x}_n \right],
+	\label{eqn:3jc810fg}
+\end{equation}
+\end{eqBox}
+where $\vec{x}_n$ is an approximate solution, and $\vec{x}_{n+1}$ is an updated approximation. Then we can simply pass $\vec{x}_{n+1}$ back through this formulation to obtain $\vec{x}_{n+2}$, and so on, iterating to a final solution when the value of $\vec{x}$ converges. Each step of Jacobi iteration requires $\mathcal{O}(N^2)$ operations, hence, we can expect Jacobi to outperform Gaussian elimination, as long as we need fewer iterations than there are rows in the system of equations. Furthermore, in CFD it is usually sufficient to converge $\vec{x}$ to some finite level of precision.
+
+To demonstrate the utility of Jacobi iteration we will use a simple example of a $3 \times 3$ system of equations. Starting with 
+\begin{equation}
+	A = 
+	\begin{bmatrix}
+	    10 & 2 & 4 \\
+	    6 & 8 & 4 \\
+			2 & 3 & 9
+	\end{bmatrix},
+\end{equation}
+and
+\begin{equation}
+	\vec{b} = \begin{bmatrix}
+	    1 \\
+	    2 \\
+			3
+	\end{bmatrix},
+\end{equation}
+we obtain the following for $L$, $D$, and $U$
+\begin{equation}
+	L = 
+	\begin{bmatrix}
+	    0 & 0 & 0 \\
+	    6 & 0 & 0 \\
+			2 & 3 & 0
+	\end{bmatrix},
+\end{equation}
+\begin{equation}
+	D = 
+	\begin{bmatrix}
+	    10 & 0 & 0 \\
+	    0 & 8 & 0 \\
+			0 & 0 & 9
+	\end{bmatrix},
+\end{equation}
+\begin{equation}
+	U = 
+	\begin{bmatrix}
+	    0 & 2 & 4 \\
+	    0 & 0 & 4 \\
+			0 & 0 & 0
+	\end{bmatrix}.
+\end{equation}
+Furthermore, we can easily invert $D$ to get
+\begin{equation}
+	D^{-1} = 
+	\begin{bmatrix}
+	    \frac{1}{10} & 0 & 0 \\
+	    0 & \frac{1}{8} & 0 \\
+			0 & 0 & \frac{1}{9}
+	\end{bmatrix}.
+\end{equation}
+Now we can start with some initial guess, lets say
+\begin{equation}
+	\vec{x_0} = \begin{bmatrix}
+	    0 \\
+	    0 \\
+			0
+	\end{bmatrix}.
+\end{equation}
+Convergence can usually be accelerated by using a good initial guess, for example, that the solution at the next time step in our CFD simulation is the same as the current solution.
+
+Now with our initial Guess and all terms from the right hand side of Equation \ref{eqn:3jc810fg} defined, we can compute
+\begin{equation}
+	\vec{x}_{1} = D^{-1}\left[ \vec{b} - (L+U)\vec{x}_0 \right] = \begin{bmatrix}
+	    0.1000 \\
+	    0.2500 \\
+			0.3333
+	\end{bmatrix}.
+\end{equation}
+Repeating this iteration a few times yields
+\begin{equation}
+	\vec{x}_{2} = D^{-1}\left[ \vec{b} - (L+U)\vec{x}_1 \right] = \begin{bmatrix}
+	    -0.0833 \\
+	    0.0083 \\
+			0.2277
+	\end{bmatrix},
+\end{equation}
+\begin{equation}
+	\vec{x}_{3} = D^{-1}\left[ \vec{b} - (L+U)\vec{x}_2 \right] = \begin{bmatrix}
+	    0.0072 \\
+	    0.1986 \\
+			0.3490
+	\end{bmatrix},
+\end{equation}
+and after 15 iterations we obtain
+\begin{equation}
+	\vec{x}_{15} = D^{-1}\left[ \vec{b} - (L+U)\vec{x}_14 \right] = \begin{bmatrix}
+	    -0.0465 \\
+	    0.1356 \\
+			0.2984
+	\end{bmatrix},
+\end{equation}
+which is very close to the exact solution
+\begin{equation}
+	\vec{x} = \begin{bmatrix}
+	    -0.0465 \\
+	    0.1357 \\
+			0.2984
+	\end{bmatrix}.
+\end{equation}
+Hence, after only 15 iterations Jacobi was able to converge to approximately four digits, without having to ever directly invert the $A$ matrix.
+
 \section{Gauss Seidel Iteration}
+With the idea of Jacobi iteration outlined above, we may wonder whether similar more efficient approaches exist. The first of these, with a very similar derivation to Jacobi, is the Gauss-Seidel method. Starting from our split $A$ matrix in the Jacobi section
+\begin{equation}
+	(L+D+U) \vec{x} = \vec{b},
+\end{equation}
+we rearrange it as
+\begin{equation}
+	(L + D)\vec{x} = \vec{b} - U\vec{x}.
+\end{equation}
+If we consider the $(L+D)$ matrix we note that it is lower-triangular. While not as trivial to invert as $D$ in Jacobi iteration, inverting $(L+D)$ can be done quickly via back-substitution. Hence, we can write
+\begin{equation}
+	\vec{x} = (L + D)^{-1}\left[ \vec{b} - U\vec{x} \right].
+\end{equation}
+Similar to Jacobi, we notice that if we insert an estimate for $\vec{x}$ on the right hand side, we obtain an updated estimate on the left hand side. Hence, we define Gauss-Seidel iteration as
+\begin{eqBox}
+\begin{equation}
+	\vec{x}_{n+1} = (L + D)^{-1}\left[ \vec{b} - U\vec{x}_n \right].
+\end{equation}
+\end{eqBox}
+Usually the additional cost of computing $(L + D)^{-1}$, relative to simply computing $D^{-1}$ with Jacobi, significantly reduces the number of iterations and total computational cost. 
+
 \section{Successive Over-Relaxation}
+When using either Jacobi or Gauss-Seidel, we often observe that the iterated solutions converge gradually to the exact solution for $\vec{x}$. That is, each iteration takes a step towards the exact solution in a somewhat uniform manner. We can exploit this by simply extrapolating each iteration to move a bit further towards the exact solution, which is known as Successive Over-Relaxation (SOR).
+
+The first step of SOR is to generate an estimate for the solution at the end of an iteration.
+
 \section{Krylov Subspace Methods}
 \section{Multigrid}

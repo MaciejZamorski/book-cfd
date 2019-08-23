@@ -831,9 +831,29 @@ Similar to Jacobi, we notice that if we insert an estimate for $\vec{x}$ on the 
 Usually the additional cost of computing $(L + D)^{-1}$, relative to simply computing $D^{-1}$ with Jacobi, significantly reduces the number of iterations and total computational cost. 
 
 \section{Successive Over-Relaxation}
-When using either Jacobi or Gauss-Seidel, we often observe that the iterated solutions converge gradually to the exact solution for $\vec{x}$. That is, each iteration takes a step towards the exact solution in a somewhat uniform manner. We can exploit this by simply extrapolating each iteration to move a bit further towards the exact solution, which is known as Successive Over-Relaxation (SOR).
+When using the Gauss-Seidel approach, we often observe that the iterated solutions converge gradually to the exact solution for $\vec{x}$. That is, each iteration takes a step towards the exact solution in a somewhat uniform manner. We can exploit this by simply extrapolating each iteration to move a bit further towards the exact solution, which is known as Successive Over-Relaxation (SOR). This is usually done to accelerate convergence, but as will be discussed later, it can be used to also stabilize convergence.
 
-The first step of SOR is to generate an estimate for the solution at the end of an iteration.
+With SOR we simply apply a Gauss Seidel iteration to our current approximation of the solution, $\vec{x}_n$. We store the results of this Gauss-Seidel iteration temporarily as $\tilde{\vec{x}}_{n+1}$. Then, using the SOR approach, we linearly project our updated solution using our current and previous approximations, that is
+\begin{eqBox}
+\begin{equation}
+	\vec{x}_{n+1} = \omega \tilde{\vec{x}}_{n+1} + (1-\omega) \vec{x}_n.
+\end{equation}
+\end{eqBox}
+where $\omega$ is referred to as the the relaxation factor. We note that when $\omega=1$ we recover the original Gauss Seidel approach. When $\omega>1$ we say it is over-relaxed, usually accelerating convergence but also potentially causing the iterations to diverge. When $\omega<1$ we say it is under-relaxed, which usually improves stability, but reduces the rate of convergence. In general, a suitable value for the relaxation factor is within the range
+\begin{equation}
+	0 \leq \omega \leq 2,
+\end{equation}
+and values of $\omega > 2$ will diverge. Typically, $\omega$ is chosen to be as large as possible, without causing the iterations to diverge.
 
-\section{Krylov Subspace Methods}
+\section{Assessing Convergence}
+In typical CFD applications, the user provides a desired convergence tolerance for solving the linear system of equations. To assess this, we introduce the concept of a residual. In the case of an exact solution to a linear system we would expect
+\begin{equation}
+	A \vec{x} - \vec{b} = 0.
+\end{equation}
+However, since our solution at any given iteration is only an approximate solution then
+\begin{equation}
+	A \vec{x}_n - \vec{b} = \vec{r},
+\end{equation}
+where $\vec{r}$ is referred to as the residual and measures how well our current approximate solution satisfies the system of equations being solved. While $\vec{r}$ gives detailed information about how well each equation in the entire system is being solved, it is typically more useful to provide the user with a norm, such as $\| \vec{r} \|_2$ or $\| \vec{r} \|_\infty$, giving a single measure of convergence. Then, iterations are continued until this residual norm converges to within the desired tolerance. It is also important to note that if the convergence tolerance is too high it can results in a loss of accuracy or stability in the CFD simulation. Hence, particular care must be chosen in how to select the desired convergence tolerance.
+
 \section{Multigrid}

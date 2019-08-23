@@ -332,8 +332,35 @@ and
 At this point it is worth noting that the form of the linear diffusion equation is similar to the linear advection equation, except we are taking the second derivative rather than the first.
 
 \chapter{Turbulence}
+One of the most challenging aspects of CFD is the prevalence of turbulent flows. While it may not be immediately apparent from the Navier-Stokes equations defined earlier, they can encode solutions with chaotic, unsteady, three-dimensional flow features. In this section we will discuss what is meant by turbulent flow, the nature of chaos, how it arises in the governing equations, and consequences for how we handle turbulent flows in CFD. Then, we will introduce an approach for modelling the effects of turbulence, and several popular models for doing so.
+
 \section{Turbulence Theory}
+The fundamental characteristic of turbulence is that it is {\it chaotic}. Hence, it encodes unsteady three-dimensional fluid flow with chaotic fluctuations in velocity, density, and pressure. These fluctuations typically exist over a wide range of length and time scales. Another important feature of turbulence, and a fundamental property of chaotic systems, is that it is highly sensitive to initial conditions. In our exploration of turbulence we will first start with a simple chaotic systems, and then we will extrapolate some of the properties of this system to the types of behaviour we observe in fluid flows.
+
 \subsection{Introduction to Chaos}
+As an introduction to chaos, we will consider the relatively simple logistic map, which is built from the non-linear logistic function
+\begin{equation}
+	x_{n+1} = ax_n(1-x_n),
+\end{equation}
+where $x_n$ is the current value, $x_{n+1}$ is the next value, and $a$ is a scalar that governs the behaviour of the system. A relatively simple analogy/application of the logistic equation is the growth/decay of a population of animals. In this case $x_n$ would be the current population, $x_{n+1}$ is next years population, and $a$ is responsible for controlling the birth/death rate of the animals in any given year based on the current population. The first thing to notice is that this equation is incredibly simple, yet under certain conditions it encodes infinitely complex chaotic behaviour, and the behaviour of the system is governed by the choice of $a$.
+
+\subsubsection{$a\leq 3$}
+In this case, regardless of the initial value $x_0$, the solution converges to one of two fixed points, either $x=0$, or $x=(a-1)/a$. In the context of a population prediction, this means that either all of the animals die, or the population converges to a constant value.
+
+\subsubsection{$ 3 < a \leq 1 + \sqrt{6}$}
+In this case, the system rapidly flips back and forth between two different values, referred to as a {\it two-cycle}. Regardless of the initial condition, the system will converge to one of these values, and then flip alternating back and forth between them. The transition from the initial fixed point solution to this two-cycle is referred to as a {\it bifurcation}. From a population perspective, this means alternating years of famine, where many animals die, and feast, where many animals are born.
+
+\subsubsection{$1 + \sqrt{6} < a \leq 3.54\hdots$}
+In this case, a second bifurcation occurs, and the solution oscillates between four possible solutions. This is referred to as a {\it period doubling}. As a consequence, the population will be a more complex cycle of feast and famine.
+
+\subsubsection{$\leq 3.54\hdots < a \leq 3.57\hdots$}
+Beyond $a = 3.54\hdots$ additional bifurcations and period doublings occur. With the population now oscillating between an ever growing number of possible values. By $a = 3.57\hdots$ an infinite number of bifurcations occurs. 
+
+\subsubsection{$3.57\hdots < a $}
+Beyond $a = 3.57\hdots$ the entire concept of a cycle breaks down, and all possible solution can be found within the range. The solution traverses chaotically and little structure is observed in its behaviour.\\
+
+An interesting thought experiment is to consider what happens to our system when we start with some initial guess $x_0$, and some perturbed initial guess $x_0 + \epsilon$, where $\epsilon$ is a small number. In the case of small values of $a$ both of these solution converge to the same fixed point. However, as $a$ gets larger this predictability starts to break down. Eventually, with a large value of $a$, and given enough iterations, the two solutions will diverge from one another and it will be impossible to discern that they had almost the exact same initial condition. Hence, with certain choices of $a$ the logistic equations is chaotic, resulting in complex behaviour and extreme sensitivity to initial conditions. 
+
 \subsection{Chaos and Navier-Stokes}
 \subsection{The Energy Cascade}
 \section{Reynolds Averaging}

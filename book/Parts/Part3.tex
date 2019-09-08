@@ -267,12 +267,12 @@ where again the superscript $t$ denotes that we are using the solution at the cu
 
 Now we simply insert our finite difference approximations of these two derivatives into the Burgers equation
 \begin{equation}
-	\frac{u_i^{t+1} - u_{i}^t}{\Delta t} +  \frac{(u_i^t)^2 - (u_{i-1}^t)^2}{\Delta x} + \mathcal{O}(\Delta x, \Delta t) = 0,
+	\frac{u_i^{t+1} - u_{i}^t}{\Delta t} +  \frac{1}{2}\frac{(u_i^t)^2 - (u_{i-1}^t)^2}{\Delta x} + \mathcal{O}(\Delta x, \Delta t) = 0,
 \end{equation}
 and, just like for linear advection, we can now find an expression for the solution at any grid point at the next time step as
 \begin{eqBox}
 \begin{equation}
-	u_i^{t+1} = u_{i}^t - \frac{\Delta t}{\Delta x} \left( \left(u_i^t \right)^2 - \left( u_{i-1}^t \right)^2 \right) + \mathcal{O}(\Delta x, \Delta t).
+	u_i^{t+1} = u_{i}^t - \frac{\Delta t}{\Delta x} \frac{1}{2}\left( \left(u_i^t \right)^2 - \left( u_{i-1}^t \right)^2 \right) + \mathcal{O}(\Delta x, \Delta t).
 \end{equation}
 \end{eqBox}
 Looking at this expression we note it is remarkably similar to the expression for linear advection, which is not particularly surprising as the two initial partial differential equations are also quite similar. Again, if we know the solution at each grid point at some time $t$, we can approximate the solution at some time $t+\Delta t$ using this expression. Then, to approximate the solution at the time $t+2\Delta t$ we simply re-apply the expression. This allows us to approximate the behaviour of Burgers equation up to any desired final time, and the error of the approximation is expected to be first-order accurate in both space and time, with errors on the order of $\mathcal{O}(\Delta x, \Delta t)$.
@@ -613,11 +613,138 @@ In the von Neumann analysis section we demonstrated that two linear advection sc
 we find it is almost always {\it unstable}. Hence, getting higher than first-order accurate solutions in time requires something other than finite differences. Furthermore, for both of the unconditionally stable schemes in the von Neumann section, we have not yet discussed how to actually advance them in time, and how to get higher-order accuracy in time, while maintaining this unconditional stability. Hence, in this section we will discuss more appropriate discretizations for the time derivative.
 
 \section{Explicit}
+Our previous approach for discretizing the time derivative is called a {\it multi-step} scheme, since we are using information from multiple time steps to try to estimate the solution at the next time-step. In this section we will introduce {\it multi-stage} time stepping, specifically the well-known classical Runge-Kutta methods. Rather than use the value of the solution at previous time steps, Runge-Kutta methods compute the solution at intermediate stages between time level $t$ and $t+1$. Then, these intermediate solutions are cleverly combined to achieve a more stable and potentially higher-order accurate solution in time. In all of these cases we will re-arrange our system into a general form
+\begin{equation}
+	\frac{\partial u}{\partial t} = R(u),
+\end{equation}
+where $R(u)$ is typically referred to as the {\it residual} or the {\it right hand side}. Note that the term residual is used in several different contexts in CFD.
+
+\subsection{Forward Euler}
+The forward Euler, or explicit Euler, scheme uses just one stage to predict the solution at the next time step. In fact, it is equivalent to our previous finite difference approach. In this scheme we get
+\begin{equation}
+	u^{t+1} = u^t + \Delta t R(u).
+\end{equation}
+Graphically, this can be interpreted as using the current derivative of the solution in time at time $t$, and simply extrapolating based on this derivative to the time $t+1$. This approach is $\mathcal{O}(\Delta t)$ in time.
+
+\subsection{Heun's Method}
+Heun's method is a fairly simple but clever improvement on the explicit Euler scheme. We start by using the explicit Euler method to build an approximation of the solution at $t+1$
+\begin{equation}
+	\tilde{u} = u^t + \Delta t R(u),
+\end{equation}
+where $\tilde{u}$ is an initial guess for the solution. Then, we use an average of the following right hand sides to compute the solution at the next time step
+\begin{equation}
+	\tilde{u}^{t+1} = u^t + \Delta t \left[\frac{R(u) + R(\tilde{u})}{2} \right].
+\end{equation}
+This approach is called a two-stage scheme, since we had to compute our solution at one intermediate stage before the final solution is obtained. This requires us to evaluate two right hand sides, one for each stage, so is approximately twice as expensive as the explicit Euler method. However, it can be shown that it achieves $\mathcal{O}(\Delta t^2)$ in time. Hence, when the time step is small it is significantly more accurate.
+
+\subsection{Midpoint Method}
+The midpoint method is very similar to Heun's method. However, we start by computing the solution at an intermediate stage halfway between the current and next time steps, using an explicit Euler approach
+\begin{equation}
+	\tilde{u} = u^t + \frac{\Delta t}{2} R(u).
+\end{equation}
+Since we have divided $\Delta t$ by two, we are now halfway between the current and next time steps, hence why it is called the midpoint method. Now, we compute the solution at the next time step by evaluating the residual at this midpoint location
+\begin{equation}
+	u^{t+1} = u^t + \Delta t R(\tilde{u}).
+\end{equation}
+Similar to Heun's method, this is also a two stage scheme and has a temporal error of $\mathcal{O}(\Delta t^2)$.
+
+\subsection{Runge-Kutta Methods}
+If we look at Heun's method and the midpoint method we note that their structure is very similar. We start by computing some intermediate solution, then evaluating the residual of that intermediate solution, and then linearly combining it with the residual of the initial solution. This can be generalized from two stages up to as many stages as we may like, with multiple intermediate solutions being obtained to improve the order of accuracy. Starting from our current solution $u^t$, we will compute $s$ intermediate stage solutions
+\begin{equation}
+	u_1, u_2, \hdots, u_s,
+\end{equation}
+where the subscript of $u_i$ denotes the stage number and $s$ is the total number of stages. From these we can also get the residuals of these intermediate solutions from $R(u_i)$. We compute the intermediate stage solutions from
+\begin{equation}
+	u_i = u^t + \Delta t \sum_{j=1}^s a_{i,j} R(u_j),
+\end{equation}
+and the final solution is found from
+\begin{equation}
+	u^{t+1} = u^t + \Delta t \sum_{i=1}^s b_i R(u_i),
+\end{equation}
+where $a_{i,j}$ and $b_i$ and a set of constants. These can be compacted into a {\it Butcher Tableau}
+\begin{equation}
+	\begin{tabular}{c|ccccc}
+ 
+	c   & A \\
+ 
+	\hline
+ 
+	         & b\\
+ 
+	\end{tabular}
+    = 	
+	\begin{tabular}{c|ccccc}
+ 
+	$c_1$    & $a_{1,1}$ & $\cdots$ & $a_{1,s}$ \\
+ 
+	$\vdots$ & $\vdots$ &  $\ddots$ & $\vdots$\\
+ 
+	$c_s$    & $a_{s,1}$  & $\cdots$ & $a_{s,s}$\\
+ 
+	\hline
+ 
+	         & $b_1$  & $\cdots$ & $b_s$\\
+ 
+	\end{tabular}
+\end{equation}
+This will yield an explicit scheme if the $A$ matrix is strictly lower-triangular. In that case, we find the solution at any stage is simple a function of the solution of earlier stages. In that case, the method consists of a number of intermediate stage solutions computed using an explicit Euler approach. The following are some example tableaus for commonly-used explicit schemes, including those already introduced.
+
+\subsubsection{Explicit Euler}
+The explicit Euler method has one stage and is $\mathcal{O}(\Delta t)$ in time.
+\begin{equation}
+	\begin{tabular}{c|ccccc}
+	0   & 0 \\
+	\hline
+	         & 1\\
+	\end{tabular}
+\end{equation}
+
+\subsubsection{Explicit Euler}
+Heun's method has two stages and is $\mathcal{O}(\Delta t^2)$ in time.
+\begin{equation}
+	\begin{tabular}{c|ccccc}
+	0 & \\
+	1 & 1 \\
+	\hline
+	 & $\frac{1}{2}$ & $\frac{1}{2}$\\
+	\end{tabular}
+\end{equation}
+
+\subsubsection{Explicit Midpoint}
+The explicit midpoint method has two stages and is $\mathcal{O}(\Delta t^2)$ in time.
+\begin{equation}
+	\begin{tabular}{c|ccccc}
+	0   & \\
+	$\frac{1}{2}$   & $\frac{1}{2}$ \\
+	\hline
+	         & 0 & 1\\
+	\end{tabular}
+\end{equation}
+
+\subsubsection{Fourth-Order Runge-Kutta}
+The explicit four-stage fourth-order Runge-Kutta method is $\mathcal{O}(\Delta t^4)$ in time.
+
+\begin{equation}
+	\begin{tabular}{c|ccccc}
+	0   & \\
+	$\frac{1}{2}$   & $\frac{1}{2}$ \\
+	$\frac{1}{2}$   & 0 & $\frac{1}{2}$ \\
+	$1$   & 0 & 0 & 1 \\
+	\hline
+	         & $\frac{1}{6}$ & $\frac{1}{3}$ & $\frac{1}{3}$ & $\frac{1}{6}$\\
+	\end{tabular}
+\end{equation}
+
 \section{Implicit}
 
 \chapter{Spectral Properties}
-\section{Dissipation}
-\section{Dispersion}
+In CFD the numerical error introduced by a scheme is typically classified into two types, dissipation error and dispersion error. In this section we will discuss how to quantify these two types of error, and how they effect different types of solutions..
+
+\section{Dissipation Error}
+We have already discussed dissipation error in the context of stability, stating that in order for a scheme to be stable it must be dissipative or neutral. That is, the amplitude of the solution must remain the same or be reduced after each time step. We have shown this via von Neumann analysis to be the amplification factor $|e^{a\Delta t}|$, which was a function of the scheme we are using, and the wavenumber in space $\kappa_m$.
+
+\section{Dispersion Error}
+From the linear advection equation we know that the solution should translate at an exact wave speed $\alpha$. However, our numerical schemes will often introduce another error whereby the numerical wave does not move at the correct velocity. As a results, we often observe that the numerical solution is out of phase with the exact solution, which is referred to as dispersion error.
 
 \chapter{Modified Equation Analysis}
 

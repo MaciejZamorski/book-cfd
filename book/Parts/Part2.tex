@@ -331,6 +331,44 @@ and
 \end{eqBox}
 At this point it is worth noting that the form of the linear diffusion equation is similar to the linear advection equation, except we are taking the second derivative rather than the first.
 
+\section{PDE Classification}\index{PDE Classification}
+In the previous sections we have introduced several different partial differential equations. From the context of the Navier-Stokes equations these include conservation of mass, momentum, and energy, which we have then simplified into the Euler, linear advection, Burgers, and linear diffusion equations. As we will see in later sections, not all numerical approaches work well for all partial differential equations, and it is often useful to classify them based on their properties and behaviour.
+
+\subsection{First Order Equations}
+First order partial differential equations take the form
+\begin{equation}
+	A \frac{\partial u}{\partial x} + B \frac{\partial u}{\partial y} = F(x,y,u).
+\end{equation}
+Note that the $x$ and $y$ dimensions here need not be only space, this is just a general form. Hence, the linear advection equation is also of this form, since both of its derivatives are first order in both space and time. These are always {\it hyperbolic} in nature, and as a result, they exhibit wavelike solutions. This means that information travels in a particular defined direction.
+
+\subsection{Second Order Equations}
+Second order partial differential equations take the form
+\begin{equation}
+	A \frac{\partial^2 u}{\partial x^2} + B \frac{\partial^2 u}{\partial x \partial y} + C \frac{\partial^2 u}{\partial y^2} = F(x,y,u,\frac{\partial u}{\partial x},\frac{\partial u}{\partial y}).
+\end{equation}
+Depending on the values of $A$, $B$, and $C$ these type of equations will exhibit different behaviour.
+
+\subsubsection{$B^2-4AC > 0$}
+These are also hyperbolic in nature, and exhibit wave-like solutions.
+
+\subsubsection{$B^2-4AC = 0$}
+These are parabolic in nature, and are typically transient diffusion processes.
+
+\subsubsection{$B^2-4AC < 0$}
+These are elliptic in nature, and are typically steady-state diffusion processes.
+
+If we look at linear advection, it is first order and, therefore hyperbolic. If we look at the linear diffusion equation, we find that it is parabolic. Hence, we expect that the numerical behaviour of these two different problems will be quite different. A few other examples include the classical wave equation
+\begin{equation}
+	\frac{\partial^2 u}{\partial t^2} - \alpha\frac{\partial^2 u}{\partial t^2} = 0,
+\end{equation}
+which is hyperbolic and should have similar behaviour to the linear advection equation. Also a steady-state two dimensional diffusion problem has the form
+\begin{equation}
+	\frac{\partial^2 u}{\partial x^2} + \frac{\partial^2 u}{\partial t^2} = 0,
+\end{equation}
+which is elliptic, and will probably require a different approach.
+
+The above is a relatively simple classification, but when confronted with new type of partial differential equation, it is very useful to identify its classification to see if its behaviour is similar to another well-known system. In addition, in many applications the $A$, $B$, and $C$ coefficients can be a function of space, time, or a non-linear function of the solution. Hence, the behaviour of the system can change from one type to another as the solution evolves. In this case a particularly robust numerical approach is required.
+ 
 \chapter{Turbulence}
 One of the most challenging aspects of CFD is the prevalence of turbulent flows. While it may not be immediately apparent from the Navier-Stokes equations defined earlier, they can encode solutions with chaotic, unsteady, three-dimensional flow features. In this section we will discuss what is meant by turbulent flow, the nature of chaos, how it arises in the governing equations, and consequences for how we handle turbulent flows in CFD. Then, we will introduce an approach for modelling the effects of turbulence, and several popular models for doing so.
 

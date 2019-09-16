@@ -402,7 +402,97 @@ An interesting thought experiment is to consider what happens to our system when
 \subsection{Chaos and Navier-Stokes}
 \subsection{The Energy Cascade}
 \section{Reynolds Averaging}
+Now that we have briefly introduced chaos and how it relates to the Navier-Stokes equations, it is clear that the study of turbulent flows is indeed challenging. Small changes in the initial conditions may substantially deviate the results. Hence, we commonly require the use of statistical tools to understand its behaviour, which include averaging operations. One of the most widely used, known as \textit{Reynolds decomposition}, was introduced by Osborne Reynolds~\cite{} in 1895. The concept lies on representing any flow property $u(\vec{x},t)$ as the sum of mean and fluctuating parts, such that
+\begin{equation}
+	u(x,t) = \overline{u(\vec{x},t)} + u(\vec{x},t)^\prime.
+	\label{eq:reynolds_decomp}
+\end{equation}
+where $\overline{\cdot}$ denotes the averaged term and $^\prime$ the fluctuation.
+Turbulent flows can be considered \textit{stationary} if, on the average, do not vary in time. Even though the instantaneous components will vary, we gain some reproducibility by considering the mean quantities instead. An example could be a wing of an airplane flying at cruise speed. It is clear that if we measure the velocity at a given point where the flow is turbulent, we will observe fluctuations in the results. However, if these results are \textit{time-averaged}, we will expect to obtain the same value should the experiment be repeated. This type of averaging is defined in an integral sense as
+\begin{equation}
+	u_T(\vec{x}) = \lim_{\tau\rightarrow\infty} \frac{1}{\tau} \int_t^{t+\tau} u(\vec{x},t)dt,
+	\label{eq:time_averaging}
+\end{equation}
+where $\tau$ is the length of the averaging. For large values of $\tau$, $u_T$ is independent of the initial conditions. A schematic representation can be observed in Figure~\ref{fig:time_averaging}. We observe a constant value given the stationary characteristic of the flow.
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.7\linewidth]{placeholder}
+	\caption{Time averaging of a stationary flow quantity $u(\vec{x},t).$}
+	\label{fig:time_averaging}
+\end{figure}
+\textit{Homogeneous} flows are those whose properties do not vary in any direction. In this case, a \textit{spatial averaging} procedure may be convenient
+\begin{equation}
+	u_\Omega(t) = \lim_{\Omega\rightarrow\infty} \frac{1}{\Omega}\int_\Omega u(\vec{x},t)dV,
+\end{equation}
+where $\Omega$ is the volume of the domain. Finally, \textit{ensemble averaging} can be used to obtain mean values using $N$ identical experiments, even if initial and boundary conditions include infinitesimal perturbations. In this type of averaging, the variation on both the spatial and temporal coordinates is maintained. For $N$ experiments, where $N$ is large, we can calculate
+\begin{equation}
+	u_N(\vec{x},t) = \lim_{N\rightarrow\infty} \frac{1}{N} \sum_{i=1}^N u_i(\vec{x},t),
+\end{equation}
+where $u_i({\vec{x},t})$ is the result obtained in the $i$-th experiment. An example of ensemble averaging, can be seen in Figure~\ref{fig:ensemble_averaging} for non-stationary flows, where we discover a smooth sinusoidal behaviour after $N$ experiments have been performed. 
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.7\linewidth]{placeholder}
+	\caption{Ensemble averaging results of a non-stationary flow quantity $u(\vec{x},t).$}
+	\label{fig:ensemble_averaging}
+\end{figure}
+
+In the following section, we will derive the Reynolds Averaged Navier-Stokes equations using the time-averaging operation. Before we dive into the derivation, we will discuss some Reynolds Averaging properties. For a complete explanation of these properties, refer to Wilcox~\cite{}. 
+
+\subsubsection{Properties of Reynolds Averaging}
+
+Consider a statistically-steady state flow scenario, two flow quantities $u$ and $v$, and constants $\alpha$ and $\beta$.
+
+\begin{itemize}
+\item Since the time-averaging process deals with definite integrals, it is a linear operation. Hence, 
+\begin{equation}
+	\overline{\alpha u + \beta v} = \alpha \overline{u} + \beta \overline{v}.
+	\label{eq:reynolds_sum}
+\end{equation}
+\item The time averaging of integrals and derivatives commute
+\begin{equation}
+	\overline{\int u dy} = \int \overline{u} dy,  ~~~ \overline{\frac{\partial u}{\partial t}} = \frac{\partial \overline{u}}{\partial t}.
+	\label{eq:reynolds_intdiff}
+\end{equation}
+\item Any time-averaged fluctuation vanishes, i.e. 
+\begin{equation}
+	\overline{u^\prime}=0.
+	\label{eq:reynolds_fluct}
+\end{equation}
+\item We can take the average of the product of two instantaneous quantities by
+\begin{equation}
+	\overline{uv} = \overline{\bar{u}\bar{v}} + \overline{u^\prime v^\prime}.
+	\label{eq:reynolds_product}
+\end{equation}
+\item From the aforementioned properties, it can also be shown that
+\begin{equation}
+	\overline{\overline{u}} = \overline{u}, ~~~ \overline{u^\prime \overline{v}} = 0.
+\end{equation}
+\end{itemize}
+
 \subsection{The Reynolds Averaged Navier-Stokes Equations}
+
+The Reynolds-Averaged Navier-Stokes (RANS) Equations are especially useful for analysis of time-marching numerical methods involving statistically steady-flow problems. To obtain these equations, we must first decompose each variable using Reynolds decomposition, using Equation~\ref{eq:reynolds_decomp}. Then we will perform the time-averaging procedure from Equation~\ref{eq:time_averaging}. In this section, we will derive the incompressible RANS equations and later extend to the compressible case.
+
+Consider the mass conservation law for incompressible flows
+\begin{equation}
+	\nabla\cdot\vec{v} = 0,
+\end{equation}
+where $\vec{v}$ is the velocity vector. First, we apply Reynolds decomposition and then time-average the equation, such that
+\begin{equation}
+	\overline{\nabla\cdot\left(\overline{\vec{v}} + \vec{v}^{~\prime}\right)} = 0.
+\end{equation}
+Recall that a time-averaged sum is the sum of the time-average of each of the summands (Equation~\ref{eq:reynolds_sum}), and a time-averaged fluctuation vanishes (Equation~\ref{eq:reynolds_fluct}). This yields
+\begin{equation}
+	\nabla \cdot \overline{\vec{v}} = 0.
+\end{equation}
+Hence, we can also conclude that the continuity equation also applies to the fluctuation velocity vector
+\begin{equation}
+	\nabla \cdot \vec{v}^{~\prime} = 0.
+\end{equation}
+
+Next, we consider the momentum equation in the $x$-direction. We leave the $y$ and $z$-momentum equations as an exercise to the reader. Similarly as with the continuity equation, we decompose the variables using Reynolds decomposition and then time-average the equation.
+
 \subsection{The Reynolds Stresses}
 \section{Turbulence Modelling}
 \subsection{The Boussinesq Hypothesis}

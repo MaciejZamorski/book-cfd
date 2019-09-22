@@ -67,6 +67,7 @@ The first of the surface forces is due to the pressure surrounding the system. S
 \end{equation}
 where $p$ is the pressure and the negative is included since pressure exerts a force inwards, but our normal vector is defined as outwards. The second set of surface terms is due to the effects of viscosity. To account for these we introduce the Cauchy stress tensor $\tau$, which for Newtonian fluids is
 \begin{equation}
+	\label{eqn:cauchytensor}
 	\tau = \mu \left(\nabla \vec{v} + \left(\nabla \vec{v} \right)^T \right) - \frac{2}{3} \mu \left(\nabla \cdot \vec{v} \right) \mathbf{I},
 \end{equation}
 where $\mu$ is the dynamic viscosity and $\mathbf{I}$ is an identity matrix. Whereas pressure acts normal to the control volume surface, viscous effects act parallel to it. Hence, the total viscous force $\vec{F_v}$ can be obtained via integration
@@ -402,7 +403,7 @@ An interesting thought experiment is to consider what happens to our system when
 \subsection{Chaos and Navier-Stokes}
 \subsection{The Energy Cascade}
 \section{Reynolds Averaging}
-Now that we have briefly introduced chaos and how it relates to the Navier-Stokes equations, it is clear that the study of turbulent flows is indeed challenging. Small changes in the initial conditions may substantially deviate the results. Hence, we commonly require the use of statistical tools to understand its behaviour, which include averaging operations. One of the most widely used, known as \textit{Reynolds decomposition}, was introduced by Osborne Reynolds~\cite{} in 1895. The concept lies on representing any flow property $u(\vec{x},t)$ as the sum of mean and fluctuating parts, such that
+Now that we have briefly introduced chaos and how it relates to the Navier-Stokes equations, it is clear that the study of turbulent flows is indeed challenging. Small changes in the initial conditions may substantially deviate the results. Hence, we commonly require the use of statistical tools to understand its behaviour, which includes averaging operations. One of the most widely used, known as \textit{Reynolds decomposition}, was introduced by Osborne Reynolds~\cite{} in 1895. The concept lies on representing any flow property $u(\vec{x},t)$ as the sum of mean and fluctuating parts, such that
 \begin{equation}
 	u(x,t) = \overline{u(\vec{x},t)} + u(\vec{x},t)^\prime.
 	\label{eq:reynolds_decomp}
@@ -452,7 +453,7 @@ Consider a statistically-steady state flow scenario, two flow quantities $u$ and
 \item The time averaging of integrals and derivatives commute
 \begin{equation}
 	\overline{\int u dy} = \int \overline{u} dy,  ~~~ \overline{\frac{\partial u}{\partial t}} = \frac{\partial \overline{u}}{\partial t}.
-	\label{eq:reynolds_intdiff}
+	\label{eq:reynolds_commute}
 \end{equation}
 \item Any time-averaged fluctuation vanishes, i.e. 
 \begin{equation}
@@ -462,7 +463,7 @@ Consider a statistically-steady state flow scenario, two flow quantities $u$ and
 \item We can take the average of the product of two instantaneous quantities by
 \begin{equation}
 	\overline{uv} = \overline{\bar{u}\bar{v}} + \overline{u^\prime v^\prime}.
-	\label{eq:reynolds_product}
+	\label{eq:reynolds_prod}
 \end{equation}
 \item From the aforementioned properties, it can also be shown that
 \begin{equation}
@@ -472,26 +473,181 @@ Consider a statistically-steady state flow scenario, two flow quantities $u$ and
 
 \subsection{The Reynolds Averaged Navier-Stokes Equations}
 
-The Reynolds-Averaged Navier-Stokes (RANS) Equations are especially useful for analysis of time-marching numerical methods involving statistically steady-flow problems. To obtain these equations, we must first decompose each variable using Reynolds decomposition, using Equation~\ref{eq:reynolds_decomp}. Then we will perform the time-averaging procedure from Equation~\ref{eq:time_averaging}. In this section, we will derive the incompressible RANS equations and later extend to the compressible case.
+The Reynolds-Averaged Navier-Stokes (RANS) equations are especially useful for analysis of time-marching numerical methods involving statistically steady flow problems. These equations have been widely used in the aerospace industry for decades. The idea is to split each of the flow variables into mean and fluctuating components and then perform time averaging of the equations. As a consequence, the high-frequency information is removed from the flow. The resulting conservation laws describe only the evolution of the mean flow quantities. 
 
-Consider the mass conservation law for incompressible flows
-\begin{equation}
-	\nabla\cdot\vec{v} = 0,
-\end{equation}
-where $\vec{v}$ is the velocity vector. First, we apply Reynolds decomposition and then time-average the equation, such that
-\begin{equation}
-	\overline{\nabla\cdot\left(\overline{\vec{v}} + \vec{v}^{~\prime}\right)} = 0.
-\end{equation}
-Recall that a time-averaged sum is the sum of the time-average of each of the summands (Equation~\ref{eq:reynolds_sum}), and a time-averaged fluctuation vanishes (Equation~\ref{eq:reynolds_fluct}). This yields
-\begin{equation}
-	\nabla \cdot \overline{\vec{v}} = 0.
-\end{equation}
-Hence, we can also conclude that the continuity equation also applies to the fluctuation velocity vector
-\begin{equation}
-	\nabla \cdot \vec{v}^{~\prime} = 0.
-\end{equation}
+In this section, we will derive RANS equations for incompressible flow and later for the compressible case. We will then discuss the appearance of the Reynolds stresses as a consequence of time-averaging nonlinear convective terms from the Navier-Stokes equations.
 
-Next, we consider the momentum equation in the $x$-direction. We leave the $y$ and $z$-momentum equations as an exercise to the reader. Similarly as with the continuity equation, we decompose the variables using Reynolds decomposition and then time-average the equation.
+\subsubsection{Incompressible flow}
+
+Consider the incompressible mass conservation law
+\begin{equation}
+    \nabla\cdot\vec{v} = 0,
+\end{equation}
+which we rewrite using tensor notation
+\begin{equation}
+    \frac{\partial v_i}{\partial x_i} = 0,
+\end{equation}
+where index $i$ indicates summation over all considered directions. We decompose the velocity variable as the sum of mean and fluctuation components
+\begin{equation}
+    \overline{\frac{\partial }{\partial x_i}\left(\overline{v_i} + v_i^\prime\right)} = 0.
+\end{equation}
+Since the time-averaging procedure commutes with derivative operators (Equation~\ref{eq:reynolds_commute}),
+\begin{equation}
+    \label{eq:rans_mass_decomposed}
+    \frac{\partial}{\partial x_i} \overline{\left(\overline{v_i} + v_i^\prime\right)} = 0.
+\end{equation}
+Using Equations~\ref{eq:reynolds_sum} and~\ref{eq:reynolds_fluct},
+\begin{eqBox}
+\begin{equation}
+    \frac{\partial \overline{v_i}}{\partial x_i} = 0,
+\end{equation}
+\end{eqBox}
+where the fluctuating term has vanished. This means that the divergence of each of the terms in Equation~\ref{eq:rans_mass_decomposed} must equal zero. Hence
+\begin{equation}
+    \frac{\partial v_i^\prime}{\partial x_i} = 0.
+\end{equation}
+Next, we consider the momentum equation. Similarly, we split the variables using Reynolds decomposition and then time-average both sides of the equation. The momentum equations can be written using tensor notation
+\begin{equation}
+    \label{eq:rans_momentum_initial}
+    \rho\frac{\partial v_i}{\partial t} + \rho v_j\frac{\partial v_i}{\partial x_j} =
+    - \frac{\partial p}{\partial x_i} + \mu \frac{\partial^2 v_i}{\partial x_j^2},
+\end{equation}
+where $\mu$ is the dynamic viscosity and $\rho=\overline{\rho}$ is constant due to the incompressible condition. We will simplify the derivation beforehand by considering
+\begin{equation}
+    \frac{\partial \left(v_jv_i\right)}{\partial x_j} = v_j \frac{\partial v_i}{\partial x_j} + v_i \frac{\partial v_j}{\partial x_j},
+\end{equation}
+where the second term $\partial v_j/\partial x_j$ vanishes according to continuity. Hence,
+\begin{equation}
+    \frac{\partial \left(v_jv_i\right)}{\partial x_j} = v_j \frac{\partial v_i}{\partial x_j},
+\end{equation}
+which we use to replace the convective term in Equation~\ref{eq:rans_momentum_initial}, such that
+\begin{equation}
+    \rho\frac{\partial  v_i}{\partial t} + \rho\frac{\partial  v_j v_i}{\partial x_j} =
+    - \frac{\partial p}{\partial x_i} + \mu \frac{\partial^2 v_i}{\partial x_j^2}.
+\end{equation}
+Decomposing the flow variables and time-averaging the resulting equation, we have
+\begin{equation}
+    \overline{ 
+    \rho\frac{\partial  \left(\overline{v_i}+v_i^\prime\right)}{\partial t} 
+    + \rho \frac{\partial  \left(\overline{v_j} + v_j^\prime\right)\left(\overline{v_i}+ v_i^\prime\right)}{\partial x_j}} = \overline{
+     - \frac{\partial \left(\overline{p}+p^\prime\right)}{\partial x_i} 
+    + \mu \frac{\partial^2 \left(\overline{v_i}
+    +v_i^\prime\right)}{\partial x_j^2}}.
+\end{equation}
+By first resolving multiplications and then applying the Reynolds averaging properties, we obtain the momentum RANS equations for incompressible flow
+\begin{eqBox}
+\begin{equation}
+    \rho \frac{\partial \overline{v_i}}{\partial t} 
+    + \rho  \frac{\partial}{\partial x_j} \left(\overline{v_j}\overline{v_i} + \overline{v_j^\prime v_i^\prime}\right)
+    =- \frac{\partial \overline{p}}{\partial x_i} 
+    + \mu \frac{\partial^2 \overline{v_i}}{\partial x_j^2}.
+\end{equation}
+\end{eqBox}
+Recall the stress tensor $\tau_{ij}$ from Chapter 4, which we now rewrite in tensor notation
+\begin{equation}
+    \tau_{ij} = 2\mu s_{ij},
+\end{equation}
+where $s_{ij}$ is the strain-rate tensor
+\begin{equation}
+    s_{ij} = \frac{1}{2}\left(\frac{\partial v_i}{\partial x_j}+\frac{\partial v_j
+    }{\partial x_i}\right).
+\end{equation}
+We may now rewrite the RANS momentum equation in terms of the stresses and rearrange some terms, such that
+\begin{eqBox}
+\begin{equation}
+    \rho \frac{\partial \overline{v_i}}{\partial t} 
+    + \rho  \frac{\partial}{\partial x_j} \left(\overline{v_j}\overline{v_i}\right)
+    =- \frac{\partial \overline{p}}{\partial x_i} 
+    + \frac{\partial}{\partial x_j} \left(\overline\tau_{ji} - \rho \overline{v_j^\prime v_i^\prime}\right),
+\end{equation}
+\end{eqBox}
+where $\rho \overline{v_j^\prime v_i^\prime}$ is known as the \textit{Reynolds stress}, which we can define as the \textit{Reynolds stress tensor} $\rho\phi_{ij}$, such that
+\begin{equation}
+    \phi_{ij} = -\overline{v_i^\prime v_j^\prime}.
+\end{equation}
+It is clear that $\phi_{ij}=\phi_{j}$, so the Reynolds stress tensor is symmetric. This means that three diagonal components and three off-diagonal components make a total of six independent variables. This number of unknown rises to ten if we consider the properties of three-dimensional flow, i.e. density and the three velocity components ($\rho, \vec{v}$). This is what is known as $closure$ problem of turbulence since the set of Navier-Stokes equations are not sufficient to obtain a solution. Later in this chapter, we will learn some mathematical models that allow us to close the system.
+
+\subsubsection{Compressible flow}
+
+In the previous section, we derived the incompressible form of the RANS equations, where the density variations are negligible, i.e $\rho=\overline{\rho}$. In the case of compressible flow, these variations must be now taken into account. However, the equations can become very lengthy and complicated if the conventional averaging procedure is used. To visualize this, let us decompose the mass conservation law using the conventional Reynolds decomposition
+\begin{equation}
+    \frac{\partial}{\partial t} \left(\overline{\rho} + \rho^\prime\right) + \frac{\partial }{\partial x_i} \left(\left(\overline{\rho}+\rho^\prime\right)\left(\overline{v_i}+v_i^\prime\right)\right) = 0,
+\end{equation}
+which will introduce correlations involving density fluctuations and may complicate the turbulence modelling, i.e.
+\begin{equation}
+    \frac{\partial \overline{\rho}}{\partial t}  + \frac{\partial }{\partial x_i} \left(\overline \rho \overline{v_i} + \overline{\rho^\prime v^\prime}\right) = 0.
+\end{equation}
+By performing a density-weighted time-averaging, introduced by Alexandre Favre in 1969, the equations become simpler and the presence of $\rho^\prime$ can be avoided. It is defined by
+\begin{equation}
+    \tilde{u}=  \frac{1}{\overline{\rho}} \lim_{n\rightarrow\infty} \frac{1}{n}\sum_{\nu=1}^{\nu=n}\left(\rho u\right)^{(\nu)} = \frac{\overline{\rho u}}{\overline{\rho}},
+    \label{eqn:favre_definition}
+\end{equation}
+where $\overline{\cdot}$ represents the conventional time-averaging. Similar to Reynolds decomposition, we consider the flow properties to be the sum of a mean and fluctuating component
+\begin{equation}
+    u = \tilde{u} + u^{\prime\prime},
+\end{equation}
+where $\tilde{u}$ is the \textit{Favre mean} and $u^{\prime\prime}$ is the \textit{Favre fluctuation}. Some properties of the Favre averaging are
+\begin{align}
+    \overline{\tilde{u}} &= \tilde{u},\\
+    \overline{\rho u^{\prime\prime}} &= 0, \\
+    \overline{u^{\prime\prime}} &= -\overline{\rho^\prime u^\prime}/{\overline{\rho}}, \\ 
+    \overline{\rho u v} &= \overline{\rho}\tilde u\tilde v + \overline{\rho u^{\prime\prime}v^{\prime\prime}}. \label{eqn:favre_rhouv}
+\end{align}
+We note that $\rho$ is the instantaneous density and that the Favre average differs from the Reynolds averaging properties. For instance, $\overline{u^\prime}=0$, whereas $\overline{u^{\prime\prime}}\neq0$. In addition, the conventional Reynolds and Favre averaging are related by
+\begin{align}
+    \tilde{u} & = \overline{u} + \overline{\frac{\rho^\prime u^\prime}{\overline \rho}}, \\
+    u^{\prime\prime} & = u^\prime - \overline{\frac{\rho^\prime u^\prime}{\overline \rho}}.
+\end{align}
+We now derive the compressible RANS equations, also known as Favre-Averaged Navier-Stokes Equations (FANS). Starting with conservation of mass, by performing time averaging, we have
+\begin{eqBox}
+\begin{equation}
+    \overline{\frac{\partial\rho}{\partial t}} + \overline{\frac{\partial \rho v_i}{\partial x_i}}= 0.
+\end{equation}
+\end{eqBox}
+Since the time-averaging procedure commutes with the derivatives,
+\begin{equation}
+    \frac{\partial\overline{\rho}}{\partial t} + \frac{\partial \overline{\rho v_i}}{\partial x_i}= 0.
+\end{equation}
+The first term can then be Favre decomposed and time averaged
+\begin{equation}
+    \frac{\partial}{\partial t} \overline{\left(\tilde \rho + \rho^{\prime\prime} \right)} 
+    = \frac{\partial \overline \rho}{\partial t},
+    \label{eqn:favre_singlevariable}
+\end{equation}
+and the proof is left as a simple exercise to the reader. The second term $\overline{\rho v_i}$ can be computed using the Favre definition in Equation~\ref{eqn:favre_definition}. The averaged mass conservation equation for compressible flows can then be written
+\begin{equation}
+    \frac{\partial\overline{\rho}}{\partial t} + \frac{\partial \overline{\rho} \tilde v_i}{\partial x_i}= 0.
+\end{equation}
+Next, we derive the compressible time-averaged momentum equations. Initially, these are given by 
+\begin{equation}
+    \frac{\partial }{\partial t} \left(\overline{\rho v_i}\right)
+    + \frac{\partial}{\partial x_j} \left(\overline{\rho v_j v_i}\right)
+    =- \frac{\partial \overline{p}}{\partial x_i} 
+    + \mu \frac{\partial^2 }{\partial x_j^2} \left(\overline{v_i}\right).
+\end{equation}
+The unsteady term can be computed using Equation~\ref{eqn:favre_definition}. We pay special attention to the convective term, which we expand according to Equation~\ref{eqn:favre_rhouv}
+\begin{equation}
+    \overline{\rho v_j v_i} = \overline{\rho}\tilde v_j\tilde v_i + \overline{\rho v_j^{\prime\prime} v_i^{\prime\prime}}.
+\end{equation}
+The time-averaged compressible momentum equations can be written
+\begin{eqBox}
+\begin{equation}
+    \frac{\partial }{\partial t} \left(\overline\rho \tilde v_i \right)
+    + \frac{\partial}{\partial x_j} \left(\overline\rho \tilde v_j \tilde v_i + \overline{\rho v_i^{\prime\prime}v_j^{\prime\prime}} \right)
+    = - \frac{\partial \overline{p}}{\partial x_i} 
+    + \mu \frac{\partial^2 }{\partial x_j^2} \left(\overline{v_i}\right).
+\end{equation}
+\end{eqBox}
+where single-variable terms such as the pressure and diffusive components follow the same procedure described in Equation~\ref{eqn:favre_singlevariable}. Similar to the incompressible case, we rearrange some terms in the equation, such that
+\begin{eqBox}
+    \begin{equation}
+        \frac{\partial }{\partial t} \left(\overline\rho \tilde v_i \right)
+        + \frac{\partial}{\partial x_j} \left(\overline\rho \tilde v_j \tilde v_i \right)
+        = - \frac{\partial \overline{p}}{\partial x_i} 
+        + \mu \frac{\partial }{\partial x_j} \left(\overline{\tau_{ji}} - \overline{\rho v_i^{\prime\prime}v_j^{\prime\prime}}\right).
+    \end{equation}
+\end{eqBox}
+where $-\overline{\rho v_i^{\prime\prime}v_j^{\prime\prime}}$ is the Reynolds stress, which includes the instantaneous density $\rho$, and $\tau_{ij}$ is the viscous stress tensor. As explained in the previous section, the resulting system of equations remains underdetermined given the large number of unknowns. In the following section, we will derive expressions for the Reynolds stresses.
 
 \subsection{The Reynolds Stresses}
 \section{Turbulence Modelling}

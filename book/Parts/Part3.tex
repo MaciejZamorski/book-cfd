@@ -738,13 +738,81 @@ The explicit four-stage fourth-order Runge-Kutta method is $\mathcal{O}(\Delta t
 \section{Implicit}
 
 \chapter{Spectral Properties}
-In CFD the numerical error introduced by a scheme is typically classified into two types, dissipation error and dispersion error. In this section we will discuss how to quantify these two types of error, and how they effect different types of solutions..
+In CFD the numerical error introduced by a scheme is typically classified into two general types, dissipation error and dispersion error. In this section we will discuss how to quantify these two types of error, and how they effect different types of solutions.
 
 \section{Dissipation Error}
-We have already discussed dissipation error in the context of stability, stating that in order for a scheme to be stable it must be dissipative or neutral. That is, the amplitude of the solution must remain the same or be reduced after each time step. We have shown this via von Neumann analysis to be the amplification factor $|e^{a\Delta t}|$, which was a function of the scheme we are using, and the wavenumber in space $\kappa_m$.
+We have already discussed dissipation error in the context of stability, stating that in order for a scheme to be stable it must be dissipative or neutrally dissipative. That is, the amplitude of the solution must remain the same or be reduced after each time step. We have shown this via von Neumann analysis to be the amplification factor $|e^{a\Delta t}|$, which was a function of the scheme we are using, and the wavenumber in space $\kappa_m$. While a scheme being dissipative is inherently linked with stability, it also introduces number error. For example, for the linear advection equation we know that the exact solution should have no dissipation, it should be simply the advection of the initial condition with the prescribed advection velocity. However, with our initial finite difference scheme we found that this was not the case, and the amplitude of the waves is decreased as time goes on.
+
+It turns out that all the information we need to understand the dissipation error of the linear advection equation is encoded in the amplification factors we found in the von Neumann analysis section, $|e^{a\Delta t}|$. For example, for the finite difference scheme
+\begin{equation}
+	\frac{u_i^{t+1} - u_{i}^t}{\Delta t} +  \alpha \frac{u_i^t - u_{i-1}^t}{\Delta x} = 0.
+\end{equation}
+we found that the amplification factor was 
+\begin{equation}
+	|e^{a\Delta t}| = |1 - \sigma + \sigma e^{-i \kappa_m \Delta x}|.
+\end{equation} 
+Recall that, for a given wavenumber $\kappa_m$ and CFL number $\sigma$ this told us how much the solution will be damped over a time step. Hence, we can plot this for a range of permissible wavenumbers in the range $\kappa_m \Delta x \in [0,\pi]$ and CFL numbers within the stability limit $\sigma \in [0,1]$. A plot of this is shown in Figure \ref{}. We can observe a few interesting features that define the dissipation error of this particular scheme. First, we note that when the wave size is large relative to the grid spacing, the wave is well resolved regardless of the CFL number. However, as we move to larger wavenumbers there is significant numerical dissipation. Also, the amount of numerical in this region dissipation depends on the CFL number, with larger CFL numbers corresponding to less dissipation. Finally, when the CFL number approaches unity the numerical dissipation approaches zero for all wavenumbers. Hence, when this CFL number is used we recover the exact dissipation relation for linear advection, that the waves do not get damped. The dissipation error of this scheme becomes particularly important in the context of turbulent flows. In this case, large scale structures in the turbulent flow have small wavenumbers relative to the grid spacing. This means that our large scale features will be simulated with relative accuracy. However, small scale turbulent structures that are of a size proportional to the grid spacing have high relative wavenumbers. This means that these fine scale structures will be heavily dissipated by this first order scheme.
+
+Lets look at a second example, our implicit finite difference scheme
+\begin{equation}
+	\frac{u_i^{t+1} - u_{i}^t}{\Delta t} +  \alpha \frac{u_i^{t+1} - u_{i-1}^{t+1}}{\Delta x} = 0,
+\end{equation}
+that had the amplification factor
+\begin{equation}
+	|e^{a\Delta t}| = \left| \frac{1}{1 + \sigma \left( 1 - e^{-i \kappa_m \Delta x} \right)} \right|.
+\end{equation}
+We can generate the exact same type of plot for permissible wave numbers $\kappa_m \Delta x \in [0,\pi]$ and, since this scheme is unconditionally stable, we will look at a few CFL numbers in the range $\sigma \in [0,10]$, as shown in Figure \ref{}. We note for this scheme, similar to the explicit scheme, that when the wave size is large relative to the grid spacing it is well resolved regardless of the CFL number. However, there is again a strong dependence of the numerical dissipation on the CFL number for high wavenumbers. As the wavenumber gets larger or as the CFL number gets larger the amount of numerical dissipation increases rapidly. Hence, while this scheme was found to be unconditionally stable, using large CFL numbers introduces significant numerical dissipation to all but the largest structures in the flow. Hence, this scheme is typically only used for solving steady-state problems that are not a function of time.
+
 
 \section{Dispersion Error}
-From the linear advection equation we know that the solution should translate at an exact wave speed $\alpha$. However, our numerical schemes will often introduce another error whereby the numerical wave does not move at the correct velocity. As a results, we often observe that the numerical solution is out of phase with the exact solution, which is referred to as dispersion error.
+From the linear advection equation we know that the solution should translate at an exact wave speed $\alpha$. However, our numerical schemes will often introduce another error whereby the numerical wave does not move at the correct velocity. As a results, we often observe that the numerical solution is out of phase with the exact solution, which is referred to as dispersion error. Similar to the dissipation error, dispersion error can also be found from our results from von Neumann analysis. Recall that our assumed form of the solution for any isolated wave component of the full solution was
+\begin{equation}
+	u_m(x,t) = e^{at} e^{i \kappa_m x},
+\end{equation}
+and recall the expression for the linear advection equation was
+\begin{equation}
+	\frac{\partial u}{\partial t} +  \alpha \frac{\partial u}{\partial x} = 0.
+\end{equation}
+If we substitute our wavelike solution we get
+\begin{equation}
+	ae^{at} e^{i \kappa_m x} + i \alpha \kappa_m e^{at} e^{i \kappa_m x} = 0.
+\end{equation}
+We note that this will be solved exactly when
+\begin{eqBox}
+\begin{equation}
+	a = -i \alpha \kappa_m.
+\end{equation}
+\end{eqBox}
+which is called the exact dispersion relation. This tells us that the exact frequency in time, which is described by $a$, is proportional to the wave speed and the wavenumber. Intuitively this makes sense as the faster a wave moves the more the solution at a point should move up and down, and the higher the wavenumber the more quickly the wave will move up and down in time as well. However, our numerical scheme will usually not return a value of $a$ that matches this dispersion relation exactly. Hence, for a given wavenumber we will get back a frequency that has some error, implying that the wave is moving at the wrong speed, which is referred to as dispersion error. Over a finite amount of time $\Delta t$, based on the exact dispersion relation we would expect the wave to move a distance
+\begin{equation}
+	a \Delta t = -i \alpha \kappa_m \Delta t.
+\end{equation}
+
+We note that we can also get to our numerical frequency from von Neumann analysis. For example, for the finite difference scheme
+\begin{equation}
+	\frac{u_i^{t+1} - u_{i}^t}{\Delta t} +  \alpha \frac{u_i^t - u_{i-1}^t}{\Delta x} = 0,
+\end{equation}
+we found
+\begin{equation}
+	e^{a\Delta t} = 1 - \sigma + \sigma e^{-i \kappa_m \Delta x},
+\end{equation} 
+which was the last step before getting the amplification factor. We can start by splitting the exponential term up into its real and imaginary parts
+\begin{equation}
+	e^{\Re{(a)}\Delta t} e^{\Im{(a)}\Delta t} = 1 - \sigma + \sigma e^{-i \kappa_m \Delta x}.
+\end{equation} 
+We first note that the real part of this $e^{\Re{(a)}\Delta t}$ is responsible for the amplification/dissipation of the solution, and is what is extracted in the dissipation section. In contrast, the imaginary part $e^{\Im{(a)}\Delta t}$ is responsible for a change in phase of the wave, which moves it in space. We can extract this imaginary term that is responsible for the phase change from
+\begin{equation}
+	a\Delta t = \ln \left(1 - \sigma + \sigma e^{-i \kappa_m \Delta x} \right),
+\end{equation} 
+and then extract the imaginary components
+\begin{equation}
+	\Im(a\Delta t) = \Im{ \left[ \ln \left(1 - \sigma + \sigma e^{-i \kappa_m \Delta x} \right) \right]}.
+\end{equation}
+In the ideal case this should be identical to the exact dispersion relation, but in practical applications it is typically either slower or faster, resulting in some phase error from the wave moving at an approximate speed. We can extract the relative speed from
+\begin{equation}
+	\frac{\Im(a\Delta t)}{-i \alpha \kappa_m \Delta t} = \frac{\Im{ \left[ \ln \left(1 - \sigma + \sigma e^{-i \kappa_m \Delta x} \right) \right]}}{-i \alpha \kappa_m \Delta t},
+\end{equation}
+which tells us the speed of the numerical wave relative to the exact wave speed. When this value is less than 1 the wave moves too slowly, and when this value is greater than 1 the wave moves to fast.
 
 \chapter{Modified Equation Analysis}
 
@@ -984,3 +1052,8 @@ However, since our solution at any given iteration is only an approximate soluti
 where $\vec{r}$ is referred to as the residual and measures how well our current approximate solution satisfies the system of equations being solved. While $\vec{r}$ gives detailed information about how well each equation in the entire system is being solved, it is typically more useful to provide the user with a norm, such as $\| \vec{r} \|_2$ or $\| \vec{r} \|_\infty$, giving a single measure of convergence. Then, iterations are continued until this residual norm converges to within the desired tolerance. It is also important to note that if the convergence tolerance is too high it can results in a loss of accuracy or stability in the CFD simulation. Hence, particular care must be chosen in how to select the desired convergence tolerance.
 
 \section{Multigrid}
+
+\chapter{Applications}
+\section{An Euler Solver}
+
+\section{A Navier-Stokes Solver}

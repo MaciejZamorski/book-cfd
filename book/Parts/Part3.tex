@@ -64,6 +64,14 @@ we note that the leading term omitted from the $f_1(\Delta x)$ approximation beh
 	
 \chapter{Finite Difference Methods}
 \section{The First Derivative}
+
+\begin{figure}[htbp]
+	    \centering
+	    \includegraphics[width=0.5\linewidth]{Pictures/ch10_fd_scheme}
+	    \caption{}
+	    \label{fig:fd_scheme}
+	\end{figure}
+	
 To introduce the finite difference method we start with a general function $u(x)$. In general this function can be in any number of dimensions, but for simplicity we will first consider the one-dimensional case. We note that a function can generally be {\it approximated} by its values at a {\it discrete} set of points. An example of this is shown in Figure \ref{} where $\Delta x$ is the grid spacing between the points. We now imagine that we are at some point $i$ whose solution is $u_i = u(x_i)$ where $x_i$ is the physical location of the point. Using Taylor series we can compute the value of the solution one grid point to the left from the expansion
 \begin{equation}
 	u_{i-1} = u_i - \Delta x \Eval{\frac{\partial u}{\partial x}}{x_i}{} + \frac{\Delta x^2}{2} \Eval{\frac{\partial^2 u}{\partial x^2}}{x_i}{} - \frac{\Delta x^3}{6} \Eval{\frac{\partial^3 u}{\partial x^3}}{x_i}{} + \mathcal{O}(\Delta x^4),
@@ -429,6 +437,14 @@ Based on these results, we can conclude that the first-order finite difference s
 \end{eqBox}
 That is, it is only stable for CFL numbers less than one. Hence, for a given grid spacing and advection velocity, there is a limit on how large the time step can be. This clearly has implications in terms of computational cost, as the smaller the time step is the more steps must be taken to reach a desired final solution time. Schemes of this type are referred to as being {\it conditionally stable}.
 
+
+\begin{figure}[htbp]
+	    \centering
+	    \includegraphics[width=0.7\linewidth]{Pictures/ch12_explicit_advection}
+	    \caption{Stability region for the explicit kinear advection scheme.}
+	    \label{fig:explicit_advection}
+\end{figure}
+
 \subsection{Implicit Linear Advection}
 In the last section we saw that our first-order finite difference scheme has a stability limit. In this section we will explore a slightly different first-order scheme for linear advection.
 
@@ -483,6 +499,13 @@ Hence, we are able to take arbitrarily large time steps and maintain stability u
 \begin{remark}
 Although this scheme is unconditionally stable, making at appealing since it allows for arbitrarily large time-steps, it also becomes more difficult/expensive for each time-step. This will be explored in the forthcoming time stepping section.
 \end{remark}
+
+\begin{figure}[htbp]
+	    \centering
+	    \includegraphics[width=0.7\linewidth]{Pictures/ch12_implicit_advection}
+	    \caption{Stability region for the implicit kinear advection scheme.}
+	    \label{fig:implicit_advection}
+\end{figure}
 
 \subsection{Explicit Linear Diffusion}
 Similar to the linear advection equation, we can also use von Neumann analysis to analyze the stability of the linear diffusion equation. 

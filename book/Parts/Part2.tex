@@ -374,7 +374,7 @@ The above is a relatively simple classification, but when confronted with new ty
 One of the most challenging aspects of CFD is the prevalence of turbulent flows. While it may not be immediately apparent from the Navier-Stokes equations defined earlier, they can encode solutions with chaotic, unsteady, three-dimensional flow features. In this section we will discuss what is meant by turbulent flow, the nature of chaos, how it arises in the governing equations, and consequences for how we handle turbulent flows in CFD. Then, we will introduce an approach for modelling the effects of turbulence, and several popular models for doing so.
 
 \section{Turbulence Theory}
-The fundamental characteristic of turbulence is that it is {\it chaotic}. Hence, it encodes unsteady three-dimensional fluid flow with chaotic fluctuations in velocity, density, and pressure. These fluctuations typically exist over a wide range of length and time scales. Another important feature of turbulence, and a fundamental property of chaotic systems, is that it is highly sensitive to initial conditions. In our exploration of turbulence we will first start with a simple chaotic systems, and then we will extrapolate some of the properties of this system to the types of behaviour we observe in fluid flows.
+The fundamental characteristic of turbulence is that it is {\it chaotic}. Hence, it encodes unsteady three-dimensional fluid flow with chaotic fluctuations in velocity, density, and pressure. These fluctuations typically exist over a wide range of length and time scales. Another important feature of turbulence, and a fundamental property of chaotic systems, is that it is highly sensitive to initial conditions. Furthermore, it is well known that chaotic behaviour only arises in {\it non-linear systems}. In our exploration of turbulence we will first start with a simple chaotic systems, and then we will extrapolate some of the properties of this system to the types of behaviour we observe in fluid flows.
 
 \subsection{Introduction to Chaos}
 As an introduction to chaos, we will consider the relatively simple logistic map, which is built from the non-linear logistic function
@@ -398,9 +398,50 @@ Beyond $a = 3.54\hdots$ additional bifurcations and period doublings occur. With
 \subsubsection{$3.57\hdots < a $}
 Beyond $a = 3.57\hdots$ the entire concept of a cycle breaks down, and all possible solution can be found within the range. The solution traverses chaotically and little structure is observed in its behaviour.\\
 
-An interesting thought experiment is to consider what happens to our system when we start with some initial guess $x_0$, and some perturbed initial guess $x_0 + \epsilon$, where $\epsilon$ is a small number. In the case of small values of $a$ both of these solution converge to the same fixed point. However, as $a$ gets larger this predictability starts to break down. Eventually, with a large value of $a$, and given enough iterations, the two solutions will diverge from one another and it will be impossible to discern that they had almost the exact same initial condition. Hence, with certain choices of $a$ the logistic equations is chaotic, resulting in complex behaviour and extreme sensitivity to initial conditions. 
+An interesting thought experiment is to consider what happens to our system when we start with some initial guess $x_0$, and some perturbed initial guess $x_0 + \epsilon$, where $\epsilon$ is a small number. In the case of small values of $a$ both of these solution converge to the same fixed point. However, as $a$ gets larger this predictability starts to break down. Eventually, with a large value of $a$, and given enough iterations, the two solutions will diverge from one another and it will be impossible to discern that they had almost the exact same initial condition. Hence, with certain choices of $a$ the logistic equations is chaotic, resulting in complex behaviour and extreme sensitivity to initial conditions. Furthermore, this implies that there is an {\it irreversible} nature to chaotic systems, that is given a final solution it is not possible to determine with any certainty what the initial condition was, because very similar initial conditions yield completely different final solutions.
 
 \subsection{Chaos and Navier-Stokes}
+In the above we have demonstrated a couple of properties of chaos. It only arises in non-linear system and it is generally irreversible due to extreme sensitivity on initial conditions. For simplicity we will explore the connection between the Navier-Stokes equations and chaos, in the form of turbulence, via the incompressible Navier-Stokes equations. However, this can be readily extended to the compressible Navier-Stokes equations should that be of interest.
+
+In the case of incompressible flow the Navier-Stokes equations reduce to the continuity equation
+\begin{equation}
+	\nabla \cdot \vec{v} = 0,
+\end{equation}
+and the momentum equation
+\begin{equation}
+	\frac{\partial \vec{v}}{\partial t} + \left(\vec{v} \cdot \nabla \right)\vec{v} - \nu \nabla^2 \vec{u} = 0,
+\end{equation}
+where $\nu$ is the kinematic viscosity. Staring with conservation of mass, we note that this is a linear equation and, hence, it cannot be responsible for the chaotic nature of turbulence, with requires a non-linear system. This allows us to quickly narrow in on the momentum equation as the responsible part of the system. In this case we note that the non-linearity arises in the $\left(\vec{v} \cdot \nabla \right)\vec{v}$ term, which is quadratic in the velocity components. To better understand this, we will consider two limiting cases of inviscid and high viscosity flows.
+
+Starting with the inviscid case, we can neglect the effects of viscosity yielding the following simplification of the momentum equation
+\begin{equation}
+	\frac{\partial \vec{v}}{\partial t} + \left(\vec{v} \cdot \nabla \right)\vec{v} = 0,
+\end{equation}
+which is the momentum component of the incompressible Euler equations. This is obviously still a non-linear equation, since we have not eliminated the convection term. We can now ask ourselves if this inviscid flow can permit chaotic solutions. Recall that our second requirement for a chaotic system is that it should be irreversible. In order to explore this we will reverse this momentum equation in time by setting $t=-t$ and $\vec{v} = -\vec{v}$, which is equivalent to stopping a solution and then rewinding it in time. Applying these modifications to the forward in time system yields
+\begin{equation}
+	\frac{\partial (-\vec{v})}{\partial (-t)} + \left((-\vec{v}) \cdot \nabla \right)(-\vec{v}) = 0,
+\end{equation}
+which simply gives us back
+\begin{equation}
+	\frac{\partial \vec{v}}{\partial t} + \left(\vec{v} \cdot \nabla \right)\vec{v} = 0.
+\end{equation}
+Hence, the incompressible Euler equations are completely time reversible and, hence, cannot permit chaotic solutions. Therefore, we need viscosity to enable turbulence.
+\begin{remark}
+Careful consideration should be used when extrapolating these conclusions to the compressible Euler equations. In that case irreversibility can arise across shockwaves, which increase entropy. Hence, turbulence can be observed with the compressible Euler equations in some cases.
+\end{remark}
+
+Now lets explore the alternative of a purely viscous flow, which is the limit that viscosity goes to extremely large values. This yields the following simplification of the momentum equation
+\begin{equation}
+	\frac{\partial \vec{v}}{\partial t} - \nu \nabla^2 \vec{u} = 0,
+\end{equation}
+which is a linear equation in velocity. Hence, in the limit of large viscosities the system of equations becomes linear and can no longer permit chaotic solutions.
+
+From the above discussion it is clear that the momentum equations in the incompressible Navier-Stokes equation are non-linear with respect to the velocity. Furthermore, the viscosity is key in determining whether chaotic solutions exist. If there is not enough the system becomes irreversible. In contrast, if there is too little the system becomes linear. The relative strength of the viscosity is given by the Reynolds number
+\begin{equation}
+	Re = \frac{UL}{\nu},
+\end{equation}
+where $U$ and $L$ are the velocity and length scales of the flow, and $\nu$ is the viscosity. Typically, turbulent flow is observed for Reynolds numbers of $Re \gtrsim \mathcal{O}(10^3)$. It is important to note that this encompasses the vast majority of flows of engineering interest. Hence, scientists and engineers must routinely deal which turbulence and its chaotic nature.
+
 \subsection{The Energy Cascade}
 \section{Reynolds Averaging}
 Now that we have briefly introduced chaos and how it relates to the Navier-Stokes equations, it is clear that the study of turbulent flows is indeed challenging. Small changes in the initial conditions may substantially deviate the results. Hence, we commonly require the use of statistical tools to understand its behaviour, which includes averaging operations. One of the most widely used, known as \textit{Reynolds decomposition}, was introduced by Osborne Reynolds~\cite{} in 1895. The concept lies on representing any flow property $u(\vec{x},t)$ as the sum of mean and fluctuating parts, such that

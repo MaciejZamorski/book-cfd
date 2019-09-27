@@ -443,8 +443,75 @@ From the above discussion it is clear that the momentum equations in the incompr
 where $U$ and $L$ are the velocity and length scales of the flow, and $\nu$ is the viscosity. Typically, turbulent flow is observed for Reynolds numbers of $Re \gtrsim \mathcal{O}(10^3)$. It is important to note that this encompasses the vast majority of flows of engineering interest. Hence, scientists and engineers must routinely deal which turbulence and its chaotic nature.
 
 \subsection{The Energy Cascade}
+A common misconception is that turbulence is {\it random} in nature, which would imply that it has no pattern and is inherently unpredictable in a deterministic sense. However, the very fact that one can derive the Navier-Stokes equations, which are a deterministic model for fluid flow, implies that turbulence is not truly random. Hence, while turbulence is often {\it modelled} as stochastic behaviour, its evolution is actually deterministic in nature.
+\begin{remark}
+We will revisit how to model turbulence stochastically when we introduce the Reynolds Averaged Navier-Stokes (RANS) equations and turbulence models.
+\end{remark}
+Furthermore, turbulent flows clearly have coherent structures, such as turbulent vortices, that demonstrate and underlying structure within the chaos.
+
+One of the most powerful observations of turbulent flow has to do with the distribution of kinetic energy across different physical scales. When considering turbulent flows there is typically a wide distribution of length scales and time scale with the largest vortices have a size similar to the physical length scale of the problem of interest, such as an airfoils chord length or the size of a bluff body such as a cylinder. In contrast, the smallest physical scales can be much smaller than the physical length scale of the problem, and there is then a wide range of scales between these two extremes. A fundamental observation related to this is that these turbulent structures, over time, tend to break up into multiple smaller scale structures. A consequence of this is that kinetic energy gradually gets transferred from large scale structures down to smaller scale structures and so on, which is referred to as the {\it turbulent kinetic energy cascade}.
+
+To better understand this we will define $l$ as the length scale of the largest scale vortices, and $u$ as their velocity scale. Similarly, we will define $\eta$ as the length scale of the smallest scale vortices and $v$ as their length scale. For the large scale vortical structures they will complete a revolution, or turnover time, in approximately
+\begin{equation}
+	t \sim \frac{l}{u}.
+\end{equation}
+In experiments it is observed that a turbulent structure tends to break up within a small number of eddy turnover times, regardless of its size. Hence, the rate at which kinetic energy gets transferred out of the largest scales is
+\begin{equation}
+	\Pi \sim \frac{u^2}{t},
+\end{equation}
+which expands to 
+\begin{equation}
+	\Pi \sim \frac{u^3}{l}.
+\end{equation}
+Hence, if we know the approximate size and velocity of the largest scale turbulent structures we can estimate the rate at which they transfer energy down to the smaller scales.
+
+Similarly, if we consider the small scale structures it can be shown via the Navier-Stokes equations that they dissipate their energy via viscous effects into heat via
+\begin{equation}
+	\epsilon \sim \nu S_{ij} S_{ij} \sim \nu \frac{v^2}{\eta^2},
+\end{equation}
+where $\epsilon$ is the rate of kinetic energy dissipation into heat and $S_{ij}$ is the strain rate tensor. Hence, we can also approximate the rate at which kinetic energy ultimately gets turned into heat.
+
+If we consider a quasi steady system, where the rate at which kinetic energy gets introduced to the flow at the large scales has stabilized, then it must balance with the rate at which kinetic energy gets dissipated by the smalles scales. Hence, under these conditions
+\begin{equation}
+	\Pi = \epsilon,
+\end{equation}
+which yields
+\begin{equation}
+	\label{eqn:qpf73j8s}
+	\frac{u^3}{l} \sim \nu \frac{v^2}{\eta^2}.
+\end{equation}
+Considering again the smallest scale structures, we would expect the dissipation due to viscous effects to start to dominate when they are about the same strength as the intertial effects. Hence, at the smallest scales the kinetic energy is expected to diffuse into heat when
+\begin{equation}
+	Re = \frac{v \eta}{\nu} \approx 1.
+\end{equation}
+In conjunction with Equation \ref{eqn:qpf73j8s} this yields
+\begin{eqBox}
+\begin{equation}
+	\frac{l}{\eta} \sim Re^{3/4}.
+\end{equation}
+\end{eqBox}
+Hence, if we know the Reynolds number of the flow than we can estimate the approximate size of the largest scales relative to the smallest scales, referred to as the scale separation. A similar procedure for the velocity components yields
+\begin{eqBox}
+\begin{equation}
+	\frac{v}{u} \sim Re^{-1/4},
+\end{equation}
+\end{eqBox}
+which can be used to estimate the relative difference in the velocity magnitudes at the largest and smallest scales as well.
+
+Now lets consider what this means in the context of CFD. If we have an object that we wanted simulate the flow over, the domain size needs to be at least as large as the object, which would be $l$. Furthermore, if we want to resolve the smallest scale turbulent structures than the grid resolution must be approximately the same size as the structures, $\eta$. Furthermore, this mesh must be three dimensional. Hence, we can estimate the total number of grid points that would be required from
+\begin{equation}
+	N \sim \left(Re^{3/4}\right)^3,
+\end{equation}
+which expands to
+\begin{eqBox}
+\begin{equation}
+	N \sim Re^{9/4},
+\end{equation}
+\end{eqBox}
+where $N$ is the total number of grid points. Hence, as the Reynolds number goes up the required number of grid points scales extremely rapidly with the Reynolds number. For practical Reynolds numbers above $Re \sim 10^5$ this rapidly becomes intractable on modern high performance computers. Therefore, if we want to simulate turbulent flows above $Re \sim 10^5$ we simply cannot resolve the large scale structures and the small scale structures in their entirety at the same time. The most common solution to this, which will be explore in the following section is to resolve only the large scale structures an introduce a {\it model} for the effect the small scale structures will have on the large scale structures. This model will not be able to exactly mimic the effects of the small scale structures and, hence, it will introduce some error into our solution of the largest scales.
+
 \section{Reynolds Averaging}
-Now that we have briefly introduced chaos and how it relates to the Navier-Stokes equations, it is clear that the study of turbulent flows is indeed challenging. Small changes in the initial conditions may substantially deviate the results. Hence, we commonly require the use of statistical tools to understand its behaviour, which includes averaging operations. One of the most widely used, known as \textit{Reynolds decomposition}, was introduced by Osborne Reynolds~\cite{} in 1895. The concept lies on representing any flow property $u(\vec{x},t)$ as the sum of mean and fluctuating parts, such that
+Now that we have briefly introduced chaos and how it relates to the Navier-Stokes equations, it is clear that the study of turbulent flows is indeed challenging. Small changes in the initial conditions may substantially deviate the results. Furthermore, we have demonstrated above that the scale separation between the largest and smallest turbulent structures rapidly becomes intractable as the Reynolds number increases. Hence, we commonly require the use of statistical tools to understand its behaviour, which includes averaging operations. One of the most widely used, known as \textit{Reynolds decomposition}, was introduced by Osborne Reynolds~\cite{} in 1895. The concept lies on representing any flow property $u(\vec{x},t)$ as the sum of mean and fluctuating parts, such that
 \begin{equation}
 	u(x,t) = \overline{u(\vec{x},t)} + u(\vec{x},t)^\prime.
 	\label{eq:reynolds_decomp}

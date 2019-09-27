@@ -766,13 +766,6 @@ If we look at the form of the Equation \ref{eqn:shrj986g} we see that when $\Del
 \section{General Observations}
 It is important note that the procedure followed here for the first order linear advection scheme can be repeated for any finite difference scheme of your choice. Starting with your numerical scheme you can replace each term with its Taylor Series expansion and rearrange this to try to get the PDE of interest on the left hand side and truncation error on the right hand side. The leading order terms will tell you the nature of the dominant error in the scheme. If the dominant error has an even-order derivative, such as the scheme above, then one would expect that the scheme is {\it dominantly dissipative}. In contrast, if the dominant error has an odd-order derivative then one would expect that the scheme is {\it dominantly dispersive}. Hence, similar to von Neumann analysis, modified equation analysis is a powerful tool to aid in understanding the general behaviour of a numerical scheme, to elucidate its dissipative and dispersive error properties, and to identify its stability limits.
 
-\chapter{Iterative Methods}
-In this implicit time stepping section we reduced each time step to the solution of a linear system of $N$ equations of the form
-\begin{equation}
-	A \vec{x} = \vec{b},
-\end{equation}
-when solving either linear advection or linear diffusion, where $N$ is the number of grid points in the domain. The extra cost of solving this linear system was introduced in order to obtain unconditionally stable schemes, allowing very large time steps to be taken. However, this will only be faster than an explicit approach if the linear system of equations can be solved efficiently. Hence, this section is dedicated to exploring different methods of solving linear systems of equations.
-
 \chapter{Time-Stepping}
 In the previous sections we have always approximated the time derivative using first-order finite differences, assuming
 \begin{equation}
@@ -908,6 +901,36 @@ The explicit four-stage fourth-order Runge-Kutta method is $\mathcal{O}(\Delta t
 \end{equation}
 
 \section{Implicit}
+
+Going back to the von Neumann analysis section we note that implicit schemes, those where we evaluated the spatial derivative using the solution at the as-yet-unknown next time step, were unconditionally stable for both linear advection and diffusion. For example, the following scheme was introduced for the linear advection equation
+\begin{equation}
+	\frac{u_i^{t+1} - u_{i}^t}{\Delta t} +  \alpha \frac{u_i^{t+1} - u_{i-1}^{t+1}}{\Delta x} = 0,
+\end{equation}
+and the following for the linear diffusion equation
+\begin{equation}
+  \frac{u_i^{t+1} - u_{i}^t}{\Delta t} - \beta \frac{u_{i-1}^{t+1} - 2u_i^{t+1} + u_{i+1}^{t+1}}{\Delta x^2} = 0.
+\end{equation}
+These are very similar to our initial schemes, except the spatial operators are evaluated at $t+1$ rather than $t$.
+
+We will start our exploration of implicit schemes with the linear advection equation, and rearrange it so all of the terms involving the unknown solution at $t+1$ are of the left hand side and all of the terms involving the current solution at time $t$ are on the right hand side
+\begin{equation}
+	u_i^{t+1} + \sigma \left(u_i^{t+1} - u_{i-1}^{t+1} \right) = u_i^{t},
+\end{equation}
+where as usual $\sigma = \alpha \Delta t/ \Delta x$. Then, lumping the terms for each grid point on the left hand side yields
+\begin{equation}
+	\label{eqn:sh4k18g9}
+	(1+\sigma) u_i^{t+1} - \sigma u_{i-1}^{t+1} = u_i^{t}.
+\end{equation}
+Unlike the explicit schemes, where we could readily rearrange the expression to get $u_i^{t+1}$ alone on the left hand side, we now have one equation for each grid point that has two unknowns, $u_i^{t+1}$ and $u_{i-1}^{t+1}$, on the left hand side. This means that in order to get $u_i^{t+1}$ we need to already know $u_{i-1}^{t+1}$, and in order to get $u_{i-1}^{t+1}$ we need to already know $u_{i-2}^{t+1}$, and so on. Hence, it appears we are stuck in a situation where we need to already know the solution at every grid point to get the solution at every other grid point, which we don't yet have.
+
+To get around this we can recognize that we actually have a large system of linear equations. For each of the $N$ grid points there is an expresion of the form of Equation \ref{eqn:sh4k18g9}, and these involve some linear combination of the $N$ unknown solution values at $t+1$. Hence, we have $N$ equations and $N$ unknowns, yielding a linear system to be solved.
+
+\chapter{Iterative Methods}
+In this implicit time stepping section we reduced each time step to the solution of a linear system of $N$ equations of the form 
+\begin{equation}
+	A \vec{x} = \vec{b},
+\end{equation}
+when solving either linear advection or linear diffusion, where $N$ is the number of grid points in the domain. The extra cost of solving this linear system was introduced in order to obtain unconditionally stable schemes, allowing very large time steps to be taken. However, this will only be faster than an explicit approach if the linear system of equations can be solved efficiently. Hence, this section is dedicated to exploring different methods of solving linear systems of equations.
 
 \section{Gaussian Elimination}
 Perhaps the most straightforward method for solving a linear system of equations is Guassian elimination. This requires us to invert $A$ and obtain

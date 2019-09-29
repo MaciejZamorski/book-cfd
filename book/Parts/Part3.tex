@@ -66,10 +66,10 @@ we note that the leading term omitted from the $f_1(\Delta x)$ approximation beh
 \section{The First Derivative}
 
 \begin{figure}[htbp]
-	    \centering
-	    \includegraphics[width=0.5\linewidth]{Pictures/ch10_fd_scheme}
-	    \caption{}
-	    \label{fig:fd_scheme}
+	\centering
+	\includegraphics[width=0.5\linewidth]{Pictures/ch10_fd_scheme}
+	\caption{}
+	\label{fig:fd_scheme}
 	\end{figure}
 	
 To introduce the finite difference method we start with a general function $u(x)$. In general this function can be in any number of dimensions, but for simplicity we will first consider the one-dimensional case. We note that a function can generally be {\it approximated} by its values at a {\it discrete} set of points. An example of this is shown in Figure \ref{} where $\Delta x$ is the grid spacing between the points. We now imagine that we are at some point $i$ whose solution is $u_i = u(x_i)$ where $x_i$ is the physical location of the point. Using Taylor series we can compute the value of the solution one grid point to the left from the expansion
@@ -439,10 +439,10 @@ That is, it is only stable for CFL numbers less than one. Hence, for a given gri
 
 
 \begin{figure}[htbp]
-	    \centering
-	    \includegraphics[width=0.7\linewidth]{Pictures/ch12_explicit_advection}
-	    \caption{Stability region for the explicit kinear advection scheme.}
-	    \label{fig:explicit_advection}
+	\centering
+	\includegraphics[width=0.7\linewidth]{Pictures/ch12_explicit_advection}
+	\caption{Stability region for the explicit kinear advection scheme.}
+	\label{fig:explicit_advection}
 \end{figure}
 
 \subsection{Implicit Linear Advection}
@@ -501,10 +501,10 @@ Although this scheme is unconditionally stable, making at appealing since it all
 \end{remark}
 
 \begin{figure}[htbp]
-	    \centering
-	    \includegraphics[width=0.7\linewidth]{Pictures/ch12_implicit_advection}
-	    \caption{Stability region for the implicit kinear advection scheme.}
-	    \label{fig:implicit_advection}
+	\centering
+	\includegraphics[width=0.7\linewidth]{Pictures/ch12_implicit_advection}
+	\caption{Stability region for the implicit kinear advection scheme.}
+	\label{fig:implicit_advection}
 \end{figure}
 
 \subsection{Explicit Linear Diffusion}
@@ -901,7 +901,6 @@ The explicit four-stage fourth-order Runge-Kutta method is $\mathcal{O}(\Delta t
 \end{equation}
 
 \section{Implicit}
-
 Going back to the von Neumann analysis section we note that implicit schemes, those where we evaluated the spatial derivative using the solution at the as-yet-unknown next time step, were unconditionally stable for both linear advection and diffusion. For example, the following scheme was introduced for the linear advection equation
 \begin{equation}
 	\frac{u_i^{t+1} - u_{i}^t}{\Delta t} +  \alpha \frac{u_i^{t+1} - u_{i-1}^{t+1}}{\Delta x} = 0,
@@ -912,6 +911,7 @@ and the following for the linear diffusion equation
 \end{equation}
 These are very similar to our initial schemes, except the spatial operators are evaluated at $t+1$ rather than $t$.
 
+\subsection{Implicit Linear Advection}
 We will start our exploration of implicit schemes with the linear advection equation, and rearrange it so all of the terms involving the unknown solution at $t+1$ are of the left hand side and all of the terms involving the current solution at time $t$ are on the right hand side
 \begin{equation}
 	u_i^{t+1} + \sigma \left(u_i^{t+1} - u_{i-1}^{t+1} \right) = u_i^{t},
@@ -923,7 +923,132 @@ where as usual $\sigma = \alpha \Delta t/ \Delta x$. Then, lumping the terms for
 \end{equation}
 Unlike the explicit schemes, where we could readily rearrange the expression to get $u_i^{t+1}$ alone on the left hand side, we now have one equation for each grid point that has two unknowns, $u_i^{t+1}$ and $u_{i-1}^{t+1}$, on the left hand side. This means that in order to get $u_i^{t+1}$ we need to already know $u_{i-1}^{t+1}$, and in order to get $u_{i-1}^{t+1}$ we need to already know $u_{i-2}^{t+1}$, and so on. Hence, it appears we are stuck in a situation where we need to already know the solution at every grid point to get the solution at every other grid point, which we don't yet have.
 
-To get around this we can recognize that we actually have a large system of linear equations. For each of the $N$ grid points there is an expresion of the form of Equation \ref{eqn:sh4k18g9}, and these involve some linear combination of the $N$ unknown solution values at $t+1$. Hence, we have $N$ equations and $N$ unknowns, yielding a linear system to be solved.
+To get around this we can recognize that we actually have a large system of linear equations. For each of the $N$ grid points there is an expresion of the form of Equation \ref{eqn:sh4k18g9}, and these involve some linear combination of the $N$ unknown solution values at $t+1$. Hence, we have $N$ equations and $N$ unknowns, yielding a linear system to be solved. This can be written as a linear system of the form
+\begin{equation}
+	\label{eqn:4h28f95h}
+	A \vec{u}^{t+1} = \vec{u}^{t},
+\end{equation} 
+where, for the case of periodic boundary conditions
+\begin{equation}
+	A = 
+	\begin{bmatrix}
+	    1+\sigma & 0 & 0 & \dots  & \sigma \\
+	    \sigma & 1+\sigma & 0 & \dots  & 0 \\
+			0 & \sigma & 1+\sigma & \dots  & 0 \\
+	    \vdots & \vdots & \vdots & \ddots & \vdots \\
+	    0 & 0 & \dots & \sigma  & 1+\sigma
+	\end{bmatrix},
+\end{equation}
+is referred to as the Jacobian matrix, and
+\begin{equation}
+	\vec{u}^{t} = \begin{bmatrix}
+	    u_1^t \\
+	    u_2^t \\
+		u_3^t \\
+	    \vdots  \\
+	    u_N^t
+	\end{bmatrix},
+\end{equation}
+is a vector of the solution at all grid points at the current time step, and
+\begin{equation}
+	\vec{u}^{t+1} = \begin{bmatrix}
+	    u_1^{t+1} \\
+	    u_2^{t+1} \\
+		u_3^{t+1} \\
+	    \vdots  \\
+	    u_N^{t+1}
+	\end{bmatrix},
+\end{equation}
+is a vector of the unknown solution values at the next time step, which is what we are trying to find. Note that the structure of the Jacobian matrix arises directly from writing out the equation for each grid point, and then assembling that as a linear system of equations. It is clear from Equation \ref{eqn:4h28f95h} that we can now solve for all of the solution values in $\vec{u}^{t+1}$ by simply solving a linear system of equations. Hence, we obtain unconditional stability, as discussed in the von Neumann analysis section, at the added cost of having to solve a linear system of equations at each time step. This cost is usually substantial and, hence, implicit schemes are typically used when sufficiently large time steps that are larger than the stability limits of explicit schemes are desired.
+
+\subsection{Implicit Linear Diffusion}
+As a second demonstration of an implicit solver we consider the implicit linear diffusion equation, derived previously as
+\begin{equation}
+  \frac{u_i^{t+1} - u_{i}^t}{\Delta t} - \beta \frac{u_{i-1}^{t+1} - 2u_i^{t+1} + u_{i+1}^{t+1}}{\Delta x^2} = 0.
+\end{equation}
+Rearranging this so that all of the known solution values are on the right hand side and all values at the as yet unknown next time step are on the left hand side yields
+\begin{equation}
+  u_i^{t+1} - r (u_{i-1}^{t+1} - 2u_i^{t+1} + u_{i+1}^{t+1}) = u_{i}^t,
+\end{equation}
+where again $r = \beta \Delta t / \Delta x^2$. Rearranging slight yields
+\begin{equation}
+  (1+2r)u_i^{t+1} - r (u_{i-1}^{t+1} + u_{i+1}^{t+1}) = u_{i}^t.
+\end{equation}
+Following the same steps as the linear advection equation, this can be written as a linear system of equations of the form
+\begin{equation}
+	A \vec{u}^{t+1} = \vec{u}^{t},
+\end{equation}
+where the Jacobian matrix for periodic boundary conditions can be written as
+\begin{equation}
+	A = 
+	\begin{bmatrix}
+	    1+2r & -r & 0 & \dots  & -r \\
+	    -r & 1+2r & -r & \dots  & 0 \\
+			0 & -r & 1+2r & \dots  & 0 \\
+	    \vdots & \vdots & \vdots & \ddots & \vdots \\
+	    -r & 0 & \dots & -r & 1+2r
+	\end{bmatrix},
+\end{equation}
+taking note of the locations of the $-r$ terms in the first and last rows that arise from the periodic boundary conditions. Hence, similar to the implicit linear advection scheme, implicit linear diffusion requires the solution of a linear system of equations at each time step. Therefore, it is typically used when the desired time step exceeds the stability limit of available explicit methods. Due to the $\Delta x^2$ scaling of the time step size for diffusion equations, as discussed in the von Neumann analysis section, diffusion operators are often solved using implicit approaches.
+
+\subsection{Implicit Burgers Equation}
+In both of the previous sections we looked at implicit solvers for {\it linear} systems of equations, specifically the linear advection and linear diffusion equations. In this section we will consider an implicit solver for the {\it non-linear} Burgers equation with a numerical scheme of the form
+\begin{equation}
+	\frac{u_i^{t+1} - u_{i}^t}{\Delta t} + \frac{1}{2\Delta x}\left( \left(u_i^{t+1} \right)^2 - \left( u_{i-1}^{t+1} \right)^2 \right) =  0.
+\end{equation}
+Putting all of the known solution values on the right hand side and unknown solution values at the next time step on the left hand side yields
+\begin{equation}
+	u_i^{t+1} + \frac{\Delta t}{2\Delta x}\left( \left(u_i^{t+1} \right)^2 - \left( u_{i-1}^{t+1} \right)^2 \right) =  u_{i}^t,
+\end{equation}
+which rearranges to
+\begin{equation}
+	\left(1 + \frac{\Delta t}{2\Delta x}u_i^{t+1} \right)u_i^{t+1} - \left(\frac{\Delta t}{2\Delta x} u_{i-1}^{t+1}\right) u_{i-1}^{t+1}  =  u_{i}^t,
+\end{equation}
+and has the following Jacobian matrix
+\begin{equation}
+	A = 
+	\begin{bmatrix}
+	    1 + \frac{\Delta t}{2\Delta x}u_i^{t+1} & 0 & 0 & \dots  & - \left(\frac{\Delta t}{2\Delta x} u_{i-1}^{t+1}\right) \\
+	    - \left(\frac{\Delta t}{2\Delta x} u_{i-1}^{t+1}\right) & 1 + \frac{\Delta t}{2\Delta x}u_i^{t+1} & 0 & \dots  & 0 \\
+			0 & - \left(\frac{\Delta t}{2\Delta x} u_{i-1}^{t+1}\right) & 1 + \frac{\Delta t}{2\Delta x}u_i^{t+1} & \dots  & 0 \\
+	    \vdots & \vdots & \vdots & \ddots & \vdots \\
+	    0 & 0 & \dots & - \left(\frac{\Delta t}{2\Delta x} u_{i-1}^{t+1}\right)  & 1 + \frac{\Delta t}{2\Delta x}u_i^{t+1}
+	\end{bmatrix},
+\end{equation}
+which is now a function of the unknown solution at the next time step. However, we do not yet know the solution at the next time step, so we cannot actually construct the Jacobian matrix and, therefore, we cannot solve directly for the solution at the next time step.
+
+To get around this problem we can use {\it Newton-Rhapson} iterations. First assume that the Jacobian matrix can be {\it approximated} using the current known solution as
+\begin{equation}
+	A_0 = 
+	\begin{bmatrix}
+	    1 + \frac{\Delta t}{2\Delta x}u_i^{t} & 0 & 0 & \dots  & - \left(\frac{\Delta t}{2\Delta x} u_{i-1}^{t}\right) \\
+	    - \left(\frac{\Delta t}{2\Delta x} u_{i-1}^{t}\right) & 1 + \frac{\Delta t}{2\Delta x}u_i^{t} & 0 & \dots  & 0 \\
+			0 & - \left(\frac{\Delta t}{2\Delta x} u_{i-1}^{t}\right) & 1 + \frac{\Delta t}{2\Delta x}u_i^{t} & \dots  & 0 \\
+	    \vdots & \vdots & \vdots & \ddots & \vdots \\
+	    0 & 0 & \dots & - \left(\frac{\Delta t}{2\Delta x} u_{i-1}^{t}\right)  & 1 + \frac{\Delta t}{2\Delta x}u_i^{t}
+	\end{bmatrix},
+\end{equation}
+where the subscript on $A_0$ denotes that this Jacobian is approximated using the current known solution at time $t$. This is referred to as a {\it linearization} of the system of equations, and we say that the Jacobian matrix has been linearized about the current solution $\vec{u}^t$. From this linearization the solution at $t+1$ can be estimated by solving the linear system
+\begin{equation}
+	A_0 \vec{u}^{t+1}_1 = \vec{u}^t,
+\end{equation}
+where the subscript in $\vec{u}^{t+1}_1$ denotes that this is the first iterated approximation of the solution at the next time step. Then, the Jacobian matrix can be approximated by linearizing it about this first estimated solution instead of $\vec{u}^t$, yielding the following linear system of equations
+\begin{equation}
+	A_1 \vec{u}^{t+1}_2 = \vec{u}^t,
+\end{equation}
+and this procedure can be repeated in the following form
+\begin{equation}
+	A_k \vec{u}^{t+1}_{k+1} = \vec{u}^t,
+\end{equation}
+where $k$ denotes the current iteration. This procedure is repeated until
+\begin{equation}
+	\vec{u}^{t+1}_{k+1} \approx \vec{u}^{t+1}_{k},
+\end{equation}
+at which point the solution at the next time step is taken to be
+\begin{equation}
+	\vec{u}^{t+1} = \vec{u}^{t+1}_{k+1},
+\end{equation}
+and the entire procedure is then repeated for each subsequent time step. Hence, for non-linear equations we need to solve multiple linear systems for each time step, following Newton-Rhapson, which can significantly increase their computational cost relative to linear systems. Furthermore, convergence of Newton-Rhapson is not guaranteed. Hence, non-linear systems often require smaller time steps relative to linear systems to maintain stability of the iterative method.
 
 \chapter{Iterative Methods}
 In this implicit time stepping section we reduced each time step to the solution of a linear system of $N$ equations of the form 

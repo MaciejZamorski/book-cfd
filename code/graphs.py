@@ -114,7 +114,8 @@ def discrete_scheme():
     dy : vertical distance to slope/average marker
     """
 
-    
+    # Changing these values requires manual 
+    # modification of the tick labels 
 
     l = 1.2
     dx = 0.2
@@ -142,10 +143,9 @@ def discrete_scheme():
         # Plot curve
         ax.plot(xcurve, ycurve, lw=1, color='black')
 
-        xnod = np.linspace(0, l, int(l/dx)+1)
-        ynod = np.polyval(y, xnod)
-
         if which == 'fd':
+            xnod = np.linspace(0, l, int(l/dx))
+            ynod = np.polyval(y, xnod)
             ch = 10
             # Draw vertical lines
             ax.vlines(xnod, ynod*0, ynod, lw=0.7, color='gray', linestyle='--')
@@ -164,6 +164,8 @@ def discrete_scheme():
                 plt.plot(xm, ym, lw=2, color='red')
 
         elif which == 'fv':
+            xnod = np.linspace(0, l, int(l/dx)+1)
+            ynod = np.polyval(y, xnod)
             ch = 11
             yavg = []
             ymax = []

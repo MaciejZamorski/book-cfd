@@ -576,6 +576,7 @@ Consider a statistically-steady state flow scenario, two flow quantities $u$ and
 \item From the aforementioned properties, it can also be shown that
 \begin{equation}
 	\overline{\overline{u}} = \overline{u}, ~~~ \overline{u^\prime \overline{v}} = 0.
+	\label{eq:reynolds_avgfluct}
 \end{equation}
 \end{itemize}
 
@@ -607,12 +608,14 @@ Since the time-averaging procedure commutes with derivative operators (Equation~
 Using Equations~\ref{eq:reynolds_sum} and~\ref{eq:reynolds_fluct},
 \begin{eqBox}
 \begin{equation}
-    \frac{\partial \overline{v_i}}{\partial x_i} = 0,
+	\frac{\partial \overline{v_i}}{\partial x_i} = 0,
+	\label{eq:rans_continuity}
 \end{equation}
 \end{eqBox}
 where the fluctuating term has vanished. This means that the divergence of each of the terms in Equation~\ref{eq:rans_mass_decomposed} must equal zero. Hence
 \begin{equation}
-    \frac{\partial v_i^\prime}{\partial x_i} = 0.
+	\frac{\partial v_i^\prime}{\partial x_i} = 0.
+	\label{eq:rans_continuity2}
 \end{equation}
 Next, we consider the momentum equation. Similarly, we split the variables using Reynolds decomposition and then time-average both sides of the equation. The momentum equations can be written using tensor notation
 \begin{equation}
@@ -669,17 +672,17 @@ We may now rewrite the RANS momentum equation in terms of the stresses and rearr
     + \frac{\partial}{\partial x_j} \left(\overline\tau_{ji} - \rho \overline{v_j^\prime v_i^\prime}\right),
 \end{equation}
 \end{eqBox}
-where $\rho \overline{v_j^\prime v_i^\prime}$ is known as the \textit{Reynolds stress}, which we can define as the \textit{Reynolds stress tensor} $\rho\phi_{ij}$, such that
+where $\rho \overline{v_j^\prime v_i^\prime}$ is known as the \textit{Reynolds stress}, which we can define as the \textit{Reynolds stress tensor} $\rho\hat\tau_{ij}$, such that
 \begin{equation}
-    \phi_{ij} = -\overline{v_i^\prime v_j^\prime}.
+	\hat\tau_{ij} = -\overline{v_i^\prime v_j^\prime}.
 \end{equation}
-It is clear that $\phi_{ij}=\phi_{j}$, so the Reynolds stress tensor is symmetric. This means that three diagonal components and three off-diagonal components make a total of six independent variables. This number of unknown rises to ten if we consider the properties of three-dimensional flow, i.e. density and the three velocity components ($\rho, \vec{v}$). This is what is known as $closure$ problem of turbulence since the set of Navier-Stokes equations are not sufficient to obtain a solution. Later in this chapter, we will learn some mathematical models that allow us to close the system.
+It is clear that $\hat\tau_{ij}=\hat\tau_{ji}$, so the Reynolds stress tensor is symmetric. This means that three diagonal components and three off-diagonal components make a total of six independent variables. This number of unknown rises to ten if we consider the properties of three-dimensional flow, i.e. density and the three velocity components ($\rho, \vec{v}$). Clearly, we have an underdetermined system and require additional equations. Later in this chapter, we derive an equation for the Reynolds stresses and discuss some of the consequences that arise from the averaging of the Navier-Stoke equations. We now look at the RANS equations for compressible flow.
 
 \subsubsection{Compressible flow}
 
 In the previous section, we derived the incompressible form of the RANS equations, where the density variations are negligible, i.e $\rho=\overline{\rho}$. In the case of compressible flow, these variations must be now taken into account. However, the equations can become very lengthy and complicated if the conventional averaging procedure is used. To visualize this, let us decompose the mass conservation law using the conventional Reynolds decomposition
 \begin{equation}
-    \frac{\partial}{\partial t} \left(\overline{\rho} + \rho^\prime\right) + \frac{\partial }{\partial x_i} \left(\left(\overline{\rho}+\rho^\prime\right)\left(\overline{v_i}+v_i^\prime\right)\right) = 0,
+    \frac{\partial}{\partial t} \left(\overline{\rho} + \rho^\prime\right) + \frac{\partial }{\partial x_i} \left[\left(\overline{\rho}+\rho^\prime\right)\left(\overline{v_i}+v_i^\prime\right)\right] = 0,
 \end{equation}
 which will introduce correlations involving density fluctuations and may complicate the turbulence modelling, i.e.
 \begin{equation}
@@ -755,9 +758,191 @@ where single-variable terms such as the pressure and diffusive components follow
         + \mu \frac{\partial }{\partial x_j} \left(\overline{\tau_{ji}} - \overline{\rho v_i^{\prime\prime}v_j^{\prime\prime}}\right).
     \end{equation}
 \end{eqBox}
-where $-\overline{\rho v_i^{\prime\prime}v_j^{\prime\prime}}$ is the Reynolds stress, which includes the instantaneous density $\rho$, and $\tau_{ij}$ is the viscous stress tensor. As explained in the previous section, the resulting system of equations remains underdetermined given the large number of unknowns. In the following section, we will derive expressions for the Reynolds stresses.
+where $-\overline{\rho v_i^{\prime\prime}v_j^{\prime\prime}}$ is the Reynolds stress, which includes the instantaneous density $\rho$, and $\tau_{ij}$ is the viscous stress tensor. As explained in the incompressible section, the resulting system of equations remains underdetermined due to the Reynolds stresses. Obtaining an equation for these stresses turns out to introduce additional unknowns. We now discuss and derive equations for the Reynolds-stress tensor for incompressible flow.
 
 \subsection{The Reynolds Stresses}
+As we have previously shown, the Reynolds stresses stem from the averaging of the convective term of the Navier-Stokes equations. We now need to find additional equations to solve our system of time-averaged conservation laws. Specifically, we would like to define equations that describe the rate of change of these stresses as we have done for other flow quantities. In this section, we derive the expressions for incompressible flow, however, the derivation can be readily performed for the compressible case considering the Favre averaging procedure. Hence, consider the incompressible momentum equations in the $i$-th direction, which we conveniently rewrite 
+\begin{equation}
+	P(v_i) 
+	= \rho \frac{\partial v_i}{\partial t}
+	+ \rho v_k\frac{\partial v_i}{\partial x_k}
+	+ \frac{\partial p}{\partial x_i} 
+	- \mu \frac{\partial^2 v_i}{\partial x_k \partial x_k} =0.
+\end{equation}
+Since we are looking for a time-averaged symmetric tensor for the Reynolds stresses, we perform the following operation
+\begin{equation}
+	\overline{v_i^\prime P(v_j) + v_j^\prime P(v_i)}=0.
+	\label{eq:reynolds_stresses_1}
+\end{equation}
+Here, $v_i^\prime$ and $v_j^\prime$ are fluctuation components in the $i$-th and $j$-th direction, respectively. We can compactly rewrite Equation~\ref{eq:reynolds_stresses_1} using
+\begin{equation}
+	A_{ij} + B_{ij} + C_{ij} + D_{ij} = 0,
+\end{equation}
+where $A_{ij},~B_{ij},~C_{ij},~D_{ij}$ are the unsteady, convective, pressure and viscous stress tensors from the momentum equations, respectively. For the sake of clarity, we expand each of these terms
+\begin{align}
+	A_{ij} &= \overline{v_i^\prime\rho\frac{\partial v_j}{\partial t} + v_j^\prime\rho\frac{\partial v_i}{\partial t}},\\
+	B_{ij} &= \overline{v_i^\prime\rho v_k\frac{\partial v_j}{\partial x_k} + v_j^\prime\rho v_k\frac{\partial v_i}{\partial x_k}},\\
+	C_{ij} &= \overline{v_j^\prime\frac{\partial p}{\partial x_i} + v_i^\prime\frac{\partial p}{\partial x_j}}, \\
+	D_{ij} &= \overline{-v_i^\prime\mu\frac{\partial^2 v_j}{\partial x_k\partial x_k}-v_j^\prime\mu\frac{\partial^2 v_i}{\partial x_k\partial x_k}}.
+\end{align}
+We will now time-average and derive an expression for the Reynolds-stress tensor. Initially, we want to split the instantaneous variables using Reynolds decomposition. Starting with the unsteady term
+\begin{equation}
+	A_{ij}
+	=
+	\rho\overline{v_i^\prime \frac{\partial}{\partial t}\left(\overline v_j + v_j^\prime \right)} +
+	\rho\overline{v_j^\prime \frac{\partial}{\partial t}\left(\overline v_i + v_{i\vphantom{j}}^\prime \right)}, 
+\end{equation}
+which we rewrite after solving the products
+\begin{equation}
+	A_{ij}
+	=
+	\rho \overline{v_i^\prime\frac{\partial\overline v_j^{\vphantom{\prime}}}{\partial t}} 
+	+ \rho \overline{v_i^\prime\frac{\partial v_j^\prime}{\partial t}}
+	+ \rho \overline{v_j^\prime\frac{\partial\overline v_{i\vphantom{j}}^{\vphantom{\prime}}}{\partial t}} 
+	+ \rho \overline{v_j^\prime\frac{\partial v_{i\vphantom{j}}^\prime}{\partial t}}.
+	\label{eq:reystress_A_1}
+\end{equation}
+Recall from the Reynolds averaging properties in Equation~\ref{eq:reynolds_avgfluct} that the average of the product of a mean and a fluctuating quantity is zero. Hence, we eliminate the first and third terms in Equation~\ref{eq:reystress_A_1}. Furthermore, we apply the product rule to bring fluctuation quantities into the temporal derivative. This yields the time-averaged convective term
+\begin{eqBox}
+\begin{equation}
+	A_{ij}
+	= \rho \overline{v_i^\prime\frac{\partial v_j^\prime}{\partial t}}
+	+ \rho \overline{v_j^\prime\frac{\partial v_{i\vphantom{j}}^\prime}{\partial t}} 
+	= \rho \frac{\partial}{\partial t} \left(\overline{v_i^\prime v_j^\prime}\right).
+\end{equation}
+\end{eqBox}
+Next, we decompose the variables in the convective term
+\begin{equation}
+	B_{ij} =
+	\rho \overline{v_i^\prime \left(\overline v_k+v_{k\vphantom{j}}^\prime\right)\frac{\partial}{\partial x_k}\left(\overline v_j+v_j^\prime\right)}
+	+ \rho \overline{v_j^\prime \left(\overline v_k+v_{k\vphantom{j}}^\prime\right)\frac{\partial}{\partial x_k}\left(\overline v_i+v_{i\vphantom{j}}^\prime\right)},
+\end{equation} 
+whereby solving the products, we obtain
+\begin{equation}
+	\begin{aligned}
+	B_{ij} &=
+	\overline{v_i^\prime\overline v_k \frac{\partial\overline v_j^{\vphantom{\prime}}}{\partial x_k} }
+	+ \overline{v_i^\prime\overline v_k \frac{\partial v_j^\prime}{\partial x_k} }
+	+ \overline{v_i^\prime v_k^\prime \frac{\partial\overline v_j^{\vphantom{\prime}}}{\partial x_k} }
+	+ \overline{v_i^\prime v_k^\prime \frac{\partial v_j^\prime}{\partial x_k} } \\
+	&+ \overline{v_j^\prime\overline v_k \frac{\partial\overline v_i}{\partial x_k} }
+	+ \overline{v_j^\prime\overline v_k \frac{\partial v_i^\prime}{\partial x_k} }
+	+ \overline{v_j^\prime v_k^\prime \frac{\partial\overline v_i}{\partial x_k} }
+	+ \overline{v_j^\prime v_k^\prime \frac{\partial v_i^\prime}{\partial x_k} }.
+	\end{aligned}
+	\label{eq:reystress_B_1}
+\end{equation}
+Note that $\overline{u^\prime \overline v \overline w} = \overline{u^\prime} \overline v \overline w = 0$ as a consequence of Equation~\ref{eq:reynolds_avgfluct}. This way we can clean up Equation~\ref{eq:reystress_B_1} by eliminating the first and fifth terms. In addition, using the product rule for the second and fourth term, we have
+\begin{equation}
+	\overline{v_i^\prime \overline v_k \frac{\partial v_j^\prime}{\partial x_k} }
+	+ \overline{v_j^\prime \overline v_k \frac{\partial v_{i\vphantom{j}}^\prime}{\partial x_k} } 
+	= \overline v_k \frac{\partial}{\partial x_k} \left(\overline{v_i^\prime v_j^\prime}\right),
+\end{equation}
+where $\overline v_k$ is a constant. This yields
+\begin{equation}
+	B_{ij} = \rho \left[\overline v_k \frac{\partial}{\partial x_k} \left(\overline{v_i^\prime v_j^\prime}\right) 
+	+ \overline{v_i^\prime v_k^\prime} \frac{\partial\overline v_j}{\partial x_k}
+	+ \overline{v_k^\prime \frac{\partial}{\partial x_k} \left(v_i^\prime v_j^\prime\right)}
+	+ \overline{v_j^\prime v_k^\prime}\frac{\partial\overline v_{i\vphantom{j}}}{\partial x_k}\right].
+	\label{eq:reystress_B_2}
+\end{equation}
+We can use the chain rule on the third term of Equation~\ref{eq:reystress_B_2}, such that
+\begin{equation}
+	\frac{\partial}{\partial x_k} \left(\overline{v_i^\prime v_j^\prime v_k^\prime }\right) 
+	= \overline{v_i^\prime v_j^\prime \frac{\partial v_k^\prime}{\partial x_k} } 
+	+ \overline{v_k^\prime \frac{\partial\vphantom{v_k^\prime}}{\partial x_k}\left(v_i^\prime v_j^\prime\right)} 
+	= \overline{v_k^\prime \frac{\partial\vphantom{v_k^\prime}}{\partial x_k}\left(v_i^\prime v_j^\prime\right)},
+\end{equation}
+where the first term is zero due to continuity (see Equation~\ref{eq:rans_continuity2}). We can now write the time-averaged convective term of the Reynolds stress equation
+\begin{eqBox}
+\begin{equation}
+	B_{ij} = 
+	\overline v_k \frac{\partial}{\partial x_k} \left(\rho \overline{v_i^\prime v_j^\prime}\right) 
+	+ \rho \overline{v_i^\prime v_k^\prime}\frac{\partial \overline v_j }{\partial x_k}
+	+ \frac{\partial}{\partial x_k} \left(\rho \overline{v_i^\prime v_j^\prime v_k^\prime }\right)
+	+ \rho \overline{v_j^\prime v_k^\prime}\frac{\partial \overline v_{i\vphantom{j}}}{\partial x_k}.
+\end{equation}
+\end{eqBox}
+Now, we move on to the pressure term. By splitting the instantaneous quantities, we obtain
+\begin{equation}
+	C_{ij} = 
+	\overline{v_i^\prime \frac{\partial}{\partial x_j} \left(\overline p + p^\prime \right)}
+	+ \overline{v_j^\prime \frac{\partial}{\partial x_i} \left(\overline p + p^\prime\right)},
+\end{equation}
+which after solving the products and cancelling the linear terms yields
+\begin{eqBox}
+\begin{equation}
+	C_{ij} =  
+	\overline{v_i^\prime \frac{\partial p^\prime}{\partial x_j}}
+	+\overline{v_j^\prime \frac{\partial p^\prime}{\partial x_i}}.
+\end{equation}
+\end{eqBox}
+Finally, we decompose the viscous term
+\begin{equation}
+	D_{ij} = -\mu \left[ 
+	  \overline{v_i^\prime \frac{\partial^2}{\partial x_k\partial x_k} \left(\overline v_j + v_j^\prime\right)}
+	+ \overline{v_j^\prime \frac{\partial^2}{\partial x_k\partial x_k} \left(\overline v_i + v_{i\vphantom{j}}^\prime\right)}
+	\right],
+\end{equation}
+whereby solving the products and cancelling corresponding terms yields
+\begin{equation}
+	D_{ij} = -\mu \left[ 
+	  \overline{v_i^\prime \frac{\partial^2 v_j^\prime}{\partial x_k\partial x_k}}
+	+ \overline{v_j^\prime \frac{\partial^2 v_{i\vphantom{j}}^\prime }{\partial x_k\partial x_k}}
+	\right].
+\end{equation}
+From the chain rule, we can write
+\begin{equation}
+	\frac{\partial^2}{\partial x_k \partial x_k} \left(\overline{v_i^\prime v_j^\prime} \right) 
+	= 2\overline{\frac{\partial v_{i\vphantom{j}}^\prime}{\partial x_k}\frac{\partial v_j^\prime}{\partial x_k}}
+	+ \overline{v_i^\prime \frac{\partial^2 v_j^\prime}{\partial x_k\partial x_k}}
+	+ \overline{v_j^\prime \frac{\partial^2 v_{i\vphantom{j}}^\prime}{\partial x_k\partial x_k}},
+\end{equation}
+which yields the time-averaged viscous term
+\begin{eqBox}
+\begin{equation}
+	D_{ij} = -
+	\mu \frac{\partial^2}{\partial x_k \partial x_k} \left(\overline{v_i^\prime v_j^\prime}\right) 
+	+ 2 \mu \overline{\frac{\partial v_{i\vphantom{j}}^\prime}{\partial x_k}\frac{\partial v_j^\prime}{\partial x_k}}.
+\end{equation}
+\end{eqBox}
+The resulting equation for the evolution of the Reynolds stresses can be written as
+\begin{equation}
+	\begin{aligned}
+	\frac{\partial}{\partial t} \left(\rho \overline{v_i^\prime v_j^\prime}\right) 
+	+ \overline v_k \frac{\partial}{\partial x_k} \left(\rho \overline{v_i^\prime v_j^\prime}\right) 
+	=&
+	- \rho \overline{v_i^\prime v_k^\prime}\frac{\partial \overline v_j }{\partial x_k}
+	- \rho \overline{v_j^\prime v_k^\prime}\frac{\partial \overline v_{i\vphantom{j}}}{\partial x_k}
+	- \overline{v_i^\prime \frac{\partial p^\prime}{\partial x_j}}
+	- \overline{v_j^\prime \frac{\partial p^\prime}{\partial x_i}}  \\
+	&+ \frac{\partial^2}{\partial x_k}  
+	\left[
+		\mu \frac{\partial}{\partial x_k} \left(\overline{v_i^\prime v_j^\prime}\right)
+		- \left(\rho\overline{v_i^\prime v_j^\prime v_k^\prime }\right) 
+	\right]
+	- 2 \mu \overline{\frac{\partial v_{i\vphantom{j}}^\prime}{\partial x_k}\frac{\partial v_j^\prime}{\partial x_k}}.
+	\end{aligned}
+	\label{eq:reynolds_stress_eq}
+\end{equation}
+By inspecting Equation~\ref{eq:reynolds_stress_eq}, it is clear that we have added six equations, but the number of unknowns also increased. The high-order correlation $\overline{v_i^\prime v_j^\prime v_k^\prime}$ is responsible for ten additional unknowns, in addition to other twelve that result from the new pressure and viscosity terms. This is known as the \textit{closure} problem of turbulence. Interestingly, if we decided to further find equations by taking additional moments, new higher-order correlations would appear. This is a consequence of the initial averaging of the Navier-Stokes equations. By multiplying Equation~\ref{eq:reynolds_stress_eq} by $-\rho^{-1}$ and using the following definitions
+\begin{align}
+	\hat\tau_{ij} &= -\overline{v_i^\prime v_j^\prime},\\
+	\Pi_{ij} &= \overline{\frac{p^\prime}{\rho} \left(\frac{\partial v_i^\prime}{\partial x_j} + \frac{\partial v_j^\prime}{\partial x_j} \right)}, \\
+	\epsilon_{ij} &= 2\nu \overline{\frac{\partial v_i^\prime}{\partial x_k}}\overline{\frac{\partial v_j^\prime}{\partial x_k}},\\
+	\rho C_{ijk} &= \rho \overline{v_i^\prime v_j^\prime v_k^\prime} + \overline{p^\prime v_i^\prime}\delta_{jk} + \overline{p^\prime v_j^\prime}\delta_{ik},
+\end{align}
+we can compactly write the Reynolds-stress equation in its common form
+\begin{eqBox}
+	\begin{equation}
+		\frac{\partial \hat \tau_{ij}}{\partial t} + \overline v_k \frac{\partial \hat \tau_{ij}}{\partial x_k}
+		= - \hat\tau_{ij}\frac{\partial \overline v_j}{\partial x_k} 
+		- \hat\tau_{jk}\frac{\partial \overline v_i }{\partial x_k} 
+		+ \epsilon_{ij} - \Pi_{ij}
+		+ \frac{\partial}{\partial x_k} \left(\nu \frac{\partial \hat\tau_{ij}}{\partial x_k} + C_{ijk}\right).
+	\end{equation}
+\end{eqBox}
+We are still left with a system of equations that remains to be closed. In the quest of solving turbulent flows using the RANS equations, we dedicate the rest of this chapter to the derivation of common algebraic models that have been devised to give closure to these equations.
 \section{Turbulence Modelling}
 \subsection{The Boussinesq Hypothesis}
 \subsection{The Mixing Length Model}

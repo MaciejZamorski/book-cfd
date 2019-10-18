@@ -67,10 +67,10 @@ we note that the leading term omitted from the $f_1(\Delta x)$ approximation beh
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.5\linewidth]{Pictures/ch10_fd_scheme}
+	\includegraphics[width=0.6\linewidth]{Pictures/ch10_fd_scheme}
 	\caption{}
 	\label{fig:fd_scheme}
-	\end{figure}
+\end{figure}
 	
 To introduce the finite difference method we start with a general function $u(x)$. In general this function can be in any number of dimensions, but for simplicity we will first consider the one-dimensional case. We note that a function can generally be {\it approximated} by its values at a {\it discrete} set of points. An example of this is shown in Figure \ref{} where $\Delta x$ is the grid spacing between the points. We now imagine that we are at some point $i$ whose solution is $u_i = u(x_i)$ where $x_i$ is the physical location of the point. Using Taylor series we can compute the value of the solution one grid point to the left from the expansion
 \begin{equation}
@@ -312,6 +312,12 @@ u_i^{t+1}  = u_{i}^t + \frac{\beta \Delta t}{\Delta x^2} \left(u_{i-1} - 2u_i + 
 Again, this is very similar to the approximations for linear advection and Burgers equations. However, one important thing to note is that the error in space is of $\mathcal{O}(\Delta x^2)$ instead of $\mathcal{O}(\Delta x)$, meaning that as we refine the grid the solution will converge more quickly to the exact solution of the linear diffusion equation.
 
 \chapter{Finite Volume Methods}
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.6\linewidth]{Pictures/ch11_fv_scheme}
+	\caption{}
+	\label{fig:fd_scheme}
+\end{figure}
 \section{Derivation}
 \section{The Riemann Problem}
 \section{Example Applications}
@@ -440,8 +446,8 @@ That is, it is only stable for CFL numbers less than one. Hence, for a given gri
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.7\linewidth]{Pictures/ch12_explicit_advection}
-	\caption{Stability region for the explicit kinear advection scheme.}
+	\includegraphics[width=0.6\linewidth]{Pictures/ch12_explicit_advection}
+	\caption{Stability region for the explicit linear advection scheme.}
 	\label{fig:explicit_advection}
 \end{figure}
 
@@ -502,8 +508,8 @@ Although this scheme is unconditionally stable, making at appealing since it all
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.7\linewidth]{Pictures/ch12_implicit_advection}
-	\caption{Stability region for the implicit kinear advection scheme.}
+	\includegraphics[width=0.6\linewidth]{Pictures/ch12_implicit_advection}
+	\caption{Stability region for the implicit linear advection scheme.}
 	\label{fig:implicit_advection}
 \end{figure}
 
@@ -564,6 +570,13 @@ Based on this amplification factor, we demonstrate graphically that this scheme 
 \end{eqBox}
 We note that this scheme is {\it conditionally stable}, similar to the first linear advection scheme we considered. This means if the grid is refined then the time step size must be reduced accordingly to maintain stability. However, we note that the factor of $\Delta x^2$ in $r$ will require the time step size to be reduced with the square of the grid spacing, which can become expensive on finer meshes.
 
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.6\linewidth]{Pictures/ch12_explicit_diffusion}
+	\caption{Stability region for the explicit linear diffusion scheme.}
+	\label{fig:explicit_diffusion}
+\end{figure}
+
 \begin{remark}
 The Navier-Stokes equations have both advective and diffusive terms. Hence, the time step is usually limited by the stricter of the stability constraints of the advective and diffusive schemes that are being used.
 \end{remark}
@@ -620,6 +633,12 @@ Based on the form of the amplification factor, we can conclude that this scheme 
 \end{equation}
 \end{eqBox}
 Hence, this linear diffusion scheme is {\it unconditionally stable}.
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.6\linewidth]{Pictures/ch12_implicit_diffusion}
+	\caption{Stability region for the implicit linear diffusion scheme.}
+	\label{fig:implicit_diffusion}
+\end{figure}
 
 \section{Convergence}
 If a scheme is consistent, recovering the exact partial differential equation in the limit $\Delta x \rightarrow 0$ and $\Delta t \rightarrow 0$, and stable, in that the approximate solution does not grow unbounded with time, then Lax's equivalence theorem can be applied. In summary, the theorem states that when given a properly-posed initial value problem, and a numerical scheme that is consistent, stability is the necessary and sufficient condition for convergence. In other words, if we can show that our numerical schemes is consistent and stable, then we can be sure that it will {\it converge} to the true solution of the partial differential equation in the limit $\Delta x \rightarrow 0$ and $\Delta t \rightarrow 0$.

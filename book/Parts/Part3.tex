@@ -1134,7 +1134,13 @@ We note that if $\vec{x}$ is a solution to the linear system of equations, then 
 	\label{eqn:3jc810fg}
 \end{equation}
 \end{eqBox}
-where $\vec{x}_n$ is an approximate solution, and $\vec{x}_{n+1}$ is an updated approximation. Then we can simply pass $\vec{x}_{n+1}$ back through this formulation to obtain $\vec{x}_{n+2}$, and so on, iterating to a final solution when the value of $\vec{x}$ converges. Each step of Jacobi iteration requires $\mathcal{O}(N^2)$ operations, hence, we can expect Jacobi to outperform Gaussian elimination, as long as we need fewer iterations than there are rows in the system of equations. Furthermore, in CFD it is usually sufficient to converge $\vec{x}$ to some finite level of precision.
+where $\vec{x}_n$ is an approximate solution, and $\vec{x}_{n+1}$ is an updated approximation. Then we can simply pass $\vec{x}_{n+1}$ back through this formulation to obtain $\vec{x}_{n+2}$, and so on, iterating to a final solution when the value of $\vec{x}$ converges. This can also be written in an element-by-element manner as
+\begin{eqBox}
+\begin{equation}
+	x_i^{n+1} = \frac{1}{a_{i,i}}\left(b_i - \sum_{i \neq i} a_{i,j}x_j^k \right), \: \: i = 1,2,\hdots,n.
+\end{equation}
+\end{eqBox}
+Each step of Jacobi iteration requires $\mathcal{O}(N^2)$ operations, hence, we can expect Jacobi to outperform Gaussian elimination, as long as we need fewer iterations than there are rows in the system of equations. Furthermore, in CFD it is usually sufficient to converge $\vec{x}$ to some finite level of precision.
 
 To demonstrate the utility of Jacobi iteration we will use a simple example of a $3 \times 3$ system of equations. Starting with 
 \begin{equation}
@@ -1257,7 +1263,55 @@ Similar to Jacobi, we notice that if we insert an estimate for $\vec{x}$ on the 
 	\vec{x}_{n+1} = (L + D)^{-1}\left[ \vec{b} - U\vec{x}_n \right].
 \end{equation}
 \end{eqBox}
-Usually the additional cost of computing $(L + D)^{-1}$, relative to simply computing $D^{-1}$ with Jacobi, significantly reduces the number of iterations and total computational cost. 
+Also, similar to Jacobi this can be performed in a element-wise manner for each component of the solution via
+\begin{eqBox}
+\begin{equation}
+	x_i^{n+1} = \frac{1}{a_{i,i}}\left(b_i - \sum_{j=1}^{i-1} a_{i,j}x_j^{n+1} - \sum_{j=i+1} a_{i,j}x_j^n \right), \: \: i = 1,2,\hdots,n.
+\end{equation}
+\end{eqBox}
+It is clear from this that Gauss-Seidel amounts to simply a Jacobi iteration but using the most up to date entries $a_{i,j}x_j^n$ or $a_{i,j}x_j^{n+1}$ as they are available. Usually the additional cost of computing $(L + D)^{-1}$, relative to simply computing $D^{-1}$ with Jacobi, significantly reduces the number of iterations and total computational cost.
+
+Going back to our example from Jacobi iteration we have
+Now with our initial Guess and all terms from the right hand side of Equation \ref{eqn:3jc810fg} defined, we can compute
+\begin{equation}
+	\vec{x}_{1} = (L + D)^{-1}\left[ \vec{b} - U\vec{x}_0 \right] = \begin{bmatrix}
+	    0.1000 \\
+	    0.1750 \\
+			0.2527
+	\end{bmatrix}.
+\end{equation}
+Repeating this iteration a few times yields
+\begin{equation}
+	\vec{x}_{2} = (L + D)^{-1}\left[ \vec{b} - U\vec{x}_1 \right] = \begin{bmatrix}
+	    -0.0361 \\
+	    0.1506 \\
+			0.2911
+	\end{bmatrix},
+\end{equation}
+\begin{equation}
+	\vec{x}_{3} = (L + D)^{-1}\left[ \vec{b} - U\vec{x}_2 \right] = \begin{bmatrix}
+	    -0.0465 \\
+	    -0.0467 \\
+			0.2982
+	\end{bmatrix},
+\end{equation}
+and after only 5 iterations we obtain
+\begin{equation}
+		\vec{x}_{5} = (L + D)^{-1}\left[ \vec{b} - U\vec{x}_4 \right] = \begin{bmatrix}
+	    -0.0465 \\
+	    0.1358 \\
+			0.2984
+	\end{bmatrix},
+\end{equation}
+which is very close to the exact solution
+\begin{equation}
+	\vec{x} = \begin{bmatrix}
+	    -0.0465 \\
+	    0.1357 \\
+			0.2984
+	\end{bmatrix}.
+\end{equation}
+Hence, after only 5 iterations, or three times as fast as Jacobi in this case, Gauss Seidel was able to converge to approximately four digits.
 
 \section{Successive Over-Relaxation}
 When using the Gauss-Seidel approach, we often observe that the iterated solutions converge gradually to the exact solution for $\vec{x}$. That is, each iteration takes a step towards the exact solution in a somewhat uniform manner. We can exploit this by simply extrapolating each iteration to move a bit further towards the exact solution, which is known as Successive Over-Relaxation (SOR). This is usually done to accelerate convergence, but as will be discussed later, it can be used to also stabilize convergence.

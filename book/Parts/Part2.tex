@@ -546,7 +546,7 @@ where $u_i({\vec{x},t})$ is the result obtained in the $i$-th experiment. An exa
 	\label{fig:ensemble_averaging}
 \end{figure}
 
-In the following section, we will derive the Reynolds Averaged Navier-Stokes equations using the time-averaging operation. Before we dive into the derivation, we will discuss some Reynolds Averaging properties. For a complete explanation of these properties, refer to Wilcox~\cite{}. 
+In the following section, we will derive the Reynolds Averaged Navier-Stokes equations using the time-averaging operation. Before we dive into the derivation, we will discuss some Reynolds Averaging properties. For a complete explanation of these properties, refer to Wilcox~\cite{wilcox1998turbulence}. 
 
 \subsubsection{Properties of Reynolds Averaging}
 
@@ -946,7 +946,7 @@ We are still left with a system of equations that remains to be closed. In the q
 \section{Turbulence Modelling}
 We have already derived the time-averaged flow equations, which are generally used in the modelling of industrial turbulent flows due to their relatively low computational cost. However, we have also stated that their use is limited to obtaining mean flow properties. In addition, we have shown that the time-averaged conservation laws require additional mathematical equations due to the closure problem in turbulence. Specifically, we intend to show simple models to compute the Reynolds stresses, which appear due to the averaging of the original Navier-Stokes equations. 
 \subsection{The Boussinesq Hypothesis}
-In 1877, Boussinesq assumed that the Reynolds stresses were related to the mean flow, specifically the mean strain tensor $\overline S_{ij}$. This hypothesis was based on principles of kinetic theory of gases. The interaction of turbulent eddies with each other led to hypothesize that a relationship between turbulent and molecular motion existed. This hypothesis can be written
+In 1877, Boussinesq presented an approximation for the turbulent transfer of momentum in relation with molecular motion. The assumption was that the Reynolds stresses were linearly related to the mean flow, specifically to the mean strain tensor $\overline S_{ij}$ such that
 \begin{equation}
 	-\rho \overline{v_i^\prime v_j^\prime} = 
 		2 \mu_\tau \left(\overline S_{ij} - \frac{1}{3} \frac{\partial \overline v_k}{\partial x_k}\delta_{ij}
@@ -959,13 +959,63 @@ where
 	\frac{\partial \overline v_i}{\partial x_j} 
 		+ \frac{\partial \overline v_j}{\partial x_i},
 \end{equation}
-$k$ is the kinetic energy $\frac{1}{2}\overline{v_i^\prime v_i^\prime}$, $\delta_{ij}$ is the Kronecker delta and $u_\tau$ is an isotropic scalar quantity, known as \textit{eddy viscosity}. For incompressible flows, the second term in equation~\ref{eq:boussinesq_approximation} vanishes due to continuity. Now we have equations for the Reynolds stress tensor and can give closure to the RANS equations.  What remains is to define the value of the viscosity coefficient, which is a parameter that does not depend on the fluid, but the characteristics of the flow field. 
+$k$ is the kinetic energy $\frac{1}{2}\overline{v_i^\prime v_i^\prime}$, $\delta_{ij}$ is the Kronecker delta and $\mu_\tau$ is an isotropic scalar quantity, known as \textit{eddy viscosity}. (Note that for incompressible flows, the second term in equation~\ref{eq:boussinesq_approximation} vanishes due to continuity). This approximation allows for closure of the RANS equations and is the basis of multiple widely-used turbulent models. However, the question lies in previously defining the constant viscosity coefficient, which does not depend on the fluid, but the characteristics of the flow field. 
 
-Furthermore, note that the resulting Reynolds stresses, which appeared from the averaging of the convective term of the Navier-Stokes equations, are now represented as additional viscous terms. Hence, we may be neglecting the convective effects of these stresses and introducing additional dissipation into our equations. However, despite the lack of theoretical validity behind the Boussinesq assumption, it has proven to show relatively good results for fairly simple flows. These include simple shear layers and attached boundary layers, as stated in~\ref{NASA}. 
+In addition, observe that the resulting Reynolds stresses, which are a consequence of the averaging of the convective term of the Navier-Stokes equations, are now represented as additional viscous terms. This is, in fact, contradictory since we are neglecting the convective effects of these stresses and instead introducing dissipation into the system. Indeed, the assumption that the Reynolds stress tensor behaves linearly with the rate of strain is incorrect. Turbulent transfer of momentum cannot be associated with the molecular transfer of momentum in gases since eddies cannot be assumed to be rigid bodies.  Contrary to molecules, the largest eddies have dimensions of the order of the characteristic length of the domain. Despite the lack of theoretical validity behind the Boussinesq assumption, it has proven to be useful for relatively simple flows. These include simple shear layers and attached boundary layers. 
 
+We now shift our attention to turbulence models based on the Boussinesq assumption. The quest for an accurate value of $\mu_\tau$ can become very complex. Some of these models define $\mu_\tau$ algebraically, namely the mixing-length model, by a single transport equation, such as the Spalart-Allmaras model or by solving two additional equations such as the $k-\epsilon$ and $k-\omega$ models. These are by no means the only turbulence models. Others with increased complexity exist, but they also incur increased computational cost when implemented in CFD algorithms. As mentioned by Wilcox~\cite{wilcox1998turbulence}, it is important to know the limitations of each of these models, which include flow over curved surfaces, rotating fluids and complex three-dimensional flows. 
 
 \subsection{The Mixing Length Model}
+Rather than defining a constant value of viscosity dependent on the velocity field, Prandtl proposed a \textit{rough} approach for the calculation of $\mu_\tau$. Recall the mean-free-path from kinetic theory of gases, which indicates the distance travelled by a molecule before any transfer of momentum occurs by means of collision. Analogous to this distance, Prandtl considered a \textit{mixing length} $\ell_m$, which is equivalent to the path travelled by a fluid element before losing its properties due to mixing with the neighbouring fluid. He further postulated that the characteristic velocity and $\ell_m$ could be related for a two-dimensional boundary layer flow by
+\begin{equation}
+    \mu_\tau = \ell_m^2 \left| \frac{\partial \overline v_x}{\partial y}\right|,
+\end{equation}
+where $l_m$ is impirically determined and is known for only certain types of flows. Other authors have proposed generalizations of this equation such as that by Baldwin and Lomax~\cite{} as a function of the mean rate of strain~\cite{pope2001turbulent}
+\begin{equation}
+    \mu_\tau = \ell_m^2 \sqrt{\overline S_{ij} \overline S_{ij}},
+\end{equation}
+We have now algebraically defined Boussinesq's viscosity $\mu_\tau$ with another empirical parameter $\ell_m$. Hence we have carried on the assumptions from Boussinesq, which we have previously stated to be inaccurate. However, mixing-length models can have relatively good results in the vicinity of a turbulent wall flow (see Wilcox~\cite{wilcox1998turbulence}). However, the specification of the mixing length is dependent on the type of flow. It must be determined for flows that have not been studied before under this configuration. The fact that we require $\ell_m$ to be previously known classifies the model as \textit{incomplete} in the sense that the parameter must be previously known.
 \subsection{The Spalart-Allmaras Model}
+Spalart and Allmaras~\cite{} took an empirical approach, using arguments from dimensional analysis developed a new model, which included the resolution of an ad-hoc transport equation for the turbulence field variable $\tilde \nu$. The model was initially developed for aerodynamics applications such as transonic flow over airfoils. Several nested versions are included in the original publication, and these range from simple models for free shear flows to more complex derivations that can be applied to boundary layer flows. The general model is given by
+\begin{equation}
+    \frac{\partial \tilde{\nu}}{\partial t} 
+    + v_i \frac{\partial\tilde\nu}{\partial x_i} 
+    = c_{b1} (1-f_{t2}) \tilde S \tilde \nu
+    + \frac{1}{\sigma} 
+     [ \nabla \cdot ((\nu + \tilde \nu)\nabla \tilde \nu) 
+      + c_{b2}(\nabla \tilde \nu)^2]
+    - \left[c_{w1}f_w] - \frac{c_{b1}}{\kappa^2}f_{t2}\right],
+    \label{eq:spalart_allmaras}
+\end{equation}
+where $c$ and $f$ are empirical constants and functions of the turbulence model, which we define shortly along with the rest of the variables. Upon solving Equation~\ref{eq:spalart_allmaras}, we can compute the eddy viscosity $\mu_\tau$ from
+\begin{equation}
+    \mu_\tau=\rho \tilde \nu \frac{(\tilde\nu/\nu)^3}{(\tilde\nu/\nu)^3+c_{v1}^3},
+    \label{eq:sa_eddyviscosity}
+\end{equation}
+where $\nu$ is the molecular kinematic viscosity. In addition,
+\begin{equation}
+    \tilde S \equiv + \frac{\tilde \nu}{\kappa^2 d^2}f_{v2}~,\quad f_{v2}=1-\frac{(\tilde\nu/\nu)}{1+(\tilde\nu/\nu)f_{v1}}
+\end{equation}
+with $S$ the magnitude of the vorticity and $d$ the distance to the closest wall~\cite{spalartallmaras}. 
+\begin{align}
+    f_w&=\left[r+c_{w2}\left(r^6-r\right)\right]
+    \left[\frac{1+c_{w3}^6}{g^6+c_{w3}^6}\right]^{1/6},\quad r\equiv \min\left(\frac{\tilde\nu}{\tilde s \kappa^2 d^2},10\right). \\
+    f_{t2}&=c_{t3} \exp \left[-c_{t4}(\tilde\nu/\nu)^2\right].
+\end{align}
+Finally, the constants are given by 
+\begin{align}
+    &c_{b1} = 0.1355,& &c_{b2} =0.622,& &\sigma = 2/3,& &\kappa=0.41, \\
+    &c_{w2} = 0.3,&    &c_{w3} =2,&     &c_{v1} = 7.1,&   &c_{t3}=1.2,  \\
+    &c_{t4} = 0.5,&      &c_{w1} = \frac{c_{b1}}{\kappa^2} + \frac{1+c_{b2}}{\sigma}.
+\end{align}
+The implementation of this model allows to remove the incomplete condition from the previously defined models. Wall and freestream boundary conditions are
+\begin{equation}
+    \tilde \nu_{wall} = 0,\quad \tilde\nu_{\infty}=3 \nu_{\infty}:to:5\nu_{v_\infty},
+\end{equation}
+according to NASA Turbulence Model Database~\cite{}. Now, by solving Equations~\ref{eq:spalart_allmaras} and~\ref{eq:sa_eddyviscosity}, we are able to give closure to the RANS equations. Since only an additional equation is required, the relative computational cost of this turbulence model is commonly appraised. Given that this model was initially developed for aerospace applications, it is a popular choice for the prediction of lift and drag at low to moderate angles of attack due to relatively good resolution of boundary layer problems. 
+
+Furthermore, the SA model is well-suited for its application with unstructured discretization methods. Despite its success in predicting close values to experimental measurements for simple aerospace applications, it has been found to fail for flows that include jet-like free-shear regions and flows involving complex recirculation. It is important to be aware of the advantages and limitations of the model so that results can be well-understood.
+
 \subsection{The k-$\epsilon$ Model}
 \subsection{The k-$\omega$ Model}
 \subsection{Summary of Turbulence Models}

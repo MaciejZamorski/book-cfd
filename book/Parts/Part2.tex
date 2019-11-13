@@ -947,12 +947,14 @@ We are still left with a system of equations that remains to be closed. In the q
 We have already derived the time-averaged flow equations, which are generally used in the modelling of industrial turbulent flows due to their relatively low computational cost. However, we have also stated that their use is limited to obtaining mean flow properties. In addition, we have shown that the time-averaged conservation laws require additional mathematical equations due to the closure problem in turbulence. Specifically, we intend to show simple models to compute the Reynolds stresses, which appear due to the averaging of the original Navier-Stokes equations. 
 \subsection{The Boussinesq Hypothesis}
 In 1877, Boussinesq presented an approximation for the turbulent transfer of momentum in relation with molecular motion. The assumption was that the Reynolds stresses were linearly related to the mean flow, specifically to the mean strain tensor $\overline S_{ij}$ such that
+\begin{eqBox}
 \begin{equation}
 	-\rho \overline{v_i^\prime v_j^\prime} = 
 		2 \mu_\tau \left(\overline S_{ij} - \frac{1}{3} \frac{\partial \overline v_k}{\partial x_k}\delta_{ij}
 		\right) - \frac{2}{3} k \delta_{ij},
 	\label{eq:boussinesq_approximation}
 \end{equation}
+\end{eqBox}
 where
 \begin{equation}
 	\overline S_{ij} = 
@@ -971,36 +973,40 @@ Rather than defining a constant value of viscosity dependent on the velocity fie
     \mu_\tau = \ell_m^2 \left| \frac{\partial \overline v_x}{\partial y}\right|,
 \end{equation}
 where $l_m$ is impirically determined and is known for only certain types of flows. Other authors have proposed generalizations of this equation such as that by Baldwin and Lomax~\cite{} as a function of the mean rate of strain~\cite{pope2001turbulent}
+\begin{eqBox}
 \begin{equation}
     \mu_\tau = \ell_m^2 \sqrt{\overline S_{ij} \overline S_{ij}},
 \end{equation}
-We have now algebraically defined Boussinesq's viscosity $\mu_\tau$ with another empirical parameter $\ell_m$. Hence we have carried on the assumptions from Boussinesq, which we have previously stated to be inaccurate. However, mixing-length models can have relatively good results in the vicinity of a turbulent wall flow (see Wilcox~\cite{wilcox1998turbulence}). However, the specification of the mixing length is dependent on the type of flow. It must be determined for flows that have not been studied before under this configuration. The fact that we require $\ell_m$ to be previously known classifies the model as \textit{incomplete} in the sense that the parameter must be previously known.
+\end{eqBox}
+We have now algebraically defined Boussinesq's viscosity $\mu_\tau$ with another empirical parameter $\ell_m$. Hence we have carried on the assumptions from Boussinesq, which we have previously stated to be inaccurate. In additione, the specification of the mixing length is dependent on the type of flow. It must be determined for flows that have not been studied before under this configuration. The fact that we require $\ell_m$ to be previously determined classifies the model as \textit{incomplete} in the sense that it cannot be directly used to predict properties of flows of which there is no prior knowledge. Its use is limited to simple flows for which $\ell_m$ has been previously and thoroughly analyzed.  
 \subsection{The Spalart-Allmaras Model}
 Spalart and Allmaras~\cite{} took an empirical approach, using arguments from dimensional analysis developed a new model, which included the resolution of an ad-hoc transport equation for the turbulence field variable $\tilde \nu$. The model was initially developed for aerodynamics applications such as transonic flow over airfoils. Several nested versions are included in the original publication, and these range from simple models for free shear flows to more complex derivations that can be applied to boundary layer flows. The general model is given by
+\begin{eqBox}
 \begin{equation}
     \frac{\partial \tilde{\nu}}{\partial t} 
     + v_i \frac{\partial\tilde\nu}{\partial x_i} 
     = c_{b1} (1-f_{t2}) \tilde S \tilde \nu
     + \frac{1}{\sigma} 
-     [ \nabla \cdot ((\nu + \tilde \nu)\nabla \tilde \nu) 
-      + c_{b2}(\nabla \tilde \nu)^2]
-    - \left[c_{w1}f_w] - \frac{c_{b1}}{\kappa^2}f_{t2}\right],
+     \left[ \frac{\partial}{\partial x_j} \cdot \left((\nu + \tilde \nu)\frac{\partial\tilde\nu}{\partial x_j} \right) 
+      + c_{b2}\left(\frac{\partial\tilde \nu}{\partial x_j} \right)^2\right]
+    - \left[c_{w1}f_w - \frac{c_{b1}}{\kappa^2}f_{t2}\right],
     \label{eq:spalart_allmaras}
 \end{equation}
+\end{eqBox}
 where $c$ and $f$ are empirical constants and functions of the turbulence model, which we define shortly along with the rest of the variables. Upon solving Equation~\ref{eq:spalart_allmaras}, we can compute the eddy viscosity $\mu_\tau$ from
 \begin{equation}
-    \mu_\tau=\rho \tilde \nu \frac{(\tilde\nu/\nu)^3}{(\tilde\nu/\nu)^3+c_{v1}^3},
+    \mu_\tau=\rho \tilde \nu \frac{\chi^3}{\chi^3+c_{v1}^3},\quad \chi=\frac{\tilde \nu}{\nu},
     \label{eq:sa_eddyviscosity}
 \end{equation}
 where $\nu$ is the molecular kinematic viscosity. In addition,
 \begin{equation}
-    \tilde S \equiv + \frac{\tilde \nu}{\kappa^2 d^2}f_{v2}~,\quad f_{v2}=1-\frac{(\tilde\nu/\nu)}{1+(\tilde\nu/\nu)f_{v1}}
+    \tilde S \equiv S + \frac{\tilde \nu}{\kappa^2 d^2}f_{v2}~,\quad f_{v2}=1-\frac{\chi}{1+\chi f_{v1}},
 \end{equation}
 with $S$ the magnitude of the vorticity and $d$ the distance to the closest wall~\cite{spalartallmaras}. 
 \begin{align}
     f_w&=\left[r+c_{w2}\left(r^6-r\right)\right]
-    \left[\frac{1+c_{w3}^6}{g^6+c_{w3}^6}\right]^{1/6},\quad r\equiv \min\left(\frac{\tilde\nu}{\tilde s \kappa^2 d^2},10\right). \\
-    f_{t2}&=c_{t3} \exp \left[-c_{t4}(\tilde\nu/\nu)^2\right].
+    \left[\frac{1+c_{w3}^6}{g^6+c_{w3}^6}\right]^{1/6},\quad r\equiv \min\left(\frac{\tilde\nu}{\tilde S \kappa^2 d^2},10\right). \\
+    f_{t2}&=c_{t3} \exp \left[-c_{t4}\chi^2\right].
 \end{align}
 Finally, the constants are given by 
 \begin{align}
@@ -1012,14 +1018,94 @@ The implementation of this model allows to remove the incomplete condition from 
 \begin{equation}
     \tilde \nu_{wall} = 0,\quad \tilde\nu_{\infty}=3 \nu_{\infty}:to:5\nu_{v_\infty},
 \end{equation}
-according to NASA Turbulence Model Database~\cite{}. Now, by solving Equations~\ref{eq:spalart_allmaras} and~\ref{eq:sa_eddyviscosity}, we are able to give closure to the RANS equations. Since only an additional equation is required, the relative computational cost of this turbulence model is commonly appraised. Given that this model was initially developed for aerospace applications, it is a popular choice for the prediction of lift and drag at low to moderate angles of attack due to relatively good resolution of boundary layer problems. 
+according to NASA Turbulence Model Database~\cite{}. Now, by solving Equations~\ref{eq:spalart_allmaras} and~\ref{eq:sa_eddyviscosity}, we are able to give closure to the RANS equations. Since only an additional equation is required, the relative computational cost of this turbulence model is commonly appraised. Given that this model was initially developed for aerospace applications, it is a popular choice for the prediction of aerodynamic loads at low to moderate angles of attack due to relatively good resolution of boundary layer problems. 
 
 Furthermore, the SA model is well-suited for its application with unstructured discretization methods. Despite its success in predicting close values to experimental measurements for simple aerospace applications, it has been found to fail for flows that include jet-like free-shear regions and flows involving complex recirculation. It is important to be aware of the advantages and limitations of the model so that results can be well-understood.
 
 \subsection{The k-$\epsilon$ Model}
+One of the most commonly used RANS models for the computation of turbulent flows is the $k-\epsilon$ model. It was originally developed to overcome the deficiencies of the mixing length model, such that no specification of flow-dependent properties are required. Instead, closure is achieved through the resolution of two transport equations for the turbulent kinetic energy $k$ and its rate of dissipation $\epsilon$. Different versions of this model have been provided ~\cite{laundersharma, launderjones}. We describe the \textit{standard} $\k-\epsilon$ model, as shown by~\cite{bardina}. The relation between the eddy-viscosity and the two aforementioned turbulent quantities is given by
+\begin{equation}
+    \nu_\tau = c_\mu k^2/\epsilon,
+\end{equation}
+where $c_\mu$ is a constant, which we define at the end of this section. Define the instantaneous kinetic energy to be the sum of the mean and the fluctuation component, such that
+\begin{align}
+    k(t) &= \overline{k} + k^\prime, \nonumber \\
+         &= \frac{1}{2} \sum_{i=1}^d \overline{v}_i + \frac{1}{2}\sum_{i=1}^d \overline{v_i^\prime v_i^\prime}.
+\end{align}
+Hence, by multiplying each velocity component with their corresponding momentum equation in the appropriate direction, a PDE for the turbulent kinetic energy can be obtained. After performing Reynolds averaging and several algebraic operations, we can write~\cite{wilcox1998turbulence}
+\begin{eqBox}
+\begin{equation}
+    \frac{\partial k}{\partial t} + 
+    \overline v_j \frac{\partial k}{\partial x_j} 
+    = \tau_{ij} \frac{\partial\overline v_i}{\partial x_j} 
+    - \epsilon + \frac{\partial}{\partial x_j}\left[(\nu + \nu_\tau/\sigma_k)\frac{\partial k}{\partial x_j}\right].
+\end{equation}
+\end{eqBox}
+The second component of this model is the dissipation rate $\epsilon$, for which the following transport equation was derived. 
+\begin{eqBox}
+\begin{equation}
+    \frac{\partial \epsilon}{\partial t}
+    + \overline v_j \frac{\partial\epsilon}{\partial x_j}
+    = c_{\epsilon 1}\frac{\epsilon}{k} \tau_{ij} \frac{\partial \overline v_i}{\partial x_j}
+    - c_{\epsilon2} \frac{\epsilon^2}{k} 
+    + \frac{\partial}{\partial x_j} \left[(\nu + \nu_\tau)/\sigma_\epsilon \frac{\partial\epsilon}{\partial x_j}\right].
+\end{equation}
+\end{eqBox}
+The constants are given by
+\begin{align}
+    & c_\mu = 0.09,   & & c_{\epsilon 1} = 1.44, & & c_{\epsilon 2} = 1.92, \\
+    & \sigma_k = 1.0, & & \sigma_\epsilon = 1.3.  
+\end{align}
+The computational cost that comes from the computation of two transport equations can be significant. However, as previously mentioned, this model is one of the most commonly used in the CFD field, mostly for the modelling of free-shear layer flows with small to moderate pressure gradients. One of the pitfalls of this model, however, lies in the presence of large adverse pressure gradients, which cause the model to predict results inaccurately. Improved versions of this model are also available and have been in constant development. Generally, the use of fine grids is required near solid walls. Additional modifications are necessary for the treatment of viscous flows in the vicinity of walls. This model remains as the simplest \textit{complete} model.
 \subsection{The k-$\omega$ Model}
-\subsection{Summary of Turbulence Models}
+The $k-\omega$ model is also a two-equation model, and along with the $k-\epsilon$ model, it is one of the most commonly used turbulence RANS models. Here, the equation for the turbulent kinetic energy is the same as in the $k-\epsilon$. The second transport equation, however, is derived for the specific dissipation rate, $\omega\equiv\epsilon/k$. The eddy viscosity is defined to be
+\begin{equation}
+    \nu_\tau = \frac{k}{\omega},
+\end{equation}
+and the transport equation for $\omega$ is given by~\cite{wilcox1998turbulence}
+\begin{eqBox}
+\begin{equation}
+    \frac{\partial \omega}{\partial t} + \overline v_j \frac{\partial \omega}{\partial x_j} = \alpha \frac{\omega}{\kappa} \tau_{ij} 
+    \frac{\partial \overline v_i}{\partial x_j} - \beta \omega^2 + \frac{\sigma_d}{\omega} \frac{\partial k}{\partial x_j} 
+    \frac{\partial \omega}{\partial x_j} + \frac{\partial}{\partial x_j} \left[\left(\nu + \sigma\frac{k}{\omega}\right)\frac{\partial \omega}{\partial x_j}\right].
+\end{equation}
+\end{eqBox}
+The closure coefficients and auxiliary relations are given by
+\begin{align}
+& \alpha= \frac{13}{25}, & & \beta = \beta_o f_\beta, & & \beta^* = \frac{9}{100}, \\
+& \sigma = \frac{1}{2}, & & \sigma^* = \frac{3}{5}, & & \sigma_{do} = \frac{1}{8},
+\end{align}
+\[
+    \sigma_{d} = 
+\begin{cases}
+    0,  \quad \dfrac{\partial k}{\partial x_j} \dfrac{\partial\omega}{\partial x_j}  \leq 0, \\
+    \sigma_{do}, \quad \dfrac{\partial k}{\partial x_j} \dfrac{\partial\omega}{\partial x_j} > 0.
+\end{cases}
+\]
+An advantage of this model is the relatively accurate resolution of near-wall interaction, and for flows with the presence of strong vorticity. This makes the $k-\omega$ approach suitable for applications such as turbomachinery. However, it was found to overpredict flow separation and to be highly sensitive to the freestream conditions. In addition, compared to the $k-\epsilon$ model, it is not an appropriate choice for free-shear flows. Further improvements to this model have been made to accommodate its shortcomings~\cite{}. Taking advantage of the relative accuracy of both the $k-\epsilon$ and $k-\omega$ models, combinations of these have been derived, such as the SST model. We refer the reader to NASA's Turbulence Resource website for further amplification of this section.
 
+\subsection{Summary of Turbulence Models}
+We have introduced the basis of turbulence modelling using the RANS equations. As previously stated, these models are initially based on Boussinesq approximation, where a constant coefficient referred to as the eddy viscosity, is said to be linearly proportional to the mean transfer of information within the flow. Further improvements, from the definition of a mixing length distance to the resolution of transport equations for turbulent quantities, have allowed the development of turbulence models to become applicable for real-world industrial applications. These models have been devised for specific applications and can result in very inaccurate results if not chosen appropriately. It is also important to remember that these models are all limited by the time-averaging of the Navier-Stokes equations, which we have shown to behave chaotically in real scenarios. 
+
+To summarize the previous models, we present a table where we display the characteristic variables that define the model, the complete or incomplete condition according to~\cite{wilcox1998turbulence}, the number of equations to solve, and a general description including the applicability of each model.
+\begin{table}[h]
+    \centering
+    \caption{Summary of basic turbulent models.}
+\begin{tabular}{lp{0.2\linewidth}llp{0.35\linewidth}}
+    \hline
+    \textbf{Model} & \textbf{Variable(s)} & \textbf{Completeness} & \textbf{Category} & \textbf{Description} \\
+    \hline
+    ML           & A mixing length $\ell_m$        & Incomplete & Algebraic     & An empirical mixing length is used to compute the eddy viscosity. This model was developed in a "rough" sense. Results are accurate only in the vicinity of laminar boundary layers.\\
+    \hline
+    SA           & Turbulent quantity proportional to the viscosity $\tilde\nu$     & Complete & One-equation    & Resolution of a transport equation for a turbulent quantity, specifically a viscosity-like parameter. Computationally efficient since only a single transport equation is added. Applicable to determine aerodynamic loads at moderate angles of attack.             \\
+    \hline
+    $k-\epsilon$ & Kinetic energy and rate of dissipation, $k$, $\epsilon$ & Complete & Two-equation    & Two transport equations are added, one for the turbulent kinetic energy and the other for its rate of dissipation. Applicable to free-shear layer flows. Gives inaccurate results for flows with large adverse pressure gradients.\\
+    \hline
+    $k-\omega$   & Kinetic energy and specific dissipation $k$, $\omega$   & Complete & Two-equation    & Requires the computation of the kinetic energy and specific dissipation rate transport equations. The model works well across the boundary layer of wall turbulent flows. Inaccurate for free-shear flows.\\
+    \hline
+\end{tabular}
+\end{table}
+More complex models can be found in the literature which have been derived from those explained in this text. Hence this compilation is by no means an extensive turbulence model reference. For further references, refer to Wilcox~\cite{wilcox} and NASA Turbulence Resource database.
 \chapter{Boundary Conditions}
 \section{Wall Boundaries}
 \subsection{Wall-Bounded Turbulence}

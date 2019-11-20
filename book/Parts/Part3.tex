@@ -315,11 +315,75 @@ Again, this is very similar to the approximations for linear advection and Burge
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=0.6\linewidth]{Pictures/ch11_fv_scheme}
-	\caption{}
-	\label{fig:fd_scheme}
+	\caption{One-dimensional Finite Volume discretization}
+	\label{fig:fv_scheme}
 \end{figure}
+In the previous chapter, we derived and characterized the finite difference method. While it is generally simple to apply, it requires the use of structured grids. Suppose now you want to simulate flow over an aircraft or one of its components. Generating structured meshes can become challenging, if not impossible, for complex geometries. Hence, we need methods that are flexible enough such that the geometry is not a fundamental limitation. Consider subdividing a general domain $\Omega$ into volumes or cells $\Omega_i$, as shown in Figure~\ref{fig:fv_scheme}. Within each cell, the value of the solution can be assumed to be constant if the size of $\Omega_i$ is sufficiently small. This idea leads to derivation of the Finite Volume method, which is one of the most commonly used schemes in the aerospace industry for CFD simulations. It was originally developed for its application on integral conservation laws. In this chapter, we derive the FV method and discuss the implication of solving the conservation laws using an integral approach.  
+
 \section{Derivation}
+Consider the general conservation law applied to a volume of arbitrary shape $\Omega$, as shown in Figure~\ref{fig:fv_omega}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.4\linewidth]{Pictures/ch11_fv_arbitrary_volume}
+    \caption{Representation of an arbitrary volume of undefined shape.}
+    \label{fig:fv_omega}
+\end{figure}
+\begin{equation}
+    \int_\Omega \frac{\partial \vec u}{\partial t} d \Omega + \int_s \vec F\cdot \hat n ds = 0,
+    \label{eq:fv_gcl}
+\end{equation}
+where $\vec{u}$ is a vector of conserved variables, such as mass, momentum, and energy. $\vec{F}=\vec F(\vec f)$ is the vector of fluxes, $S$ is the area of $\Omega$ with outward unit normal $\hat n$. Recall that for constant volumes, integration and differentiation commute according to Leibniz's rule, so we can rewrite Equation~\ref{eq:fv_gcl} with the time derivative outside of the integral in the first term
+\begin{equation}
+    \frac{\partial}{\partial t} \int_\Omega \vec{u} d\Omega + \int_s \vec F\cdot \hat n ds = 0.
+    \label{eq:fv_gclleibniz}
+\end{equation}
+Clearly, the integral of the solution yields its total amount within $\Omega$. Hence, the rate of change of the total amount of $\vec{u}$ in a volume is the result of the net flux accross the surface $S$ of $\Omega$. We are looking for an average value of the solution, specifically the \textit{cell-average} of $\vec u$, which can be written
+\begin{equation}
+    \vec {\overline{u}} = \frac{ \int_\Omega \vec u d\Omega} {|\Omega|},
+    \label{eq:fv_average}
+\end{equation}
+where $|\Omega|$ is the size of the cell. After averaging the solution, it is clear that it has now become constant within each volume, i.e. $\vec {\overline u} \neq \vec {\overline u} (\vec x)$, so it is not only a function of time $\overline {\vec u} = \overline {\vec u} (t)$. If we combine Equations~\ref{eq:fv_gclleibniz} and~\ref{eq:fv_average}, we obtain
+\begin{equation}
+    \frac{d \vec{\overline u}}{dt} + \frac{1}{|\Omega|} \int_s \vec{F} \cdot\hat nds=0.
+\end{equation}
+Now, we have an equation for the rate of change of the averaged quantity $\vec{\overline u}$. What remains is to define the value of $\vec{F}$. First, we note that the averaged solution must converge to the instantaneous solution in the limit of a sufficiently small volume
+\begin{align}
+    \lim_{|\Omega| \rightarrow 0} \vec{\overline u} = \vec u,
+\end{align}
+then, the value of its corresponding flux can be approximated by
+\begin{equation}
+    \lim_{|\Omega| \rightarrow 0} \vec F (\vec {\overline{u}}) = \vec F(\vec u).
+\end{equation}
+This leads to the general form of the finite volume method, which we write 
+\begin{eqBox}
+\begin{equation}
+    \frac{d \vec{\overline u}}{dt} = - \frac{1}{|\Omega|} \int_s \vec{F} (\vec{\overline u})\cdot\hat nds=0.
+    \label{eq:fvm}
+\end{equation}
+\end{eqBox}
+where $d/dt$ can be solved using an appropriate temporal discretization (see Chapter~\ref{ch:timestepping}). 
+
+Generally, we can make relatively good approximations of arbitrary volumes using straight-sided elements such as triangles and tetrahedra. Consider the triangular volume $\Omega_j$ displayed in Figure~\ref{fig:fv_straightsided}. The solution $\vec{\overline u}$ is constant within the triangular shape. In addition, each of the faces has an area of $S_1$, $S_2$ and $S_3$. Observe that since the sides of the considered volume are straight, the flux vectors are constant accross each of the faces. Hence, the surface integral in Equation~\ref{eq:fvm} can be trivially solved via summation. For the $j$-th volume, a the general form of the FV method for straight grids can be written
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.4\linewidth]{Pictures/ch11_fv_cellavg}
+    \caption{Representation of solution, fluxes and faces of a straight-sided element.}
+    \label{fig:fv_straightsided}
+\end{figure}
+\begin{eqBox}
+    \begin{equation}
+        \frac{d \overline{\vec u}_j}{dt} = - \frac{1}{|\Omega_j|} \sum_{i=1}^{m} \vec F_i \cdot \hat n_i S_i,
+    \end{equation}
+\end{eqBox}
+where $m$ is the number of faces, $F_i$ is the flux across the $i$-th face with outward unit normal $\hat n_i$ and area surface and $S_i$.
+
 \section{The Riemann Problem}
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.4\linewidth]{Pictures/ch11_fv_riemann_diagram}
+	\caption{Representation of the Riemann problem}
+	\label{fig:fv_riemann_diagram}
+\end{figure}
 \section{Example Applications}
 \subsection{Linear Advection}
 \subsection{Burgers Equation}
@@ -786,6 +850,7 @@ If we look at the form of the Equation \ref{eqn:shrj986g} we see that when $\Del
 It is important note that the procedure followed here for the first order linear advection scheme can be repeated for any finite difference scheme of your choice. Starting with your numerical scheme you can replace each term with its Taylor Series expansion and rearrange this to try to get the PDE of interest on the left hand side and truncation error on the right hand side. The leading order terms will tell you the nature of the dominant error in the scheme. If the dominant error has an even-order derivative, such as the scheme above, then one would expect that the scheme is {\it dominantly dissipative}. In contrast, if the dominant error has an odd-order derivative then one would expect that the scheme is {\it dominantly dispersive}. Hence, similar to von Neumann analysis, modified equation analysis is a powerful tool to aid in understanding the general behaviour of a numerical scheme, to elucidate its dissipative and dispersive error properties, and to identify its stability limits.
 
 \chapter{Time-Stepping}
+\label{ch:timestepping}
 In the previous sections we have always approximated the time derivative using first-order finite differences, assuming
 \begin{equation}
 	\frac{\partial u}{\partial t} = \frac{u_i^{t+1} - u_{i}^t}{\Delta t} + \mathcal{O}(\Delta t).

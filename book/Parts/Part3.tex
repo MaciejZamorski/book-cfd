@@ -313,81 +313,230 @@ Again, this is very similar to the approximations for linear advection and Burge
 
 \chapter{Finite Volume Methods}
 \begin{figure}[htbp]
-	\centering
-	\includegraphics[width=0.6\linewidth]{Pictures/ch11_fv_scheme}
-	\caption{One-dimensional Finite Volume discretization}
-	\label{fig:fv_scheme}
+ \centering
+ \includegraphics[width=0.6\linewidth]{Pictures/ch11_fv_scheme}
+ \caption{One-dimensional Finite Volume discretization}
+ \label{fig:fv_scheme}
 \end{figure}
-In the previous chapter, we derived and characterized the finite difference method. While it is generally simple to apply, it requires the use of structured grids. Suppose now you want to simulate flow over an aircraft or one of its components. Generating structured meshes can become challenging, if not impossible, for complex geometries. Hence, we need methods that are flexible enough such that the geometry is not a fundamental limitation. Consider subdividing a general domain $\Omega$ into volumes or cells $\Omega_i$, as shown in Figure~\ref{fig:fv_scheme}. Within each cell, the value of the solution can be assumed to be constant if the size of $\Omega_i$ is sufficiently small. This idea leads to derivation of the Finite Volume method, which is one of the most commonly used schemes in the aerospace industry for CFD simulations. It was originally developed for its application on integral conservation laws. In this chapter, we derive the FV method and discuss the implication of solving the conservation laws using an integral approach.  
+In the previous chapter, we derived and characterized the finite difference method. While it is generally simple to apply, it requires the use of structured grids. Suppose now you want to simulate flow over an aircraft or one of its components. Generating structured meshes can become challenging, if not impossible, for complex geometries. Hence, we need methods that are flexible enough such that the geometry is not a fundamental limitation. Instead of evaluating the solution in a pointwise fashion, consider subdividing a generic domain $\Omega$ into volumes or cells $\Omega_i$, as shown in Figure~\ref{fig:fv_scheme}. Within each cell, the value of the function $u(x)$ can be assumed constant and is calculated using an integral approach. This idea leads to the derivation of the finite volume method, which is one of the most commonly used spatial discretizations in the industry. It was initially developed for its application on the general form of the conservation laws, meaning it can be fundamentally applied to solutions that present discontinuities. In this chapter, we present the theory required to apply the finite volume method on scalar as well as systems of conservation laws.
 
 \section{Derivation}
 Consider the general conservation law applied to a volume of arbitrary shape $\Omega$, as shown in Figure~\ref{fig:fv_omega}
 \begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.4\linewidth]{Pictures/ch11_fv_arbitrary_volume}
-    \caption{Representation of an arbitrary volume of undefined shape.}
-    \label{fig:fv_omega}
+ \centering
+ \includegraphics[width=0.4\linewidth]{Pictures/ch11_fv_arbitrary_volume}
+ \caption{Representation of an arbitrary volume of undefined shape.}
+ \label{fig:fv_omega}
 \end{figure}
 \begin{equation}
-    \int_\Omega \frac{\partial \vec u}{\partial t} d \Omega + \int_s \vec F\cdot \hat n ds = 0,
-    \label{eq:fv_gcl}
+ \int_\Omega \frac{\partial \vec u}{\partial t} d \Omega + \int_s \vec F\cdot \hat n ds = 0,
+ \label{eq:fv_gcl}
 \end{equation}
-where $\vec{u}$ is a vector of conserved variables, such as mass, momentum, and energy. $\vec{F}=\vec F(\vec f)$ is the vector of fluxes, $S$ is the area of $\Omega$ with outward unit normal $\hat n$. Recall that for constant volumes, integration and differentiation commute according to Leibniz's rule, so we can rewrite Equation~\ref{eq:fv_gcl} with the time derivative outside of the integral in the first term
+where $\vec{u}$ is a vector of conserved variables, such as mass, momentum, and energy. $\vec{F}=\vec F(\vec f)$ is the vector of fluxes, $S$ is the area of $\Omega$ with outward unit normal $\hat n$. Recall that for constant volumes, integration and differentiation commute so we can rewrite Equation~\ref{eq:fv_gcl}
 \begin{equation}
-    \frac{\partial}{\partial t} \int_\Omega \vec{u} d\Omega + \int_s \vec F\cdot \hat n ds = 0.
-    \label{eq:fv_gclleibniz}
+ \frac{\partial}{\partial t} \int_\Omega \vec{u} d\Omega + \int_s \vec F\cdot \hat n ds = 0.
+ \label{eq:fv_gclleibniz}
 \end{equation}
-Clearly, the integral of the solution yields its total amount within $\Omega$. Hence, the rate of change of the total amount of $\vec{u}$ in a volume is the result of the net flux accross the surface $S$ of $\Omega$. We are looking for an average value of the solution, specifically the \textit{cell-average} of $\vec u$, which can be written
+Clearly, the integral of the solution represents its total amount within $\Omega$. Hence, the rate of change of the total amount of $\vec{u}$ in a volume is the result of the net flux across the surface $S$ of $\Omega$. As we have stated in the introduction of this chapter, we are looking for averaged values of the solution, specifically the \textit{cell-average} of $\vec u$, which is given by
 \begin{equation}
-    \vec {\overline{u}} = \frac{ \int_\Omega \vec u d\Omega} {|\Omega|},
-    \label{eq:fv_average}
+ \vec {\overline{u}} = \frac{ \int_\Omega \vec u d\Omega} {|\Omega|},
+ \label{eq:fv_average}
 \end{equation}
-where $|\Omega|$ is the size of the cell. After averaging the solution, it is clear that it has now become constant within each volume, i.e. $\vec {\overline u} \neq \vec {\overline u} (\vec x)$, so it is not only a function of time $\overline {\vec u} = \overline {\vec u} (t)$. If we combine Equations~\ref{eq:fv_gclleibniz} and~\ref{eq:fv_average}, we obtain
+where $|\Omega|$ is the size of the cell. After averaging the solution, it is clear that it has become constant within each volume, i.e. $\vec {\overline u} \neq \vec {\overline u} (\vec x)$, so it is now only a function of time $\overline {\vec u} = \overline {\vec u} (t)$. If we combine Equations~\ref{eq:fv_gclleibniz} and~\ref{eq:fv_average}, we obtain
 \begin{equation}
-    \frac{d \vec{\overline u}}{dt} + \frac{1}{|\Omega|} \int_s \vec{F} \cdot\hat nds=0.
+ \frac{d \vec{\overline u}}{dt} + \frac{1}{|\Omega|} \int_s \vec{F} \cdot\hat nds=0.
 \end{equation}
-Now, we have an equation for the rate of change of the averaged quantity $\vec{\overline u}$. What remains is to define the value of $\vec{F}$. First, we note that the averaged solution must converge to the instantaneous solution in the limit of a sufficiently small volume
+Now, we have an equation for the rate of change of the averaged quantity $\vec{\overline u}$. What remains is to define the value of $\vec{F}$. First, we note that the averaged solution $\vec{\overline u}$ must converge to the instantaneous solution $\vec{u}$ in the limit of sufficiently small volumes
 \begin{align}
-    \lim_{|\Omega| \rightarrow 0} \vec{\overline u} = \vec u,
+ \lim_{|\Omega| \rightarrow 0} \vec{\overline u} = \vec u,
 \end{align}
-then, the value of its corresponding flux can be approximated by
+and hence,
 \begin{equation}
-    \lim_{|\Omega| \rightarrow 0} \vec F (\vec {\overline{u}}) = \vec F(\vec u).
+ \lim_{|\Omega| \rightarrow 0} \vec F (\vec {\overline{u}}) = \vec F(\vec u).
 \end{equation}
 This leads to the general form of the finite volume method, which we write 
 \begin{eqBox}
 \begin{equation}
-    \frac{d \vec{\overline u}}{dt} = - \frac{1}{|\Omega|} \int_s \vec{F} (\vec{\overline u})\cdot\hat nds=0.
-    \label{eq:fvm}
+ \frac{d \vec{\overline u}}{dt} = - \frac{1}{|\Omega|} \int_s \vec{F} (\vec{\overline u})\cdot\hat nds=0,
+ \label{eq:fvm}
 \end{equation}
 \end{eqBox}
 where $d/dt$ can be solved using an appropriate temporal discretization (see Chapter~\ref{ch:timestepping}). 
 
-Generally, we can make relatively good approximations of arbitrary volumes using straight-sided elements such as triangles and tetrahedra. Consider the triangular volume $\Omega_j$ displayed in Figure~\ref{fig:fv_straightsided}. The solution $\vec{\overline u}$ is constant within the triangular shape. In addition, each of the faces has an area of $S_1$, $S_2$ and $S_3$. Observe that since the sides of the considered volume are straight, the flux vectors are constant accross each of the faces. Hence, the surface integral in Equation~\ref{eq:fvm} can be trivially solved via summation. For the $j$-th volume, a the general form of the FV method for straight grids can be written
+Generally, we can make relatively good approximations of arbitrary volumes using straight-sided elements such as triangles and tetrahedra. Consider the triangular volume $\Omega_i$ displayed in Figure~\ref{fig:fv_straightsided}. The solution $\vec{\overline u}$ is constant within the triangular shape. In addition, each of the faces has an area of $S_1$, $S_2$ and $S_3$. Observe that since the sides of the considered volume are straight, the flux vectors are constant across each of the faces. Hence, the surface integral in Equation~\ref{eq:fvm} can be trivially solved via summation. For the $i$-th volume, the general form of the FV method for straight grids can be written
 \begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.4\linewidth]{Pictures/ch11_fv_cellavg}
-    \caption{Representation of solution, fluxes and faces of a straight-sided element.}
-    \label{fig:fv_straightsided}
+ \centering
+ \includegraphics[width=0.4\linewidth]{Pictures/ch11_fv_cellavg}
+ \caption{Representation of solution, fluxes and faces of a straight-sided element.}
+ \label{fig:fv_straightsided}
 \end{figure}
 \begin{eqBox}
-    \begin{equation}
-        \frac{d \overline{\vec u}_j}{dt} = - \frac{1}{|\Omega_j|} \sum_{i=1}^{m} \vec F_i \cdot \hat n_i S_i,
-    \end{equation}
+ \begin{equation}
+ \frac{d \overline{\vec u}_i}{dt} = - \frac{1}{|\Omega_i|} \sum_{j=1}^{m} \vec F_j \cdot \hat n_j S_j,
+ \label{eq:fv_straightsided}
+ \end{equation}
 \end{eqBox}
-where $m$ is the number of faces, $F_i$ is the flux across the $i$-th face with outward unit normal $\hat n_i$ and area surface and $S_i$.
+where $m$ is the number of faces, $F_i$ is the flux across the $j$-th face with outward unit normal $\hat n_j$ and area surface $S_j$.
 
 \section{The Riemann Problem}
 \begin{figure}[htbp]
-	\centering
-	\includegraphics[width=0.4\linewidth]{Pictures/ch11_fv_riemann_diagram}
-	\caption{Representation of the Riemann problem}
-	\label{fig:fv_riemann_diagram}
+ \centering
+ \includegraphics[width=0.4\linewidth]{Pictures/ch11_fv_riemann_diagram}
+ \caption{Representation of the Riemann problem}
+ \label{fig:fv_riemannproblem}
 \end{figure}
+You may now realize that the solution is piecewise linear, i.e., we have approximated a function $\vec u(x,t)$ by constant values $\vec {\overline u}_i(t)$ at each volume $\Omega_i$. Usually, in finite difference methods, the value of the flux can be simply computed as $\vec{F}=\vec{F}(\vec{\overline{u}})$ due to the pointwise approach. In contrast, consider the two volumes shown in Figure~\ref{fig:fv_riemannproblem} as a result of a finite volume discretization. We are looking for the value of the fluxes across each of the volume's faces to solve Equation~\ref{eq:fv_straightsided}. However, note that on each side of the interface, we have two values of the solution $\vec{\overline{u}}_L,~\vec{\overline{u}}_R$, which are expected to yield a single value of the flux. Hence, the flux at the interface is
+\begin{eqBox}
+ \begin{equation}
+ \vec{F} = \vec{F} (\vec{\overline{u}}_L,~\vec{\overline{u}}_R).
+ \end{equation}
+\end{eqBox}
+This is known as the \textit{Riemann problem}. The solution to the Riemann problem depends on the physics of the problem. For hyperbolic equations, it is said to be a similarity solution and is related to the \textit{characteristic speed} of PDE. We now present some examples of the Riemann problem for scalar conservation laws and the resulting finite-volume discretizations. Later in this chapter, we will come back to this topic and derive some solutions for systems of hyperbolic equations.
+
 \section{Example Applications}
+We have now derived the finite volume method and described some of its characteristics. We have introduced a consequence of the discretization, which is the Riemann problem. In this section, we present finite-volume schemes applied to our simple one-dimensional scalar conservation laws, as well as solutions to the Riemann problem for each of these equations.
 \subsection{Linear Advection}
+Consider the general conservation law applied to the one-dimensional advection equation. For scalar conservation laws, we may write
+\begin{equation}
+ \vec{u} = u,
+\end{equation}
+and hence the advection flux is given by
+\begin{equation}
+ \vec{F} = f = \alpha u,
+\end{equation}
+where $\alpha$ is the advection velocity. A finite-volume discretization for this problem can be seen in Figure~\ref{fig:fv_advection}, where $\alpha >0$. Consider the cell $\Omega_i$. We need to find the value of the flux at each of the faces of the cell. 
+\begin{figure}[htbp]
+ \centering
+ \includegraphics[width=0.5\linewidth]{Pictures/ch11_fv_advection}
+ \caption{Finite-volume linear advection.}
+ \label{fig:fv_advection}
+\end{figure}
+Different approaches can be considered, which result in distinct finite-volume schemes, each with its own characteristic error and order of accuracy. We now present three options to compute the Riemann flux and the resulting discretizations.
+\subsubsection{Upwind}
+We have previously assumed $\alpha>0$, which means information travels from left to right. A natural choice of Riemann flux is \textit{upwind}. Here, the value of the flux is computed from the left-hand-side solution value at each interface. Hence, 
+\begin{equation}
+ \vec F(\overline u_L, \overline u_R) = \alpha \overline u_L, 
+\end{equation}
+which can be written 
+\begin{align}
+ \vec F_1 &= \alpha \overline u_{i-1}, \\ 
+ \vec F_2 &= \alpha \overline u_{i},
+\end{align}
+for the left and right faces of $\Omega_i$, respectively. Recall the finite-volume discretization for straight-sided elements in Equation~\ref{eq:fv_straightsided}, which we now rewrite for this problem considering $\hat n_1=-1$, $\hat n_2=1$ and $S_1=S_2=1$
+\begin{equation}
+ \frac{d \overline{u}_i}{dt} = -\frac{1}{\Delta x} \left[\alpha \overline {u}_i - \alpha \overline u_{i-1}\right],
+\end{equation}
+or simply
+\begin{eqBox}
+\begin{equation}
+ \frac{d \overline{u}_i}{dt} = -\alpha \frac{ \overline {u}_i - \overline u_{i-1}}{\Delta x},
+\end{equation}
+\end{eqBox}
+which is identical to the original first-order finite-difference method. 
+\subsubsection{Central}
+A second choice of Riemann flux results from an averaged value of the solution at each interface. This means
+\begin{equation}
+ \vec F(\overline u_L, \overline u_R) = \frac{1}{2}\left[\alpha \overline u_L + \alpha \overline u_R \right].
+\end{equation}
+Hence, the fluxes can be written
+\begin{align}
+ \vec F_1 = \frac{1}{2}\left[\alpha \overline u_{i-1} + \alpha \overline u_{i} \right],\\
+ \vec F_2 = \frac{1}{2}\left[\alpha \overline u_{i} + \alpha \overline u_{i+1} \right],
+\end{align}
+for the left and right interface of $\Omega_i$, respectively. By substituting these fluxes into Equation~\ref{eq:fv_straightsided}, a central finite-volume scheme can be written
+\begin{eqBox}
+\begin{equation}
+ \frac{d\overline u_i}{dt} = - \alpha \frac{\overline u_{i+1} - u_{i-1}}{2 \Delta x},
+\end{equation}
+\end{eqBox}
+which is identical to the second-order finite-difference method. 
+\subsubsection{Blended}
+Consider upwind and central fluxes given by
+\begin{align}
+ f_u & = \alpha \overline u_L, \\
+ f_c & = \frac{\alpha}{2} \left(\overline u_L + \overline u_R \right),
+\end{align}
+respectively, where $f_u$ yields a \textit{low-resolution} first order scheme and $f_c$ yields a second-order, \textit{high-resolution} scheme. We can combine these two approaches to obtain a \textit{blended} scheme, such that
+\begin{eqBox}
+\begin{equation}
+ f_b = f_u + \phi f_c,
+\end{equation}
+\end{eqBox}
+where $\phi$ is a weighting parameter that can recover the upwind, central or yield a blended scheme, i.e.
+\[
+ f = 
+\begin{cases}
+ f_u & \text{if}~\phi = 0, \\
+ f_c & \text{if}~\phi = 1, \\ 
+ f_b & \text{if}~0 < \phi < 1. 
+\end{cases}
+\]
+We have shown that we can recover finite-difference schemes on structured grids for the linear advection equation considering appropriate choices of Riemann solver. We now explore whether this is also true for the Burgers equation.
 \subsection{Burgers Equation}
+We now consider the Burgers equation. As we have previously stated, for scalar conservation laws
+\begin{equation}
+ \vec{u} = u,
+\end{equation}
+and in the case of Burgers, the flux can be written
+\begin{equation}
+ \vec{F} = f(u) = \frac{1}{2} u^2.
+\end{equation}
+Recall that solutions in Burgers equation tend to develop discontinuities at a finite time even if they are initially smooth. Hence, a common Riemann flux choice for this problem is upwind due to its dissipative effect. We can write the fluxes at each face of $\Omega_i$
+\begin{align}
+ F_1 &= \frac{1}{2} \overline u_{i-1}^2, \\ 
+ F_2 &= \frac{1}{2} \overline u_{i}^2.
+\end{align}
+By following the same procedure as with the advection equation, we obtain the finite-volume scheme from Equation~\ref{eq:fv_straightsided}, 
+\begin{equation}
+ \frac{d\overline u_i}{dt} = - \frac{1}{\Delta x} \left[\frac{\overline u_i^2}{2} - \frac{\overline u_{i-1}^2}{2}\right],
+\end{equation}
+which we simplify
+\begin{eqBox}
+\begin{equation}
+ \frac{d\overline u_i}{dt} = - \frac{1}{2 \Delta x} \left[\overline u_i^2 - \overline u_{i-1}^2\right].
+ \label{eq:fv_burgers}
+\end{equation}
+\end{eqBox}
+Equation~\ref{eq:fv_burgers} is identical to the first-order upwind scheme for Burgers equation derived using finite differences.
 \subsection{Linear Diffusion}
+Consider the scalar linear diffusion equation, where
+\begin{equation}
+ \vec{u} = u,
+\end{equation}
+and the corresponding flux can be obtained from Fourier's law
+\begin{equation}
+ \vec{F} = f = -\beta \frac{\partial u}{\partial x},
+\end{equation}
+where $\beta$ is a constant diffusion coefficient. The resulting finite-volume discretization for this problem can be observed in Figure~\ref{fig:fv_diffusion}. Note that at each interface, we need to compute the derivative of the solution. Due to the behaviour of the diffusion equation, one should expect the Riemann flux to include the effects from both sides of the element.
+\begin{figure}[htbp]
+ \centering
+ \includegraphics[width=0.5\linewidth]{Pictures/ch11_fv_diffusion}
+ \caption{Finite-volume linear diffusion.}
+ \label{fig:fv_diffusion}
+\end{figure}
+We can compute the derivatives considering an upwind and a downwind difference approach at the left and right faces , respectively. Hence,
+\begin{align}
+ \left(\frac{\partial u}{\partial x}\right)_1 & \approx \frac{\overline u_i - \overline u_{i-1}}{\Delta x}, \\
+ \left(\frac{\partial u}{\partial x}\right)_2 & \approx \frac{\overline u_{i+1} - \overline u_{i}}{\Delta x}.
+\end{align}
+Then the respective fluxes can be computed from
+\begin{align}
+ \vec F_1 &=-\beta \left(\frac{\partial u}{\partial x}\right)_1 \approx -\beta \frac{\overline u_i - \overline u_{i-1}}{\Delta x},\\
+ \vec F_2 &=-\beta \left(\frac{\partial u}{\partial x}\right)_2 \approx -\beta \frac{\overline u_{i+1} - \overline u_{i}}{\Delta x}.
+\end{align}
+By substituting the fluxes into Equation~\ref{eq:fv_straightsided}, we obtain the finite-volume method for linear diffusion
+\begin{eqBox}
+ \begin{equation}
+ \frac{d\overline u_i}{dt} = \beta \frac{\overline u_{i+1}-2\overline u_{i} + \overline u_{i-1}}{\Delta x^2},
+	\label{eq:fv_diffusion}
+ \end{equation}
+\end{eqBox}
+which is second-order accurate. The resulting scheme is central, which agrees with the physics of diffusive processes.  Note that Equation~\ref{eq:fv_diffusion} is identical to the second-order finite-difference scheme we previously derived for this problem. 
+
+\section{Introduction to Hyperbolic Systems}
+
+
+
 
 \chapter{Consistency, Stability, Convergence}
 Now that we have derived a few different schemes for solving linear advection, Burgers equation, and linear diffusion, we should now ask ourselves whether they will give us accurate predictions, and are there any restrictions on when they can be used. We have already discussed the importance of order of accuracy, which governs the rate at which the error will converge to zero. Now we will introduce the concepts of consistency, stability, and convergence. If we can prove that our numerical scheme satisfies all three of these properties we can be confident that it is promising approach for the Euler or Navier-Stokes equations. In the current section we will explore these properties in the context of finite difference methods, but the exact same steps can be taken to check whether a finite volume method is suitable or not.

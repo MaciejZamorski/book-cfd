@@ -6,7 +6,7 @@ import scipy.interpolate as spi
 
 
 def _rotate_vector(v, rad):
-    M = np.array([[np.cos(rad), -np.sin(rad)],
+    M = np.array([[np.cos(rad), -np.sin(rad)], 
                   [np.sin(rad), np.cos(rad)]])
     return v @ M
 
@@ -44,12 +44,12 @@ def convert_to_graph(fig, ax):
     yhl = hl/(xmax-xmin)*(ymax-ymin) * width/height
 
     # draw x and y axis
-    ax.arrow(xmin, 0, xmax-xmin, 0., fc='k', ec='k', lw=lw,
-             head_width=hw, head_length=hl, overhang=ohg,
+    ax.arrow(xmin, 0, xmax-xmin, 0., fc='k', ec='k', lw=lw, 
+             head_width=hw, head_length=hl, overhang=ohg, 
              length_includes_head=True, clip_on=False)
 
-    ax.arrow(0, ymin, 0., ymax-ymin, fc='k', ec='k', lw=lw,
-             head_width=yhw, head_length=yhl, overhang=ohg,
+    ax.arrow(0, ymin, 0., ymax-ymin, fc='k', ec='k', lw=lw, 
+             head_width=yhw, head_length=yhl, overhang=ohg, 
              length_includes_head=True, clip_on=False)
 
     return fig, ax
@@ -78,7 +78,7 @@ def ensemble_average():
     # Ensemble averaging
     y = np.random.random(npts) * 0.5*np.sin(np.pi/5*x) + \
         0.5*np.random.random(npts) + 0.75
-    ax.plot(x, y, 'k', lw=1, label=r'$u_i(\vec{x},t)$')
+    ax.plot(x, y, 'k', lw=1, label=r'$u_i(\vec{x}, t)$')
 
     ymean = 0
     for i in range(navg):
@@ -86,7 +86,7 @@ def ensemble_average():
         ymean += np.random.random(npts) * 0.5*np.sin(np.pi/5*x) + \
             0.5*np.random.random(npts) + 0.75
     ymean = ymean/navg
-    ax.plot(x, ymean, '--k', lw=1, label=r'$u_E(\vec{x},t)$')
+    ax.plot(x, ymean, '--k', lw=1, label=r'$u_E(\vec{x}, t)$')
 
     ax.set_ylim([0, 2])
     ax.set_xlim([0, maxt])
@@ -112,8 +112,8 @@ def time_average():
 
     # Time averaging (statistically-stationary)
     y = 0.5*np.random.random(npts) + 0.75
-    ax.plot(x, y, lw=1, color='black', label=r'$u_i(\vec{x},t)$')
-    ax.axhline(np.mean(y), linestyle='--', color='black',
+    ax.plot(x, y, lw=1, color='black', label=r'$u_i(\vec{x}, t)$')
+    ax.axhline(np.mean(y), linestyle='--', color='black', 
                lw=1, label=r'$u_T(\vec{x})$')
 
     ax.set_ylim([0, 2])
@@ -208,14 +208,14 @@ def discrete_scheme():
 
             ax.hlines(yavg, xnod[:-1], xnod[1:], lw=2, color='red')
             # Draw vertical lines
-            ax.vlines(xnod,  ynod*0, [*ymax, yavg[-1]],
+            ax.vlines(xnod, ynod*0, [*ymax, yavg[-1]], 
                       lw=0.7, color='gray', linestyle='--')
 
         # delta x annotation
-        ax.text((xnod[3] + xnod[2])/2, np.min(ynod)/2*1.1,
+        ax.text((xnod[3] + xnod[2])/2, np.min(ynod)/2*1.1, 
                 r'$\Delta x$', horizontalalignment='center')
         ax.annotate("", xy=(xnod[3], np.min(ynod)/2), xytext=(xnod[2], np.min(
-            ynod)/2),  arrowprops=dict(arrowstyle="<|-|>", lw=0.7, color='black'),)
+            ynod)/2), arrowprops=dict(arrowstyle="<|-|>", lw=0.7, color='black'), )
 
         ax.set_ylim([-dax/2, l-dax])
         ax.set_xlim([-dax/2, l+dax])
@@ -227,7 +227,7 @@ def discrete_scheme():
                 l/dx)), [r'$x_{i-2}$', r'$x_{i-1}$', 
                 r'$x_{i}$', r'$x_{i+1}$', r'$x_{i+2}$'])
         elif which == 'fv':
-            plt.xticks(np.linspace(0+dx/2, l-dx/2, int(l/dx)),
+            plt.xticks(np.linspace(0+dx/2, l-dx/2, int(l/dx)), 
                        [r'$\Omega_{i-2}$', r'$\Omega_{i-1}$', 
                        r'$\Omega_{i}$', r'$\Omega_{i+1}$', r'$\Omega_{i+2}$'])
 
@@ -263,7 +263,7 @@ def stability_advection():
             cfls = [0.5, 1.0, 2.0, 4.0, 8.0]
             ylim = [-1.1, 1.3]
 
-        circle = plt.Circle((0, 0), 1, facecolor='#e6e6e6',
+        circle = plt.Circle((0, 0), 1, facecolor='#e6e6e6', 
                             edgecolor='#c2c2c2', linestyle='--', hatch='////')
         ax.add_artist(circle)
 
@@ -274,8 +274,8 @@ def stability_advection():
                 y.append(ampf(cfl, kappa))
 
             opts = {
-                'color': colors[i],
-                'lw': 1.1,
+                'color': colors[i], 
+                'lw': 1.1, 
                 'label': f'$\\sigma={cfl}$'
             }
 
@@ -287,7 +287,7 @@ def stability_advection():
         ax.add_artist(circle)
 
         # Create fake plot for circle legend
-        ax.plot([], [], label=f'$\\sigma={maxval}$',
+        ax.plot([], [], label=f'$\\sigma={maxval}$', 
                 color='black', lw='1', linestyle='--')
         ax.axhline(y=0, lw=0.7, color='black')
         ax.axvline(x=0, lw=0.7, color='black')
@@ -296,7 +296,7 @@ def stability_advection():
         ax.set_ylim(ylim)
         ax.set_xlim(xlim)
         ax.set_aspect('equal', )
-        plt.legend(loc=9, ncol=3,  handlelength=0.8, borderaxespad=0)
+        plt.legend(loc=9, ncol=3, handlelength=0.8, borderaxespad=0)
 
         plt.tight_layout()
         fig.savefig(f'ch12_{which}_advection.pdf')
@@ -323,7 +323,7 @@ def stability_diffusion():
             cfls = [1.0, 5.0, 10.0]
             markers = ['o', 's', 'd', 'p']
 
-        circle = plt.Circle((0, 0), 1, facecolor='#e6e6e6',
+        circle = plt.Circle((0, 0), 1, facecolor='#e6e6e6', 
                             edgecolor='#c2c2c2', linestyle=None, hatch='////')
         ax.add_artist(circle)
 
@@ -334,10 +334,10 @@ def stability_diffusion():
                 y.append(ampf(cfl, kappa))
 
             opts = {
-                'color': colors[i],
-                'lw': 1.1,
-                'label': f'$\\sigma={cfl}$',
-                'marker': markers[i],
+                'color': colors[i], 
+                'lw': 1.1, 
+                'label': f'$\\sigma={cfl}$', 
+                'marker': markers[i], 
             }
 
             line, = ax.plot(np.real(y), np.imag(y), **opts)
@@ -350,7 +350,7 @@ def stability_diffusion():
         ax.set_ylim([-1.1, 1.3])
         ax.set_xlim([-1.2, 1.2])
         ax.set_aspect('equal', )
-        plt.legend(loc=9, ncol=3,  handlelength=0.8, borderaxespad=0)
+        plt.legend(loc=9, ncol=3, handlelength=0.8, borderaxespad=0)
         plt.tight_layout()
 
         fig.savefig(f'ch12_{which}_diffusion.pdf')
@@ -359,14 +359,14 @@ def stability_diffusion():
 
 def fv_arbitrary_volume():
 
-    pts = np.array([[0, 0],
-                    [0.25, 0.45],
-                    [0.5, 0.40],
-                    [0.75, 0.4],
-                    [1, 0],
-                    [0.75, -0.35],
-                    [0.5, -0.5],
-                    [0.38, -0.36],
+    pts = np.array([[0, 0], 
+                    [0.25, 0.45], 
+                    [0.5, 0.40], 
+                    [0.75, 0.4], 
+                    [1, 0], 
+                    [0.75, -0.35], 
+                    [0.5, -0.5], 
+                    [0.38, -0.36], 
                     [0, 0]])
     pts = pts*0.3
     tck, u = spi.splprep(pts.T, u=None, s=0.0, per=1)
@@ -390,9 +390,9 @@ def fv_arbitrary_volume():
     fig, ax = plt.subplots(figsize=(4, 3))
 
     # Plot flux and normal vectors
-    ax.quiver(xs[p], ys[p], nhat[0], nhat[1],
+    ax.quiver(xs[p], ys[p], nhat[0], nhat[1], 
               units='xy', scale=15, scale_units='xy')
-    ax.quiver(xs[p], ys[p], -fv[0], -fv[1], units='xy',
+    ax.quiver(xs[p], ys[p], -fv[0], -fv[1], units='xy', 
               scale=15, scale_units='xy', color=blue)
 
     ax.plot(xs, ys, 'k', lw=1)
@@ -447,9 +447,9 @@ def fv_trivolume():
     # fvec[-1] *= 1.4
 
     fig, ax = plt.subplots(figsize=(3.2, 4))
-    ax.quiver(cpts[:, 0], cpts[:, 1], nhat[:, 0],
+    ax.quiver(cpts[:, 0], cpts[:, 1], nhat[:, 0], 
               nhat[:, 1], units='xy', scale=12)
-    ax.quiver(cpts[:, 0], cpts[:, 1], fvec[:, 0],
+    ax.quiver(cpts[:, 0], cpts[:, 1], fvec[:, 0], 
               fvec[:, 1], color=blue, units='xy', scale=9)
     ax.plot(pts[:, 0], pts[:, 1], 'k', lw=1)
 
@@ -482,9 +482,9 @@ def fv_riemann_diagram():
     fig, ax = plt.subplots(figsize=(4, 3))
 
     # Define node coordinates
-    x = [[0, 0.4],
-         [1.1, 0],
-         [2, 0.8],
+    x = [[0, 0.4], 
+         [1.1, 0], 
+         [2, 0.8], 
          [0.9, 1]]
     x = np.array(x)
 
@@ -501,7 +501,7 @@ def fv_riemann_diagram():
     ax.annotate(r'$\vec{F}$', xy=(xfv[0]+0.15, xfv[1]+0.1))
 
     # Draw solution points
-    ax.plot([xfv[0]-0.25, xfv[0]+0.25],
+    ax.plot([xfv[0]-0.25, xfv[0]+0.25], 
             [xfv[1]-0.1, xfv[1]-0.1], 'o', color=red)
     ax.annotate(r'$\vec{\overline{u}}_L$', xy=(
         xfv[0]-0.25, xfv[1]-0.25), ha='center')
@@ -513,6 +513,119 @@ def fv_riemann_diagram():
     # plt.show()
     plt.close(fig)
 
+def fv_1d_advection():
+    x = np.array([0, 1/3, 2/3, 1])+0.05
+    u = np.array([0.8, 0.5, 0.7])
+    xc = 0.5*(x[:-1] + x[1:])
+
+    fig, ax = plt.subplots(figsize=(4, 3))
+    ax.vlines(x, 0, 1, lw=0.8, color='gray', linestyle='--')
+    ax.hlines(u, x[:-1], x[1:], lw=1.2, color=red)
+
+    # Draw normals and fluxes
+    ax.quiver(x[[1, 2]], u[[1, 1]], [-1, 1], [0, 0])
+    ax.quiver(x[[1, 2]]-0.1, [1, 1], [2, 2], [0, 0], units='xy', scale=8, color=blue)
+    ax.quiver(xc[1]-0.075, 0.7, 1.5, 0, units='xy', scale=8)
+
+    ax.annotate(r'$\overline u_{i-1}$', 
+                xy=(xc[0], u[0]-0.05), ha='center', va='top')
+    ax.annotate(r'$\overline u_{i}$', 
+                xy=(xc[1], u[1]-0.05), ha='center', va='top')
+    ax.annotate(r'$\overline u_{i+1}$',
+                xy=(xc[2], u[2]-0.05), ha='center', va='top')
+    ax.annotate(r'$\vec F_1(\overline u_{i-1}, \overline u_i)$', 
+                xy=(x[1], 1.14), ha='center', va='top')
+    ax.annotate(r'$\vec F_2(\overline u_i, \overline u_{i+1})$', 
+                xy=(x[2], 1.14), ha='center', va='top')
+    ax.annotate(r'$\hat n_1$', xy=(x[1]-0.1, u[1]), 
+                ha='center', va='center')
+    ax.annotate(r'$\hat n_2$', xy=(x[2]+0.1, u[1]), 
+                ha='center', va='center')
+    ax.annotate(r'$\alpha$', xy=(xc[1], 0.8), 
+                ha='center', va='top')
+    ax.annotate(r'$\Delta x$', xy=(xc[1], 0.1), 
+                ha='center', va='top')
+    ax.annotate(r'', xy=(x[1], 0.12), xytext=(x[2], 0.12), 
+                arrowprops=dict(arrowstyle="<|-|>", 
+                lw=0.7, color='black'), )
+
+    ax.plot(xc, u, 'o', color=red)
+    # ax.margins(0.1)
+    ax.set_xlabel('$x$')
+    ax.set_ylabel('$u$')
+    ax.set_xlim([0, 1.1])
+    ax.set_ylim([0, 1.2])
+    fig, ax = convert_to_graph(fig, ax)
+    ax.tick_params(which='major', pad=10)
+    plt.xticks(xc, [r'$\Omega_{i-1}$', r'$\Omega_{i}$', 
+               r'$\Omega_{i+1}$'], va='center' )
+    fig.tight_layout()
+    # plt.show()
+    fig.savefig('ch11_fv_advection.pdf')
+    plt.close(fig)
+
+def fv_1d_diffusion():
+    x = np.array([0, 1/3, 2/3, 1])+0.05
+    u = np.array([0.8, 0.5, 0.7])
+    xc = 0.5*(x[:-1] + x[1:])
+
+    fig, ax = plt.subplots(figsize=(4, 3))
+    ax.vlines(x, 0, 1, lw=0.8, color='gray', linestyle='--')
+    ax.hlines(u, x[:-1], x[1:], lw=1.2, color=red)
+    
+    dudxp = np.polyfit(xc[:-1], u[:-1], 1)
+    dudxx = np.linspace(xc[0], xc[1], 2)
+    dudxy = np.polyval(dudxp, dudxx)
+    ax.plot(dudxx, dudxy, lw=0.8, linestyle='--', color=blue)
+
+    dudxp = np.polyfit(xc[1:], u[1:], 1)
+    dudxx = np.linspace(xc[1], xc[2], 2)
+    dudxy = np.polyval(dudxp, dudxx)
+    ax.plot(dudxx, dudxy, lw=0.8, linestyle='--', color=blue)
+
+    # Draw normals
+    ax.quiver(x[[1, 2]], u[[1, 1]], [-1, 1], [0, 0])
+
+    ax.annotate(r'$\overline u_{i-1}$', 
+                xy=(xc[0], u[0]-0.05), ha='center', va='top')
+    ax.annotate(r'$\overline u_{i}$', 
+                xy=(xc[1], u[1]-0.05), ha='center', va='top')
+    ax.annotate(r'$\overline u_{i+1}$', 
+                xy=(xc[2], u[2]-0.05), ha='center', va='top')
+    ax.annotate(r'$\left(\frac{\partial u}{\partial x}\right)_1$', 
+                xy=(x[1]+0.1, 0.8), ha='left', va='center')
+    ax.annotate(r'$\left(\frac{\partial u}{\partial x}\right)_2$', 
+                xy=(x[2]+0.1, 0.85), ha='left', va='center')
+    ax.annotate(r'$\hat n_1$', xy=(x[1]-0.1, u[1]), 
+                ha='center', va='center')
+    ax.annotate(r'$\hat n_2$', xy=(x[2]+0.1, u[1]), 
+                ha='center', va='center')
+    ax.annotate(r'$\Delta x$', xy=(xc[1], 0.1), 
+                ha='center', va='top')
+    ax.annotate(r'', xy=(x[1], 0.12), xytext=(x[2], 0.12), 
+                arrowprops=dict(arrowstyle="<|-|>", 
+                lw=0.7, color='black'), )
+    ax.annotate(r'', xy=(x[2]+0.01, 0.62), xytext=(x[2]+0.1, 0.85), 
+                arrowprops=dict(arrowstyle="-|>", 
+                lw=0.7, color='black'), )
+    ax.annotate(r'', xy=(x[1]+0.01, 0.65), xytext=(x[1]+0.1, 0.8), 
+                arrowprops=dict(arrowstyle="-|>", 
+                lw=0.7, color='black'), )
+
+    ax.plot(xc, u, 'o', color=red)
+    # ax.margins(0.1)
+    ax.set_xlabel('$x$')
+    ax.set_ylabel('$u$')
+    ax.set_xlim([0, 1.1])
+    ax.set_ylim([0, 1.2])
+    fig, ax = convert_to_graph(fig, ax)
+    ax.tick_params(which='major', pad=10)
+    plt.xticks(xc, [ r'$\Omega_{i-1}$', 
+                       r'$\Omega_{i}$', r'$\Omega_{i+1}$'], va='center' )
+    fig.tight_layout()
+    # plt.show()
+    fig.savefig('ch11_fv_diffusion.pdf')
+    plt.close(fig)
 
 def main():
     # Reynolds averaging
@@ -521,9 +634,11 @@ def main():
 
     # FD, FV schemes
     # discrete_scheme()
-    fv_arbitrary_volume()
-    fv_trivolume()
-    fv_riemann_diagram()
+    # fv_arbitrary_volume()
+    # fv_trivolume()
+    # fv_riemann_diagram()
+    fv_1d_advection()
+    fv_1d_diffusion()
 
     # # Stability plots
     # stability_advection()

@@ -626,6 +626,34 @@ def fv_1d_diffusion():
     # plt.show()
     fig.savefig('ch11_fv_diffusion.pdf')
     plt.close(fig)
+    
+def linear_scalar_characteristics():
+    fig, ax = plt.subplots(figsize=(4, 3))
+    tp = np.linspace(0, 1, 100)
+    alpha = 0.5
+    nc = 7
+
+    # Draw characteristic lines and x0
+    x0s = np.linspace(0, 1, nc)
+    for x0 in x0s:
+        xp = x0 + alpha*tp
+        ax.plot(xp, tp, 'k', lw=1)
+        ax.plot(x0, 0 , 'ok', markersize=2)
+    
+    # Draw slope marker
+    s1 = 40
+    s2 = 55
+    ax.plot(xp[[s1, s2, s2]], tp[[s1, s1, s2]], 'k', zorder=-10, lw=1)
+    xc = xp[s2] + 0.05
+    yc = np.mean(tp[[s1, s2]])
+    ax.annotate(r'$\alpha > 0$', xy=(xc, yc), va='center')
+
+    fig, ax = convert_to_graph(fig, ax)   
+    ax.set_ylabel('$t$')
+    ax.set_xlabel('$x$')
+   
+    fig.savefig('ch11_linear_scalar_characteristics.pdf')
+
 
 def main():
     # Reynolds averaging
@@ -637,8 +665,11 @@ def main():
     # fv_arbitrary_volume()
     # fv_trivolume()
     # fv_riemann_diagram()
-    fv_1d_advection()
-    fv_1d_diffusion()
+    # fv_1d_advection()
+    # fv_1d_diffusion()
+
+    # Hyperbolic problems
+    linear_scalar_characteristics()
 
     # # Stability plots
     # stability_advection()

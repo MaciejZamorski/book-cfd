@@ -366,7 +366,7 @@ where $d/dt$ can be solved using an appropriate temporal discretization (see Cha
 Generally, we can make relatively good approximations of arbitrary volumes using straight-sided elements such as triangles and tetrahedra. Consider the triangular volume $\Omega_i$ displayed in Figure~\ref{fig:fv_straightsided}. The solution $\vec{\overline u}$ is constant within the triangular shape. In addition, each of the faces has an area of $S_1$, $S_2$ and $S_3$. Observe that since the sides of the considered volume are straight, the flux vectors are constant across each of the faces. Hence, the surface integral in Equation~\ref{eq:fvm} can be trivially solved via summation. For the $i$-th volume, the general form of the FV method for straight grids can be written
 \begin{figure}[htbp]
  \centering
- \includegraphics[width=0.4\linewidth]{Pictures/ch11_fv_cellavg}
+ \includegraphics[width=0.3\linewidth]{Pictures/ch11_fv_cellavg}
  \caption{Representation of solution, fluxes and faces of a straight-sided element.}
  \label{fig:fv_straightsided}
 \end{figure}
@@ -533,10 +533,106 @@ By substituting the fluxes into Equation~\ref{eq:fv_straightsided}, we obtain th
 \end{eqBox}
 which is second-order accurate. The resulting scheme is central, which agrees with the physics of diffusive processes.  Note that Equation~\ref{eq:fv_diffusion} is identical to the second-order finite-difference scheme we previously derived for this problem. 
 
-\section{Introduction to Hyperbolic Systems}
+\section{Linear Hyperbolic Problems}
+In Chapter 2, we stated that first-order partial differential equations are naturally hyperbolic, meaning that they exhibit wave-like solutions. The simplest case is our advection equation, 
+\begin{equation}
+	\frac{\partial u}{\partial t} + \alpha \frac{\partial u}{\partial x} = 0, 
+	\label{eq:hyperprob_advection}
+\end{equation}
+which can model, for instance, the tracing of a dye particle in a one-dimensional flow, such as a pipe. Suppose that you want to trace this particle. At time $t=0$, the particle is located at $x=0$ as shown in Figure~\ref{}. After some time, we expect the particle to have moved a distance $d=\alpha t$. Hence, it can be easily shown that solutions to Equation~\ref{eq:hyperprob_advection} are given by
+\begin{equation}
+	u(x,t) = u_0 (x - \alpha t, t), 
+\end{equation}
+where $u_0$ is the initial solution. Note that the particle has only translated, and no change in its shape or any diffusion effects are modelled by Equation~\ref{eq:hyperprob_advection}.
 
+Consider now the space-time plane $x\times t$. In this space, we can find \textit{characteristic lines} $x(t)$ along which the solution remains unchanged, that is, lines where $du=0$. We can then rewrite the solution $u(x(t),t)$, and by using the chain rule 
+\begin{equation}
+	\frac{d}{dt} (u(x(t),t) = \frac{\partial u}{\partial t} + \frac{d x}{dt} \frac{\partial u}{\partial x} = 0.
+	\label{eq:dudt_advection}
+\end{equation}
+Now, compare Equations~\ref{eq:dudt_advection} and~\ref{eq:hyperprob_advection}. It is clear that
+\begin{equation}
+	\frac{dx}{dt} = \alpha.
+	\label{eq:dxdt_advection}
+\end{equation}
+Hence the \textit{characteristic speed} of a scalar hyperbolic equation is the advection velocity. From the above relation, we obtain an equation for the characteristic lines of our PDE, given by
+\begin{equation}
+	x = x_0 + \alpha t,
+\end{equation}
+where a curve can be drawn for a given $x_0$. If we consider $\alpha$ to be positive, the resulting characteristic curves can be observed in Figure~\ref{fig:linscal_charact}. We can clearly note that advection components in the governing equations are responsible for the propagation of information. However, the most important conservation laws consist of more than a single equation. In order to analyze linear hyperbolic systems of equations, we need to reveal the underlying advection equations.
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.5\linewidth]{Pictures/ch11_linear_scalar_characteristics}
+	\caption{Characteristic lines for the linear advection equation with $\alpha>0$, where $x_0$ are represented by dots.}
+	\label{fig:linscal_charact}
+\end{figure}
+\subsection{Linear Hyperbolic Systems}
+A system of $m$ equations
+\begin{equation}
+\frac{\partial \vec u}{\partial t} + A \frac{\partial \vec u}{\partial x} = 0,\quad \vec u = [u_1, u_2, \ldots, u_m]
+\label{eq:hyperprob_linearsystem}
+\end{equation}
+is said to be hyperbolic if the constant $m\times m$ matrix $A$ has $m$ real distinct eigenvalues $\lambda_i$ and $m$ linearly independent eigenvectors $\vec q_i$. This can be written as the eigenvalue problem
+\begin{equation}
+	A \vec q_i = \lambda_i A,\quad i=1,2,\ldots,m,
+\end{equation}
+or in matrix form
+\begin{equation}
+	A Q = Q \Lambda,
+	\label{eq:hyperprob_eigen}
+\end{equation}
+where
+\[
+	Q = 
+	\begin{bmatrix}
+		\vec q_1 & \vec q_2 & \ldots & \vec q_m
+	\end{bmatrix}, \quad
+	\Lambda = 
+	\begin{bmatrix}
+		\lambda_1 	& 0			& \ldots  & 0 	   \\
+		0	 		&  	\ddots  &         & \vdots \\
+		\vdots 		&  		    & \ddots  & 0 \\
+		0 			& \ldots	& 0		  & \lambda_m
+	\end{bmatrix}.
+\]
+We have shown in the previous section that the scalar linear equation simply propagates information at a given characteristic speed, which represents the slope of the characteristic curves $x(t)$ in a space-time plane. In the case of a linear hyperbolic system, these slopes are given by the eigenvalues of $A$. Now, how are these characteristic speeds related to the conserved variables $\vec u$? In order to further analyze this, we need to transform the original system into its \textit{characteristic form}. The idea is to decouple Equation~\ref{eq:hyperprob_linearsystem} into a series of independent equations. 
 
+Recall the $m$ eigenvectors of $A$ are linearly independent. Hence, we can diagonalize matrix A in Equation~\ref{eq:hyperprob_advection} by setting
+\begin{equation}
+	A = Q \Lambda Q^{-1}.
+\end{equation}
+Now, diagonalize $A$ and multiply Equation~\ref{eq:hyperprob_linearsystem} by $Q^{-1}$, which yields
+\begin{equation}
+	Q^{-1} \frac{\partial \vec  u}{\partial t} + Q^{-1} Q \Lambda Q^{-1} \frac{\partial \vec u}{\partial t} = 0.
+\end{equation}
+For simplicity, we define a \textit{characteristic variable} $\vec \omega=Q^{-1} \vec{u}$ and hence we obtain the characteristic form of the system of PDEs
+\begin{equation}
+	\frac{\partial \vec \omega}{\partial t} + \Lambda \frac{\partial \vec \omega}{\partial x} = 0.
+\end{equation}
+Hence, We have decoupled our original system into $m$ independent advection equations of the form
+\begin{equation}
+	\frac{\partial \omega_i}{\partial t} + \lambda_i \frac{\partial \omega_i}{\partial x} = 0,\quad i=1,\ldots,m,
+\end{equation}
+each of which has solution
+\begin{equation}
+	\omega_i = \omega_{i,0}(x-\lambda_i t).
+\end{equation}
+Similar to the scalar case, we can now draw characteristic curves in the space-time plane. If we consider the eigenvalues to be sorted such that
+\begin{equation}
+	\lambda_1 < \lambda_2 < \ldots < \lambda_m,
+\end{equation}
+then the result can be seen in Figure~\ref{}. What we have done is an eigendecomposition of the vector of conserved quantities $\vec u$ into characteristic variables $\vec \omega$ by means of the eigenvectors $\vec q_i$. Hence, the original variables can be recovered by a superposition of the characteristic waves
+\begin{equation}
+	u(x,t) = \sum_{i=1}^{m} \omega_i(x,t) \vec q_i.
+\end{equation}
+\subsubsection{Example case}
+\subsection{The Riemann Problem}
 
+\section{Nonlinear Hyperbolic Problems}
+\subsection{Nonlinear Hyperbolic Systems}
+\subsection{The Riemann Problem}
+\subsection{An Exact Riemann Solver for the Euler Equations}
+\subsection{Approximate Riemann Solvers}
 
 \chapter{Consistency, Stability, Convergence}
 Now that we have derived a few different schemes for solving linear advection, Burgers equation, and linear diffusion, we should now ask ourselves whether they will give us accurate predictions, and are there any restrictions on when they can be used. We have already discussed the importance of order of accuracy, which governs the rate at which the error will converge to zero. Now we will introduce the concepts of consistency, stability, and convergence. If we can prove that our numerical scheme satisfies all three of these properties we can be confident that it is promising approach for the Euler or Navier-Stokes equations. In the current section we will explore these properties in the context of finite difference methods, but the exact same steps can be taken to check whether a finite volume method is suitable or not.

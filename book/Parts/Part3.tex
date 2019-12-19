@@ -72,7 +72,7 @@ we note that the leading term omitted from the $f_1(\Delta x)$ approximation beh
 	\label{fig:fd_scheme}
 \end{figure}
 	
-To introduce the finite difference method we start with a general function $u(x)$. In general this function can be in any number of dimensions, but for simplicity we will first consider the one-dimensional case. We note that a function can generally be {\it approximated} by its values at a {\it discrete} set of points. An example of this is shown in Figure \ref{} where $\Delta x$ is the grid spacing between the points. We now imagine that we are at some point $i$ whose solution is $u_i = u(x_i)$ where $x_i$ is the physical location of the point. Using Taylor series we can compute the value of the solution one grid point to the left from the expansion
+To introduce the finite difference method we start with a general function $u(x)$. In general this function can be in any number of dimensions, but for simplicity we will first consider the one-dimensional case. We note that a function can generally be {\it approximated} by its values at a {\it discrete} set of points. An example of this is shown in Figure \ref{fig:fd_scheme} where $\Delta x$ is the grid spacing between the points. We now imagine that we are at some point $i$ whose solution is $u_i = u(x_i)$ where $x_i$ is the physical location of the point. Using Taylor series we can compute the value of the solution one grid point to the left from the expansion
 \begin{equation}
 	u_{i-1} = u_i - \Delta x \Eval{\frac{\partial u}{\partial x}}{x_i}{} + \frac{\Delta x^2}{2} \Eval{\frac{\partial^2 u}{\partial x^2}}{x_i}{} - \frac{\Delta x^3}{6} \Eval{\frac{\partial^3 u}{\partial x^3}}{x_i}{} + \mathcal{O}(\Delta x^4),
 	\label{eqn:fdmup}
@@ -534,18 +534,24 @@ By substituting the fluxes into Equation~\ref{eq:fv_straightsided}, we obtain th
 which is second-order accurate. The resulting scheme is central, which agrees with the physics of diffusive processes.  Note that Equation~\ref{eq:fv_diffusion} is identical to the second-order finite-difference scheme we previously derived for this problem. 
 
 \section{Linear Hyperbolic Problems}
-In Chapter 2, we stated that first-order partial differential equations are naturally hyperbolic, meaning that they exhibit wave-like solutions. The simplest case is our advection equation, 
+In Chapter 2, we stated that first-order partial differential equations are naturally hyperbolic, meaning that they exhibit wave-like solutions. The simplest case is our advection equation
 \begin{equation}
 	\frac{\partial u}{\partial t} + \alpha \frac{\partial u}{\partial x} = 0, 
 	\label{eq:hyperprob_advection}
 \end{equation}
-which can model, for instance, the tracing of a dye particle in a one-dimensional flow, such as a pipe. Suppose that you want to trace this particle. At time $t=0$, the particle is located at $x=0$ as shown in Figure~\ref{}. After some time, we expect the particle to have moved a distance $d=\alpha t$. Hence, it can be easily shown that solutions to Equation~\ref{eq:hyperprob_advection} are given by
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.5\linewidth]{Pictures/ch11_lsc_advection_dye}
+	\caption{Initial and final state of the advection of a dye particle in a one-dimensional flow.}
+	\label{fig:advection_dye}
+\end{figure}
+which can model, for instance, the tracing of a dye particle in a one-dimensional geometry, such as a pipe. Suppose that you want to trace this particle. At time $t=0$, the particle is located at $x=0$ as shown in Figure~\ref{fig:advection_dye}. After some time, we expect the particle to have translated a distance $d=\alpha t$. Hence, it can be easily checked that solutions to Equation~\ref{eq:hyperprob_advection} are given by
 \begin{equation}
-	u(x,t) = u_0 (x - \alpha t, t), 
+	u(x,t) = u_0 (x - \alpha t), 
 \end{equation}
-where $u_0$ is the initial solution. Note that the particle has only translated, and no change in its shape or any diffusion effects are modelled by Equation~\ref{eq:hyperprob_advection}.
+where $u_0$ is the initial solution. Note that the particle has only changed location, and no shape changes or any diffusion effects are modelled by Equation~\ref{eq:hyperprob_advection}.
 
-Consider now the space-time plane $x\times t$. In this space, we can find \textit{characteristic lines} $x(t)$ along which the solution remains unchanged, that is, lines where $du=0$. We can then rewrite the solution $u(x(t),t)$, and by using the chain rule 
+Consider now the space-time plane $x\times t$. In this space, we can find \textit{characteristic lines} $x(t)$ along which the solution remains unchanged, that is, lines where $du=0$. We can then rewrite the solution as $u(x(t),t)$, and by using the chain rule, we have 
 \begin{equation}
 	\frac{d}{dt} (u(x(t),t) = \frac{\partial u}{\partial t} + \frac{d x}{dt} \frac{\partial u}{\partial x} = 0.
 	\label{eq:dudt_advection}
@@ -555,24 +561,28 @@ Now, compare Equations~\ref{eq:dudt_advection} and~\ref{eq:hyperprob_advection}.
 	\frac{dx}{dt} = \alpha.
 	\label{eq:dxdt_advection}
 \end{equation}
-Hence the \textit{characteristic speed} of a scalar hyperbolic equation is the advection velocity. From the above relation, we obtain an equation for the characteristic lines of our PDE, given by
+Hence the \textit{characteristic speed} of a scalar hyperbolic equation is its advection velocity. From the above relation, we can obtain an equation for the characteristic lines of our PDE, given by
 \begin{equation}
 	x = x_0 + \alpha t,
 \end{equation}
-where a curve can be drawn for a given $x_0$. If we consider $\alpha$ to be positive, the resulting characteristic curves can be observed in Figure~\ref{fig:linscal_charact}. We can clearly note that advection components in the governing equations are responsible for the propagation of information. However, the most important conservation laws consist of more than a single equation. In order to analyze linear hyperbolic systems of equations, we need to reveal the underlying advection equations.
+where a curve can be drawn for each initial value of $x_0$ corresponding to $u(x,t=0)=u(x_0)$. 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.5\linewidth]{Pictures/ch11_linear_scalar_characteristics}
-	\caption{Characteristic lines for the linear advection equation with $\alpha>0$, where $x_0$ are represented by dots.}
+	\includegraphics[width=0.5\linewidth]{Pictures/ch11_lsc_characteristics}
+	\caption{Characteristic lines for the linear advection equation with $\alpha>0$ for different values of $x_0$.}
 	\label{fig:linscal_charact}
 \end{figure}
+
+Consider $\alpha$ to be positive. The resulting characteristic curves are shown in Figure~\ref{fig:linscal_charact}. Observe that the slope of the curves is $\alpha$. Hence, we can find the value of $u$ at any point $(x,t)$ by tracing curves parallel to those in Figure~\ref{fig:linscal_charact}. We have characterized the behaviour of scalar hyperbolic equations. To analyze systems of equations, we must take into account additional considerations, which we explore in the next section.
+
 \subsection{Linear Hyperbolic Systems}
-A system of $m$ equations
+\label{sec:linear_hyper_systems}
+The advective components in our governing equations are responsible for the propagation of information from one point to another. In general, scalar conservation laws are simplifications of more complicated systems. Some of these systems are hyperbolic, which we can analyze as a superposition of advection equations with their corresponding wave speed. A system of $m$ equations
 \begin{equation}
-\frac{\partial \vec u}{\partial t} + A \frac{\partial \vec u}{\partial x} = 0,\quad \vec u = [u_1, u_2, \ldots, u_m]
+\frac{\partial \vec u}{\partial t} + A \frac{\partial \vec u}{\partial x} = 0,\quad \vec u = \begin{bmatrix} u_1 & u_2 & \ldots & u_m\end{bmatrix},
 \label{eq:hyperprob_linearsystem}
 \end{equation}
-is said to be hyperbolic if the constant $m\times m$ matrix $A$ has $m$ real distinct eigenvalues $\lambda_i$ and $m$ linearly independent eigenvectors $\vec q_i$. This can be written as the eigenvalue problem
+is said to be hyperbolic if the constant $m\times m$ matrix $A$, which is generally dense, has $m$ real distinct eigenvalues $\lambda_i$ and $m$ linearly independent eigenvectors $\vec q_i$. This can be written as the eigenvalue problem
 \begin{equation}
 	A \vec q_i = \lambda_i A,\quad i=1,2,\ldots,m,
 \end{equation}
@@ -581,12 +591,15 @@ or in matrix form
 	A Q = Q \Lambda,
 	\label{eq:hyperprob_eigen}
 \end{equation}
-where
-\[
+where $Q$ is the matrix of eigenvectors
+\begin{equation}
 	Q = 
 	\begin{bmatrix}
 		\vec q_1 & \vec q_2 & \ldots & \vec q_m
 	\end{bmatrix}, \quad
+\end{equation}
+and $\Lambda$ is the diagonal matrix containing the eigenvalues of $A$
+\begin{equation}
 	\Lambda = 
 	\begin{bmatrix}
 		\lambda_1 	& 0			& \ldots  & 0 	   \\
@@ -594,40 +607,335 @@ where
 		\vdots 		&  		    & \ddots  & 0 \\
 		0 			& \ldots	& 0		  & \lambda_m
 	\end{bmatrix}.
-\]
-We have shown in the previous section that the scalar linear equation simply propagates information at a given characteristic speed, which represents the slope of the characteristic curves $x(t)$ in a space-time plane. In the case of a linear hyperbolic system, these slopes are given by the eigenvalues of $A$. Now, how are these characteristic speeds related to the conserved variables $\vec u$? In order to further analyze this, we need to transform the original system into its \textit{characteristic form}. The idea is to decouple Equation~\ref{eq:hyperprob_linearsystem} into a series of independent equations. 
+\end{equation}
+We have shown in the previous section that the scalar linear equation simply propagates information at a given characteristic speed, which represents the slope of the characteristic curves $x(t)$ in a space-time plane. In the case of a linear hyperbolic system, more than a single wave speed is embedded in the equations. Hence, multiple slopes are associated with any given $(x,t)$ point in the $x\times t$ plane, which are given by the eigenvalues of $A$. Now, how are these characteristic speeds related to $\vec u$? It turns out that the solution is considered to be a superposition of these waves. To illustrate this, the original system needs to be decoupled into $m$ independent equations. This is done by diagonalizing the constant matrix $A$.
 
-Recall the $m$ eigenvectors of $A$ are linearly independent. Hence, we can diagonalize matrix A in Equation~\ref{eq:hyperprob_advection} by setting
+Recall the $m$ eigenvectors of $A$ are linearly independent. Hence, we can transform Equation~\ref{eq:hyperprob_linearsystem} into \textit{characteristic form} by setting
 \begin{equation}
 	A = Q \Lambda Q^{-1}.
+	\label{eq:A_diagonalize}
 \end{equation}
-Now, diagonalize $A$ and multiply Equation~\ref{eq:hyperprob_linearsystem} by $Q^{-1}$, which yields
+Now, substituting A in Equation~\ref{eq:hyperprob_linearsystem} using~\ref{eq:A_diagonalize} and multiplying by $Q^{-1}$ yields
 \begin{equation}
 	Q^{-1} \frac{\partial \vec  u}{\partial t} + Q^{-1} Q \Lambda Q^{-1} \frac{\partial \vec u}{\partial t} = 0.
 \end{equation}
-For simplicity, we define a \textit{characteristic variable} $\vec \omega=Q^{-1} \vec{u}$ and hence we obtain the characteristic form of the system of PDEs
+For simplicity, define the vector of \textit{characteristic variables} $\vec \omega=Q^{-1} \vec{u}$. Hence, the characteristic form of hyperbolic system of PDEs is
+\begin{eqBox}
 \begin{equation}
 	\frac{\partial \vec \omega}{\partial t} + \Lambda \frac{\partial \vec \omega}{\partial x} = 0.
 \end{equation}
-Hence, We have decoupled our original system into $m$ independent advection equations of the form
+\end{eqBox}
+We have now decoupled our original system into $m$ independent advection equations of the form
 \begin{equation}
 	\frac{\partial \omega_i}{\partial t} + \lambda_i \frac{\partial \omega_i}{\partial x} = 0,\quad i=1,\ldots,m,
 \end{equation}
 each of which has solution
 \begin{equation}
-	\omega_i = \omega_{i,0}(x-\lambda_i t).
+	\omega_i = \omega_i^0(x-\lambda_i t),
 \end{equation}
-Similar to the scalar case, we can now draw characteristic curves in the space-time plane. If we consider the eigenvalues to be sorted such that
+where the initial characteristic state can be found directly from the initial conditions by
 \begin{equation}
-	\lambda_1 < \lambda_2 < \ldots < \lambda_m,
+	\vec{\omega}_0 = Q^{-1} \vec u_0. 
+	\label{eq:initialstatetocharact}
 \end{equation}
-then the result can be seen in Figure~\ref{}. What we have done is an eigendecomposition of the vector of conserved quantities $\vec u$ into characteristic variables $\vec \omega$ by means of the eigenvectors $\vec q_i$. Hence, the original variables can be recovered by a superposition of the characteristic waves
+Similar to the scalar case, we can now draw characteristic curves in the $x\times t$ plane. These can be observed in Figure~\ref{fig:linsys_charact}, where we have considered the eigenvalues to be sorted 
 \begin{equation}
-	u(x,t) = \sum_{i=1}^{m} \omega_i(x,t) \vec q_i.
+	\lambda_1 < \lambda_2 < \ldots < \lambda_m.
 \end{equation}
-\subsubsection{Example case}
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.5\linewidth]{Pictures/ch11_lsys_characteristics}
+	\caption{Characteristic lines for a linear hyperbolic system of equations.}
+	\label{fig:linsys_charact}
+\end{figure}
+We have now decomposed the vector of conserved quantities $\vec u$ into characteristic variables $\vec \omega$ employing the eigenvectors $\vec q_i$. Hence, the original variables can be recovered by coefficients $\omega_i$ and their corresponding eigenvector.
+\begin{equation}
+	u(x,t) = \sum_{i=1}^{m} \omega_i(x,t) \vec q_i=\sum_{i=1}^m \omega^0_i(x-\lambda_i t) \vec q_i.
+	\label{eq:linsuperposition}
+\end{equation}
 \subsection{The Riemann Problem}
-
+\subsubsection{The Scalar Case}
+Consider the following initial-value problem (Figure~\ref{fig:scalar_riemann_u0}) for the scalar advection equation 
+\begin{align}
+	\frac{\partial u}{\partial t} + \alpha \frac{\partial u}{\partial x} = 0, \quad u(x,0) = 
+	\begin{cases}
+		u_L & \text{if}~x<0,\\
+		u_R & \text{if}~x>0,\\
+	\end{cases}
+\end{align}
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.5\linewidth]{Pictures/ch11_riem_lsc_u0}
+	\caption{Scalar initial condition with discontinuity}
+	\label{fig:scalar_riemann_u0}
+\end{figure}
+where $u_L$ and $u_R$ are piecewise constants and $u_L\neq u_R$. Based on our previous discussions, these constant values simply propagate along some characteristic curve in the $x\times t$ plane along with the discontinuity initially located at $x=0$. The characteristic line with the origin at this point defines the path of the discontinuity with equation $x=\alpha t$, as shown in Figure~\ref{fig:riem_charact_scalar}. Hence, on the left side of this curve, specifically where $x<\alpha t$, the solution is simply $u_L$, and on the right-hand side, where $x>\alpha t$, the solution is $u_R$. Hence, the Riemann solution to the scalar problem is simply
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.5\linewidth]{Pictures/ch11_riem_lsc_characteristics}
+	\caption{Chacteristic line along which discontinuity propagates}
+	\label{fig:riem_charact_scalar}
+\end{figure}
+\begin{eqBox}
+\begin{equation}
+	u(x,t) = 
+	\begin{cases}
+		u_L & \text{if}~x<\alpha t,\\
+		u_R & \text{if}~x>\alpha t.\\
+	\end{cases}
+\end{equation}
+\end{eqBox}
+\subsubsection{Hyperbolic Systems}
+Now consider the following initial-value problem, this time for a system of $m$ hyperbolic equations, where multiple values of the solution exist on each side of $x=0$
+\begin{align}
+	\frac{\partial \vec u}{\partial t} +A \frac{\partial \vec u}{\partial x} = 0, \quad \vec u(x,0) = 
+	\begin{cases}
+		\vec u_L & \text{if}~x<0,\\
+		\vec u_R & \text{if}~x>0.\\
+	\end{cases}
+	\label{eq:ivp_linearsys}
+\end{align}
+Recall from Section~\ref{sec:linear_hyper_systems} that linear hyperbolic systems are driven by a superposition of multiple waves. To reveal these underlying advection equations, we must transform the original equations into characteristic form. From Equation~\ref{eq:initialstatetocharact}, we may write
+\begin{equation}
+	\vec \omega(x,0) = 
+	\begin{cases}
+		\vec \omega_L & \text{if}~x<0,\\
+		\vec \omega_R & \text{if}~x>0,\\
+	\end{cases}
+	\label{eq:ivp_linearsys}
+\end{equation}
+where the $i$-th equation has solution
+\begin{equation}
+	\omega_i(x,t) = 
+	\begin{cases}
+		\omega_{L,i} &\text{if}~x<\lambda_i t, \\
+		\omega_{R,i} &\text{if}~x>\lambda_i t. \\
+	\end{cases}
+\end{equation}
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.5\linewidth]{Pictures/ch11_riem_lsys_characteristics}
+	\caption{Characteristic curves for the Riemann problem with $m=4$. Note the value of the maximum sub-index changes for each point $P$. For $P_{m,L}^*$, $I=1$, for $P_{m}$, $I=2$ and for $P_{m,R}^*$, $I=3$. (Adapted from~\cite{leveque})}
+	\label{fig:characteristics_riemann}
+\end{figure}
+The eigenvalues of $A$ can be observed in Figure~\ref{fig:characteristics_riemann} for the case of $m=4$ equations. Now, suppose you have a set of coordinates $(x,t)$ where you want to know the value of the solution. At any point in the $x\times t$ domain, the solution only depends on $u(x,0)=u(x_0)=u_0$. Hence, we can determine the value of $\vec u$ at any point by drawing lines parallel to the characteristic curves. On the left of $\lambda_1$, tracing parallel lines only yields initial values which correspond to the left state $\vec u_L$, hence the solution can be computed by
+\begin{equation}
+	\vec u_L = \sum_{i=1}^m  \omega_{L,i} \vec q_i.
+\end{equation}
+Similarly, at any point on the right side of $\lambda_m$ ($\lambda_4$ in Figure~\ref{fig:characteristics_riemann}) we find
+\begin{equation}
+	\vec u_R = \sum_{i=1}^m  \omega_{R,i} \vec q_i.
+\end{equation}
+Now, what if we are interested in finding the solution at the point $P_m$ in Figure~\ref{fig:characteristics_riemann}?. Tracking the solution back to its initial value shows that values of $x-\lambda t$ are located on both the left and right-hand sides of $x=0$. Hence, we require a combination of both left and right states. Note that at any point within the region defined by $\lambda_2$ and $\lambda_3$, the solution $\vec u_m$ depends on the linear combination of left and right states. Moving $P_m$ to the left or right of these characteristic lines, for example where points $P_{m,L}^*$ and $P_{m,R}^*$ are will require a different combination $\vec \omega_L$ and $\vec\omega_R$. Hence, to generalize the equation for the solution at any point, define $I^*=I^*(x,t)$ to be the maximum index $i$ for which $x>\lambda_i t$.  Then, the solution can be found by
+\begin{equation}
+	\vec u_m = \sum_{i=I^*+1}^m \omega_{L,i} \vec q_i + \sum_{i=1}^{I^*} \omega_{R,i} \vec q_i.
+	\label{eq:riemann_solution}
+\end{equation}
+Since the solution is constant along each characteristic line, the jump between two states is also constant and is given for the whole system
+\begin{equation}
+	\vec \delta = Q^{-1}(\vec u_R - \vec u_L). 
+	\label{eq:lin_rankinehugoniot}
+\end{equation}
+Hence the jump across the $\lambda_i$-characteristic is given by $\delta_i = \omega_{R,i}-\omega_{L,i}$, which is known as the strength of the $i$-th wave. Note that Equation~\ref{eq:lin_rankinehugoniot} is called the \textit{Rankine-Hugoniot} condition, and will be useful for the analysis of nonlinear problems later in this chapter.
+\subsubsection{Example case: Linear Acoustics}
+Consider the propagation of sound waves in a motionless gas. Small changes in pressure and density propagate in the surrounding air. This propagation is governed in one dimension by
+\begin{equation}
+	\begin{bmatrix}
+		\rho \\ \rho v 
+	\end{bmatrix}_t
+	+
+	\begin{bmatrix}
+		\rho v \\ \rho v^2 + p(\rho)
+	\end{bmatrix}_x
+	= 0.
+	\label{eq:massmomentum_acoustics}
+\end{equation}
+These are the Euler equations, one of which is the nonlinear PDE for the conservation of momentum. This system can be written in \textit{quasilinear} form
+\begin{equation}
+	\frac{\partial \vec u}{\partial t} + \vec {f^\prime}(\vec u) \frac{\partial \vec u}{\partial x} = 0,
+\end{equation}
+where
+\begin{align}
+	\vec u &= 
+	\begin{bmatrix}
+		\rho \\ \rho v
+	\end{bmatrix}
+	=
+	\begin{bmatrix}
+		u_1 \\ u_2
+	\end{bmatrix},
+	\\
+	\vec f(\vec u) &= 
+	\begin{bmatrix}
+		\rho v \\ \rho v^2 + p(\rho)
+	\end{bmatrix}
+	=
+	\begin{bmatrix}
+		u_2 \\ \frac{u_2^2}{u_1^2} + p(u_1)
+	\end{bmatrix}.
+\end{align}
+Then $A = \vec {f^\prime} (\vec u)$ is the Jacobian matrix and is given by
+\begin{equation}
+	A = \vec {f^\prime} (\vec u) =
+	\begin{bmatrix}
+		\frac{\partial f_1}{\partial u_1} & \frac{\partial f_1}{\partial u_2} \\ 
+		\frac{\partial f_2}{\partial u_1} & \frac{\partial f_2}{\partial u_2} 
+	\end{bmatrix}
+	= 
+	\begin{bmatrix}
+		0 & 1 \\
+		-\frac{u_2^2}{u_1^2} + p^\prime(u_1) & \frac{2 u_2}{u_1}
+	\end{bmatrix}
+	=
+	\begin{bmatrix}
+		0 & 1 \\
+		-v^2 + p^\prime(\rho) & 2 v
+	\end{bmatrix}.
+\end{equation}
+We can analyze systems with small disturbances by linearizing about some state. This can be done by considering the flow properties to be the sum of an initial variable plus a perturbation term
+\begin{align}
+	u &= \tilde u(x,t), \\
+	\rho &= \rho_0 + \tilde \rho(x,t), \\
+	p & = p_0 + \tilde p(x,t),
+\end{align}
+and since the gas is considered motionless, we have set $u_0=0$. Neglecting products of small disturbances and applying the chain rule to the momentum equations, the linear system can be written 
+\begin{eqBox}
+\begin{equation}
+	\begin{bmatrix}
+		\tilde \rho \\  \tilde u
+	\end{bmatrix}_t 
+	+ \begin{bmatrix}
+		0 & \rho_0 \\
+		\frac{c^2}{\rho_0} & 0 \\
+	\end{bmatrix}
+	\begin{bmatrix}
+		\tilde \rho \\  \tilde u
+	\end{bmatrix}_x
+	= 0,
+	\label{eq:linearized_gasdyn}
+\end{equation}
+\end{eqBox}
+where $c=\sqrt{p'(\rho_0)}$ is the speed of sound. Now, consider the following Riemann problem
+\begin{equation}
+	\vec u(x,0) = \vec u_0 = 
+	\begin{cases}
+		\vec u_L & \text{if }x<0, \\
+		\vec u_R & \text{if }x>0,\\
+	\end{cases}
+\end{equation}
+where $\vec u_L = \begin{bmatrix} \rho_L & u_L \end{bmatrix}^T$ and $\vec u_R = \begin{bmatrix} \rho_R & u_R \end{bmatrix}^T$, $\vec u_L \neq \vec u_R$. Note that the problem is linear due to the above procedure. We can compute the eigenvalues of $A$ in Equation~\ref{eq:linearized_gasdyn} by setting
+\begin{equation}
+	\det(A-I\lambda) = 0,
+\end{equation}
+where $I$ is the identity matrix. Solving the eigenvalue problem yields the characteristic polynomial 
+\begin{equation}
+	\lambda^2 - c^2 = 0,
+\end{equation}
+which has solutions 
+\begin{align}
+	\lambda_1 = -c, \quad
+	\lambda_2 = +c.
+\end{align}
+The corresponding matrix of eigenvectors can be found to be
+\begin{align}
+	Q = 
+	\begin{bmatrix}
+		\rho_0 & \rho_0 \\
+		-c & c
+	\end{bmatrix},
+\end{align}
+with inverse
+\begin{align}
+	Q^{-1}= 
+	\frac{1}{2\rho_0 c}
+	\begin{bmatrix}
+		c & -\rho_0 \\
+		c & \rho_0
+	\end{bmatrix}.
+\end{align}
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.5\linewidth]{Pictures/ch11_riem_linacoustics_characteristics}
+	\caption{Characteristic curves for the linear acoustics example}
+	\label{fig:acoustics_charact}
+\end{figure}
+As we expected, the solution consists of a superposition of left-going and right-going sound waves, which represent the slopes of the characteristic lines shown in Figure~\ref{fig:acoustics_charact}. Now, we analyze the characteristic form of Equation~\ref{eq:linearized_gasdyn} seeking a Riemann solution $\vec u_m$. Note that for systems of $m=2$ equations, the Riemann state only depends on the single region highlighted in Figure~\ref{fig:acoustics_charact}. We start by finding the values of $\vec \omega_L$ and $\vec \omega_R$ by
+\begin{equation}
+	\vec \omega_L = 
+	\begin{bmatrix}
+		\omega_{L,1} \\ \omega_{L,2}
+	\end{bmatrix}
+	= Q^{-1} \vec v_L = \frac{1}{2c\rho_0}
+	\begin{bmatrix}
+		c & -\rho_0 \\
+		c & \rho_0 
+	\end{bmatrix}
+	\begin{bmatrix}
+		\rho_L \\ v_L
+	\end{bmatrix}.
+\end{equation}
+Hence
+\begin{align}
+	\omega_{L,1} &= \frac{c \rho_L - \rho_0 v_L}{2 c \rho_0}, \\
+	\omega_{L,2} &= \frac{c \rho_L + \rho_0 v_L}{2 c \rho_0}.
+\end{align}
+Similarly, for the right state we can find
+\begin{align}
+	\omega_{R,1} &= \frac{c \rho_R - \rho_0 v_R}{2 c \rho_0}, \\
+	\omega_{R,2} &= \frac{c \rho_R + \rho_0 v_R}{2 c \rho_0}.
+\end{align}
+In Equation~\ref{eq:riemann_solution}, $I^*=1$, hence
+\begin{equation}
+	\vec u_m = 
+	\begin{bmatrix}
+		\rho_m \\ v_m
+	\end{bmatrix} =  \sum_{i=2}^2 \omega_{L,i} \vec q_i + \sum_{i=1}^{1} \omega_{R,i} \vec q_i = 
+	\omega_{L,2} \vec q_2 + \omega_{R,1} \vec q_1,
+\end{equation}
+which yields the exact Riemann solution for the linear acoustics equation
+\begin{eqBox}
+	\begin{align}
+		\rho_m &= \frac{1}{2} (\rho_R+\rho_L) + \frac{1}{2}\frac{\rho_0}{c} (u_L-u_R), \\
+		u_m &= \frac{1}{2}\frac{c}{\rho_0}(\rho_L-\rho_R) + \frac{1}{2} (u_R+u_L).
+		\label{eq:riemann_solution_acoustics}
+	\end{align}
+\end{eqBox}
+Similar to~\cite{toro_riemann}, we can define the values of $\rho_0=1$, $c=1$ and given the initial left and right states
+\begin{equation}
+	\vec u_L = 
+	\begin{bmatrix}
+		\rho_L \\ v_L
+	\end{bmatrix}
+	 = 	
+	 \begin{bmatrix}
+		0.5 \\ 0
+	\end{bmatrix},
+	\quad
+	\vec u_R = 
+	\begin{bmatrix}
+		\rho_R \\ v_R
+	\end{bmatrix}
+	 = 	
+	 \begin{bmatrix}
+		0.25 \\ 0.0
+	\end{bmatrix},
+\end{equation}
+as shown in Figure~\ref{fig:riem_acoustics_example_u0}, we can determine the middle state from Equation~\ref{eq:riemann_solution_acoustics}. Hence $\rho_m=0.375$ and $v_m=0.125$. Results can be seen in Figure~\ref{fig:riem_acoustics_example_sol}, where a symmetric wave can be seen to have moved from $x=0$ to $-ct$ and $ct$ for the left and right discontinuities, respectively. 
+\begin{figure}[htbp]
+	\centering
+	\begin{subfigure}[b]{0.49\textwidth}
+		\includegraphics[width=\linewidth]{Pictures/ch11_riem_linacoustics_u0}
+		\caption{Initial condition}
+		\label{fig:riem_acoustics_example_u0}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.49\textwidth}
+		\includegraphics[width=\linewidth]{Pictures/ch11_riem_linacoustics_sol}
+		\caption{Solution at $t>0$}
+		\label{fig:riem_acoustics_example_sol}
+	\end{subfigure}
+	\caption{Example solution with values for the linear acoustics case.}
+	\label{fig:riem_acoustics_example}
+\end{figure}
 \section{Nonlinear Hyperbolic Problems}
 \subsection{Nonlinear Hyperbolic Systems}
 \subsection{The Riemann Problem}

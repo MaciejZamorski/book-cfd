@@ -17,6 +17,7 @@ To begin our exploration of CFD we will state with the Finite Difference Method 
 \end{eqBox}
 We notice that the form of all of these equations is very similar. All three involve a time derivative combined with a coefficient multiplied by a spatial derivative. The Finite Difference Method uses well-known concepts from applied mathematics, specifically Taylor-Series. Hence, before deriving the Finite Difference Method we will start by reviewing some concepts from Taylor-Series.
 
+
 Arising from Taylors theorem, Taylor series says that the value of a sufficiently smooth function at some point $x + \Delta x$ can be predicted by using the value of the solution at the point $x$ along with knowledge of all derivatives at the point $x$.
 \begin{theorem}[Taylor's Theorem]
 Let $k \geq 1$ and letting $f(x)$ be smooth and differentiable $k$ times then
@@ -55,6 +56,12 @@ which is not a particularly accurate approximation of a sine wave except very cl
 	f_{9}(\Delta x) = \Delta x - \frac{\Delta x^3}{6} + \frac{\Delta x^5}{120} - \frac{\Delta x^7}{5040} + \frac{\Delta x^9}{362880},
 \end{equation}
 where the subscript denotes the power of the highest degree expansion term included in the approximation. Each of these is a polynomial approximation of a sine wave about the point $x=0$. We can make a few observations about the behaviour of Taylor series in general. First, when we are close to the expansion point $x=0$, even approximations with a small number of terms are close to the true function. For example, the $f_1$ expansion is the well-known small angle approximation of a sine wave. Then, as we add more terms the accuracy of the expansion improves rapidly. For example, by ten terms the approximation is nearly indistinguishable from the true function on the entire interval. Hence, we note that Taylor series becomes more accurate as we get closer to the expansion point and/or as we increase the number of terms.
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.6\linewidth]{Pictures/ch9_taylor_series_sin}
+	\caption{Taylor series expansion of $sin(x)$ about $x=0$}
+	\label{fig:taylor_series}
+\end{figure}
 
 To understand the behaviour of these truncated expansions, we note that their error arises from truncating the higher-order terms of the expansion. Furthermore, when $\Delta x$ is relatively small the error is dominated by the first truncated term, since the higher-order terms rapidly approximate zero as $\Delta x$ decreases. Hence, if we consider an infinite expansion
 \begin{equation}
@@ -533,7 +540,7 @@ By substituting the fluxes into Equation~\ref{eq:fv_straightsided}, we obtain th
 \end{eqBox}
 which is second-order accurate. The resulting scheme is central, which agrees with the physics of diffusive processes.  Note that Equation~\ref{eq:fv_diffusion} is identical to the second-order finite-difference scheme we previously derived for this problem. 
 
-\section{Linear Hyperbolic Problems}
+\section{Linear Hyperbolic Problems} \label{sec:linear_hyperb_problems}
 In Chapter 2, we stated that first-order partial differential equations are naturally hyperbolic, meaning that they exhibit wave-like solutions. The simplest case is our advection equation
 \begin{equation}
 	\frac{\partial u}{\partial t} + \alpha \frac{\partial u}{\partial x} = 0, 
@@ -937,6 +944,31 @@ as shown in Figure~\ref{fig:riem_acoustics_example_u0}, we can determine the mid
 	\label{fig:riem_acoustics_example}
 \end{figure}
 \section{Nonlinear Hyperbolic Problems}
+Consider the following one-dimensional scalar conservation law
+\begin{equation}
+	\frac{\partial u}{\partial t} + \frac{\partial f(u)}{\partial x} = 0,
+\end{equation}
+where $f(u)$ is the flux. In previous sections, we have considered a linear flux $f(u)=\alpha u$, which yields the advection equation. Now, consider a nonlinear flux $f(u)=\frac{1}{2}u^2$. Now, the solution is not expected to simply translate, but also various parts of the solution will deform, leading to the generation of shocks. This is one of our simplified system of equations, which we have referred to as the inviscid Burgers equation. 
+
+Similar to Section~\ref{sec:linear_hyperb_problems}, we want to analyze the characteristic behaviour of this equation. In order to do this, we write the \textit{quasilinear form} of Burgers' equation
+\begin{equation}
+	\frac{\partial u}{\partial t} + u\frac{\partial u}{\partial x} = 0,
+	\label{eq:nonconserv_burgers}
+\end{equation}
+which we will use to analyze the characteristic curves. Note that $f'(u) = u$. Recall that in the $x\times t$ plane, we look for lines along which the solution does not change. Hence, using the chain rule for $u(x(t), t)$, we can write
+\begin{equation}
+	\frac{du}{dt} = \frac{\partial u}{\partial t} + \frac{dx}{dt}{\partial t} = 0.
+	\label{eq:chainrule_burgers}
+\end{equation}
+If we compare Equations~\ref{eq:chainrule_burgers} and~\ref{eq:nonconserv_burgers}, it is clear that 
+\begin{equation}
+	\frac{dx}{dt} = u,
+\end{equation}
+where the characteristic curve equation is
+\begin{equation}
+	x = x_0 + ut.
+\end{equation}
+Since $u$ changes in time, so will the slope of the curves. Clearly, the speed of the solution is the solution itself. Hence, we expect larger values of the solution to travel faster than lower values of the solution. 
 \subsection{Nonlinear Hyperbolic Systems}
 \subsection{The Riemann Problem}
 \subsection{An Exact Riemann Solver for the Euler Equations}
@@ -1263,6 +1295,22 @@ If a scheme is consistent, recovering the exact partial differential equation in
 \chapter{Spectral Properties}
 In CFD the numerical error introduced by a scheme is typically classified into two general types, dissipation error and dispersion error. In this section we will discuss how to quantify these two types of error, and how they effect different types of solutions.
 
+\begin{figure}[htbp]
+	\centering
+	\begin{subfigure}[b]{0.49\linewidth}
+		\includegraphics[width=\linewidth]{Pictures/ch13_dissipation_diagram}
+		\caption{Dissipation}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.49\linewidth}
+		\includegraphics[width=\linewidth]{Pictures/ch13_dispersion_diagram}
+		\caption{Dispersion}
+	\end{subfigure}
+	\caption{Types of numerical error}
+	\label{fig:numerical_error}
+\end{figure}
+
+
+
 \section{Dissipation Error}
 We have already discussed dissipation error in the context of stability, stating that in order for a scheme to be stable it must be dissipative or neutrally dissipative. That is, the amplitude of the solution must remain the same or be reduced after each time step. We have shown this via von Neumann analysis to be the amplification factor $|e^{a\Delta t}|$, which was a function of the scheme we are using, and the wavenumber in space $\kappa_m$. While a scheme being dissipative is inherently linked with stability, it also introduces number error. For example, for the linear advection equation we know that the exact solution should have no dissipation, it should be simply the advection of the initial condition with the prescribed advection velocity. However, with our initial finite difference scheme we found that this was not the case, and the amplitude of the waves is decreased as time goes on.
 
@@ -1274,8 +1322,13 @@ we found that the amplification factor was
 \begin{equation}
 	|e^{a\Delta t}| = |1 - \sigma + \sigma e^{-i \kappa_m \Delta x}|.
 \end{equation} 
-Recall that, for a given wavenumber $\kappa_m$ and CFL number $\sigma$ this told us how much the solution will be damped over a time step. Hence, we can plot this for a range of permissible wavenumbers in the range $\kappa_m \Delta x \in [0,\pi]$ and CFL numbers within the stability limit $\sigma \in [0,1]$. A plot of this is shown in Figure \ref{}. We can observe a few interesting features that define the dissipation error of this particular scheme. First, we note that when the wave size is large relative to the grid spacing, the wave is well resolved regardless of the CFL number. However, as we move to larger wavenumbers there is significant numerical dissipation. Also, the amount of numerical in this region dissipation depends on the CFL number, with larger CFL numbers corresponding to less dissipation. Finally, when the CFL number approaches unity the numerical dissipation approaches zero for all wavenumbers. Hence, when this CFL number is used we recover the exact dissipation relation for linear advection, that the waves do not get damped. The dissipation error of this scheme becomes particularly important in the context of turbulent flows. In this case, large scale structures in the turbulent flow have small wavenumbers relative to the grid spacing. This means that our large scale features will be simulated with relative accuracy. However, small scale turbulent structures that are of a size proportional to the grid spacing have high relative wavenumbers. This means that these fine scale structures will be heavily dissipated by this first order scheme.
-
+Recall that, for a given wavenumber $\kappa_m$ and CFL number $\sigma$ this told us how much the solution will be damped over a time step. Hence, we can plot this for a range of permissible wavenumbers in the range $\kappa_m \Delta x \in [0,\pi]$ and CFL numbers within the stability limit $\sigma \in [0,1]$. A plot of this is shown in Figure \ref{fig:dissipation_advection_explicit}. We can observe a few interesting features that define the dissipation error of this particular scheme. First, we note that when the wave size is large relative to the grid spacing, the wave is well resolved regardless of the CFL number. However, as we move to larger wavenumbers there is significant numerical dissipation. Also, the amount of numerical in this region dissipation depends on the CFL number, with larger CFL numbers corresponding to less dissipation. Finally, when the CFL number approaches unity the numerical dissipation approaches zero for all wavenumbers. Hence, when this CFL number is used we recover the exact dissipation relation for linear advection, that the waves do not get damped. The dissipation error of this scheme becomes particularly important in the context of turbulent flows. In this case, large scale structures in the turbulent flow have small wavenumbers relative to the grid spacing. This means that our large scale features will be simulated with relative accuracy. However, small scale turbulent structures that are of a size proportional to the grid spacing have high relative wavenumbers. This means that these fine scale structures will be heavily dissipated by this first order scheme.
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.6\linewidth]{Pictures/ch13_dissipation_adv_explct}
+	\caption{Amplification factor vs wavenumber for the explicit advection scheme}
+	\label{fig:dissipation_advection_explicit}
+\end{figure}
 Lets look at a second example, our implicit finite difference scheme
 \begin{equation}
 	\frac{u_i^{t+1} - u_{i}^t}{\Delta t} +  \alpha \frac{u_i^{t+1} - u_{i-1}^{t+1}}{\Delta x} = 0,
@@ -1284,8 +1337,13 @@ that had the amplification factor
 \begin{equation}
 	|e^{a\Delta t}| = \left| \frac{1}{1 + \sigma \left( 1 - e^{-i \kappa_m \Delta x} \right)} \right|.
 \end{equation}
-We can generate the exact same type of plot for permissible wave numbers $\kappa_m \Delta x \in [0,\pi]$ and, since this scheme is unconditionally stable, we will look at a few CFL numbers in the range $\sigma \in [0,10]$, as shown in Figure \ref{}. We note for this scheme, similar to the explicit scheme, that when the wave size is large relative to the grid spacing it is well resolved regardless of the CFL number. However, there is again a strong dependence of the numerical dissipation on the CFL number for high wavenumbers. As the wavenumber gets larger or as the CFL number gets larger the amount of numerical dissipation increases rapidly. Hence, while this scheme was found to be unconditionally stable, using large CFL numbers introduces significant numerical dissipation to all but the largest structures in the flow. Hence, this scheme is typically only used for solving steady-state problems that are not a function of time.
-
+We can generate the exact same type of plot for permissible wave numbers $\kappa_m \Delta x \in [0,\pi]$ and, since this scheme is unconditionally stable, we will look at a few CFL numbers in the range $\sigma \in [0,10]$, as shown in Figure \ref{fig:dissipation_advection_implicit}. We note for this scheme, similar to the explicit scheme, that when the wave size is large relative to the grid spacing it is well resolved regardless of the CFL number. However, there is again a strong dependence of the numerical dissipation on the CFL number for high wavenumbers. As the wavenumber gets larger or as the CFL number gets larger the amount of numerical dissipation increases rapidly. Hence, while this scheme was found to be unconditionally stable, using large CFL numbers introduces significant numerical dissipation to all but the largest structures in the flow. Hence, this scheme is typically only used for solving steady-state problems that are not a function of time.
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.6\linewidth]{Pictures/ch13_dissipation_adv_implct}
+	\caption{Amplification factor vs wavenumber for the implicit advection scheme}
+	\label{fig:dissipation_advection_implicit}
+\end{figure}
 
 \section{Dispersion Error}
 From the linear advection equation we know that the solution should translate at an exact wave speed $\alpha$. However, our numerical schemes will often introduce another error whereby the numerical wave does not move at the correct velocity. As a results, we often observe that the numerical solution is out of phase with the exact solution, which is referred to as dispersion error. Similar to the dissipation error, dispersion error can also be found from our results from von Neumann analysis. Recall that our assumed form of the solution for any isolated wave component of the full solution was
@@ -1336,6 +1394,12 @@ In the ideal case this should be identical to the exact dispersion relation, but
 	\frac{\Im(a\Delta t)}{-i \alpha \kappa_m \Delta t} = \frac{\Im{ \left[ \ln \left(1 - \sigma + \sigma e^{-i \kappa_m \Delta x} \right) \right]}}{-i \alpha \kappa_m \Delta t},
 \end{equation}
 which tells us the speed of the numerical wave relative to the exact wave speed. When this value is less than 1 the wave moves too slowly, and when this value is greater than 1 the wave moves to fast.
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.6\linewidth]{Pictures/ch13_dispersion_adv_explct}
+	\caption{Dispersion curve for the implicit advection scheme}
+	\label{fig:dissipation_advection_implicit}
+\end{figure}
 
 \chapter{Modified Equation Analysis}
 In the previous sections we have demonstrated that our numerical schemes only approximate the exact PDE we are trying to solve. Furthermore, via von Neumann analysis that we can quantify the type of error we will observe as either dissipation or dispersion. Modified equation analysis is another powerful technique that allows us to better understand how and why a particular numerical scheme behaves the way it does. Using modified equation analysis we can show that, while our numerical scheme does not exactly satisfy the PDE we are trying to solve, it does provide an exact solution to a similar PDE. By determining what this similar PDE is, we can gain further insight into the behaviour of our scheme. In this section we will demonstrate by example how to perform modified equation analysis in the context of linear advection.
@@ -1427,6 +1491,12 @@ The forward Euler, or explicit Euler, scheme uses just one stage to predict the 
 	u^{t+1} = u^t + \Delta t R(u).
 \end{equation}
 Graphically, this can be interpreted as using the current derivative of the solution in time at time $t$, and simply extrapolating based on this derivative to the time $t+1$. This approach is $\mathcal{O}(\Delta t)$ in time.
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.5\linewidth]{Pictures/ch15_explicit_euler}
+	\caption{Forward Euler method}
+	\label{fig:forward_euler}
+\end{figure}
 
 \subsection{Heun's Method}
 Heun's method is a fairly simple but clever improvement on the explicit Euler scheme. We start by using the explicit Euler method to build an approximation of the solution at $t+1$
@@ -1438,7 +1508,12 @@ where $\tilde{u}$ is an initial guess for the solution. Then, we use an average 
 	\tilde{u}^{t+1} = u^t + \Delta t \left[\frac{R(u) + R(\tilde{u})}{2} \right].
 \end{equation}
 This approach is called a two-stage scheme, since we had to compute our solution at one intermediate stage before the final solution is obtained. This requires us to evaluate two right hand sides, one for each stage, so is approximately twice as expensive as the explicit Euler method. However, it can be shown that it achieves $\mathcal{O}(\Delta t^2)$ in time. Hence, when the time step is small it is significantly more accurate.
-
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.5\linewidth]{Pictures/ch15_heuns_method}
+	\caption{Heun's method}
+	\label{fig:forward_euler}
+\end{figure}
 \subsection{Midpoint Method}
 The midpoint method is very similar to Heun's method. However, we start by computing the solution at an intermediate stage halfway between the current and next time steps, using an explicit Euler approach
 \begin{equation}

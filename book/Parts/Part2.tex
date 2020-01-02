@@ -8,9 +8,15 @@ Some of the most powerful tools in classical mechanics, including fluid mechanic
 While these concepts can be applied by a high-school student for simple systems, such as elastic/inelastic collisions between partciles, their application to fluid mechanics is less trivial. Nevertheless, the fundamental concepts of conservation of mass, momentum, and energy still apply to fluids just as well as they do to individual particles, it is only the mathematics that becomes more complex. It is expected that students reading this book have already taken an undergraduate course in fluid mechanics and are familiar with conservation laws. Nevertheless, this chapter reviews these concepts for completeness, and to establish the notation used in the rest of the book.
 
 \section{Reynolds Transport Theorem}\index{Reynolds Transport Theorem}
-Before tackling conservation of mass, momentum, and energy in their entirety, we will first consider an arbitrary conserved {\it extensive} quantity $U_{System} = U_{System}(t)$ of a moving system of fluid, which has a related quantity per unit volume $u = u(\vec{x},t)$, where $\vec{x}$ and $t$ are the spatial coordinate and time, respectively. For example, if the extensive property is mass, than the volumetric property is mass per unit volume, or density. We start by imagining a stationary control volume (CV), denoted by $\Omega$, that is the same shape as the fluid system at some time $t$. We also denote the surface of this volume by $S$ and the outward pointing normal vector on this surface by $\hat{n}$. After some amount of time $dt$, we can imagine that the initial system of fluid embedded within the control volume will move to a deformed position and shape at $t + dt$, while the control volume remains fixed by definition. In this manner the fluid contained by the system will be equal to that of the control volume plus any incoming or outgoing fluid due to the motion of the system system boundaries as it travels with the flow.
+Before tackling conservation of mass, momentum, and energy in their entirety, we will first consider an arbitrary conserved {\it extensive} quantity $U_{System} = U_{System}(t)$ of a moving system of fluid, which has a related quantity per unit volume $u = u(\vec{x},t)$, where $\vec{x}$ and $t$ are the spatial coordinate and time, respectively. For example, if the extensive property is mass, than the volumetric property is mass per unit volume, or density. We start by imagining a stationary control volume (CV) such as the one in Figure~\ref{fig:reynolds_transport_volume}, denoted by $\Omega$, that is the same shape as the fluid system at some time $t$. We also denote the surface of this volume by $S$ and the outward pointing normal vector on this surface by $\hat{n}$. After some amount of time $dt$, we can imagine that the initial system of fluid embedded within the control volume will move to a deformed position and shape at $t + dt$, while the control volume remains fixed by definition. In this manner the fluid contained by the system will be equal to that of the control volume plus any incoming or outgoing fluid due to the motion of the system system boundaries as it travels with the flow.
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.5\linewidth]{Pictures/ch4_reytrans_volume}
+	\caption{Arbitrary flow pattern on an arbitrary volume}
+	\label{fig:reynolds_transport_volume}
+\end{figure}
 
-Looking at Figure \ref{}, there are two ways that $U_{System}$ will change with time. Either via a change of $U_{CV}$ within the control volume it overlaps with, or by some amount of the conserved quantity crossing the boundary of the system as it moves. We start by getting the total amount within the control volume $U_{CV}(t)$ by simply adding up, or integrating, $u$ over it. This can be written as
+Looking at Figure \ref{fig:reynolds_transport_volume}, there are two ways that $U_{System}$ will change with time. Either via a change of $U_{CV}$ within the control volume it overlaps with, or by some amount of the conserved quantity crossing the boundary of the system as it moves. We start by getting the total amount within the control volume $U_{CV}(t)$ by simply adding up, or integrating, $u$ over it. This can be written as
 \begin{equation}
 	\label{eqn:totalcons}
 	U_{CV}(t) = \int_\Omega u d\vec{x},
@@ -398,6 +404,12 @@ Beyond $a = 3.54\hdots$ additional bifurcations and period doublings occur. With
 \subsubsection{$3.57\hdots < a $}
 Beyond $a = 3.57\hdots$ the entire concept of a cycle breaks down, and all possible solution can be found within the range. The solution traverses chaotically and little structure is observed in its behaviour.\\
 
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.65\linewidth]{Pictures/ch7_logistic_map}
+	\caption{Logistic map for $a\in[1,4]$}
+	\label{fig:logistic_map}
+\end{figure}
 An interesting thought experiment is to consider what happens to our system when we start with some initial guess $x_0$, and some perturbed initial guess $x_0 + \epsilon$, where $\epsilon$ is a small number. In the case of small values of $a$ both of these solution converge to the same fixed point. However, as $a$ gets larger this predictability starts to break down. Eventually, with a large value of $a$, and given enough iterations, the two solutions will diverge from one another and it will be impossible to discern that they had almost the exact same initial condition. Hence, with certain choices of $a$ the logistic equations is chaotic, resulting in complex behaviour and extreme sensitivity to initial conditions. Furthermore, this implies that there is an {\it irreversible} nature to chaotic systems, that is given a final solution it is not possible to determine with any certainty what the initial condition was, because very similar initial conditions yield completely different final solutions.
 
 \subsection{Chaos and Navier-Stokes}
@@ -442,6 +454,28 @@ From the above discussion it is clear that the momentum equations in the incompr
 \end{equation}
 where $U$ and $L$ are the velocity and length scales of the flow, and $\nu$ is the viscosity. Typically, turbulent flow is observed for Reynolds numbers of $Re \gtrsim \mathcal{O}(10^3)$. It is important to note that this encompasses the vast majority of flows of engineering interest. Hence, scientists and engineers must routinely deal which turbulence and its chaotic nature.
 
+\begin{figure}[htbp]
+	\centering
+	\begin{subfigure}[b]{0.40\textwidth}
+		\includegraphics[width=\linewidth]{Pictures/ch7_cylinder_1}
+		\caption{$Re\approx1$}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.40\textwidth}
+		\includegraphics[width=\linewidth]{Pictures/ch7_cylinder_2}
+		\caption{$Re\approx100$}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.40\textwidth}
+		\includegraphics[width=\linewidth]{Pictures/ch7_cylinder_3}
+		\caption{$Re\approx10^4$}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.40\textwidth}
+		\includegraphics[width=\linewidth]{Pictures/ch7_cylinder_1}
+		\caption{$Re=\infty$}
+	\end{subfigure}
+	\caption{Incompressible flow regimes at different Reynolds numbers}
+	\label{fig:flow_regimes}
+\end{figure}
+
 \subsection{The Energy Cascade}
 A common misconception is that turbulence is {\it random} in nature, which would imply that it has no pattern and is inherently unpredictable in a deterministic sense. However, the very fact that one can derive the Navier-Stokes equations, which are a deterministic model for fluid flow, implies that turbulence is not truly random. Hence, while turbulence is often {\it modelled} as stochastic behaviour, its evolution is actually deterministic in nature.
 \begin{remark}
@@ -449,7 +483,13 @@ We will revisit how to model turbulence stochastically when we introduce the Rey
 \end{remark}
 Furthermore, turbulent flows clearly have coherent structures, such as turbulent vortices, that demonstrate and underlying structure within the chaos.
 
-One of the most powerful observations of turbulent flow has to do with the distribution of kinetic energy across different physical scales. When considering turbulent flows there is typically a wide distribution of length scales and time scale with the largest vortices have a size similar to the physical length scale of the problem of interest, such as an airfoils chord length or the size of a bluff body such as a cylinder. In contrast, the smallest physical scales can be much smaller than the physical length scale of the problem, and there is then a wide range of scales between these two extremes. A fundamental observation related to this is that these turbulent structures, over time, tend to break up into multiple smaller scale structures. A consequence of this is that kinetic energy gradually gets transferred from large scale structures down to smaller scale structures and so on, which is referred to as the {\it turbulent kinetic energy cascade}.
+One of the most powerful observations of turbulent flow has to do with the distribution of kinetic energy across different physical scales. When considering turbulent flows there is typically a wide distribution of length scales and time scale with the largest vortices have a size similar to the physical length scale of the problem of interest, such as an airfoils chord length or the size of a bluff body such as a cylinder. In contrast, the smallest physical scales can be much smaller than the physical length scale of the problem, and there is then a wide range of scales between these two extremes. A fundamental observation related to this is that these turbulent structures, over time, tend to break up into multiple smaller scale structures. A consequence of this is that kinetic energy gradually gets transferred from large scale structures down to smaller scale structures and so on, which is referred to as the {\it turbulent kinetic energy cascade}, which can be observed in Figure~\ref{fig:energy_cascade}.
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.5\linewidth]{Pictures/ch7_energy_cascade}
+	\caption{Turbulent kinetic energy cascade}
+	\label{fig:energy_cascade}
+\end{figure}
 
 To better understand this we will define $l$ as the length scale of the largest scale vortices, and $u$ as their velocity scale. Similarly, we will define $\eta$ as the length scale of the smallest scale vortices and $v$ as their length scale. For the large scale vortical structures they will complete a revolution, or turnover time, in approximately
 \begin{equation}
@@ -525,10 +565,11 @@ Turbulent flows can be considered \textit{stationary} if, on the average, do not
 where $\tau$ is the length of the averaging. For large values of $\tau$, $u_T$ is independent of the initial conditions. A schematic representation can be observed in Figure~\ref{fig:time_averaging}. We observe a constant value given the stationary characteristic of the flow.
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.7\linewidth]{Pictures/ch7_time_averaging}
+	\includegraphics[width=0.6\linewidth]{Pictures/ch7_time_averaging}
 	\caption{Time averaging of a stationary flow quantity $u(\vec{x},t).$}
 	\label{fig:time_averaging}
 \end{figure}
+
 \textit{Homogeneous} flows are those whose properties do not vary in any direction. In this case, a \textit{spatial averaging} procedure may be convenient
 \begin{equation}
 	u_\Omega(t) = \lim_{\Omega\rightarrow\infty} \frac{1}{\Omega}\int_\Omega u(\vec{x},t)dV,
@@ -541,7 +582,7 @@ where $u_i({\vec{x},t})$ is the result obtained in the $i$-th experiment. An exa
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.7\linewidth]{Pictures/ch7_ensemble_averaging}
+	\includegraphics[width=0.6\linewidth]{Pictures/ch7_ensemble_averaging}
 	\caption{Ensemble averaging results of a non-stationary flow quantity $u(\vec{x},t).$}
 	\label{fig:ensemble_averaging}
 \end{figure}
@@ -943,11 +984,22 @@ we can compactly write the Reynolds-stress equation in its common form
 	\end{equation}
 \end{eqBox}
 We are still left with a system of equations that remains to be closed. In the quest of solving turbulent flows using the RANS equations, we dedicate the rest of this chapter to the derivation of common models that have been devised to give closure to these equations.
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[height=0.25\linewidth]{Pictures/ch7_heated_plate_flow_0}~
+	\includegraphics[height=0.25\linewidth]{Pictures/ch7_heated_plate_flow_1}
+	\caption{Reynolds stresses example}
+	\label{fig:heated_plate_flow}
+\end{figure}
+
 \section{Turbulence Modelling}
 In the previous section, we derived the RANS equations. This time-averaged system of conservation laws is widely used in the aerospace industry, in particular, due to their relatively low computational cost when compared to direct approximations. We have also stated that their use is limited to obtaining mean flow properties due to the averaging of the turbulent scales. In addition, we have shown that we require additional mathematical equations to give closure to the system. This is done by introducing approximations that model features of the Reynolds stress tensor.  We will observe that none of these models is applicable to all types of flow. Indeed, each of these turbulence models has its applications and limitations. We begin by presenting the Boussinesq approximation, where a new apparent viscous parameter known as the \textit{eddy viscosity} is introduced. Later, it will be shown that all RANS models devise different strategies to model this parameter, which is done by comparison with empirical data. 
 
 We categorize these models according to the number of additional partial differential equations required for turbulence closure. We present zero-equation, also known as algebraic, one-equation and two-equation models. Note that models with a larger number of PDEs exist; however, this also implies a decrease in computational efficiency. A second feature that categorizes these models, according to Wilcox~\cite{wilcox1998turbulence} is whether the model can be considered \textit{complete} or \textit{incomplete}. A complete model does not require previously known information about the turbulence properties of the flow to simulate, whereas incomplete models do. We also note that generally, one must be careful when choosing a turbulence model. While some may be used to predict turbulence mean properties, others require previous calibration and are rarely used for unknown flows. We note that this section includes some of the most known turbulence models, and it is by no means a turbulence modelling reference by itself. This section is intended as an introduction to the modelling of turbulent flows in Computational Fluid Dynamics.
+
+
 \subsection{The Boussinesq Hypothesis}
+
 In 1877, Boussinesq presented an approximation for the turbulent transfer of momentum in relation to molecular motion. The assumption was that the Reynolds stresses were linearly related to the mean flow, specifically to the mean strain tensor $\overline S_{ij}$ such that
 \begin{eqBox}
 \begin{equation}

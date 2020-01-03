@@ -1493,11 +1493,10 @@ The forward Euler, or explicit Euler, scheme uses just one stage to predict the 
 Graphically, this can be interpreted as using the current derivative of the solution in time at time $t$, and simply extrapolating based on this derivative to the time $t+1$. This approach is $\mathcal{O}(\Delta t)$ in time.
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.5\linewidth]{Pictures/ch15_explicit_euler}
-	\caption{Forward Euler method}
-	\label{fig:forward_euler}
+	\includegraphics[width=0.6\linewidth]{Pictures/ch15_explicit_euler}
+	\caption{Explicit Euler}
+	\label{fig:explicit_euler_method}
 \end{figure}
-
 \subsection{Heun's Method}
 Heun's method is a fairly simple but clever improvement on the explicit Euler scheme. We start by using the explicit Euler method to build an approximation of the solution at $t+1$
 \begin{equation}
@@ -1510,10 +1509,11 @@ where $\tilde{u}$ is an initial guess for the solution. Then, we use an average 
 This approach is called a two-stage scheme, since we had to compute our solution at one intermediate stage before the final solution is obtained. This requires us to evaluate two right hand sides, one for each stage, so is approximately twice as expensive as the explicit Euler method. However, it can be shown that it achieves $\mathcal{O}(\Delta t^2)$ in time. Hence, when the time step is small it is significantly more accurate.
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.5\linewidth]{Pictures/ch15_heuns_method}
+	\includegraphics[width=0.6\linewidth]{Pictures/ch15_heuns_method}
 	\caption{Heun's method}
-	\label{fig:forward_euler}
+	\label{fig:heuns_method}
 \end{figure}
+
 \subsection{Midpoint Method}
 The midpoint method is very similar to Heun's method. However, we start by computing the solution at an intermediate stage halfway between the current and next time steps, using an explicit Euler approach
 \begin{equation}
@@ -1524,6 +1524,12 @@ Since we have divided $\Delta t$ by two, we are now halfway between the current 
 	u^{t+1} = u^t + \Delta t R(\tilde{u}).
 \end{equation}
 Similar to Heun's method, this is also a two stage scheme and has a temporal error of $\mathcal{O}(\Delta t^2)$.
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.6\linewidth]{Pictures/ch15_midpoint_method}
+	\caption{Midpoint method}
+	\label{fig:midpoint_method}
+\end{figure}
 
 \subsection{Runge-Kutta Methods}
 If we look at Heun's method and the midpoint method we note that their structure is very similar. We start by computing some intermediate solution, then evaluating the residual of that intermediate solution, and then linearly combining it with the residual of the initial solution. This can be generalized from two stages up to as many stages as we may like, with multiple intermediate solutions being obtained to improve the order of accuracy. Starting from our current solution $u^t$, we will compute $s$ intermediate stage solutions
@@ -1565,6 +1571,12 @@ where $a_{i,j}$ and $b_i$ and a set of constants. These can be compacted into a 
 	\end{tabular}
 \end{equation}
 This will yield an explicit scheme if the $A$ matrix is strictly lower-triangular. In that case, we find the solution at any stage is simple a function of the solution of earlier stages. In that case, the method consists of a number of intermediate stage solutions computed using an explicit Euler approach. The following are some example tableaus for commonly-used explicit schemes, including those already introduced.
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.6\linewidth]{Pictures/ch15_rk_method}
+	\caption{Fourth-order four-stage RK method}
+	\label{fig:midpoint_method}
+\end{figure}
 
 \subsubsection{Explicit Euler}
 The explicit Euler method has one stage and is $\mathcal{O}(\Delta t)$ in time.
@@ -1576,7 +1588,7 @@ The explicit Euler method has one stage and is $\mathcal{O}(\Delta t)$ in time.
 	\end{tabular}
 \end{equation}
 
-\subsubsection{Explicit Euler}
+\subsubsection{Heun's Method}
 Heun's method has two stages and is $\mathcal{O}(\Delta t^2)$ in time.
 \begin{equation}
 	\begin{tabular}{c|ccccc}
@@ -1597,6 +1609,7 @@ The explicit midpoint method has two stages and is $\mathcal{O}(\Delta t^2)$ in 
 	         & 0 & 1\\
 	\end{tabular}
 \end{equation}
+
 
 \subsubsection{Fourth-Order Runge-Kutta}
 The explicit four-stage fourth-order Runge-Kutta method is $\mathcal{O}(\Delta t^4)$ in time.

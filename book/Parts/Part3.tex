@@ -288,6 +288,7 @@ and, just like for linear advection, we can now find an expression for the solut
 \begin{eqBox}
 \begin{equation}
 	u_i^{t+1} = u_{i}^t - \frac{\Delta t}{\Delta x} \frac{1}{2}\left( \left(u_i^t \right)^2 - \left( u_{i-1}^t \right)^2 \right) + \mathcal{O}(\Delta x, \Delta t).
+	\label{eq:fd_burgers}
 \end{equation}
 \end{eqBox}
 Looking at this expression we note it is remarkably similar to the expression for linear advection, which is not particularly surprising as the two initial partial differential equations are also quite similar. Again, if we know the solution at each grid point at some time $t$, we can approximate the solution at some time $t+\Delta t$ using this expression. Then, to approximate the solution at the time $t+2\Delta t$ we simply re-apply the expression. This allows us to approximate the behaviour of Burgers equation up to any desired final time, and the error of the approximation is expected to be first-order accurate in both space and time, with errors on the order of $\mathcal{O}(\Delta x, \Delta t)$.
@@ -314,6 +315,7 @@ Again, by simply rearranging we can arrive at an expression for the solution at 
 \begin{eqBox}
 \begin{equation}
 u_i^{t+1}  = u_{i}^t + \frac{\beta \Delta t}{\Delta x^2} \left(u_{i-1} - 2u_i + u_{i+1}\right) + \mathcal{O}(\Delta x^2,\Delta t).
+\label{eq:fd_diffusion}
 \end{equation}
 \end{eqBox}
 Again, this is very similar to the approximations for linear advection and Burgers equations. However, one important thing to note is that the error in space is of $\mathcal{O}(\Delta x^2)$ instead of $\mathcal{O}(\Delta x)$, meaning that as we refine the grid the solution will converge more quickly to the exact solution of the linear diffusion equation.
@@ -431,7 +433,7 @@ which can be written
 \end{align}
 for the left and right faces of $\Omega_i$, respectively. Recall the finite-volume discretization for straight-sided elements in Equation~\ref{eq:fv_straightsided}, which we now rewrite for this problem considering $\hat n_1=-1$, $\hat n_2=1$ and $S_1=S_2=1$
 \begin{equation}
- \frac{d \overline{u}_i}{dt} = -\frac{1}{\Delta x} \left[\alpha \overline {u}_i - \alpha \overline u_{i-1}\right],
+ \frac{d \overline{u}_i}{dt} = -\frac{1}{\Delta x} \left(\alpha \overline {u}_i - \alpha \overline u_{i-1}\right),
 \end{equation}
 or simply
 \begin{eqBox}
@@ -439,16 +441,22 @@ or simply
  \frac{d \overline{u}_i}{dt} = -\alpha \frac{ \overline {u}_i - \overline u_{i-1}}{\Delta x},
 \end{equation}
 \end{eqBox}
-which is identical to the original first-order finite-difference method. 
+which is identical to the original first-order finite-difference method. Discretizing the temporal derivative using the forward Euler method, we have
+\begin{eqBox}
+\begin{equation}
+\overline u_i^{t+1} = \overline u_i^t - \frac{\alpha \Delta t}{\Delta x} \left( \overline {u}_i^t - \overline u_{i-1}^t\right).
+\end{equation}
+\end{eqBox}
+Hence, by comparing the above equation with Equation~\ref{eqn:7hH8UBeG}, we can see that they are indentical.
 \subsubsection{Central}
 A second choice of Riemann flux results from an averaged value of the solution at each interface. This means
 \begin{equation}
- \vec F(\overline u_L, \overline u_R) = \frac{1}{2}\left[\alpha \overline u_L + \alpha \overline u_R \right].
+ \vec F(\overline u_L, \overline u_R) = \frac{1}{2}\left(\alpha \overline u_L + \alpha \overline u_R \right).
 \end{equation}
 Hence, the fluxes can be written
 \begin{align}
- \vec F_1 = \frac{1}{2}\left[\alpha \overline u_{i-1} + \alpha \overline u_{i} \right],\\
- \vec F_2 = \frac{1}{2}\left[\alpha \overline u_{i} + \alpha \overline u_{i+1} \right],
+ \vec F_1 = \frac{1}{2}\left(\alpha \overline u_{i-1} + \alpha \overline u_{i} \right),\\
+ \vec F_2 = \frac{1}{2}\left(\alpha \overline u_{i} + \alpha \overline u_{i+1} \right),
 \end{align}
 for the left and right interface of $\Omega_i$, respectively. By substituting these fluxes into Equation~\ref{eq:fv_straightsided}, a central finite-volume scheme can be written
 \begin{eqBox}
@@ -493,18 +501,25 @@ Recall that solutions in Burgers equation tend to develop discontinuities at a f
  F_1 &= \frac{1}{2} \overline u_{i-1}^2, \\ 
  F_2 &= \frac{1}{2} \overline u_{i}^2.
 \end{align}
-By following the same procedure as with the advection equation, we obtain the finite-volume scheme from Equation~\ref{eq:fv_straightsided}, 
+By following the same procedure as with the advection equation, we obtain the semidiscrete scheme from Equation~\ref{eq:fv_straightsided}, 
 \begin{equation}
- \frac{d\overline u_i}{dt} = - \frac{1}{\Delta x} \left[\frac{\overline u_i^2}{2} - \frac{\overline u_{i-1}^2}{2}\right],
+ \frac{d\overline u_i}{dt} = - \frac{1}{\Delta x} \left(\frac{\overline u_i^2}{2} - \frac{\overline u_{i-1}^2}{2}\right),
 \end{equation}
 which we simplify
 \begin{eqBox}
 \begin{equation}
- \frac{d\overline u_i}{dt} = - \frac{1}{2 \Delta x} \left[\overline u_i^2 - \overline u_{i-1}^2\right].
+ \frac{d\overline u_i}{dt} = - \frac{1}{2 \Delta x} \left(\left(\overline u_i\right)^2 - \left(\overline u_{i-1}\right)^2\right).
  \label{eq:fv_burgers}
 \end{equation}
 \end{eqBox}
-Equation~\ref{eq:fv_burgers} is identical to the first-order upwind scheme for Burgers equation derived using finite differences.
+Applying the first-order forward Euler scheme to advance the solution in time yields
+\begin{eqBox}
+	\begin{equation}
+	 \overline u_i^{t+1} = \overline u_i^t - \frac{\Delta t}{\Delta x} \frac{1}{2} \left(\left(\overline u_i^t\right)^2 - \left(\overline u_{i-1}^t \right)^2\right).
+	 \label{eq:fv_burgers_fully}
+	\end{equation}
+\end{eqBox}
+Equation~\ref{eq:fv_burgers_fully} is identical to the first-order upwind scheme for Burgers equation derived using finite difference in Equation~\ref{eq:fd_burgers}.
 \subsection{Linear Diffusion}
 Consider the scalar linear diffusion equation, where
 \begin{equation}
@@ -538,8 +553,14 @@ By substituting the fluxes into Equation~\ref{eq:fv_straightsided}, we obtain th
 	\label{eq:fv_diffusion}
  \end{equation}
 \end{eqBox}
-which is second-order accurate. The resulting scheme is central, which agrees with the physics of diffusive processes.  Note that Equation~\ref{eq:fv_diffusion} is identical to the second-order finite-difference scheme we previously derived for this problem. 
-
+which is second-order accurate. The resulting scheme is central, which agrees with the physics of diffusive processes.  If we couple the spatial derivative in Equation~\ref{eq:fv_diffusion} with the forward Euler method, we can write the fully-discrete scheme
+\begin{eqBox}
+\begin{equation}
+	\overline u_i^{t+1} = \overline u_i^t + \frac{\beta \Delta t}{\Delta x^2}  \left(\overline u_{i+1}^t-2\overline u_{i}^t + \overline u_{i-1}^t\right).
+	\label{eq:fv_diffusion_fullydiscrete}
+\end{equation}
+\end{eqBox}
+Note that Equation~\ref{eq:fv_diffusion} is identical to the second-order finite-difference scheme we previously derived for this problem in Equation~\ref{eq:fd_diffusion}.  
 \section{Linear Hyperbolic Problems} \label{sec:linear_hyperb_problems}
 In Chapter 2, we stated that first-order partial differential equations are naturally hyperbolic, meaning that they exhibit wave-like solutions. The simplest case is our advection equation
 \begin{equation}

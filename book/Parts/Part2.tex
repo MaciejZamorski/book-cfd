@@ -41,7 +41,7 @@ To create our conservation law we combine the concepts in Equations \ref{eqn:tot
 \end{equation}
 noting that the positive in front of the surface term is due to our normal vector being outward pointing. Known as Reynolds Transport Theorem, this will be the foundation for deriving our conservation of mass, momentum, and energy equations for fluid flows.
 
-\chapter{The Navier Stokes Equations}
+\chapter{The Navier Stokes Equations} \label{ch:navier_stokes}
 
 \section{Integral Form}\index{Integral Form}
 \subsection{Conservation of Mass}
@@ -291,6 +291,12 @@ and
 	\frac{\partial u}{\partial t} +  \alpha \frac{\partial u}{\partial x} = 0.
 \end{equation}
 \end{eqBox}
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.65\linewidth]{Pictures/ch6_advection_equation}
+	\caption{Evolution of a gaussian bump $u(x,0)=\exp\left[-40\left(x-\frac{1}{2}\right)^2\right]$ using the advection equation on $x\in[0,1]$, a velocity $\alpha=1$ and periodic boundary conditions.}
+	\label{fig:advection_equation}
+\end{figure}
 
 \section{Burgers Equation}\index{Burgers Equation}
 Our second simplified system, known as Burgers equation, is useful as a simplified model for compressible flow features such as shocks and expansion fans. To derive Burgers equation we start with the momentum equation, decoupled from conservation of mass and conservation of energy. Then, neglecting the effects of viscosity and pressure, we replace the momentum with an arbitrary conserved variable $u$, and restrict ourselves to one physical dimension. 
@@ -312,7 +318,12 @@ If we consider the divergence form of Burgers' equation, applying chain rule to 
 	\frac{\partial u}{\partial t} +  u \frac{\partial u}{\partial x} = 0.
 \end{equation}
 We note that this looks remarkably similar to the divergence form of the linear advection equation, also in one dimension. However, the advection velocity $\alpha$, which appears infront of the spatial derivative for linear advection, has instead been replaced by $u$, the value of the solution. Hence, Burgers equation has similar behaviour to linear advection, except the velocity at any point in space is {\it equal} to the value of the solution at that point, rather than being a constant value throughout the domain.
-
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.65\linewidth]{Pictures/ch6_burgers_equation}
+	\caption{Evolution of a gaussian bump $u(x,0)=\exp\left[-40\left(x-\frac{1}{2}\right)^2\right]$ using Burgers equation on $x\in[0,1]$.}
+	\label{fig:burgers_equation}
+\end{figure}
 \section{Linear Diffusion}\index{Linear Diffusion}
 Our third and final simplified equation, known as linear diffusion, starts again from a simple thought experiment. First, we will consider only the energy equation decoupled from conservation of mass and momentum. We will now imagine that we have a stationary fluid with zero velocity everywhere in the domain. Similar to linear advection, we will consider a flow with some blob of fluid with more energy than the fluid around it. Since all of the fluid is stationary, this extra energy must come in the form of heat. As time goes on, we would expect that this local region of hot fluid would diffuse some of its heat over time to the cold fluid that is adjacent to it. Hence, over time an initially concentrated blob of heat would spread out, until eventually all of the fluid is at the same temperature.
 
@@ -337,7 +348,12 @@ and
 \end{equation}
 \end{eqBox}
 At this point it is worth noting that the form of the linear diffusion equation is similar to the linear advection equation, except we are taking the second derivative rather than the first.
-
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.65\linewidth]{Pictures/ch6_diffusion_equation}
+	\caption{Evolution of a gaussian bump $u(x,0)=\exp\left[-40\left(x-\frac{1}{2}\right)^2\right]$ using the linear diffusion equation on $x\in[0,1]$.}
+	\label{fig:diffusion_equation}
+\end{figure}
 \section{PDE Classification}\index{PDE Classification}
 In the previous sections we have introduced several different partial differential equations. From the context of the Navier-Stokes equations these include conservation of mass, momentum, and energy, which we have then simplified into the Euler, linear advection, Burgers, and linear diffusion equations. As we will see in later sections, not all numerical approaches work well for all partial differential equations, and it is often useful to classify them based on their properties and behaviour.
 
@@ -386,6 +402,7 @@ The fundamental characteristic of turbulence is that it is {\it chaotic}. Hence,
 As an introduction to chaos, we will consider the relatively simple logistic map, which is built from the non-linear logistic function
 \begin{equation}
 	x_{n+1} = ax_n(1-x_n),
+	\label{eq:logistic_function}
 \end{equation}
 where $x_n$ is the current value, $x_{n+1}$ is the next value, and $a$ is a scalar that governs the behaviour of the system. A relatively simple analogy/application of the logistic equation is the growth/decay of a population of animals. In this case $x_n$ would be the current population, $x_{n+1}$ is next years population, and $a$ is responsible for controlling the birth/death rate of the animals in any given year based on the current population. The first thing to notice is that this equation is incredibly simple, yet under certain conditions it encodes infinitely complex chaotic behaviour, and the behaviour of the system is governed by the choice of $a$.
 
@@ -402,7 +419,9 @@ In this case, a second bifurcation occurs, and the solution oscillates between f
 Beyond $a = 3.54\hdots$ additional bifurcations and period doublings occur. With the population now oscillating between an ever growing number of possible values. By $a = 3.57\hdots$ an infinite number of bifurcations occurs. 
 
 \subsubsection{$3.57\hdots < a $}
-Beyond $a = 3.57\hdots$ the entire concept of a cycle breaks down, and all possible solution can be found within the range. The solution traverses chaotically and little structure is observed in its behaviour.\\
+Beyond $a = 3.57\hdots$ the entire concept of a cycle breaks down, and all possible solution can be found within the range. The solution traverses chaotically and little structure is observed in its behaviour. 
+
+Hence, the complete behaviour of Equation~\ref{eq:logistic_function} can be observed in Figure~\ref{fig:logistic_map} for all values of $a$ in the range $a\in[1,4]$.\\
 
 \begin{figure}[htbp]
 	\centering
@@ -411,7 +430,9 @@ Beyond $a = 3.57\hdots$ the entire concept of a cycle breaks down, and all possi
 	\label{fig:logistic_map}
 \end{figure}
 An interesting thought experiment is to consider what happens to our system when we start with some initial guess $x_0$, and some perturbed initial guess $x_0 + \epsilon$, where $\epsilon$ is a small number. In the case of small values of $a$ both of these solution converge to the same fixed point. However, as $a$ gets larger this predictability starts to break down. Eventually, with a large value of $a$, and given enough iterations, the two solutions will diverge from one another and it will be impossible to discern that they had almost the exact same initial condition. Hence, with certain choices of $a$ the logistic equations is chaotic, resulting in complex behaviour and extreme sensitivity to initial conditions. Furthermore, this implies that there is an {\it irreversible} nature to chaotic systems, that is given a final solution it is not possible to determine with any certainty what the initial condition was, because very similar initial conditions yield completely different final solutions.
-
+\begin{jupyternote}
+	Check out the Chaos notebook on \url{\binderurl}. You can also download the files from the Gitlab repository \url{\repourl}.
+\end{jupyternote}
 \subsection{Chaos and Navier-Stokes}
 In the above we have demonstrated a couple of properties of chaos. It only arises in non-linear system and it is generally irreversible due to extreme sensitivity on initial conditions. For simplicity we will explore the connection between the Navier-Stokes equations and chaos, in the form of turbulence, via the incompressible Navier-Stokes equations. However, this can be readily extended to the compressible Navier-Stokes equations should that be of interest.
 
@@ -447,14 +468,7 @@ Now lets explore the alternative of a purely viscous flow, which is the limit th
 	\frac{\partial \vec{v}}{\partial t} - \nu \nabla^2 \vec{u} = 0,
 \end{equation}
 which is a linear equation in velocity. Hence, in the limit of large viscosities the system of equations becomes linear and can no longer permit chaotic solutions.
-
-From the above discussion it is clear that the momentum equations in the incompressible Navier-Stokes equation are non-linear with respect to the velocity. Furthermore, the viscosity is key in determining whether chaotic solutions exist. If there is not enough the system becomes irreversible. In contrast, if there is too little the system becomes linear. The relative strength of the viscosity is given by the Reynolds number
-\begin{equation}
-	Re = \frac{UL}{\nu},
-\end{equation}
-where $U$ and $L$ are the velocity and length scales of the flow, and $\nu$ is the viscosity. Typically, turbulent flow is observed for Reynolds numbers of $Re \gtrsim \mathcal{O}(10^3)$. It is important to note that this encompasses the vast majority of flows of engineering interest. Hence, scientists and engineers must routinely deal which turbulence and its chaotic nature.
-
-\begin{figure}[htbp]
+\begin{figure}[tbp]
 	\centering
 	\begin{subfigure}[b]{0.40\textwidth}
 		\includegraphics[width=\linewidth]{Pictures/ch7_cylinder_1}
@@ -475,6 +489,13 @@ where $U$ and $L$ are the velocity and length scales of the flow, and $\nu$ is t
 	\caption{Incompressible flow regimes at different Reynolds numbers}
 	\label{fig:flow_regimes}
 \end{figure}
+From the above discussion it is clear that the momentum equations in the incompressible Navier-Stokes equation are non-linear with respect to the velocity. Furthermore, the viscosity is key in determining whether chaotic solutions exist. If there is not enough the system becomes irreversible. In contrast, if there is too little the system becomes linear. The relative strength of the viscosity is given by the Reynolds number
+\begin{equation}
+	Re = \frac{UL}{\nu},
+\end{equation}
+where $U$ and $L$ are the velocity and length scales of the flow, and $\nu$ is the viscosity. Examples of different Reynolds numbers can be observed in Figure~\ref{fig:flow_regimes}. Typically, turbulent flow is observed for Reynolds numbers of $Re \gtrsim \mathcal{O}(10^3)$. It is important to note that this encompasses the vast majority of flows of engineering interest. Hence, scientists and engineers must routinely deal which turbulence and its chaotic nature.
+
+
 
 \subsection{The Energy Cascade}
 A common misconception is that turbulence is {\it random} in nature, which would imply that it has no pattern and is inherently unpredictable in a deterministic sense. However, the very fact that one can derive the Navier-Stokes equations, which are a deterministic model for fluid flow, implies that turbulence is not truly random. Hence, while turbulence is often {\it modelled} as stochastic behaviour, its evolution is actually deterministic in nature.
@@ -484,7 +505,7 @@ We will revisit how to model turbulence stochastically when we introduce the Rey
 Furthermore, turbulent flows clearly have coherent structures, such as turbulent vortices, that demonstrate and underlying structure within the chaos.
 
 One of the most powerful observations of turbulent flow has to do with the distribution of kinetic energy across different physical scales. When considering turbulent flows there is typically a wide distribution of length scales and time scale with the largest vortices have a size similar to the physical length scale of the problem of interest, such as an airfoils chord length or the size of a bluff body such as a cylinder. In contrast, the smallest physical scales can be much smaller than the physical length scale of the problem, and there is then a wide range of scales between these two extremes. A fundamental observation related to this is that these turbulent structures, over time, tend to break up into multiple smaller scale structures. A consequence of this is that kinetic energy gradually gets transferred from large scale structures down to smaller scale structures and so on, which is referred to as the {\it turbulent kinetic energy cascade}, which can be observed in Figure~\ref{fig:energy_cascade}.
-\begin{figure}[htbp]
+\begin{figure}[tbp]
 	\centering
 	\includegraphics[width=0.5\linewidth]{Pictures/ch7_energy_cascade}
 	\caption{Turbulent kinetic energy cascade}
@@ -686,7 +707,7 @@ Decomposing the flow variables and time-averaging the resulting equation, we hav
     + \mu \frac{\partial^2 \left(\overline{v_i}
     +v_i^\prime\right)}{\partial x_j^2}}.
 \end{equation}
-By first resolving multiplications and then applying the Reynolds averaging properties, we obtain the momentum RANS equations for incompressible flow
+By first resolving multiplications and then applying the Reynolds averaging properties, we obtain the RANS equations for incompressible flow
 \begin{eqBox}
 \begin{equation}
     \rho \frac{\partial \overline{v_i}}{\partial t} 
@@ -710,7 +731,8 @@ We may now rewrite the RANS momentum equation in terms of the stresses and rearr
     \rho \frac{\partial \overline{v_i}}{\partial t} 
     + \rho  \frac{\partial}{\partial x_j} \left(\overline{v_j}\overline{v_i}\right)
     =- \frac{\partial \overline{p}}{\partial x_i} 
-    + \frac{\partial}{\partial x_j} \left(\overline\tau_{ji} - \rho \overline{v_j^\prime v_i^\prime}\right),
+	+ \frac{\partial}{\partial x_j} \left(\overline\tau_{ji} - \rho \overline{v_j^\prime v_i^\prime}\right),
+	\label{eq:rans_momentum}
 \end{equation}
 \end{eqBox}
 where $\rho \overline{v_j^\prime v_i^\prime}$ is known as the \textit{Reynolds stress}, which we can define as the \textit{Reynolds stress tensor} $\rho\hat\tau_{ij}$, such that
@@ -787,7 +809,7 @@ The time-averaged compressible momentum equations can be written
     \frac{\partial }{\partial t} \left(\overline\rho \tilde v_i \right)
     + \frac{\partial}{\partial x_j} \left(\overline\rho \tilde v_j \tilde v_i + \overline{\rho v_i^{\prime\prime}v_j^{\prime\prime}} \right)
     = - \frac{\partial \overline{p}}{\partial x_i} 
-    + \mu \frac{\partial^2 }{\partial x_j^2} \left(\overline{v_i}\right).
+	+ \mu \frac{\partial^2 }{\partial x_j^2} \left(\overline{v_i}\right).
 \end{equation}
 \end{eqBox}
 where single-variable terms such as the pressure and diffusive components follow the same procedure described in Equation~\ref{eqn:favre_singlevariable}. Similar to the incompressible case, we rearrange some terms in the equation, such that
@@ -796,12 +818,47 @@ where single-variable terms such as the pressure and diffusive components follow
         \frac{\partial }{\partial t} \left(\overline\rho \tilde v_i \right)
         + \frac{\partial}{\partial x_j} \left(\overline\rho \tilde v_j \tilde v_i \right)
         = - \frac{\partial \overline{p}}{\partial x_i} 
-        + \mu \frac{\partial }{\partial x_j} \left(\overline{\tau_{ji}} - \overline{\rho v_i^{\prime\prime}v_j^{\prime\prime}}\right).
+		+ \mu \frac{\partial }{\partial x_j} \left(\overline{\tau_{ji}} - \overline{\rho v_i^{\prime\prime}v_j^{\prime\prime}}\right).
+	\label{eq:favre_rans}
     \end{equation}
 \end{eqBox}
 where $-\overline{\rho v_i^{\prime\prime}v_j^{\prime\prime}}$ is the Reynolds stress, which includes the instantaneous density $\rho$, and $\tau_{ij}$ is the viscous stress tensor. As explained in the incompressible section, the resulting system of equations remains underdetermined due to the Reynolds stresses. Obtaining an equation for these stresses turns out to introduce additional unknowns. We now discuss and derive equations for the Reynolds-stress tensor for incompressible flow.
 
 \subsection{The Reynolds Stresses}
+The Reynolds stresses are given by 
+\begin{equation}
+	\hat \tau_{ij} = -\rho \overline{v_i^{\prime}v_j^{\prime}},
+\end{equation}
+and we will show in the next section that we can't solve for them exactly. However, for now we can understand their influence on the mean flow. Recall the integral form of the Navier-Stokes equations from Chapter~\ref{ch:navier_stokes}, which we rewrite
+\begin{equation}
+	\frac{d}{dt}\int_\Omega \rho v_i d\Omega + \oint_S \rho v_i \vec{v} \cdot ds = \oint_S -P ds + \oint_S \tau_{ij} ds.
+	\label{eq:integral_ns_turbulence}
+\end{equation}
+The term on the LHS represents the rate of change of momentum. On the right-hand side of Equation~\ref{eq:integral_ns_turbulence}, the first term is responsible for the convection of momentum in and out of the system, followed by the pressure term and finally the viscous diffusion of momentum. When we apply our time-averaging to this equation, we obtain
+\begin{equation}
+	\frac{d}{dt}\int_\Omega \rho \overline v_i d\Omega + \oint_S \rho  \overline v_i  \overline{\vec{v}} \cdot ds = \oint_S - \overline P ds + \oint_S  \left(\overline\tau_{ij}-\rho \overline{v_i^{\prime}v_j^{\prime}}\right)ds.
+	\label{eq:integral_ns_turbulence_avg}
+\end{equation}
+Equation~\ref{eq:integral_ns_turbulence_avg} is similar to the time-averaged systems we have derived in the previous section in differential form, such as Equations~\ref{eq:rans_momentum} and~\ref{eq:favre_rans}. Note that the new Reynolds stress term naturally lumps together with the viscous stresses. In fact, the Reynolds stresses are the \textit{turbulent diffusion} of momentum into $\Omega$.
+
+\subsubsection{Example}
+Consider laminar and turbulent flow over a plate that is heated, such as that shown in Figure~\ref{fig:heated_plate_flow}. By taking the average of the turbulent case, the resulting profile will resemble that in Figure~\ref{fig:heated_plate_flow_2}. If we now compare the heat transfer between the time-averaged turbulent case and the laminar profile, we will observe much more heat transfer in the time-averaged profile. The reason is due to the energy transported by the turbulent eddies, which after time-averaging looks like extra diffusion. 
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[height=0.25\linewidth]{Pictures/ch7_heated_plate_flow_0}~
+	\includegraphics[height=0.25\linewidth]{Pictures/ch7_heated_plate_flow_2}
+	\caption{Reynolds stresses example}
+	\label{fig:heated_plate_flow}
+\end{figure}
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[height=0.25\linewidth]{Pictures/ch7_heated_plate_flow_1}
+	\caption{Reynolds stresses example}
+	\label{fig:heated_plate_flow_2}
+\end{figure}
+
+\subsection{The RANS Closure Problem}
 As we have previously shown, the Reynolds stresses stem from the averaging of the convective term of the Navier-Stokes equations. We now need to find additional equations to solve our system of time-averaged conservation laws. Specifically, we would like to define equations that describe the rate of change of these stresses as we have done for other flow quantities. In this section, we derive the expressions for incompressible flow, however, the derivation can be readily performed for the compressible case considering the Favre averaging procedure. Hence, consider the incompressible momentum equations in the $i$-th direction, which we conveniently rewrite 
 \begin{equation}
 	P(v_i) 
@@ -983,14 +1040,7 @@ we can compactly write the Reynolds-stress equation in its common form
 		+ \frac{\partial}{\partial x_k} \left(\nu \frac{\partial \hat\tau_{ij}}{\partial x_k} + C_{ijk}\right).
 	\end{equation}
 \end{eqBox}
-We are still left with a system of equations that remains to be closed. In the quest of solving turbulent flows using the RANS equations, we dedicate the rest of this chapter to the derivation of common models that have been devised to give closure to these equations.
-\begin{figure}[htbp]
-	\centering
-	\includegraphics[height=0.25\linewidth]{Pictures/ch7_heated_plate_flow_0}~
-	\includegraphics[height=0.25\linewidth]{Pictures/ch7_heated_plate_flow_1}
-	\caption{Reynolds stresses example}
-	\label{fig:heated_plate_flow}
-\end{figure}
+We are still left with a system of equations that remains to be closed. Hence, we have shown that the Reynolds stresses cannot be found without solving the full unsteady Navier-Stokes equations. In the quest of solving turbulent flows using the RANS equations, we dedicate the rest of this chapter to the derivation of common empirical models that have been devised to estimate $\hat \tau_{ij}$.
 
 \section{Turbulence Modelling}
 In the previous section, we derived the RANS equations. This time-averaged system of conservation laws is widely used in the aerospace industry, in particular, due to their relatively low computational cost when compared to direct approximations. We have also stated that their use is limited to obtaining mean flow properties due to the averaging of the turbulent scales. In addition, we have shown that we require additional mathematical equations to give closure to the system. This is done by introducing approximations that model features of the Reynolds stress tensor.  We will observe that none of these models is applicable to all types of flow. Indeed, each of these turbulence models has its applications and limitations. We begin by presenting the Boussinesq approximation, where a new apparent viscous parameter known as the \textit{eddy viscosity} is introduced. Later, it will be shown that all RANS models devise different strategies to model this parameter, which is done by comparison with empirical data. 
@@ -1000,7 +1050,7 @@ We categorize these models according to the number of additional partial differe
 
 \subsection{The Boussinesq Hypothesis}
 
-In 1877, Boussinesq presented an approximation for the turbulent transfer of momentum in relation to molecular motion. The assumption was that the Reynolds stresses were linearly related to the mean flow, specifically to the mean strain tensor $\overline S_{ij}$ such that
+In 1877, Boussinesq presented an approximation for the turbulent transfer of momentum in relation to molecular motion. He proposed, based on the transfer of momentum in kinetic theory of gases, replacing the Reynolds stress tensor $\hat \tau_{ij}$ by simply additional turbulent viscosity.  His hypothesis can be written for three-dimensional flows
 \begin{eqBox}
 \begin{equation}
     -\rho \overline{v_i^\prime v_j^\prime} = \rho \hat \tau_{ij} =
@@ -1016,24 +1066,34 @@ where
 		+ \frac{\partial \overline v_j}{\partial x_i},
 		\label{eq:meanstrainrate}
 \end{equation}
-$k$ is the kinetic energy $\frac{1}{2}\overline{v_i^\prime v_i^\prime}$, $\delta_{ij}$ is the Kronecker delta and $\mu_\tau$ is an isotropic scalar quantity, known as \textit{eddy viscosity}. Note that for incompressible flows, $\frac{\partial \overline v_k}{\partial x_k}\equiv0$ due to continuity. This closing approximation of the RANS equations is the basis of the turbulence models presented hereafter. Now, the remaining task is to define the value of $\mu_\tau$. 
+$k$ is the kinetic energy $\frac{1}{2}\overline{v_i^\prime v_i^\prime}$, $\delta_{ij}$ is the Kronecker delta and $\mu_\tau$ is an isotropic scalar quantity, known as \textit{eddy viscosity}. This value is a function of the local flow, and not of the fluid itself. Note that for incompressible flows, $\frac{\partial \overline v_k}{\partial x_k}\equiv0$ due to continuity. This closing approximation of the RANS equations is the basis of the turbulence models presented hereafter. Now, the remaining task is to define the value of $\mu_\tau$. 
 
-Observe that the resulting Reynolds stresses are now represented as additional viscous terms. This is, in fact, contradictory since we are neglecting the convective effects of these stresses. Is this a real contradiction?  Indeed, the assumption that the Reynolds stress tensor behaves linearly with the rate of strain is incorrect for most flows and is the result of incorrectly associating the behaviour of gas molecules from the kinetic theory of gases to that of the turbulent structures. In fact, turbulent transfer of momentum cannot be associated with the molecular transfer of momentum in gases. One of the reasons is the fact that eddies cannot be assumed to be rigid bodies. Furthermore, recall that the size of turbulent structures ranges from the characteristic length of the domain to a tiny number that cubically decreases with the Reynolds number. Hence the relation between eddy sizes and their "mean free-path" cannot be associated with that of the molecules. This discrepancy shows a lack of theoretical justification for the Boussinesq assumption. However, most turbulence models have been devised under this premise, and have proven to be accurate for specific types of flows.
+Observe that the resulting Reynolds stresses are now represented as additional viscous terms. This is, in fact, contradictory since we are neglecting the convective effects of these stresses. Is this a real contradiction?  Indeed, the assumption that the Reynolds stress tensor behaves linearly with the rate of strain is incorrect for most flows and is the result of incorrectly associating the behaviour of gas molecules from the kinetic theory of gases to that of the turbulent structures. In fact, turbulent transfer of momentum cannot be associated with the molecular transfer of momentum in gases. One reason is that eddies cannot be assumed to be rigid bodies. Furthermore, recall that the size of turbulent structures ranges from the characteristic length of the domain to a tiny number that cubically decreases with the Reynolds number. Hence the relation between eddy sizes and their "mean free-path" cannot be associated with that of the molecules. These discrepancies show a lack of theoretical justification for the Boussinesq assumption. However, most turbulence models have been devised under this premise, and have turned out to yield relatively good results. Beware, however, that models based on this assumption generally fail for highly anisotropic flows, such as boundary layers.
 
-We now shift our attention to turbulence models based on the approximation presented by Boussinesq. These models are often known as \textit{eddy-viscosity models}. We will observe that the quest for an accurate value of $\mu_\tau$ can become very involved. 
+We present some turbulence models based on the approximation presented by Boussinesq. These models are often known as \textit{eddy-viscosity models}. We will observe that finding accurate values of the turbulent viscosity $\mu_\tau$ can become very involved. 
 
 \subsection{The Mixing Length Model}
-Rather than defining a constant value of viscosity dependent on the velocity field, Prandtl proposed a \textit{rough} approach for the calculation of $\mu_\tau$. Recall the mean-free-path in a gas is the distance travelled by a molecule before collision, thus transferring its momentum. Analogous to this distance, Prandtl considered a \textit{mixing length} $\ell_m$, which is equivalent to the path travelled by a fluid element before losing momentum due to mixing with the neighbouring fluid. He further postulated that the characteristic velocity and $\ell_m$ could be related for a two-dimensional boundary layer flow by
+Rather than defining a constant value of viscosity dependent on the velocity field, Prandtl proposed a \textit{rough} approach for the calculation of the kinematic eddy viscosity $\nu_\tau=\mu_\tau/\rho$. Recall the mean-free-path in a gas is the distance travelled by a molecule before it collides with another. When this collision happens, momentum transfer occurs. Analogous to this distance, Prandtl considered a \textit{mixing length} $\ell_m$, which is equivalent to the path travelled by a fluid element before losing momentum due to mixing with the neighbouring fluid. This length was proposed to be constant, and corresponds to the size of the eddies. In one dimension, we note that $\nu_\tau$ has SI units $m^2/s$. Hence, by performing a dimensional analysis, it seems a natural fit to use
 \begin{equation}
-    \mu_\tau = \ell_m^2 \left| \frac{\partial \overline v_x}{\partial y}\right|,
+	\nu_\tau = \ell_m v^*,
 \end{equation}
-where $\ell_m$ is empirically determined and is known for only certain types of flows. This is the basis of the Mixing Length model (ML). Other authors have proposed generalizations of this equation such as that by Baldwin and Lomax~\cite{} as a function of the mean rate of strain~\cite{pope2001turbulent}
-\begin{eqBox}
+where $v^*$ is the corresponding characteristic velocity. We can determine the value of $v^*$, which Prandtl proposed to be
 \begin{equation}
-    \mu_\tau = \ell_m^2 \sqrt{\overline S_{ij} \overline S_{ij}},
+	v^* \propto \ell_m \left|\frac{\partial \overline v_x}{\partial y}\right|.
 \end{equation}
-\end{eqBox}
-We have now algebraically defined Boussinesq's viscosity $\mu_\tau$ with another empirical parameter $\ell_m$. Hence we have carried on the assumptions from Boussinesq, which we have previously stated to be inaccurate. In addition, the specification of the mixing length is dependent on whether it is a jet, wake, wall boundary layer or another type of flow~\cite{andersonComputationalFluidMechanics2016}. It must be determined for flows that have not been studied before under this configuration. Therefore, this model is considered incomplete. In addition, it has been shown that to have accurate results, $\mu_\tau$ should be treated as a tensor. The mixing-layer model's applicability is limited to simple flows for which $\ell_m$ has been previously determined. Hence it requires callibration before it can be used for any new type of flow. 
+Hence, the characteristic velocity and $\ell_m$ could be related to the eddy viscosity by
+\begin{equation}
+    \nu_\tau = \ell_m^2 \left| \frac{\partial \overline v_x}{\partial y}\right|,
+\end{equation}
+where $\ell_m$ is empirically determined and is known for only certain types of flows. Prandtl postulated that near solid walls, the velocity of the flow is proportional to the distance from the surface. This is consistent with the observed behaviour of flows within $\approx 10\%$ of their height. A profile of a typical boundary layer is shown in Figure~\ref{fig:law_of_the_wall}. 
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[height=0.45\linewidth]{Pictures/ch7_law_of_the_wall}
+	\caption{Behaviour of the mean velocity profile in wall-bounded turbulent flows}
+	\label{fig:law_of_the_wall}
+\end{figure}
+
+We have now algebraically defined Boussinesq's viscosity $\mu_\tau$ with another empirical parameter $\ell_m$. Hence we have carried on the assumptions from Boussinesq, which we have previously stated to be inaccurate. In addition, the specification of the mixing length is dependent on whether it is a jet, wake, wall boundary layer or another type of flow~\cite{andersonComputationalFluidMechanics2016}. It must be determined for flows that have not been studied before under this configuration. Therefore, this model is considered incomplete since it cannot be used to predict unknown flow behaviour. The mixing-layer model's applicability is limited to simple flows for which $\ell_m$ has been previously determined. 
 
 \subsection{The Spalart-Allmaras Model}
 Spalart and Allmaras~\cite{spalartOneequationTurbulenceModel1992} (SA) took an empirical approach, using arguments from dimensional analysis developed a new model, which included the resolution of an ad-hoc transport equation for a turbulence variable $\tilde \nu$. The model was initially developed for aerodynamics applications such as transonic flow over airfoils. Several nested versions are included in the original publication, and these range from simple models for free shear flows to more complex derivations that can be applied to boundary layer flows. The general model is given by
@@ -1175,13 +1235,13 @@ To summarize the previous models, we present a table where we display the charac
     \hline
     \textbf{Model} & \textbf{Variable(s)} & \textbf{Classification} & \textbf{Description} \\
     \hline
-    ML           & A mixing length $\ell_m$        & Incomplete, algebraic model    & An empirical mixing length is used to compute the eddy viscosity. This model was developed in a "rough" sense. Value of $\ell_m$ depends on the type of flow.\\
+    ML           & A mixing length $\ell_m$        & Incomplete, algebraic model    & An empirical mixing length is used to compute the eddy viscosity. This model was developed in a "rough" sense. Value of $\ell_m$ depends on the type of flow. \\
     \hline
     SA           & Turbulent quantity proportional to the viscosity $\tilde\nu$     & Complete, one-equation model    & Resolution of a transport equation for a turbulent quantity, specifically a viscosity-like parameter. Computationally efficient since only a single transport equation is added. Applicable to determine aerodynamic loads at moderate angles of attack.             \\
     \hline
     $k-\epsilon$ & Kinetic energy and rate of dissipation, $k$, $\epsilon$ & Complete, two-equation model   & Two transport equations are added, one for the turbulent kinetic energy and the other for its rate of dissipation. Applicable to free-shear layer flows. Gives inaccurate results for flows with large adverse pressure gradients.\\
     \hline
-    $k-\omega$   & Kinetic energy and specific dissipation $k$, $\omega$   & Complete, two-equation model    & Requires the computation of the kinetic energy and specific dissipation rate transport equations. The model works well across the boundary layer of wall turbulent flows. Inaccurate for free-shear flows.\\
+    $k-\omega$   & Kinetic energy and specific dissipation $k$, $\omega$   & Complete, two-equation model    & Requires the computation of the kinetic energy and specific dissipation rate transport equations. The model works well across the boundary layer of wall turbulent flows, hence widely used in the aerospace field. Inaccurate for free-shear flows.\\
     \hline
 \end{tabular}
 \end{table}

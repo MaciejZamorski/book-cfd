@@ -68,14 +68,16 @@ To understand the behaviour of these truncated expansions, we note that their er
 	f(\Delta x) = \Delta x - \frac{\Delta x^3}{6} + \frac{\Delta x^5}{120} - \frac{\Delta x^7}{5040} + \frac{\Delta x^9}{362880} - \frac{\Delta x^{11}}{39916800} + \hdots,
 \end{equation}
 we note that the leading term omitted from the $f_1(\Delta x)$ approximation behaves like $\Delta x^3$, the leading error term of the $f_1(\Delta x)$ approximation behaves like $\Delta x^5$, and so on. Hence, as we get closer to the expansion point $x=0$ we expect that the error shrinks, and that the rate at which the error shrinks will be proportional to the exponent of the leading truncated term of the expansion. We can test this by creating a convergence table.
-	
+\begin{jupyternote}
+	Check out the Taylor Series Jupyter notebook on \url{\binderurl}. You can also download the files from the Gitlab repository \url{\repourl}.
+\end{jupyternote}
 \chapter{Finite Difference Methods}
 \section{The First Derivative}
 
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=0.6\linewidth]{Pictures/ch10_fd_scheme}
-	\caption{}
+	\caption{One-dimensional discretization using Finite Difference methods}
 	\label{fig:fd_scheme}
 \end{figure}
 	
@@ -265,7 +267,15 @@ By inspecting this equation, and assuming that we know the solution at each grid
 \end{eqBox}
 
 Looking at Equation \ref{eqn:7hH8UBeG} we note that, provided we know the current solution at all grid points at time $t$, we can predict the solution at time $t+\Delta t$ with an error term of $\mathcal{O}(\Delta x, \Delta t)$. Then we will have an approximation of the solution at all grid points at time $t+\Delta t$, and we can use this to find an approximation of the solution at time $t+2\Delta t$ by applying the same equation, and so on. Hence, we are able to advance the linear advection equation to any final time we desire, noting that each time step we take will introduce some numerical error.
-
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.65\linewidth]{Pictures/ch10_advection_upwind}
+	\caption{First-order advection of a gaussian bump using different levels of grid refinement.}
+	\label{fig:advection_upwind}
+\end{figure}
+\begin{jupyternote}
+	Check out the Advection Jupyter notebook on \url{\binderurl}. You can also download the files from the Gitlab repository \url{\repourl}.
+\end{jupyternote}
 \subsection{Burgers Equation}
 We recall that the one-dimensional Burgers equation was
 \begin{equation}
@@ -292,6 +302,15 @@ and, just like for linear advection, we can now find an expression for the solut
 \end{equation}
 \end{eqBox}
 Looking at this expression we note it is remarkably similar to the expression for linear advection, which is not particularly surprising as the two initial partial differential equations are also quite similar. Again, if we know the solution at each grid point at some time $t$, we can approximate the solution at some time $t+\Delta t$ using this expression. Then, to approximate the solution at the time $t+2\Delta t$ we simply re-apply the expression. This allows us to approximate the behaviour of Burgers equation up to any desired final time, and the error of the approximation is expected to be first-order accurate in both space and time, with errors on the order of $\mathcal{O}(\Delta x, \Delta t)$.
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.65\linewidth]{Pictures/ch10_burgers_upwind}
+	\caption{First-order nonlinear burgers equation with a gaussian bump using different levels of grid refinement.}
+	\label{fig:burgers_upwind}
+\end{figure}
+\begin{jupyternote}
+	Check out the Burgers Jupyter notebook on \url{\binderurl}. You can also download the files from the Gitlab repository \url{\repourl}.
+\end{jupyternote}
 
 \subsection{Linear Diffusion}
 We recall that our third and final simplified system of equations was the linear diffusion equation
@@ -319,6 +338,15 @@ u_i^{t+1}  = u_{i}^t + \frac{\beta \Delta t}{\Delta x^2} \left(u_{i-1} - 2u_i + 
 \end{equation}
 \end{eqBox}
 Again, this is very similar to the approximations for linear advection and Burgers equations. However, one important thing to note is that the error in space is of $\mathcal{O}(\Delta x^2)$ instead of $\mathcal{O}(\Delta x)$, meaning that as we refine the grid the solution will converge more quickly to the exact solution of the linear diffusion equation.
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.65\linewidth]{Pictures/ch10_diffusion_central}
+	\caption{Second-order linear diffusion of a gaussian bump using different levels of grid refinement and $\alpha=1\times 10^{-3}$.}
+	\label{fig:diffusion_central}
+\end{figure}
+\begin{jupyternote}
+	Check out the Diffusion Jupyter notebook on \url{\binderurl}. You can also download the files from the Gitlab repository \url{\repourl}.
+\end{jupyternote}
 
 \chapter{Finite Volume Methods}
 \begin{figure}[htbp]
@@ -964,36 +992,36 @@ as shown in Figure~\ref{fig:riem_acoustics_example_u0}, we can determine the mid
 	\caption{Example solution with values for the linear acoustics case.}
 	\label{fig:riem_acoustics_example}
 \end{figure}
-\section{Nonlinear Hyperbolic Problems}
-Consider the following one-dimensional scalar conservation law
-\begin{equation}
-	\frac{\partial u}{\partial t} + \frac{\partial f(u)}{\partial x} = 0,
-\end{equation}
-where $f(u)$ is the flux. In previous sections, we have considered a linear flux $f(u)=\alpha u$, which yields the advection equation. Now, consider a nonlinear flux $f(u)=\frac{1}{2}u^2$. Now, the solution is not expected to simply translate, but also various parts of the solution will deform, leading to the generation of shocks. This is one of our simplified system of equations, which we have referred to as the inviscid Burgers equation. 
+% \section{Nonlinear Hyperbolic Problems}
+% Consider the following one-dimensional scalar conservation law
+% \begin{equation}
+% 	\frac{\partial u}{\partial t} + \frac{\partial f(u)}{\partial x} = 0,
+% \end{equation}
+% where $f(u)$ is the flux. In previous sections, we have considered a linear flux $f(u)=\alpha u$, which yields the advection equation. Now, consider a nonlinear flux $f(u)=\frac{1}{2}u^2$. Now, the solution is not expected to simply translate, but also various parts of the solution will deform, leading to the generation of shocks. This is one of our simplified system of equations, which we have referred to as the inviscid Burgers equation. 
 
-Similar to Section~\ref{sec:linear_hyperb_problems}, we want to analyze the characteristic behaviour of this equation. In order to do this, we write the \textit{quasilinear form} of Burgers' equation
-\begin{equation}
-	\frac{\partial u}{\partial t} + u\frac{\partial u}{\partial x} = 0,
-	\label{eq:nonconserv_burgers}
-\end{equation}
-which we will use to analyze the characteristic curves. Note that $f'(u) = u$. Recall that in the $x\times t$ plane, we look for lines along which the solution does not change. Hence, using the chain rule for $u(x(t), t)$, we can write
-\begin{equation}
-	\frac{du}{dt} = \frac{\partial u}{\partial t} + \frac{dx}{dt}{\partial t} = 0.
-	\label{eq:chainrule_burgers}
-\end{equation}
-If we compare Equations~\ref{eq:chainrule_burgers} and~\ref{eq:nonconserv_burgers}, it is clear that 
-\begin{equation}
-	\frac{dx}{dt} = u,
-\end{equation}
-where the characteristic curve equation is
-\begin{equation}
-	x = x_0 + ut.
-\end{equation}
-Since $u$ changes in time, so will the slope of the curves. Clearly, the speed of the solution is the solution itself. Hence, we expect larger values of the solution to travel faster than lower values of the solution. 
-\subsection{Nonlinear Hyperbolic Systems}
-\subsection{The Riemann Problem}
-\subsection{An Exact Riemann Solver for the Euler Equations}
-\subsection{Approximate Riemann Solvers}
+% Similar to Section~\ref{sec:linear_hyperb_problems}, we want to analyze the characteristic behaviour of this equation. In order to do this, we write the \textit{quasilinear form} of Burgers' equation
+% \begin{equation}
+% 	\frac{\partial u}{\partial t} + u\frac{\partial u}{\partial x} = 0,
+% 	\label{eq:nonconserv_burgers}
+% \end{equation}
+% which we will use to analyze the characteristic curves. Note that $f'(u) = u$. Recall that in the $x\times t$ plane, we look for lines along which the solution does not change. Hence, using the chain rule for $u(x(t), t)$, we can write
+% \begin{equation}
+% 	\frac{du}{dt} = \frac{\partial u}{\partial t} + \frac{dx}{dt}{\partial t} = 0.
+% 	\label{eq:chainrule_burgers}
+% \end{equation}
+% If we compare Equations~\ref{eq:chainrule_burgers} and~\ref{eq:nonconserv_burgers}, it is clear that 
+% \begin{equation}
+% 	\frac{dx}{dt} = u,
+% \end{equation}
+% where the characteristic curve equation is
+% \begin{equation}
+% 	x = x_0 + ut.
+% \end{equation}
+% Since $u$ changes in time, so will the slope of the curves. Clearly, the speed of the solution is the solution itself. Hence, we expect larger values of the solution to travel faster than lower values of the solution. 
+% \subsection{Nonlinear Hyperbolic Systems}
+% \subsection{The Riemann Problem}
+% \subsection{An Exact Riemann Solver for the Euler Equations}
+% \subsection{Approximate Riemann Solvers}
 
 \chapter{Consistency, Stability, Convergence}
 Now that we have derived a few different schemes for solving linear advection, Burgers equation, and linear diffusion, we should now ask ourselves whether they will give us accurate predictions, and are there any restrictions on when they can be used. We have already discussed the importance of order of accuracy, which governs the rate at which the error will converge to zero. Now we will introduce the concepts of consistency, stability, and convergence. If we can prove that our numerical scheme satisfies all three of these properties we can be confident that it is promising approach for the Euler or Navier-Stokes equations. In the current section we will explore these properties in the context of finite difference methods, but the exact same steps can be taken to check whether a finite volume method is suitable or not.
@@ -1365,7 +1393,9 @@ We can generate the exact same type of plot for permissible wave numbers $\kappa
 	\caption{Amplification factor vs wavenumber for the implicit advection scheme}
 	\label{fig:dissipation_advection_implicit}
 \end{figure}
-
+\begin{jupyternote}
+	Check out the Von Neumann Jupyter notebook on \url{\binderurl}. You can also download the files from the Gitlab repository \url{\repourl}.
+\end{jupyternote}
 \section{Dispersion Error}
 From the linear advection equation we know that the solution should translate at an exact wave speed $\alpha$. However, our numerical schemes will often introduce another error whereby the numerical wave does not move at the correct velocity. As a results, we often observe that the numerical solution is out of phase with the exact solution, which is referred to as dispersion error. Similar to the dissipation error, dispersion error can also be found from our results from von Neumann analysis. Recall that our assumed form of the solution for any isolated wave component of the full solution was
 \begin{equation}
@@ -1421,7 +1451,9 @@ which tells us the speed of the numerical wave relative to the exact wave speed.
 	\caption{Dispersion curve for the implicit advection scheme}
 	\label{fig:dissipation_advection_implicit}
 \end{figure}
-
+\begin{jupyternote}
+	Check out the Von Neumann Jupyter notebook on \url{\binderurl}. You can also download the files from the Gitlab repository \url{\repourl}.
+\end{jupyternote}
 \chapter{Modified Equation Analysis}
 In the previous sections we have demonstrated that our numerical schemes only approximate the exact PDE we are trying to solve. Furthermore, via von Neumann analysis that we can quantify the type of error we will observe as either dissipation or dispersion. Modified equation analysis is another powerful technique that allows us to better understand how and why a particular numerical scheme behaves the way it does. Using modified equation analysis we can show that, while our numerical scheme does not exactly satisfy the PDE we are trying to solve, it does provide an exact solution to a similar PDE. By determining what this similar PDE is, we can gain further insight into the behaviour of our scheme. In this section we will demonstrate by example how to perform modified equation analysis in the context of linear advection.
 

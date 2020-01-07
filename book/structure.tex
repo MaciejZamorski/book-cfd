@@ -370,6 +370,19 @@ innerbottommargin=5pt]{eqBox}
 \advance\baselineskip -1pt}{\end{list}\vskip5pt} % Tighter line spacing and white space after remark
 
 %----------------------------------------------------------------------------------------
+%	JUPYTER NOTEBOOK ENVIRONMENT
+%----------------------------------------------------------------------------------------
+
+\newenvironment{jupyternote}{\par\vspace{10pt}\small % Vertical white space above the remark and smaller font size
+\begin{list}{}{
+\leftmargin=35pt % Indentation on the left
+\rightmargin=25pt}\item\ignorespaces % Indentation on the right
+\makebox[-2.5pt]{\begin{tikzpicture}[overlay]
+\node[draw=ocre!60,line width=1pt,circle,fill=none,font=\sffamily\bfseries,inner sep=0pt,outer sep=0pt] at (-15pt,0pt){\includegraphics[width=.04\textwidth]{Pictures/jupyter_logo}};\end{tikzpicture}\quad} % Orange R in a circle
+\advance\baselineskip -1pt}{\end{list}\vskip5pt} % Tighter line spacing and white space after remark
+
+
+%----------------------------------------------------------------------------------------
 %	SECTION NUMBERING IN THE MARGIN
 %----------------------------------------------------------------------------------------
 

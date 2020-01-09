@@ -2203,5 +2203,153 @@ Hence, starting from the linear system of equations and the node locations on th
 
 \chapter{Applications}
 \section{An Euler Solver}
+In this section we will describe how to develop a two-dimensional solver for the Euler equations on a periodic domain. This will be approximated using finite difference methods in space and advanced in time using an explicit Runge-Kutta method. 
+
+Note that the Euler equations in two dimensions can be expanded as
+\begin{equation}
+	\label{eqn:5js81pgl}
+	\frac{\partial \vec{w}}{\partial t} + \frac{\partial{\vec{F}}}{\partial x} + \frac{\partial{\vec{G}}}{\partial y} = 0,
+\end{equation}
+where
+\begin{equation}
+	\label{eqn:dh691kgu}
+	\vec{w} = [\rho,\rho u, \rho v, \rho E]^T,
+\end{equation}
+is a vector of the conserved variables, $u$ and $v$ are the velocity components, and $E$ is the specific energy. The fluxes can be found directly as a function of the solution
+\begin{equation}
+	\label{eqn:sm5j29dj}
+	\vec{F} = [\rho u,\rho u^2 + p, \rho uv, u(\rho E+p)]^T,
+\end{equation}
+and
+\begin{equation}
+	\label{eqn:029as5ns}
+	\vec{G} = [\rho v,\rho u v, \rho v^2+p, v(\rho E+p)]^T,
+\end{equation}
+where
+\begin{equation} 
+	p = \rho R T,
+\end{equation}
+is the ideal gas law where $R$ is the gas constant and $T$ is temperature. Through some manipulation of the ideal gas law it can be shown that this can be written in an alternative form
+\begin{equation} 
+	p = (\gamma -1) \rho \left(E - \frac{1}{2}\left(u^2 + v^2 \right) \right),
+\end{equation}
+that no longer requires the gast constant, and where $\gamma$ is the ratio of specific heats. Hence, given the value of the solution at any point in the domain, and the ideal gas law, we can determine both of the flux components.
+
+It is worth taking a moment to consider this set of equations. Using the finite difference approach, we will store the conserved variables, specifically mass, momentum, and energy, at each grid point. From Equation \ref{eqn:5js81pgl} it is then possible to then get the time derivative of the solution at all of these grid points, provided we can compute the fluxes and their derivatives in space. This simply requires the specification of a suitable finite difference methods for approximating the derivatives in space.
+
+Now consider a two dimensional domain of length $L_x$ and $L_y$ in each direction that is discretized using a grid of $N_x$ and $N_y$ equidistant points. Using periodic boundary conditions, the grid spacing between adjacent points is
+\begin{equation}
+	\Delta x = \frac{L_x}{N_x},
+\end{equation}
+in the x-direction and
+\begin{equation}
+	\Delta y = \frac{L_y}{N_y},
+\end{equation}
+in the y-direction. The current value of the solution is stored at all grid points and denoted by $\vec{w}_{i,j}^t$ where $i$ and $j$ are the grid point indices and $t$ is the time level. We also store the coordinates of each grid point as $\vec{x}_{i,j}$, where 
+\begin{equation}
+	\vec{x}_{i,j} = [x_{i,j},y_{i,j}]^T.
+\end{equation}
+Provided an initial condition, the value of the solution is known at each grid point at the start of the simulation. Then the fluxes at each grid point can be calculated according to Equation \ref{eqn:sm5j29dj} and Equation \ref{eqn:029as5ns}. Hence, at every grid point we will now have $\vec{w}_{i,j}^t$, $\vec{F}_{i,j}^t$, and $\vec{G}_{i,j}^t$. Now using, for example, second-order central differences in space we can write
+\begin{equation}
+	\frac{d \vec{w}_{i,j}^t}{d t} + \frac{\vec{F}_{i+1,j}^t-\vec{F}_{i-1,j}^t}{2\Delta x} + \frac{\vec{G}_{i,j+1}^t-\vec{G}_{i,j-1}^t}{2\Delta y} + \mathcal{O}(\Delta x^2,\Delta y^2) = 0.
+\end{equation}
+Hence, given a value of the solution at every grid point, the fluxes, their divergence, and finally the time rate of change of the solution at each grid point can be determined. Then, using an appropriate temporal scheme, such as the classical RK$_{4,4}$ method, this system of equations can be advanced to the next time step.
+
+As an example, we will consider advection of an isentropic vortex having the initial condition
+\begin{eqnarray}
+\begin{split}
+\rho & = \left[1-\frac{S^2Ma^2(\gamma-1)e^{2f}}{8\pi^2}\right]^{\frac{1}{\gamma-1}},\\
+u& = \frac{S(y-y_c)e^f}{2\pi R},\\
+v& = 1-\frac{S(x-x_c)e^f}{2\pi R},\\
+p& = \frac{\rho^\gamma}{\gamma Ma^2},
+\end{split}
+\end{eqnarray}
+where $f = (1-(x-x_c)^2-(y-y_c)^2)/2R^2$, $S = 13.5$ is the strength of the vortex, $R=1.5$ is the characteristic vortex radius, $\gamma = 1.4$, the Mach number is $Ma = 0.4$, and $x_c$ and $y_c$ are the initial location of the vortex center. This initial condition is isentropic and, hence, without any viscous effects the exact solution consists of the vortex maintaining its initial shape and simply advecting with the mean flow at a vertical velocity of unity. Since the domain is periodic, the vortex will eventually return to its initial condition, and at this point we can evaluate an error norm of the density field of the form
+\begin{equation}
+	\| \rho \|_2 = \sqrt{\frac{\sum_{i=1}^{N_x} \sum_{j=1}^{N_y} \left(\rho_{i,j} - \rho_{e,i,j}\right)^2}{N_x N_y}},
+\end{equation}
+where $\rho_{e,i,j}$ is the exact solution at a grid point, which is equal to the initial condition at time $t = L_y/1$ since the vertical velocity is unity.
 
 \section{A Navier-Stokes Solver}
+In order to solve the Navier-Stokes equations, we can readily extend the two-dimensional Euler solver outlined in the previous section. He we will demonstrate how to solve the Navier-Stokes equations for a classical lid-driven cavity flow problem, as shown in Figure \ref{}. Again, this will be discretized using the finite difference method in space, with grid spacings
+\begin{equation}
+	\Delta x = \frac{L_x}{(N_x-1)},
+\end{equation}
+and
+\begin{equation}
+	\Delta y = \frac{L_y}{(N_y-1)},
+\end{equation}
+to ensure that grid points are included along all edges of the domain.
+
+Starting with the Navier-Stokes equations in two dimensions, we note that they can also be expanded in the following form
+\begin{equation}
+	\label{eqn:5js81pgl}
+	\frac{\partial \vec{w}}{\partial t} + \frac{\partial{\vec{F}}}{\partial x} + \frac{\partial{\vec{G}}}{\partial y} = 0,
+\end{equation}
+where again
+\begin{equation}
+	\vec{w} = [\rho,\rho u, \rho v, \rho E]^T,
+\end{equation}
+is a vector of the conserved variables. In addition, unlike the isentropic vortex test case, the lid driven cavity flow problem requires boundary conditions to be applied at the edges of the domain. In this case, we need to enforce the no-slip boundary conditions on all four walls. In additional we will enforce that the walls are isothermal. This is achieved by setting
+\begin{equation}
+	u_b = u_w, \: \:
+	v_b = v_w
+\end{equation}
+where $u_w = v_w = 0$ on all boundaries, except for the top plate where $u_w$ is specified to be consistent with the chosen Reynolds number. Then, the temperature at the boundary is fixed at
+\begin{equation}
+	T_b = T_w,
+\end{equation}
+which is specified to be the same temperature as the initial gas in the domain. In order to get the density at the wall, the pressure is first projected from the interior onto the boundary, and 
+\begin{equation}
+	p_b = p_+,
+\end{equation}
+where $p_+$ is the pressure at the first grid point off of the wall. Finally, the density can be obtained from the ideal gas law with the specified wall temperature and the pressure, and the state vector at the wall $\vec{w}_b$ can be constructed.
+
+For the Navier-Stokes equations, the flux functions can now be written as the sum of their respective inviscid and viscous components, such that $\vec{F} = \vec{F}_i + \vec{F}_v$ and $\vec{G} = \vec{G}_i + \vec{G}_v$, and $\vec{F}_i$ and $\vec{G}_i$ are the inviscid flux, which are still
+\begin{equation}
+	\vec{F}_i = [\rho u,\rho u^2 + p, \rho uv, u(\rho E+p)]^T,
+\end{equation}
+and
+\begin{equation}
+	\vec{G}_i = [\rho v,\rho u v, \rho v^2+p, v(\rho E+p)]^T.
+\end{equation}
+Furthermore, the viscous fluxes $\vec{F}_v$ and $\vec{G}_v$ are expanded to
+\begin{equation}
+	\vec{F}_v = [0,-\tau_{xx}, -\tau_{xy}, q_x-u\tau_{xx}-v\tau_{xy}]^T,
+\end{equation}
+and
+\begin{equation}
+	\vec{G}_v = [0,-\tau_{xy}, -\tau_{yy}, q_y-u\tau_{xy}-v\tau_{yy}]^T,
+\end{equation}
+where 
+\begin{equation}
+	q_x = -k \frac{\partial T}{\partial x},
+\end{equation} 
+\begin{equation}
+ q_y = -k \frac{\partial T}{\partial y},
+\end{equation} 
+are the heat fluxes, $k$ is the thermal conductivity and
+\begin{equation}
+	\tau_{xx} = \frac{2}{3}\mu\left(2 \frac{\partial u}{\partial x} - \frac{\partial v}{\partial y} \right),
+\end{equation}
+\begin{equation}
+	\tau_{yy} = \frac{2}{3}\mu\left(2 \frac{\partial v}{\partial y} - \frac{\partial y}{\partial x} \right),
+\end{equation}
+\begin{equation}
+	\tau_{xy} = \mu \left(\frac{\partial u}{\partial y} + \frac{\partial v}{\partial x}\right).
+\end{equation}
+We note that, unlike the Euler equations, we cannot obtain the viscous fluxes directly from the solution, since they also require the gradients of the velocity components and temperature. To obtain these gradients we will simply use central differences in the middle of the domain. For example, for the gradient of $u$ the following finite difference methods can be used
+\begin{equation}
+	\frac{\partial u}{\partial x} = \frac{u_{i-1,j}^t - 2 u_{i,j}^t + u_{i+1,j}^t}{\Delta x^2},
+\end{equation}
+\begin{equation}
+	\frac{\partial u}{\partial y} = \frac{u_{i,j-1}^t - 2 u_{i,j}^t + u_{i,j+1}^t}{\Delta y^2}.
+\end{equation}
+However, these finite difference methods will not work for computing the velocity and temperature gradients of the solution at the boundaries of the domain, since they would require points outside of the computational domain. Instead, one-sided stenciles can be used at the wall. For example, the following stencil can be used on the left hand side boundary of the domain
+\begin{equation}
+	\frac{\partial u}{\partial x} = \frac{-u_{i,3} + 4u_{i,2} - 3u_{i,1}}{2\Delta x},
+\end{equation}
+and along the length of each wall we will take the derivative to be zero. For example, on the left and right hand side boundaries this will yield
+\begin{equation}
+	\frac{\partial u}{\partial y} = 0.
+\end{equation}

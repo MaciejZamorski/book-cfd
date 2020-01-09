@@ -2119,6 +2119,87 @@ However, since our solution at any given iteration is only an approximate soluti
 where $\vec{r}$ is referred to as the residual and measures how well our current approximate solution satisfies the system of equations being solved. While $\vec{r}$ gives detailed information about how well each equation in the entire system is being solved, it is typically more useful to provide the user with a norm, such as $\| \vec{r} \|_2$ or $\| \vec{r} \|_\infty$, giving a single measure of convergence. Then, iterations are continued until this residual norm converges to within the desired tolerance. It is also important to note that if the convergence tolerance is too high it can results in a loss of accuracy or stability in the CFD simulation. Hence, particular care must be chosen in how to select the desired convergence tolerance.
 
 \section{Multigrid}
+It is important to note that both Jacobi and Gauss-Seidel iterations require $\mathcal{O}(N^2)$ operations per iteration they will typically be much faster that Gaussian elimination, provided the number of iterations is relatively small. However, the computational cost will still increase rapidly with the number of grid points. Ideally, we would like an iterative method that will converge with $\mathcal{O}(N)$ operations, resulting in a computational cost that varies linearly with the number of grid points.
+
+An important observation regarding the aforementioned iterative methods, such as Jacobi and Gauss-Seidel, is that they tend to converge {\it high-wavenumber} features, those that span only a few grid points, very quickly. In contrast, {\it low-wavenumber} features, those that span a large number of grid points, converge relatively slowly. The general idea behind the multigrid method is to use an additional coarse grid to converge these large scale structures. Since this additional grid is coarse it is relatively cheap per iteration, since it contains significantly fewer grid points and unknowns. Also, the low-wavenumber features on the find grid appear as higher-wavenumber features on the coarse grid and, hence, they converge quickly there. This procedure can then be extended to a large number of grid levels, resulting in the {\it multigrid} method.
+
+As an example, we will describe a two-level multigrid method for solving the linear system of equations
+\begin{equation}
+	A_h \vec{x}_h = \vec{b}_h,
+\end{equation}
+where the subscript $h$ denotes that this is the initial system of equations on fine grid, denoted by $\Omega_h$. Ultimately, we want to obtain the final solution to this linear system, $\vec{x}_h$, with as little computational cost as possible. From here we will recall that the residual on the fine grid can be defined as
+\begin{equation}
+	\vec{r}_h = \vec{b}_h - A_h \vec{x}_{h,n},
+\end{equation}
+where $\vec{x}_{h,n}$ is our current iterated estimate of the true solution. We will also define the error on the fine grid as simply the difference between the exact solution and the current iterated solution
+\begin{equation}
+	\vec{e}_{h,n} = \vec{x}_{h} - \vec{x}_{h,n}.
+\end{equation}
+Rearranging this expression for the error yields
+\begin{equation}
+	\vec{x}_{h,n} =  \vec{x}_{h} - \vec{e}_{h,n}.
+\end{equation}
+Substituting this into our expression for the expression for the residual yields
+\begin{equation}
+	\vec{r}_h = \vec{b}_h - A_h (\vec{x}_{h} - \vec{e}_{h,n}),
+\end{equation}
+and finally
+\begin{equation}
+	A_h \vec{e}_{h,n} = \vec{r}_h.
+\end{equation}
+Hence, similar to the solution, the error between the exact and current iterated solution also obeys a linear system of equations. In the multigrid method it is this error on the fine grid that gets projected to the coarse grid, and that is what is solved. The general multigrid process is as follows:
+\begin{itemize}
+	\item {\it Relax} $A_h \vec{x}_h = \vec{b}_h$ using $n$ iterations of Jacobi or Gauss-Seidel to obtain $\vec{x}_{h,n}$
+	\item {\it Compute} the residual on the fine grid level using $\vec{r}_h = \vec{b}_h - A_h \vec{x}_{h,n}$
+	\item {\it Restrict} the residual from $\Omega_h \rightarrow \Omega_{2h}$ using $\vec{r}_{2h} = I_{h}^{2h} \vec{r}_h$
+	\item {\it Solve} $A_{2h} \vec{e}_{2h,n} = \vec{r}_{2h}$ using Jacobi, Gauss-Seidel, or Gaussian elimination
+	\item {\it Prolongate} the error from $\Omega_{2h} \rightarrow \Omega_{h}$ using $\vec{e}_{h} = I_{2h}^{h} \vec{e}_{2h}$
+	\item {\it Correct} the solution on the fine grid using $\vec{x}_{h,n} = \vec{x}_{h,n} + \vec{e}_{h}$
+	\item {\it Repeat} from the first step until the system of equations on the fine grid converges
+\end{itemize}
+In the above approach we have introduce two new operators, specifically the restriction operator $I_{h}^{2h}$ and the prolongation operator $I_{2h}^{h}$ that are responsible for transferring data from the fine to coarse grid, and vice-versa. If we look at their required shapes we find that $I_{h}^{2h} \in N_{2h} \times N_h$, where $N_{2h}$ is the number of degrees of freedom on the coarse grid and $N_h$ is the number of degrees of freedom on the fine grid. In contrast, the prolongation operator is of dimension $I_{2h}^{h} \in N_{h} \times N_{2h}$. Consider the one-dimensional example case shown in Figure \ref{}, where $\Omega_{2h}$ is coarser than $\Omega_h$ in the sense that every other grid point is omitted. One simple option is to simply {\it linearly} interpolate the error from the coarse grid to the fine grid. This would give the following prolongation operator matrix
+\begin{equation}
+	I_{2h}^{h} = 
+	\begin{bmatrix}
+	    1 & 0 & 0 & 0 \\
+			\frac{1}{2} & \frac{1}{2} & 0 & 0 \\
+			0 & 1 & 0 & 0 \\
+			0 & \frac{1}{2} & \frac{1}{2} & 0 \\
+	    0 & 0 & 1 & 0 \\
+			0 & 0 & \frac{1}{2} & \frac{1}{2} \\
+			0 & 0 & 0 & 1 \\
+			\frac{1}{2} & 0 & 0 & \frac{1}{2}
+	\end{bmatrix},
+\end{equation}
+assuming periodic boundary conditions and a linear interpolation between the intermediate points. Now to get the restriction operator, which transfers data from the fine grid to the coarse grid we use
+\begin{equation}
+	I_{h}^{2h} = c (I_{2h}^{h})^T,
+\end{equation}
+where $c$ is a constant chosen such that all row sums of $I_{h}^{2h}$ are unity. This expands to
+\begin{equation}
+	I_{h}^{2h} = c
+	\begin{bmatrix}
+	    1 & \frac{1}{2} & 0 & 0 & 0 & 0 & 0 & \frac{1}{2} \\
+			0 & \frac{1}{2} & 1 & \frac{1}{2} & 0 & 0 & 0 & 0 \\
+			0 & 0 & 0 & \frac{1}{2} & 1 & \frac{1}{2} & 0 & 0 \\
+			0 & 0 & 0 & 0 & 0 & \frac{1}{2} & 1 & \frac{1}{2} \\
+	\end{bmatrix},
+\end{equation}
+and taking $c = 1/2$ yields
+\begin{equation}
+	I_{h}^{2h} =
+	\begin{bmatrix}
+	    \frac{1}{2} & \frac{1}{4} & 0 & 0 & 0 & 0 & 0 & \frac{1}{4} \\
+			0 & \frac{1}{4} & \frac{1}{2} & \frac{1}{4} & 0 & 0 & 0 & 0 \\
+			0 & 0 & 0 & \frac{1}{4} & \frac{1}{2} & \frac{1}{4} & 0 & 0 \\
+			0 & 0 & 0 & 0 & 0 & \frac{1}{4} & \frac{1}{2} & \frac{1}{4} \\
+	\end{bmatrix},
+\end{equation}
+satisfying the condition of having row sums of unity. Now that we have the restriction and prolongation operators, the last step is to find the linear system of equations on the coarse grid. This is found via
+\begin{equation}
+	A_{2h} = I_{h}^{2h} A_h I_{2h}^{h}.
+\end{equation}
+Hence, starting from the linear system of equations and the node locations on the coarse and fine grids, the first step for constructing the system on the coarse grid level is to provide a suitable prolongation operator to take data from this coarse to the fine grid. From this, one obtains the corresponding restriction operator, and finally the operator matrix on the coarse grid. Now, all of the required data is available to complete the multigrid procedure. We note that the above procedure describes a two-level multigrid method. However, this can be readily extended to any number of multigrid stages, and the smallest grid levels are typically coarse enough to be solved directly using Gaussian elimination. Furthermore, these grid levels can be traversed in difference orders. For example, the V-cycle, W-cycle, and Full Multigrid cycle shown in Figure \ref{}. Typically, each cycle spends the majority of its iterations on the coarsest grid levels, since iterations are relatively inexpensive here. Iterations are only performed on the finest grid level sparingly, and to converge the highest-wavenumber features in the flow.
 
 \chapter{Applications}
 \section{An Euler Solver}

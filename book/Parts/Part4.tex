@@ -1298,10 +1298,10 @@ the inviscid case (multigrid results). Comment on possible sources of discrepanc
 \label{ch:Mesh Generation Unisg Gmsh}
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 \section{Problem Description}
-In this tutorial, we are going to explain how to design and generate mesh based on different engineering demands and various CFD simulation purposes. The software we are going to use is Gmsh software. As mentioned before, the Gmsh is free and open-source software (for more information, please visit http://gmsh.info). However, to design a qualified mesh using Gmsh for simulation of flow around an airfoil, some preparations are required. These preparations should be done before getting started by Gmsh, in order to ease and accelerate the mesh design procedure. Therefore, all steps required for mesh generation using Gmsh are explained in details in following sections.
+In this tutorial, we are going to explain how to design and generate a mesh depending on different engineering demands and various purposes in the CFD simulation. The software we are going to use is Gmsh. As mentioned before, the Gmsh is free and open-source software (for more information, please visit http://gmsh.info). However, to design a qualified mesh using Gmsh some preparations are required. These preparations should be done before starting the Gmsh, in order to ease and accelerate the mesh design procedure. Therefore, all steps required for mesh generation using Gmsh are explained in details in following sections.
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 \section{Airfoil Coordinate Preparation}
-For mesh generating around an airfoil, we need to have access to the coordinates of the airfoil. One of the websites that almost contains most of the airfoils' coordinates is the AirfoilTools (for more information, please visit www.airfoiltools.com) (Fig.\ref{fig6:gmsh1}). We want to generate mesh for one of NACA series airfoils, so we can select either \textbf{NACA 4 digit generator} or \textbf{NACA 5 digit generator}. Here, we choose NACA2312 from \textbf{NACA 4 digit generator} (Fig.\ref{fig6:gmsh2}). Therefore, according to NACA2312, the \textbf{Max Camber}, \textbf{Max camber position} and \textbf{Thickness} are 2, 30 and 12, respectively. Furthermore, we select \textbf{Number of points} as 50 for simplicity, but you can increase it if you want to have more precise airfoil coordinate. At the end, click on the \textbf{Plot}, and copy the coordinate data from \textbf{Data file}.
+For mesh generation around an airfoil, we need to have access to the coordinates of the airfoil. One of the websites that contains the coordinates for a large variety of the airfoils is the AirfoilTools (for more information, please visit www.airfoiltools.com) (Fig.\ref{fig6:gmsh1}). In this tutorial we want to generate a mesh for one of NACA series airfoils, so we can select either \textbf{NACA 4 digit generator} or \textbf{NACA 5 digit generator}. Here, we chose NACA2312 from \textbf{NACA 4 digit generator} (Fig.\ref{fig6:gmsh2}). Therefore, according to NACA2312, the \textbf{Max Camber}, \textbf{Max camber position} and \textbf{Thickness} are 2, 30 and 12, respectively. Furthermore, we select \textbf{Number of points} as 50 for simplicity, but you can increase it if you want to have more precise airfoil coordinates. At the end, click on the \textbf{Plot}, and copy the coordinates data from \textbf{Data file}.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.9\textwidth]{tut06/gmsh1.pdf}
@@ -1314,8 +1314,8 @@ For mesh generating around an airfoil, we need to have access to the coordinates
     \caption{Settings for making NACA 4 digit airfoil coordinate.}
     \label{fig6:gmsh2}
 \end{figure}
-Additionally, make sure you activate the check-boxes beside \textbf{Cosine spacing} and \textbf{Close Trailing edge}. The \textbf{Cosine spacing} increases the number of points (or decreases the distance between points) around the leading and trailing edges of the airfoil to define curvatures precisely. Additionally, \textbf{Close Trailing edge} leads to have the same starting and ending points. In other words, both starting point and ending point have the same coordinate as (1, 0) in $xy$ plane. 
-Next, launch Microsoft Excel, and paste the coordinate data in the excel sheet. Since the airfoil coordinate has only $x$ and $y$ components, we need to add another column as $z$ component with zero values (Fig.\ref{fig6:gmsh3}). Next, save data as .dat file (you can make new Notepad file and copy/paste data from Excel sheet to the Notepad, and then in the Notepad, go to \textbf{File} $\rightarrow$ \textbf{Save as} and save it as \textit{naca2312.dat}).
+Additionally, make sure you activate the check-box beside \textbf{Cosine spacing} and \textbf{Close Trailing edge}. The \textbf{Cosine spacing} increases the number of points (or decreases the distance between points) around the leading edge and trailing edge of the airfoil in order to define precise curvatures. Additionally, \textbf{Close Trailing edge} leads to have the same starting and ending points in the coordinates list. In other words, both starting point and ending point have the same coordinate as (1, 0) in $xy$ plane. 
+Next, launch Microsoft Excel, and paste the coordinates data in the excel sheet. Since the airfoil coordinates have only $x$ and $y$ components, we need to add another column as $z$ component with zero values (Fig.\ref{fig6:gmsh3}). The reason is that the coordinates in Gmsh must be defined in 3D space, and because our mesh is 2D, we put zero value for $z$ component. Next, save data as .dat file (you can make a new file using a text editor (i.e. Notepad), and then copy/paste data from Excel sheet to there. Finally, in the text editor go to \textbf{File} $\rightarrow$ \textbf{Save as} and save it as \textit{naca2312.dat}).
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.6\textwidth]{tut06/gmsh3.pdf}
@@ -1324,25 +1324,25 @@ Next, launch Microsoft Excel, and paste the coordinate data in the excel sheet. 
 \end{figure}
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 \section{Converting Coordinate to Gmsh format}
-The Gmsh can not import the coordinates directly from .dat file, while it reads data from its own file format (.geo file). All data is written in form of Gmsh-language, and then, stored in the .geo file. The .geo file allows users to modify the design variables or add commands in an open-source environment. Since coding mesh generation in .geo file is beyond the concept of this tutorial, we try to use Graphical User Interface (GUI) environment as much as possible.
+The Gmsh can not import the coordinates directly from .dat file, while it only reads data from its specific file (.geo file). All data is written in form of Gmsh-language, and then, stored in the .geo file. The .geo file allows users to modify the design variables or add commands in an open-source environment. Since programing for mesh generation in the .geo file is beyond the concept of this tutorial, we try to use Graphical User Interface (GUI) environment as much as possible.
 
 In the first step, the points in Gmsh is defined like: \\
 \texttt{Point(1)=\{1.00000000, 0.00000000, 0.00000000, 1.000\};}, \\
-where, index in \texttt{Point(1)} shows the index of the corresponding point, and the first three numbers indicate point coordinate in space ($x$, $y$, and $z$ components). Additionally, the last number is the scale of mesh distribution around the corresponding point, which is 1 by default. Since defining all points in this way is time consuming, we added a Python-language script that converts all point coordinates in .dat file into Gmsh-language data, and store them in a new .geo file. To use this convertor, first of all, copy the \textit{gmshconvertor}.py script file in the same directory you already saved \textit{naca2312}.dat, and then open command line terminal and enter following commands:
+where, index in \texttt{Point(1)} shows the index of the corresponding point, and the first three numbers in brackets indicate the point coordinates in space ($x$, $y$, and $z$ components). Additionally, the last number is the scale of mesh distribution around the corresponding point, which is 1 by default. Since typing commands one-by-one for all points in this way is time consuming, we added a Python-language script in the tutorial folder that reads coordinates for all points in the \textit{naca2312}.dat file, and converts them into the Gmsh-language data, and store them in a new .geo file. To use this converter, first of all, copy the \textit{gmshconverter}.py script file in the same directory you already saved \textit{naca2312}.dat, and then open command line terminal and enter following commands:
 \begin{table}[htbp]
     \centering
     \begin{tabular}{|l|l|}
     \hline
-    Windows     & \begin{tabular}{c} \$ cd "where you saved naca2312.dat and gmshconvertor.py" \\ \$ python3 gmshconvertor.py naca2312.dat naca2312.geo \end{tabular}
+    Windows     & \begin{tabular}{c} \$ cd "where you saved naca2312.dat and gmshconverter.py" \\ \$ python3 gmshconverter.py naca2312.dat naca2312.geo \end{tabular}
     \\
     \hline
-    OSX     & \begin{tabular}{c} \$ cd "where you saved naca2312.dat and gmshconvertor.py" \\ \$ python3 gmshconvertor.py naca2312.dat naca2312.geo \end{tabular}
+    OSX     & \begin{tabular}{c} \$ cd "where you saved naca2312.dat and gmshconverter.py" \\ \$ python3 gmshconverter.py naca2312.dat naca2312.geo \end{tabular}
     \\
     \hline
     \end{tabular}
 \end{table}
 
-Please note that \textit{naca2312}.geo is the name of the .geo file that we are going to generate. After taking these steps, your .geo file is saved in the same directory and is ready to be loaded by Gmsh
+Please note that \textit{naca2312}.geo is the name of the .geo file that we are going to generate. After taking these steps, your .geo file is saved in the same directory and is ready to be loaded by Gmsh.
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 \section{Mesh Design Using Gmsh}
 Launch Gmsh and go to \textbf{File} $\rightarrow$ \textbf{Open}, and select \textit{naca2312}.geo file. As it is shown in Fig\ref{fig6:gmsh22}, once you load the \textit{naca2312}.geo file you will see the points in display window.
@@ -1352,21 +1352,21 @@ Launch Gmsh and go to \textbf{File} $\rightarrow$ \textbf{Open}, and select \tex
     \caption{Points defining NACA2312 airfoil.}
     \label{fig6:gmsh22}
 \end{figure}
-To make surface for the airfoil, we use spline to make smooth surfaces for the upper and lower side of the airfoil. On the right-hand side of the Gmsh window, go to \textbf{Modules} $\rightarrow$ \textbf{Geometry} $\rightarrow$ \textbf{Elementary entities} $\rightarrow$ \textbf{Add} $\rightarrow$ \textbf{Spline} (Fig.\ref{fig6:gmsh4}).
+To make surface for the airfoil, we use spline to make smooth surfaces for the upper and lower side of the airfoil. On the right-hand side of the Gmsh display window, go to \textbf{Modules} $\rightarrow$ \textbf{Geometry} $\rightarrow$ \textbf{Elementary entities} $\rightarrow$ \textbf{Add} $\rightarrow$ \textbf{Spline} (Fig.\ref{fig6:gmsh4}).
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.35\textwidth]{tut06/gmsh4.pdf}
     \caption{How to add spline to design platform.}
     \label{fig6:gmsh4}
 \end{figure}
-Next, start to click on points from the trailing edge (1,0,0) toward the leading edge (0,0,0) for the upper side of the airfoil. When you reach (0,0,0) press \texttt{E} button on your keyboard to apply your command (or design). Then, start again from (1,0,0) toward (0,0,0) for the lower side of the airfoil, and again when you reach (0,0,0), press \texttt{E} button. It is worth pointing out that Gmsh applies what you select in display window or what you design by pressing \texttt{E} button. Additionally, the Gmsh terminates the design or command by pressing \texttt{Q} button. Once you are done with making the upper and lower surfaces for the airfoil, press \texttt{Q} button to exit from this command. As it is shown in Fig.\ref{fig6:gmsh6}, the splines for both upper and lower surface of the airfoil is added.
+Next, start to click on points from the trailing edge (1,0,0) toward the leading edge (0,0,0) for the upper side of the airfoil. When you reach (0,0,0) press \texttt{E} button on your keyboard to apply your command (or design). Then, start again from (1,0,0) toward (0,0,0) for the lower side of the airfoil, and again when you reach (0,0,0), press \texttt{E} button. It is worth pointing out that by pressing \texttt{E} button, the Gmsh applies the commands for what you selected or designed in the display window. Additionally, the Gmsh terminates the design or commands by pressing \texttt{Q} button. Once you are done with making the upper and lower surfaces for the airfoil, press \texttt{Q} button to exit from this command. As it is shown in Fig.\ref{fig6:gmsh6}, the splines for both upper and lower surfaces of the airfoil are added to geometry.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.9\textwidth]{tut06/gmsh6.pdf}
     \caption{Splines added to define smooth surface for NACA2312 airfoil.}
     \label{fig6:gmsh6}
 \end{figure}
-In order to define the outer boundaries for computational domain, according to Fig.\ref{fig6:gmsh5}, go to \textbf{Modules} $\rightarrow$ \textbf{Geometry} $\rightarrow$ \textbf{Elementary entities} $\rightarrow$ \textbf{Add} $\rightarrow$ \textbf{Point}. Another display window similar to Fig.\ref{fig6:gmsh7} will appear that you need to define the coordinate for each point and then click on the \textbf{Apply}. Here, we give four points with following coordinates as follows: (10,-10,0), (10,10,0), (-10,-10,0), and (-10,10,0). Next, press \texttt{Q} button on your keyboard to end the commands.
+In order to define the outer boundaries for computational domain, according to Fig.\ref{fig6:gmsh5}, go to \textbf{Modules} $\rightarrow$ \textbf{Geometry} $\rightarrow$ \textbf{Elementary entities} $\rightarrow$ \textbf{Add} $\rightarrow$ \textbf{Point}. Another display window similar to Fig.\ref{fig6:gmsh7} will appear that you need to define the coordinates for each point and then click on the \textbf{Apply}. Here, we give four points with following coordinates as follows: (10,-10,0), (10,10,0), (-10,-10,0), and (-10,10,0). Next, press \texttt{Q} button on your keyboard to terminate the commands.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.35\textwidth]{tut06/gmsh5.pdf}
@@ -1379,14 +1379,14 @@ In order to define the outer boundaries for computational domain, according to F
     \caption{Setting for adding point in domain.}
     \label{fig6:gmsh7}
 \end{figure}
-As seen form Fig.\ref{fig6:gmsh8}, four points are added and appear in display window.
+As seen form Fig.\ref{fig6:gmsh8}, four points are added in the display window.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.75\textwidth]{tut06/gmsh8.pdf}
     \caption{Generated points in design platform at the corners of domain.}
     \label{fig6:gmsh8}
 \end{figure}
-The next step is to connect these four pints, and define the outer boundaries. To do this, according to Fig.\ref{fig6:gmsh10}, go to \textbf{Modules} $\rightarrow$ \textbf{Geometry} $\rightarrow$ \textbf{Elementary entities} $\rightarrow$ \textbf{Add} $\rightarrow$ \textbf{Straight line}. Next, try to connect the points by clicking on them. Once they are connected, a straight blue line shows up to display lines between each two points (Fig.\ref{fig6:gmsh9}). At the end, press \texttt{Q} button on your keyboard to end the command.
+The next step is to connect these four pints, and define the outer boundaries. To do this, according to Fig.\ref{fig6:gmsh10}, go to \textbf{Modules} $\rightarrow$ \textbf{Geometry} $\rightarrow$ \textbf{Elementary entities} $\rightarrow$ \textbf{Add} $\rightarrow$ \textbf{Straight line}. Next, try to connect the points by clicking on them. Once they are connected, four straight blue lines show the connection between each two points (Fig.\ref{fig6:gmsh9}). At the end, press \texttt{Q} button on your keyboard to end the commands.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.35\textwidth]{tut06/gmsh10.pdf}
@@ -1399,7 +1399,7 @@ The next step is to connect these four pints, and define the outer boundaries. T
     \caption{Straight lines added to define outer boundaries of domain.}
     \label{fig6:gmsh9}
 \end{figure}
-The next step is to integrate all lines/splines, and define a solid computational domain. According to Fig. \ref{fig6:gmsh11}, go to \textbf{Modules} $\rightarrow$ \textbf{Geometry} $\rightarrow$ \textbf{Elementary entities} $\rightarrow$ \textbf{Add} $\rightarrow$ \textbf{Plane Surface}. Next, click on all lines and splines, and then, press \texttt{E} button on your keyboard. As it is seen from Fig.\ref{fig6:gmsh12}, the dash lines with grey color appear, which demonstrate a computational surface that contains outer boundaries. At the end, press \texttt{Q} button on your keyboard to end the command.
+The next step is to specify the boundaries of the domain/geometry with respect to the lines/splines, and define a united computational domain. According to Fig. \ref{fig6:gmsh11}, go to \textbf{Modules} $\rightarrow$ \textbf{Geometry} $\rightarrow$ \textbf{Elementary entities} $\rightarrow$ \textbf{Add} $\rightarrow$ \textbf{Plane Surface}. Next, click on all lines and splines, and then, press \texttt{E} button on your keyboard. As it is seen from Fig.\ref{fig6:gmsh12}, the dash lines with grey color appear, which demonstrate a computational surface that contains geometry and outer boundaries. At the end, press \texttt{Q} button on your keyboard to end the commands.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.35\textwidth]{tut06/gmsh11.pdf}
@@ -1412,14 +1412,14 @@ The next step is to integrate all lines/splines, and define a solid computationa
     \caption{Surface generated to define computational domain.}
     \label{fig6:gmsh12}
 \end{figure}
-After having computational domain, we should determine physical boundaries (type of boundaries) in Gmsh to be able to implement boundary conditions in SU2 (or any other CFD software). To get started, according to Fig.\ref{fig6:gmsh13}, go to \textbf{Modules} $\rightarrow$ \textbf{Geometry} $\rightarrow$ \textbf{Physical groups} $\rightarrow$ \textbf{Add} $\rightarrow$ \textbf{Line}.
+After having the computational domain in Gmsh, we should determine the physical boundaries (type of boundaries) to be able to implement boundary conditions in SU2 (or any other CFD software). To get started, according to Fig.\ref{fig6:gmsh13}, go to \textbf{Modules} $\rightarrow$ \textbf{Geometry} $\rightarrow$ \textbf{Physical groups} $\rightarrow$ \textbf{Add} $\rightarrow$ \textbf{Line}.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.35\textwidth]{tut06/gmsh13.pdf}
     \caption{How to define boundary type in design platform.}
     \label{fig6:gmsh13}
 \end{figure}
-To define the outer boundary, according to Fig.\ref{fig6:gmsh14 a}, type \textit{farfield}, and then select four straight lines in display window by clicking on them. Next, press \texttt{E} button on your keyboard. This step specifies the name of these four lines as \textit{farfield}, and later in CFD software you can specify boundary conditions for \textit{farfield}. According to Fig.\ref{fig6:gmsh14 b}, do the same for airfoil, and then press \texttt{E} button on your keyboard. At the end, to specify fluid for computational domain, go to \textbf{Modules} $\rightarrow$ \textbf{Geometry} $\rightarrow$ \textbf{Physical groups} $\rightarrow$ \textbf{Add} $\rightarrow$ \textbf{Surface} (Fig.\ref{fig6:gmsh15}). Then, according to Fig.\ref{fig6:gmsh14 c}, type \textit{fluid} in text-box, and then select surface of the domain in display window by clicking on one of the dash lines (which indicate the surface of the domain). Next, press \texttt{E} button, and then  the \texttt{Q} button on your keyboard.
+To define the outer boundaries, according to Fig.\ref{fig6:gmsh14 a}, type \textit{farfield}, and then select four straight lines in display window by clicking on them. Next, press \texttt{E} button on your keyboard. This step specifies the name of these four lines as \textit{farfield}, and later in CFD software you can specify boundary conditions for the \textit{farfield}. According to Fig.\ref{fig6:gmsh14 b}, do the same for the airfoil, and then press \texttt{E} button on your keyboard. At the end, to specify the fluid for computational domain, go to \textbf{Modules} $\rightarrow$ \textbf{Geometry} $\rightarrow$ \textbf{Physical groups} $\rightarrow$ \textbf{Add} $\rightarrow$ \textbf{Surface} (Fig.\ref{fig6:gmsh15}). Then, according to Fig.\ref{fig6:gmsh14 c}, type \textit{fluid} in text-box, and then select surface of the domain in display window by clicking on one of the dash lines (which indicate the surface of the domain). Next, press \texttt{E} button, and then \texttt{Q} button on your keyboard.
 \begin{figure}[htbp]
     \centering
      \begin{subfigure}[b]{.4\textwidth}
@@ -1451,14 +1451,14 @@ To define the outer boundary, according to Fig.\ref{fig6:gmsh14 a}, type \textit
     \caption{Defining different boundary type.}
     \label{fig6:gmsh15}
 \end{figure}
-In order to add grids to the domain, we should specify the number of grids for each line or spline, and then make mesh for entire computational domain. Please note that here we are going to generate unstructured mesh for the computational domain. To get started, go to \textbf{Modules} $\rightarrow$ \textbf{Mesh} $\rightarrow$ \textbf{Define} $\rightarrow$ \textbf{Transfinite} $\rightarrow$ \textbf{Line} (Fig.\ref{fig6:gmsh16}).
+In order to add grids to the domain, we should specify the number of grids for each line or spline, and then make the mesh for entire computational domain. Please note that we are going to generate unstructured mesh for the computational domain. To get started, go to \textbf{Modules} $\rightarrow$ \textbf{Mesh} $\rightarrow$ \textbf{Define} $\rightarrow$ \textbf{Transfinite} $\rightarrow$ \textbf{Line} (Fig.\ref{fig6:gmsh16}).
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.35\textwidth]{tut06/gmsh16.pdf}
     \caption{How to specify grids on the boundaries.}
     \label{fig6:gmsh16}
 \end{figure}
-According to Fig.\ref{fig6:gmsh17 a}, choose 100 grid points in \textbf{Number of points}. Also, select \textit{Bump} form \textbf{Type} drop-down menu, and set 0.3 for \textbf{Parameter}. Next, click on both splines for upper and lower surface of the airfoil, and at the end, press \texttt{E} button on your keyboard. In this step, we selected 100 grid points for each surface of the airfoil, and with selecting \textit{Bump} with 0.3 as parameter set, we distributed the grid nodes along the spline with more concentration on the leading and trailing edges. You can change the clustering rate by setting different values for \textbf{Parameter}.
+According to Fig.\ref{fig6:gmsh17 a}, choose 100 grid points in \textbf{Number of points}. Also, select \textit{Bump} form \textbf{Type} drop-down menu, and set 0.3 for \textbf{Parameter}. Next, click on both splines for the upper and lower surface of the airfoil, and at the end, press \texttt{E} button on your keyboard. In this step, we selected 100 grid points for each surface of the airfoil, and with selecting \textit{Bump} with 0.3 as parameter set, we distributed the grid nodes along the spline with more concentration on the leading edge and trailing edge of the airfoil geometry. You can change the clustering rate by setting different values for \textbf{Parameter}.
 \begin{figure}[htbp]
     \centering
      \begin{subfigure}[b]{.4\textwidth}
@@ -1477,16 +1477,16 @@ According to Fig.\ref{fig6:gmsh17 a}, choose 100 grid points in \textbf{Number o
     \caption{Settings for defining different type of grid points.}
     \label{fig6:gmsh17}
 \end{figure}
-Next, according to Fig.\ref{fig6:gmsh17 b}, set the number of grid to 20 in \textbf{Number of points}. Then, to have equalized distribution of grids on each line of the outer boundary, select \textit{Progression} from \textbf{Type} drop-down menu with 1 as \textbf{Parameter}. Next, click on all four straight lines at outer boundaries, and then press \texttt{E} button on your keyboard. At the end, press \texttt{Q} button on your keyboard to end commands.
+Next, according to Fig.\ref{fig6:gmsh17 b}, set the number of grid to 20 in \textbf{Number of points}. Then, to have equalized distribution of the grids on each line of the outer boundaries, select \textit{Progression} from \textbf{Type} drop-down menu with value of 1 as \textbf{Parameter}. Next, click on all four straight lines at outer boundaries, and then press \texttt{E} button on your keyboard. At the end, press \texttt{Q} button on your keyboard to end commands.
 
-The next step is to generate mesh for 2D domain we already designed. To do this, according to Fig.\ref{fig6:gmsh23}, go to \textbf{Modules} $\rightarrow$ \textbf{Mesh} $\rightarrow$ \textbf{2D}. Once you select \textbf{2D}, it starts automatically to generate unstructured mesh for computational domain.
+The next step is to generate mesh for 2D domain we already designed. To do this, according to Fig.\ref{fig6:gmsh23}, go to \textbf{Modules} $\rightarrow$ \textbf{Mesh} $\rightarrow$ \textbf{2D}. Once you select \textbf{2D}, it  automatically starts to generate unstructured mesh for the computational domain.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.35\textwidth]{tut06/gmsh23pdf.pdf}
     \caption{How to generate 2D mesh.}
     \label{fig6:gmsh23}
 \end{figure}
-The mesh you get should be similar to Fig.\ref{fig6:gmsh18}. As you can see form Fig.\ref{fig6:gmsh18 a}, the mesh is coarse around the outer boundary, and the mesh is finer around the airfoil (Fig.\ref{fig6:gmsh18 b}), especially near the leading and trailing edges.
+The mesh you get should be similar to Fig.\ref{fig6:gmsh18}. As you can see form Fig.\ref{fig6:gmsh18 a}, the mesh is coarse around the outer boundaries, while it is finer around the airfoil (Fig.\ref{fig6:gmsh18 b}), especially near the leading edge and trailing edges of the airfoil geometry.
 \begin{figure}[htbp]
     \centering
      \begin{subfigure}[b]{.75\textwidth}
@@ -1505,7 +1505,7 @@ The mesh you get should be similar to Fig.\ref{fig6:gmsh18}. As you can see form
     \caption{Mesh generated for computational domain.}
     \label{fig6:gmsh18}
 \end{figure}
-Eventually, the mesh generation is done, and in this step we should save it in proper format for SU2. Fortunately, Gmsh can generate mesh which is compatible with SU2 (.su2 format). To do this, go to \textbf{File} $\rightarrow$ \textbf{Export}. Next, according to Fig.\ref{fig6:gmsh20}, select \textit{Mesh-SU2(*.su2)} from \textbf{Format} drop-down menu, and in the \textbf{Filename} address bar, choose \textit{naca2312.su2} for the name of your .su2 file. Then, click on \textbf{OK} to proceed next step. Afterward, a display window appears that asks about \textbf{SU2 Options}. You should ignore this option by clicking on \textbf{OK} to terminate mesh generation. Finally, the \textit{naca2312}.su2 mesh file is generated and saved in the directory you already chose.
+Eventually, the mesh generation is done, and in this step we should save it in proper format that is known by SU2 software. Fortunately, Gmsh can generate the mesh which is compatible with SU2 software (.su2 format). To do this, go to \textbf{File} $\rightarrow$ \textbf{Export}. Next, according to Fig.\ref{fig6:gmsh20}, select \textit{Mesh-SU2(*.su2)} from \textbf{Format} drop-down menu, and in the \textbf{Filename} address bar, type \textit{naca2312.su2} to create .su2 mesh file. Then, click on \textbf{OK} to proceed the next step. Afterward, a display window appears that asks about \textbf{SU2 Options}. You should ignore this option by clicking on \textbf{OK} to terminate mesh generation. Finally, the \textit{naca2312}.su2 mesh file is generated and saved in the directory you already chose.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.6\textwidth]{tut06/gmsh20.pdf}
@@ -1514,14 +1514,14 @@ Eventually, the mesh generation is done, and in this step we should save it in p
 \end{figure}
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 \section{Run Tutorial In Chapter\ref{ch:Inviscid NACA0012} Using New Mesh}
-In order to go over Chapter\ref{ch:Inviscid NACA0012} again with new mesh, just replace the new mesh with the default mesh in \textit{01QuickStart/tutorial} folder and proceed the same steps in Chapter\ref{ch:Inviscid NACA0012} to run the CFD simulation. If you want to change the name of physical boundaries in Gmsh, or choose different name for your .su2 mesh file, you should go to configuration file (.cfg) and change the related settings for mesh options. To do this, open the \textit{inv\_NACA0012}.cfg, and search for \texttt{INPUT/OUTPUT INFORMATION}. According to Fig.\ref{fig6:gmsh24}, in \texttt{MESH\_FILENAME} under \texttt{INPUT/OUTPUT INFORMATION}, you can change the name of mesh you are going to use it in SU2. You can also select different type of mesh in \texttt{MESH\_FORMAT}. In this tutorial we leave it as \texttt{SU2}.
+In order to go over Chapter\ref{ch:Inviscid NACA0012} again with new mesh, just replace the new mesh with the default mesh in \textit{01QuickStart/tutorial} folder and proceed the same steps in Chapter\ref{ch:Inviscid NACA0012} to run the CFD simulation. If you want to change the name of physical boundaries in Gmsh, or choose different name for your .su2 mesh file, you can go to configuration file (.cfg) and change the related settings for mesh options. To do this, open the \textit{inv\_NACA0012}.cfg, and search for \texttt{INPUT/OUTPUT INFORMATION}. According to Fig.\ref{fig6:gmsh24}, in \texttt{MESH\_FILENAME} under \texttt{INPUT/OUTPUT INFORMATION}, you can change the name of mesh you are going to use. You can also select different types of mesh in \texttt{MESH\_FORMAT}. In this tutorial we leave it as \texttt{SU2}.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.85\textwidth]{tut06/gmsh24.pdf}
     \caption{Settings for mesh in SU2 configuration file.}
     \label{fig6:gmsh24}
 \end{figure}
-Additionally, if you would like to pick different name for the physical boundaries in Gmsh, you should change the boundary names in the configuration file as well. To do this, search for \texttt{BOUNDARY CONDITION DEFINITION} in \textit{inv\_NACA0012}.cfg. According to Fig.\ref{fig6:gmsh25}, you can change the names with those you defined in Gmsh for physical boundaries. In this section, \texttt{MARKER\_EULER} and \texttt{MARKER\_FAR} correspond to the wall boundary for the upper and lower surfaces of the airfoil, and the far-field boundary for the outer boundaries, respectively.
+Additionally, if you would like to pick different name for the physical boundaries in the Gmsh, you should change the boundary names in the configuration file as well. To do this, search for \texttt{BOUNDARY CONDITION DEFINITION} in \textit{inv\_NACA0012}.cfg. According to Fig.\ref{fig6:gmsh25}, you can change the names with those you defined in the Gmsh for the physical boundaries. In this section, \texttt{MARKER\_EULER} and \texttt{MARKER\_FAR} correspond to the wall boundary for the upper and lower surfaces of the airfoil, and the far-field boundary for the outer boundaries, respectively.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.85\textwidth]{tut06/gmsh25.pdf}

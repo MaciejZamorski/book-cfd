@@ -8,62 +8,78 @@
 \label{ch:intro for tutorials}
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 \section{Gmsh}
-%++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-Gmsh is an 2D/3D finite element mesh generator included in built-in CAD engine and post-processor. Gmsh is developed in order to provide a fast, light and user-friendly meshing environment and visualization capabilities. This software is open source and the source code of Gmsh for various operating platforms (i.e. Windows, Mac and Unix) can be downloaded from http://gmsh.info. Gmsh contains four modules for geometry definition, meshing, solving and post-processing. each module has its own specifications as input and it can be controlled and manipulated interactively using the graphical user-interface (GUI), Gmsh's own scripting language (.geo file) or even using the C++, C or Python Application Programming Interface (API).
-Once we execute Gmsh, the module panel appears normally in left-hand side of window, including:
+\begin{gmshnote}
+	Read all about Gmsh and download its source and executables at \href{http://gmsh.info}{http://gmsh.info}.
+\end{gmshnote}
+Gmsh is an 2D/3D mesh generator including a built-in CAD engine and post-processor. Gmsh was developed to provide a fast, light, and user-friendly meshing environment with additional visualization capabilities. It is open source, and the source code and executables for various operating systems (Windows, Mac, Linux) can be downloaded directly from \href{http://gmsh.info}{http://gmsh.info}. Gmsh contains modules for geometry definition, meshing, solving and post-processing. each module has its own set of commands, which can be easily manipulated using the graphical user-interface (GUI).
+
+Upon launching the Gmsh executable the GUI will open, and the the module panel appears on left-hand side of window with headings to control the:
 \begin{itemize}
     \item \textbf{Geometry}
     \item \textbf{Mesh}
     \item \textbf{Solver}
 \end{itemize}
-Now, we try to explain each module separately and explain important features for each of them. The \textbf{Geometry} is a module that you can design your own geometry or import CAD design. A geometry is Gmsh is defined using its Boundary representation. It means a volume is made up of different surfaces, and each surface is made up of different curvatures or lines. Then, each curvature or line is bounded by two end points. Therefore, this representation shows the way we should take to design a 2D/3D geometry.
-Therefore, to define a shape in space, set of points are specified and the connections between these pints are built by straight lines or curvatures. Now, Gmsh can figure out surfaces based on the boundaries defined (line/curvature/end point). Later, based on the surfaces defined, Gmsh ca generates volume of geometry in space.
+The \textbf{Geometry} section is a module that allows you to create your own geometry directly within Gmsh, or import external CAD files. Geometry in Gmsh is defined using a hierarchical structure. This means a volume is made up of different surfaces, and each surface is made up of different curvatures or lines. In turn, each curve or line is bounded by two end points in the case of a straight line, or a sequence of points in the case of a spline, for example. Therefore, to define a desired geometry a set of points are specified first, and the connections between these pints are built by straight lines or curves. Then, a set of surfaces are created using the lines and curves, which are themselves used to define a volume in the case of a three-dimensional problem.
 
-This module has some sections that help you to define geometric parameters and shape of your design. Some of important sections of this module is enlisted and described as follows:
+The geometry module has some key features to allow you to accomplish these tasks. Some of the important features are as follows:
 \begin{itemize}
-    \item \textbf{Elementary entities}: helps to add, merge, split or delete points, lines, curves, faces or volumes we defined.
-    \item \textbf{Physical groups}: manages boundary conditions and physical properties (i.e. fluid or solid) of predefined geometry.
-    \item \textbf{Reload script}: reads and load the data defined predefined geometry from Gmsh's own language script saved in .geo file.
-    \item \textbf{Edit script}: allows you to edit the .geo file manually to change any specifications.
+    \item \textbf{Elementary entities}: Create, merge, split or delete points, lines, curves, faces or volumes as needed.
+    \item \textbf{Physical groups}: Specify boundary conditions and physical properties (i.e. fluid or solid) of a particular geometric entity.
+    \item \textbf{Reload script}: Re-reads the geometry saved in your .geo file, the Gmsh native file format.
+    \item \textbf{Edit script}: Allows you to edit the .geo file manually using a text editor.
 \end{itemize}
-It is worth pointing out that all specifications of geometry are saved in .geo file, this helps operator to manually manipulate geometry or any other specifications. 
-After building geometry and defining boundary conditions via \textbf{Geometry} module, the next step is to make finite element mesh of the geometry model using \textbf{Mesh} module. This module helps to define our geometry model by simple geometrical elements, such as: lines, triangles, tetrahedra, hexahedra and pyramids. Gmsh uses different algorithms for generating mesh automatically and the type of mesh in Gmsh is unstructured by default, otherwise we specify to generate structured one. \textbf{Mesh} module has also some sections that help to specify the type, number and density of mesh in domain. Here, some of important sections are provided as follows:
+It is worth noting that geometry specifications are saved in the .geo file in plain text format. This allows you to manually manipulate geometry or any other specifications by editing this plain text file using either the in-built text editor, or an external one. 
+
+After building the geometry and defining the boundary conditions via the \textbf{Geometry} module, the next step is usually to generate a discrete mesh of the geometry using the \textbf{Mesh} module. This module splits our geometry up into a number of simple geometric elements, such as: lines, triangles, tetrahedra, hexahedra and pyramids. Gmsh has several different algorithms for automatically generating the mesh, and an unstructured mesh will be generated by default. The \textbf{Mesh} module has also some sections that help to specify the type, number and density of mesh in domain. Here, some of the important sections:
 \begin{itemize}
-    \item \textbf{Define}: sets number of grids as well as growth ratio on the boundaries. Additionally, it specifies the mesh type (whether Structured or Unstructured).
-    \item \textbf{2D/3D}: makes mesh for surfaces/volumes existed in domain. It automatically generate mesh based on the specifications provided in \textbf{Define} section.
-    \item \textbf{Set order 1, 2, or 3}: Since the grid points in the mesh are connected to each other by straight lines (\textbf{Set order 1}), sometimes it is inefficient to define a geometry's curvatures using these straight lines. However, to overcome this problem, the mesh lines that define these curvatures can be more flexible and defined as polynomial (\textbf{Set order 2 or 3}). This feature helps to have more smooth mesh just beside curvatures to increase mesh quality in these regions.
+    \item \textbf{Define}: Set the number of grid points and stretching ratios. Additionally, control the mesh type (whether structured or unstructured).
+    \item \textbf{2D/3D}: Generates the mesh for surfaces/volumes in domain. It automatically generates the mesh using specifications provided in the \textbf{Define} section.
     \item 
 \end{itemize}
-Additionally, there is another module named \textbf{Solver}, which embed Gmsh directly to another solver.
-In this section, we are trying to explain how to use Gmesh in order to design and build a mesh-file for CFD application. This module makes an interface to share parameters and modeling information with different solvers. ONLAB (http://onelab.info) is one of examples that is used for this purpose. Explaining more details about this module is beyond the scope of this book.
-%++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Additionally, there is another module named \textbf{Solver}, which allows a numerical solver to be accessed directly from Gmsh. In the context of the current book, this will not be used here.
+
 \section{SU2}
-In computational aerodynamics, to simulate flow around a bluff body, inside the duct or any other related case, the Navier-Stokes equations should be solved in the discrete computational domain. The SU2 is open-source software that solves PDE (especially Navier Stokes equations) numerically. Additionally, it has the capability of performing optimization for PDE constrained problems (i.e. Adjoint method optimization). The SU2 source codes are written C++ programming language and its main application is aerodynamic shape optimization and computational fluid dynamics (CFD). However, it has other potential to being used for the study of electrodynamics or chemically reacting flow (i.e. combustion). The SU2 is an user-friendly software and is available for all operating systems (Windows, IOS and Linux). Furthermore, it is fast growing CFD tool and compatible with many famous post-processing and meshing software as well.
-Therefore, in the following tutorials, we are going to utilize SU2 as a CFD tool for flow simulations to demonstrate its potential for aerodynamic purposes.
+\begin{su2note}
+	Read all about SU2 and download its source and executables at \href{https://su2code.github.io/}{https://su2code.github.io/}.
+\end{su2note}
+As discussed in the Physics and Numerics parts of this book, ultimately an approximate solution to the Navier-Stokes or RANS equations is obtained by solving a discrete system of equations on a computational grid, or mesh. SU2 is an open-source CFD solver built specifically for this task. SU2 is written in C++, and its primary applications are computational aerodynamics and shape optimization. SU2 is generally user-friendly, and pre-compiled versions are available for all major operating systems (Windows, Mac, Linux). In the following laboratories we will demonstrate the utility of SU2 as a CFD tool for computational aerodynamics. Additional details on the capabilities of SU2, its source code, executables, and several example applications are available at \href{https://su2code.github.io/}{https://su2code.github.io/}.
+
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 \section{Paraview}
-After saving data as the output of CFD simulation, it should be gone through post-processing. In post-processing, the results are visualized in various manners, depending on the application. The data for CFD results are usually big and they need proper software to be analyzed. Paraview is an open-source and multi-platform visualization tool, which has great potential for scientific post-processing of the data. It is available for all operating systems (Windows, IOS and Linux). Additionally, it is user-friendly and free to use, which makes it one of the special scientific post-processing software. One of the unique features of the Paraview is to be designated for large data analysis by distributing memory in parallel ways to increase the speed of computations. Furthermore, the Paraview makes it possible to program scripts for automatic analysis or frequent post-processing of large data, such as making the animations or extracting results in various time steps. Consequently, in the following tutorial chapters, we will use the Paraview as a post-processing tool for the analysis of the CFD results.
+\begin{paraviewnote}
+	Read all about Paraview and download its source and executables at \href{https://www.paraview.org/}{https://www.paraview.org/}.
+\end{paraviewnote}
+After SU2 runs it generates a set of data files, which includes the complete flow field solved on the mesh generated previously using Gmsh. This data must be post-processed to visualize the flow structures, such as the velocity or pressure distributions. Paraview is an open-source and multi-platform visualization tool designed for this task. It is also available for all operating systems (Windows, Mac, Linux) and is free to download and use. Paraview is designed specifically to handle large complex data sets, such as those generated in CFD simulations. In the following laboratory experiments, we will use Paraview as a post-processing tool for the analysis of the data produced by SU2. Typically, this analysis consists of contours of flow parameters, extracting line plots, slices, or pressure coefficient distributions. Additional details about Paraview, its source code, executables, and example datasets can be found at \href{https://www.paraview.org/}{https://www.paraview.org/}.
+
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 \chapter{Inviscid NACA0012}
 \label{ch:Inviscid NACA0012}
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+\section{Required Files}
+\begin{su2note}
+	Use the following links to download the same version of SU2 for Windows (\href{}{click here}) or Mac (\href{}{click here}), and the required configuration (\href{}{click here}) and mesh files (\href{}{click here}).
+\end{su2note}
+\begin{paraviewnote}
+	Use the following links to download the same version of Paraview for Windows (\href{}{click here}) or Mac (\href{}{click here}).
+\end{paraviewnote}
+
 \section{Problem Description}
-In this tutorial, we are going to explain how to simulate inviscid flow around an NACA0012 airfoil. Since the flow is assumed to be inviscid, we apply Euler equation for flow modeling. Please note that at high Reynolds numbers, the flow could be assumed to be inviscid, since viscosity term in Navier-Stokes equations becomes negligible. For this example, the flow specifications are provided as follows:
+In this tutorial we are going to demonstrate how to simulate inviscid flow around the well-known NACA0012 airfoil. Under the assumption of inviscid flow, the Euler equations will be used. Please note that this assumption is only reasonably valid at high Reynolds numbers and low angles of attack, since the contribution of the viscous terms in the Navier-Stokes equations is minimal in this case. The flow specifications are provided as follows:
 \begin{itemize}
     \item Pressure = 101,325 Pa
     \item Temperature = 273 K
     \item Mach number = 0.8
     \item Angle of attack = 1.25 degree
 \end{itemize}
-The tutorial has two parts: Flow Solution and Post-Processing. In the first part, we explain how to manage prerequisite files and settings, and how to run the CFD simulation using SU2. In the second part, we explain how to use Paraview software to visualize data obtained form SU2.
+This tutorial has two parts: Flow Solution and Post-Processing. In the first part we will explain how to manage the required files and settings in SU2, and then run the simulation. In the second part we will explore how to use Paraview to visualize data files generated in the first step by SU2.
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 \section{Flow solution}
-To run the simulation, the SU2 needs two essential files: configuration file (.cfg) and mesh file (.su2). In this example, the following files are located in \textit{01Quickstart} folder:
+To run this simulation SU2 needs two files: a configuration file (.cfg) and a mesh file (.su2). Links to the required files and executables are provided at the start of this tutorial. The files include:
 \begin{enumerate}
-\item \textit{inv\_NACA0012}.cfg as a configuration file.
-\item \textit{mesh\_NACA0012\_inv}.su2 as a mesh file.
+\item \textit{inv\_NACA0012}.cfg: the configuration file.
+\item \textit{mesh\_NACA0012\_inv}.su2: the mesh file.
 \end{enumerate}
-The next step is to copy these two files in directory of SU2, where the execution and script files are located there. To run this simulation, open the command line terminal and enter the following commands:
+The next step is to copy these two files in the directory you have save the SU2 executable, so everything is located in the same folder. Then, to run the simulation using the executable, mesh, and configuration files simply open a terminal window and enter the following commands:
 \begin{table}[htbp]
     \centering
     \begin{tabular}{|l|l|}
@@ -71,28 +87,28 @@ The next step is to copy these two files in directory of SU2, where the executio
     Windows     & \begin{tabular}{c} \$ cd "where you saved the package" \\ \$ SU2\_CFD.exe inv\_NACA0012.cfg \end{tabular}
     \\
     \hline
-    OSX     & \begin{tabular}{c} \$ cd "where you saved the package" \\ \$ SU2\_CFD.exe inv\_NACA0012.cfg \end{tabular}
+    Mac     & \begin{tabular}{c} \$ cd "where you saved the package" \\ \$ SU2\_CFD.exe inv\_NACA0012.cfg \end{tabular}
     \\
     \hline
     \end{tabular}
 \end{table}
 
-The SU2 solver will commence calculation and print out the residuals at every iteration until the specified convergence criteria is achieved. After calculations are done, the following output files should be generated and saved in the SU2 folder:
+The SU2 solver will commence solving the problem and will print out the residuals at every iteration, until the specified convergence criteria is achieved. After the calculations are complete the following output files should have been generated within in the SU2 folder:
 \begin{itemize}
-    \item \textit{flow}.vtk: contains the full volume flow solution.
-    \item \textit{force\_breakdown}.dat: contains forces and moment on the airfoil.
-    \item \textit{history}.vtk: contains convergence history of calculations.
-    \item \textit{restart\_flow}.dat: for restarting simulation.
-    \item \textit{surface\_flow}.vtk: flow solution on the surface of the airfoil.
-    \item \textit{surface\_flow}.csv: comma separated values of flow solution on the airfoil (If you want to plot data in another software, like Microsoft Excel, you can use this file).
+    \item \textit{flow}.vtk: The flow solution on the entire domain.
+    \item \textit{force\_breakdown}.dat: Forces and moment on the airfoil.
+    \item \textit{history}.vtk: Convergence history.
+    \item \textit{restart\_flow}.dat: Restart file.
+    \item \textit{surface\_flow}.vtk: The flow solution on the airfoil surface.
+    \item \textit{surface\_flow}.csv: A comma separated value file of the flow solution on the airfoil.
 \end{itemize}
-Please keep in mind that every time you run SU2, the output data will be overwritten. Hence, before launching new simulation, you could make a new folder and transfer your data from previous simulation to this folder.
+Please keep in mind that every time you run SU2, the output data will be overwritten. Hence, before launching a new simulation you should backup your files in another directory.
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-\section{Post-processing}
-In this section, we explain how to use Paraview to visualize CFD data for this example. First of all, install Paraview (this tutorial uses Paraview 3.12.0) if you do not have it on your computer. Otherwise, take following steps for visualization:
+\section{Post-Processing}
+In this section, we explain how to use Paraview to visualize the solution generated by SU2. First of all, install paraview using the links at the start of this tutorial. Once that is complete, perform the following steps to visualize the results:
 %--------------------------------------------------------------
-\subsection{Load Solution File:}
-Launch Paraview. Go to \textbf{File} $\rightarrow$ \textbf{Open}, and then select \textit{flow}.vtk file. On the left-hand side of Paraview window you will see the file appears under \textbf{builtin} in \textbf{Pipeline Browser}. Now press \textbf{Apply} button in \textbf{Properties} tab, just right under the  \textbf{Pipeline Browser}. After taking these steps, your file is loaded by software and is ready to visualize (Fig.\ref{fig1:load}).
+\subsection{Open the Solution:}
+Launch Paraview. Go to \textbf{File} $\rightarrow$ \textbf{Open}, and then select \textit{flow}.vtk file. On the left-hand side of the Paraview window you will see the file appears under \textbf{builtin} in the \textbf{Pipeline Browser}. Now press the \textbf{Apply} button in the \textbf{Properties} tab, right under the \textbf{Pipeline Browser} heading. After taking these steps, your file is loaded by Paraview and is ready to be visualized (Figure \ref{fig1:load}).
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.4\textwidth]{tut01/loadvtkfile.pdf}
@@ -100,8 +116,8 @@ Launch Paraview. Go to \textbf{File} $\rightarrow$ \textbf{Open}, and then selec
     \label{fig1:load}
 \end{figure}
 %--------------------------------------------------------------
-\subsection{Visualize Mesh Domain}
-In order to view mesh, according to Fig.\ref{fig1:wireframe}, select \textit{Solid Color} with \textit{Wireframe} in the toolbar. Then, you can zoom in to see mesh around the airfoil like Fig.\ref{fig1:mesh}. As you can see, the mesh around the NACA0012 is unstructured, and the grids are clustered around the leading and trailing edges of the airfoil.
+\subsection{Visualize the Mesh}
+In order to view the mesh that was stored in the .su2 file, and as shown in Figure \ref{fig1:wireframe}, select \textit{Solid Color} with \textit{Wireframe} in the toolbar. Then, you can zoom in to see the mesh near the surface of the airfoil. as shown in Figure \ref{fig1:mesh}. As you can see, the mesh around the NACA0012 is unstructured, and the elements are clustered around the leading and trailing edges of the to resolve the complex flow structures that are expected there.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.6\textwidth]{tut01/wireframe.pdf}
@@ -116,7 +132,7 @@ In order to view mesh, according to Fig.\ref{fig1:wireframe}, select \textit{Sol
 \end{figure}
 %--------------------------------------------------------------
 \subsection{Visualize Pressure Contour}
-In order to visualize pressure contour, click on the \textit{flow}.vtk from \textbf{Pipeline Browser} to activate the file, and then click on the \textbf{Properties} tab. According to Fig.\ref{fig1:colorby}, in \textbf{Coloring} section, select \textit{Pressure} from drop-down menu. To change color settings for the pressure, you can also click on the \textbf{Edit} under the \textbf{Coloring}. Normally another display window appears on the right-hand side of the monitor, similar to Fig.\ref{fig1:change_color_range}. Now you can change the maximum/minimum range of pressure to your desirable values by \textbf{Set Range}, or change contour colors by \textbf{Choose Preset} (Fig.\ref{fig1:change_color_range}).
+In order to visualize pressure contours, click on \textit{flow}.vtk from within the \textbf{Pipeline Browser} to select the current data file, and then click on the \textbf{Properties} tab. According to Figure \ref{fig1:colorby}, in \textbf{Coloring} section, select \textit{Pressure} from the drop-down menu. To change the color settings used to show the pressure field you can click on \textbf{Edit} under the \textbf{Coloring} options. Another display window appears on the right-hand side of the monitor, similar to Figure \ref{fig1:change_color_range}. Now you can change the maximum/minimum range of pressure to your desired values using the \textbf{Set Range} option, or change the contour colors using \textbf{Choose Preset} (Figure \ref{fig1:change_color_range}).
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.4\textwidth]{tut01/contourdisplay.pdf}
@@ -129,7 +145,7 @@ In order to visualize pressure contour, click on the \textit{flow}.vtk from \tex
     \caption{How to change color and max/min values for contour.}
     \label{fig1:change_color_range}
 \end{figure}
-After taking these steps, the pressure contour in the display window should be similar to Fig.\ref{fig1:pressure_contour}.
+After these steps, the pressure contours shown in the display window should be similar to those shown in Figure \ref{fig1:pressure_contour}.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=.75\textwidth]{tut01/pressurecontour1.pdf}
@@ -137,21 +153,21 @@ After taking these steps, the pressure contour in the display window should be s
     \label{fig1:pressure_contour}
 \end{figure}
 
-To add contour lines, click again on the \textit{flow}.vtk file in the \textbf{Pipeline Browser}, and then click on the \textbf{Contour} icon (Fig.\ref{fig1:contour_icon}) in toolbar.
+To add contour lines, click again on the \textit{flow}.vtk file in the \textbf{Pipeline Browser}, and then click on the \textbf{Contour} icon (Figure \ref{fig1:contour_icon}) in the toolbar.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.6\textwidth]{tut01/contourlineicon.pdf}
-    \caption{Contour icon in toolbar.}
+    \caption{Contour icon in the toolbar.}
     \label{fig1:contour_icon}
 \end{figure}
-Now you should see \textit{Contour1} appears under \textit{flow}.vtk file in the \textbf{Pipeline Browser} (Fig.\ref{fig1:contour1}).
+Now you should see that a new item called \textit{Contour1} appears under \textit{flow}.vtk in the \textbf{Pipeline Browser} (Figure \ref{fig1:contour1}).
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.5\textwidth]{tut01/contour1.pdf}
     \caption{Adding \textit{Contour1} in \textbf{Pipeline Browser}.}
     \label{fig1:contour1}
 \end{figure}
-According to Fig.\ref{fig1:contourby a}, go to the \textbf{Properties} tab, and select \textit{Pressure} from \textbf{Contour By} drop-down menu. Next, click on the \textbf{New Range} icon to customize the range of pressure contour. For now, set the number of step to 20, similar to Fig.\ref{fig1:contourby b}. It means the pressure contour range is equally divided by 20 portions, and the pressure values in each portion are limited by two lines in the display window. At the end, click on \textbf{Apply} to see contour lines in display window.
+As shown in Figure \ref{fig1:contourby a}, go to the \textbf{Properties} tab, and select \textit{Pressure} from the \textbf{Contour By} drop-down menu. Next, click on the \textbf{New Range} icon to customize the range of contour lines that will be generated. For now, set the number of steps to 20, similar to Figure \ref{fig1:contourby b}. This means the pressure contour range is equally divided by 20 portions between the minimum and maximum values. Finally, click on \textbf{Apply} to generate these contour lines in the display window.
 \begin{figure}[htbp]
     \centering
      \begin{subfigure}[b]{.4\textwidth}
@@ -170,14 +186,14 @@ According to Fig.\ref{fig1:contourby a}, go to the \textbf{Properties} tab, and 
     \caption{How to define a new range for the contour lines.}
     \label{fig1:contourby}
 \end{figure}
-Next, as it is shown in Fig.\ref{fig1:colorby2}, click on the \textbf{Display} under \textbf{Properties} tab. In \textbf{Coloring} section, select \textbf{Solid Color} form drop-down menu, and choose white color form \textbf{Edit}.
+Next, as it is shown in Figure \ref{fig1:colorby2}, click on the \textbf{Display} under \textbf{Properties} tab. In the \textbf{Coloring} section, select \textbf{Solid Color} from the drop-down menu, and choose white as the color using \textbf{Edit}.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.6\textwidth]{tut01/coloring.pdf}
     \caption{Changing contour lines color in \textbf{Coloring} section.}
     \label{fig1:colorby2}
 \end{figure}
-Eventually, the pressure contour with contour lines should be similar to Fig.\ref{fig1:pressure_contour_lines}.
+Now the pressure contour lines should look similar to Figure \ref{fig1:pressure_contour_lines}.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=.75\textwidth]{tut01/pressurecontour2.pdf}
@@ -186,16 +202,16 @@ Eventually, the pressure contour with contour lines should be similar to Fig.\re
 \end{figure}
 %--------------------------------------------------------------
 \subsection{Visualize Pressure Coefficient}
-The pressure data on the surface of the airfoil is stored in \textit{surface\_flow}.vtk. Now the attempt is to plot it with respect to the chord line position. Therefore, go to \textbf{Open} $\rightarrow$ \textbf{File}, and select \textit{surface\_flow}.vtk. As it is shown in Fig.\ref{fig1:builtin}, this file is now loaded and added to the list of items under \textbf{builtin} in \textbf{Pipeline Browser}.
+The pressure data on the surface of the airfoil is stored in \textit{surface\_flow}.vtk. We will now generate a plot of the pressure coefficient as a function of chordwise position. Go to \textbf{Open} $\rightarrow$ \textbf{File} and select \textit{surface\_flow}.vtk. As shown in Figure \ref{fig1:builtin}, this file is now loaded and added to the list of items under \textbf{builtin} in \textbf{Pipeline Browser}.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.5\textwidth]{tut01/eyeiconsurfaceflow.pdf}
     \caption{Loading another .vtk file in Paraview.}
     \label{fig1:builtin}
 \end{figure}
-Note that there is an eye icon on the left-hand side of each item in \textbf{Pipeline Browser}, which enables to hide/unhide the figures being related to each item. Since we want to see pressure coefficient plot, we hide the contours by clicking on the eye icon beside \textit{flow}.vtk and \textit{Contour1}. 
+Note that there is an eye icon on the left-hand side of each item in \textbf{Pipeline Browser}, which enables you to hide/unhide the plots related to each item. Since we want to see only the pressure coefficient plot, we hide the previously-generated contours by unselecting the eye icon beside \textit{flow}.vtk and \textit{Contour1}. 
 
-According to Fig.\ref{fig1:plotdata}, select \textit{surface\_flow}.vtk in \textbf{Pipeline Browser}, and then go to \textbf{Filters} $\rightarrow$ \textbf{Search} (Fig.\ref{fig1:plotdata a}), and then search for \textbf{Plot Data} (Fig.\ref{fig1:plotdata b}). 
+As shown in Figure \ref{fig1:plotdata}, select \textit{surface\_flow}.vtk in \textbf{Pipeline Browser} and then go to \textbf{Filters} $\rightarrow$ \textbf{Search} (Figure \ref{fig1:plotdata a}) and search for \textbf{Plot Data} (Figure \ref{fig1:plotdata b}). 
 \begin{figure}[htbp]
     \centering
      \begin{subfigure}[b]{.4\textwidth}
@@ -215,21 +231,21 @@ According to Fig.\ref{fig1:plotdata}, select \textit{surface\_flow}.vtk in \text
     \label{fig1:plotdata}
 \end{figure}
 
-After taking this step, as it is shown in Fig.\ref{fig1:plotdata-list}, \textit{PlotData1} item is added to the list in the \textbf{Pipeline Browser}. Then, hide (deactivate) all items in the list of \textbf{Pipeline Browser} except \textit{PlotData1} by clicking on the eye icons beside each item, and later, click on \textbf{Apply} for the next step.
+After taking this step, as shown in Figure \ref{fig1:plotdata-list}, the \textit{PlotData1} item is added to tthe \textbf{Pipeline Browser}. Hide (deactivate) all items in the list of \textbf{Pipeline Browser} except \textit{PlotData1} by clicking on the eye icons beside each item, and then click on \textbf{Apply}.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.5\textwidth]{tut01/plotdata1.pdf}
     \caption{Adding \textit{PlotData1} to \textbf{Pipeline Browser}.}
     \label{fig1:plotdata-list}
 \end{figure}
-According to Fig.\ref{fig1:pointsx}, from \textbf{Display} in \textbf{Properties} tab, deactivate \textbf{Use Index For XAxis}, and then select \textit{Points\_X} from drop-down menu. 
+As shown in Figure \ref{fig1:pointsx}, from \textbf{Display} in the \textbf{Properties} tab, deactivate \textbf{Use Index For XAxis}, and then select \textit{Points\_X} from the drop-down menu. 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.5\textwidth]{tut01/plotcurvesetting.pdf}
     \caption{Plot settings for pressure coefficient along the chord line.}
     \label{fig1:pointsx}
 \end{figure}
-In the \textbf{Series Parameters} in the same tab, unclick all variables except for \textit{Pressure\_Coefficient}. This allows you to have only one plot for pressure coefficient versus chord line. The pressure plot in the display window should be similar to Fig.\ref{fig1:surface_pressure}.
+In the \textbf{Series Parameters} in the same tab, unselect all variables except for \textit{Pressure\_Coefficient}. This allows you to have only one plot showing the pressure coefficient versus chord line. The pressure plot in the display window should be similar to Figure \ref{fig1:surface_pressure}.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=.75\textwidth]{tut01/plot11.pdf}
@@ -237,21 +253,21 @@ In the \textbf{Series Parameters} in the same tab, unclick all variables except 
     \label{fig1:surface_pressure}
 \end{figure}
 
-Usually $C_p$ is plotted in such a way that the pressure curve in suction side (lower pressure) is on top of the pressure curve on the pressure side (higher pressure). Therefore, we need to reverse  the $y$-axis in the plot (flip). To do this, go to \textbf{Display} from \textbf{Properties} tab. Next, find \textbf{Left Axis Range} section in the same tab, and then click on the \textbf{Left Axis Use Custom Range} (Fig.\ref{fig1:viewsetting}). Later, another section appears to select maximum/minimum ranges for left axis of plot. Eventually, just switch numbers in these two text bars. It allows the $y$-axis to be reverse (flipped) as we want it to be.
+By convection, $-C_p$ is typically plotted such that the pressure curve on suction side (lower pressure) is on top of the pressure curve on the pressure side (higher pressure). Therefore, we need to reverse the $y$-axis in this plot to flip it. To do this, go to \textbf{Display} in the \textbf{Properties} tab. Next, find the \textbf{Left Axis Range} section in the same tab, and then click on \textbf{Left Axis Use Custom Range} (Figure \ref{fig1:viewsetting}). Later, another section appears to select maximum/minimum ranges for left axis of plot. Now, switch numbers in these two text bars. This allows the $y$-axis to be reverse (flipped).
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.5\textwidth]{tut01/leftaxis.pdf}
     \caption{Plot Settings.}
     \label{fig1:viewsetting}
 \end{figure}
-Additionally, there are other parameters that you might change in the same tab, like \textbf{Left Axis Title} or  \textbf{Bottom Axis Title}. To do this, please type $C_p$ and $x/c$ in \textbf{Left Axis Title} and \textbf{Bottom Axis Title}, respectively. Furthermore, for adding marker to the plot lines, form \textbf{Display} select \textbf{Marker Style} as \textit{Diamond} (Fig.\ref{fig1:marker}). You can also change the thickness of plot line in the same tab.
+Additionally, there are other parameters that you may want to change in the same tab, like \textbf{Left Axis Title} or \textbf{Bottom Axis Title}. To do this, please type $C_p$ and $x/c$ in \textbf{Left Axis Title} and \textbf{Bottom Axis Title}, respectively. Furthermore, for adding markers to the plot lines, form \textbf{Display} select the \textbf{Marker Style} as \textit{Diamond} (Figure \ref{fig1:marker}). You can also change the thickness of plot line in the same tab.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.4\textwidth]{tut01/addingmarker.pdf}
     \caption{How to add marker to plot.}
     \label{fig1:marker}
 \end{figure}
-Eventually, the final plot you should get is like Fig.\ref{fig1:surface_pressure2}
+Eventually, the final plot you should get is like Figure \ref{fig1:surface_pressure2}
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=.75\textwidth]{tut01/plot22.pdf}
@@ -259,16 +275,16 @@ Eventually, the final plot you should get is like Fig.\ref{fig1:surface_pressure
     \label{fig1:surface_pressure2}
 \end{figure}
 %--------------------------------------------------------------
-\subsection{Forces on the Airfoil}
-In order to obtain the aerodynamic loads on the airfoil, open \textit{force\_breakdown}.dat using a text editor software. According to Fig.\ref{fig1:forcefile1}, in this file there are flow properties that you can check if the values are the same as those in configuration file. 
+\subsection{Aerodynamic Forces}
+In order to obtain the aerodynamic forces on the airfoil, open \textit{force\_breakdown}.dat using a text editor software. According to Figure \ref{fig1:forcefile1}, in this file the flow properties are also show, and it can be confirmed that these agree with the values in the configuration file. 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.9\textwidth]{tut01/forcefile1.pdf}
-    \caption{Fluid and flow properties form \textit{force\_breakdown}.dat.}
+    \caption{Fluid and flow properties from \textit{force\_breakdown}.dat.}
     \label{fig1:forcefile1}
 \end{figure}
 
-Additionally, according to Fig.\ref{fig1:forcefile2}, the aerodynamic loads are expressed in non-dimensional form by using free-stream values for density and velocity, as well as one reference length (or area). It could be a good practice to check if the non-dimensional factor corresponds to the expected free-stream values. The actual forces (dimensional) can be obtained by multiplying coefficient with non-dimensional factor calculated by free-stream density and velocity. Note that you can find lift coefficient ($C_L$), drag coefficient ($C_D$), lift to drag ratio ($C_L / C_D$), the moment coefficient ($C_{M,z}$), $x$-component of force coefficient ($C_{F,x}$) and $y$-component of force coefficient ($C_{F,y}$) all from the \textit{force\_breakdown}.dat.
+Additionally, as shown in Figure \ref{fig1:forcefile2}, the aerodynamic forces are expressed in non-dimensional form by using free-stream values for density and velocity, as well as one reference length (or area). The actual dimensional forces (dimensional) can be obtained by multiplying the flow coefficients with these non-dimensional factor calculated with the free-stream density and velocity. Note that you can find the lift coefficient ($C_L$), drag coefficient ($C_D$), lift to drag ratio ($C_L / C_D$), the moment coefficient ($C_{M,z}$), $x$-component of force coefficient ($C_{F,x}$) and $y$-component of force coefficient ($C_{F,y}$) all from the \textit{force\_breakdown}.dat.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.8\textwidth]{tut01/forcefile2.pdf}
@@ -276,6 +292,7 @@ Additionally, according to Fig.\ref{fig1:forcefile2}, the aerodynamic loads are 
     \label{fig1:forcefile2}
 \end{figure}
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+\clearpage
 \section{Questions}
 1. Run the provided default NACA0012 test case at the provided Ma = 0.8.
 \begin{enumerate}[label=(\alph*)]
@@ -297,23 +314,30 @@ Additionally, according to Fig.\ref{fig1:forcefile2}, the aerodynamic loads are 
 \chapter{Supersonic Wedge}
 \label{ch:Supersonic Wedge}
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+\section{Required Files}
+\begin{su2note}
+	Use the following links to download the same version of SU2 for Windows (\href{}{click here}) or Mac (\href{}{click here}), and the required configuration (\href{}{click here}) and mesh files (\href{}{click here}).
+\end{su2note}
+\begin{paraviewnote}
+	Use the following links to download the same version of Paraview for Windows (\href{}{click here}) or Mac (\href{}{click here}).
+\end{paraviewnote}
 \section{Problem Description}
-In this tutorial, we are going to explain how to simulate supersonic inviscid flow past a simple 2D wedge. This wedge generates oblique-shock for high Mach number flows. Keep in mind that if the Reynolds number is high enough, the viscosity term in Navier-Stokes equations becomes negligible, and then, flow can be assumed to be inviscid. The another assumption we take is that the flow is a perfect gas. Furthermore, the domain is a structured mesh with 3,750 nodes. The upper wall is a flat Euler wall. The lower wall is also Euler wall with a wedge starting at $x/L=1/3$, where $L$ is the length of duct. Additionally, the wedge angle is 10 degree. For this example, the flow specifications are provided as follows:
+In this tutorial we are going to demonstrate how to simulate supersonic inviscid flow past a simple 2D wedge. This wedge generates an oblique-shock wave moving outwards from its surface. Assuming the Reynolds number is high enough, and that the fluid is an ideal gas, we will be using the Euler equations. The domain is approximated using a structured mesh with 3,750 nodes. The domain consists of a flat upper wall, and a lower wall with an inclined a wedge starting at $x/L=1/3$, where $L$ is the length of duct. The wedge angle is taken to be 10 degrees, and the inlet flow paramaters are:
 \begin{itemize}
     \item Pressure = 101,325 Pa
     \item Temperature = 273.15 K
     \item Mach number = 2.0
     \item Wedge angle = 10 degrees
 \end{itemize}
-The tutorial has two parts: Flow Solution and Post-processing. In the first part, we explain how to manage prerequisite files and settings, and how to run the CFD simulation using SU2. In the second part, we explain how to use Paraview software to visualize data obtained form SU2.
+This tutorial has two parts: Flow Solution and Post-processing. In the first part, we will explain how to manage yjr prerequisite files and settings, and how to run the CFD simulation using SU2. In the second part we explain how to use Paraview to visualize the data obtained from SU2.
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 \section{Flow solution}
-To run the simulation, the SU2 needs two essential files: configuration file (.cfg) and mesh file (.su2). In this example, the following files are located in \textit{02InviscidSupersonicWedge} folder:
+To run this simulation SU2 needs two files: a configuration file (.cfg) and a mesh file (.su2). Links to the required files and executables are provided at the start of this tutorial. The files include:
 \begin{enumerate}
-    \item inv\_wedge\_HLLC.cfg as a configuration file.
-    \item mesh\_wedge\_inv.su2 as a mesh file.
+    \item inv\_wedge\_HLLC.cfg which is a configuration file.
+    \item mesh\_wedge\_inv.su2 which is a a mesh file.
 \end{enumerate}
-The next step is to copy these two files in directory of SU2, where the execution and script files are located there. To run this simulation, open the command line terminal and enter the following commands:
+The next step is to copy these two files into that same directory as the SU2 executable. Then, to run the simulation open a terminal window and enter the following commands:
 \begin{table}[htbp]
     \centering
     \begin{tabular}{|l|l|}
@@ -321,28 +345,28 @@ The next step is to copy these two files in directory of SU2, where the executio
     Windows     & \begin{tabular}{c} \$ cd "where you saved the package" \\ \$ SU2\_CFD.exe inv\_wedge\_HLLC.cfg \end{tabular}
     \\
     \hline
-    OSX     & \begin{tabular}{c} \$ cd "where you saved the package" \\ \$ SU2\_CFD.exe inv\_wedge\_HLLC.cfg \end{tabular}
+    Mac     & \begin{tabular}{c} \$ cd "where you saved the package" \\ \$ SU2\_CFD.exe inv\_wedge\_HLLC.cfg \end{tabular}
     \\
     \hline
     \end{tabular}
 \end{table}
 
-The SU2 solver will commence calculation and print out the residuals at every iteration until the specified convergence criteria is achieved. After calculations are done, the following output files should be generated and saved in the SU2 folder:
+The SU2 solver will commence solving the problem and will print out the residuals at every iteration, until the specified convergence criteria is achieved. After the calculations are complete the following output files should have been generated within in the SU2 folder:
 \begin{itemize}
-    \item \textit{flow}.vtk: contains the full volume flow solution.
-    \item \textit{force\_breakdown}.dat: contains forces and moment on the surface of the duct.
-    \item \textit{history}.vtk: contains convergence history of calculations.
-    \item \textit{restart\_flow}.dat: for restarting simulation.
-    \item \textit{surface\_flow}.vtk: flow solution on the surface of the duct.
-    \item \textit{surface\_flow}.csv: comma separated values of flow solution on the surface of the duct (If you want to plot data in another software, like Microsoft Excel, you can use this file).
+    \item \textit{flow}.vtk: The flow solution on the entire domain.
+    \item \textit{force\_breakdown}.dat: Forces and moment on the airfoil.
+    \item \textit{history}.vtk: Convergence history.
+    \item \textit{restart\_flow}.dat: Restart file.
+    \item \textit{surface\_flow}.vtk: The flow solution on the airfoil surface.
+    \item \textit{surface\_flow}.csv: A comma separated value file of the flow solution on the airfoil.
 \end{itemize}
-Please keep in mind that every time you run SU2, the output data will be overwritten. Hence, before launching new simulation, you could make a new folder and transfer your data from previous simulation to this folder.
+Please keep in mind that every time you run SU2, the output data will be overwritten. Hence, before launching a new simulation you should backup your files in another directory.
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-\section{Post-processing}
-In this section, we explain how to use Paraview to visualize CFD data for this example. First of all, install Paraview (this tutorial uses Paraview 3.12.0) if you do not have it on your computer. Otherwise, take following steps for visualization:
+\section{Post-Processing}
+In this section, we explain how to use Paraview to visualize the solution generated by SU2. First of all, install paraview (if not already done) using the links at the start of this tutorial. Once that is complete, perform the following steps to visualize the results:
 %--------------------------------------------------------------
 \subsection{Load Solution File:}
-Launch Paraview. Go to \textbf{File} $\rightarrow$ \textbf{Open}, and then select \textit{flow}.vtk file. On the left side of Paraview window you will see the file appears in \textbf{Pipeline Browser}, under \textbf{builtin}. Now press \textbf{Apply} button in \textbf{Properties} tab, just right under the  \textbf{Pipeline Browser}. After taking these steps, your file is loaded by software and is ready to visualize (Fig.\ref{fig2:load}).
+Launch Paraview. Go to \textbf{File} $\rightarrow$ \textbf{Open}, and then select the \textit{flow}.vtk file. On the left side of the Paraview window you will see the file appears in the \textbf{Pipeline Browser} under \textbf{builtin}. Now press the \textbf{Apply} button in the \textbf{Properties} tab, right under the \textbf{Pipeline Browser} heading. After taking these steps, your file is loaded by Paraview and is ready to be visualized (Figure \ref{fig2:load}).
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.4\textwidth]{tut02/loadvtkfile.pdf}
@@ -351,7 +375,7 @@ Launch Paraview. Go to \textbf{File} $\rightarrow$ \textbf{Open}, and then selec
 \end{figure}
 %--------------------------------------------------------------
 \subsection{Visualize Mesh Domain}
-According to Fig.\ref{fig2:wireframe}, in order to view mesh, select \textit{Solid Color} with \textit{Wireframe} in the toolbar. Then, you can even zoom in to see mesh for wedge domain, like Fig.\ref{fig2:mesh}. As you can see, the mesh in the duct is structured, and at some point the wedge changes the direction of mesh in domain. Additionally, the grids are approximately uniform in whole domain without any significant clustering.
+As shown in Figure \ref{fig2:wireframe}, in order to view the mesh select \textit{Solid Color} with \textit{Wireframe} in the toolbar. Then, you can zoom in to see the mesh for the computational domain, as shown in Figure \ref{fig2:mesh}. As you can see, the mesh in the duct is structured, and at the start of the wedge abruptly changes the direction of mesh on the bottom surface. Additionally, the grids are approximately uniform throughout the domain.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.6\textwidth]{tut02/wireframe.pdf}
@@ -366,28 +390,28 @@ According to Fig.\ref{fig2:wireframe}, in order to view mesh, select \textit{Sol
 \end{figure}
 %--------------------------------------------------------------
 \subsection{Visualize Pressure Contour and Mach Contour}
-To display the pressure contour, click on the \textit{flow}.vtk in \textbf{Pipeline Browser} to activate the file, and then click on \textbf{Display} form \textbf{Properties} tab. Under \textbf{Coloring} section, select \textit{Pressure} from drop-down menu (Fig.\ref{fig2:pressure contours setting}). Additionally, for changing color settings for the pressure, you can click on the \textbf{Edit} under the \textbf{Coloring}.
+To display pressure contours click on \textit{flow}.vtk in the \textbf{Pipeline Browser}, and then click on the \textbf{Display} form in the \textbf{Properties} tab. Under \textbf{Coloring} section, select \textit{Pressure} from the drop-down menu (Figure \ref{fig2:pressure contours setting}). Additionally, to change the color settings used for  pressure you can click on the \textbf{Edit} option under the \textbf{Coloring} section.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.4\textwidth]{tut02/pressurecont.pdf}
     \caption{Settings for displaying the pressure contour.}
     \label{fig2:pressure contours setting}
 \end{figure}
-Normally, another display window appears on the right-hand side of the monitor, named as \textbf{Mapping Data}, similar to Fig.\ref{fig2:color_range}.
+Another display window will appear on the right-hand side of the monitor titled \textbf{Mapping Data}, similar to Figure \ref{fig2:color_range}.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.4\textwidth]{tut02/colorrange.pdf}
     \caption{Changing color range for pressure contour.}
     \label{fig2:color_range}
 \end{figure}
-Now you can change contour colors by choosing \textbf{Choose preset}. Here, we select \textit{Cold and Hot} color range to be able to show clearly the sharp changes in pressure values (Fig.\ref{fig2:color_range_item}). Then, click \textbf{Apply} for the next step.
+Now you can change contour colors by choosing \textbf{Choose preset}. Here, we select \textit{Cold and Hot} color range to be able to show clearly the sharp changes in pressure values around the shock (Figure \ref{fig2:color_range_item}). Then, click \textbf{Apply} for the next step.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.5\textwidth]{tut02/changecontourcolors.pdf}
     \caption{Different color ranges to display contour.}
     \label{fig2:color_range_item}
 \end{figure}
-Additionally, to add axis to plots, under \textbf{Miscellaneous} form \textbf{Display} (Fig.\ref{fig2:add axis}), you can check box beside \textbf{Data Axes Grid}, and then go to \textbf{Edit} and change more options based on your preferences (Fig.\ref{fig2:axis setting}).
+To add axes to the plots look under the \textbf{Miscellaneous} form of \textbf{Display} (Figure \ref{fig2:add axis}) and select the check box beside \textbf{Data Axes Grid}. Then go to \textbf{Edit} and change these options based on your preferences (Figure \ref{fig2:axis setting}).
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.4\textwidth]{tut02/addaxis.pdf}
@@ -400,7 +424,7 @@ Additionally, to add axis to plots, under \textbf{Miscellaneous} form \textbf{Di
     \caption{Settings for axis style.}
     \label{fig2:axis setting}
 \end{figure}
-Finally, the pressure contour you get should be similar to Fig.\ref{fig2:plot pressure cont1}.
+Finally, the pressure contour you get should be similar to Figure \ref{fig2:plot pressure cont1}.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.85\textwidth]{tut02/plot1pressurecont.pdf}
@@ -410,21 +434,21 @@ Finally, the pressure contour you get should be similar to Fig.\ref{fig2:plot pr
 %----------------------------------------------------------
 
 The pressure gradient along the shock wave is very difficult to see, and we want to add contour lines to
-separate the pressure color gradient. To add contour lines, click again on the \textit{flow}.vtk file in the \textbf{Pipeline Browser}, and then click on the \textbf{Contour} icon (Fig.\ref{fig2:contour_icon}) in toolbar.
+separate the different regions. To add contour lines, click again on the \textit{flow}.vtk file in the \textbf{Pipeline Browser}, and then click on the \textbf{Contour} icon (Figure \ref{fig2:contour_icon}) in toolbar.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.5\textwidth]{tut02/contourlineicon.pdf}
     \caption{\textbf{Contour} icon in toolbar.}
     \label{fig2:contour_icon}
 \end{figure}
-Eventually,\textit{Contour1} appears under \textit{flow}.vtk file in the \textbf{Pipeline Browser} (Fig.\ref{fig2:contour1}). Then, click on \textbf{Apply} to proceed next step.
+Now the \textit{Contour1} item appears under \textit{flow}.vtk file in the \textbf{Pipeline Browser} (Figure \ref{fig2:contour1}). Click on \textbf{Apply} to proceed to the next step.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.4\textwidth]{tut02/contour1.pdf}
     \caption{Adding \textit{Contour1} in \textbf{Pipeline Browser}.}
     \label{fig2:contour1}
 \end{figure}
-With regard to Fig.\ref{fig2:contourby a}, go to the \textbf{Properties} tab, and select \textit{Pressure} from \textbf{Contour By} drop-down menu. Next, click on the \textbf{Add Range} icon to customize the range of pressure contour. In Fig.\ref{fig2:contourby b}, you will see the max/min range of contour lines (i.e. \textbf{From}/\textbf{To}), as well as number of lines you would rather to have in your contour plot (i.e. \textbf{Steps}). Next, set \textbf{Step} to 20, and click \textbf{OK}. By doing this, it means the pressure contour range is equally divided by 20 portions, and the pressure values in each portion are limited by two lines in the display window. At the end, click on \textbf{Apply} to see contour lines in display window.
+With regard to Figure \ref{fig2:contourby a}, go to the \textbf{Properties} tab, and select \textit{Pressure} from the \textbf{Contour By} drop-down menu. Next, click on the \textbf{Add Range} icon to customize the range to be used for the pressure contours. In Figure \ref{fig2:contourby b}, you will see the max/min range of contour lines (i.e. \textbf{From}/\textbf{To}), as well as number of lines you would like to have in your contour plot (i.e. \textbf{Steps}). Next, set \textbf{Steps} to 20, and click \textbf{OK}. By doing this the pressure contour range is equally divided into 20 lines. At the end, click on \textbf{Apply} to see contour lines in display window.
 \begin{figure}[htbp]
     \centering
      \begin{subfigure}[b]{.4\textwidth}
@@ -443,14 +467,14 @@ With regard to Fig.\ref{fig2:contourby a}, go to the \textbf{Properties} tab, an
     \caption{How to define a new range for the contour lines.}
     \label{fig2:contourby}
 \end{figure}
-Next, as it is shown in Fig.\ref{fig2:colorby2}, click on the \textbf{Display} under \textbf{Properties} tab. In \textbf{Coloring} section, select \textbf{Solid Color} form drop-down menu, and choose white color form \textbf{Edit}.
+Next, as it is shown in Figure \ref{fig2:colorby2}, click on the \textbf{Display} under \textbf{Properties} tab. In the \textbf{Coloring} section select \textbf{Solid Color} from the drop-down menu and choose white from \textbf{Edit}.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.4\textwidth]{tut02/contourline.pdf}
     \caption{Changing contour lines color in \textbf{Coloring} section.}
     \label{fig2:colorby2}
 \end{figure}
-Eventually, the pressure contour with contour lines should be similar to Fig.\ref{fig2:pressure_contour_lines}.
+The pressure contour lines should now be similar to Figure \ref{fig2:pressure_contour_lines}.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=.85\textwidth]{tut02/plot2pressurecont.pdf}
@@ -458,7 +482,7 @@ Eventually, the pressure contour with contour lines should be similar to Fig.\re
     \label{fig2:pressure_contour_lines}
 \end{figure}
 You can zoom-in to the region at the bottom of the wedge to see the pressure gradient along the oblique
-shock, like Fig.\ref{fig2:pressure_contour_lines_zoom}.
+shock, as shown in Figure \ref{fig2:pressure_contour_lines_zoom}.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=.65\textwidth]{tut02/plot3pressurecont.pdf}
@@ -466,7 +490,7 @@ shock, like Fig.\ref{fig2:pressure_contour_lines_zoom}.
     \label{fig2:pressure_contour_lines_zoom}
 \end{figure}
 
-The other important plot we want to show is related to Mach number contour. To display the Mach number contour, click on \textit{flow}.vtk in the \textbf{Pipeline Browser}. Similar to Fig.\ref{fig2:pressure contours setting}, under \textbf{Coloring} section, select \textit{Mach} from drop-down menu. Next, click on \textit{Contour1} in the \textbf{Pipeline Browser}. Later, under \textbf{Properties}, select \textit{Mach} from \textbf{Contour By} drop-down menu. Since all the settings are related to pressure value, we need to revise some options for \textit{Mach} value. To do this, first of all, we need to delete data range for pressure and replace it with data range of Mach number. Under \textbf{Isosurfaces} from \textbf{Properties}, click on the \textbf{Remove All} icon, and then click on the \textbf{Add Range} icon, as shown in Fig.\ref{fig2:contourby2 a}. As you can see form Fig.\ref{fig2:contourby2 b}, the max/min values for mach number has changed. Now set the \textbf{Steps} to 20 and click on \textbf{OK} to proceed next step.
+The other important plot we want to generate is related to the Mach number. To display the Mach number contours, click on \textit{flow}.vtk in the \textbf{Pipeline Browser}. Similar to Figure \ref{fig2:pressure contours setting}, under \textbf{Coloring} section, select \textit{Mach} from the drop-down menu. Next, click on \textit{Contour1} in the \textbf{Pipeline Browser}. Now, under \textbf{Properties} select \textit{Mach} from the \textbf{Contour By} drop-down menu. Since all these settings are related to the previous pressure value, we need to revise some options to display contours of \textit{Mach} number appropriately. To do this we need to delete the data range that was used for pressure, and replace it with the data range of that Mach number. Under \textbf{Isosurfaces} from \textbf{Properties}, click on the \textbf{Remove All} icon, and then click on the \textbf{Add Range} icon, as shown in Figure \ref{fig2:contourby2 a}. As you can see from Figure \ref{fig2:contourby2 b}, the max/min values for mach number has changed. Now set the \textbf{Steps} to 20 and click on \textbf{OK} to proceed to the next step.
 \begin{figure}[htbp]
     \centering
      \begin{subfigure}[b]{.4\textwidth}
@@ -485,7 +509,7 @@ The other important plot we want to show is related to Mach number contour. To d
     \caption{How to define a new range for the contour lines.}
     \label{fig2:contourby2}
 \end{figure}
-Now the Mach number contour should look like Fig.\ref{fig2:mach_contour}. Additionally, if you zoom-in the plot, you will see more contour details near the wedge similar to Fig.\ref{fig2:mach_contour_zoom}.
+Now the Mach number contour should look similar to Figure \ref{fig2:mach_contour}. Additionally, if you zoom-in the plot you will see more contour details near the wedge, similar to Figure \ref{fig2:mach_contour_zoom}.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=.85\textwidth]{tut02/plot1machcont.pdf}
@@ -500,35 +524,35 @@ Now the Mach number contour should look like Fig.\ref{fig2:mach_contour}. Additi
 \end{figure}
 %--------------------------------------------------------------
 \subsection{Plotting a variable over an arbitrary line}
-For plotting variable over an arbitrary line, you can activate \textit{flow}.vtk by clicking on it in the \textbf{Pipeline Browser}. Next, as shown in Fig.\ref{fig2:plot_over_line}, go to \textbf{Filters} $\rightarrow$  \textbf{Data Analysis} $\rightarrow$  \textbf{Plot Over Line}.
+To plot a variable over an arbitrary line, you can activate \textit{flow}.vtk by clicking on it in the \textbf{Pipeline Browser}. Next, as shown in Figure \ref{fig2:plot_over_line}, go to \textbf{Filters} $\rightarrow$  \textbf{Data Analysis} $\rightarrow$  \textbf{Plot Over Line}.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=.75\textwidth]{tut02/plotoverline.pdf}
     \caption{How to plot over an arbitrary line.}
     \label{fig2:plot_over_line}
 \end{figure}
-Next, according to Fig.\ref{fig2:line_coordinate}, under \textbf{Line Parameters} from \textbf{Properties}, select the coordinates for two arbitrary points you want (i.e. \textbf{Point1} and \textbf{Point2}). In this case, plot the line from \textbf{Point1} to \textbf{Point2} with (0,0.5,0) and (1.5,0.5,0), respectively, and then, click on \textbf{Apply}.
+Next, as shown in Figure \ref{fig2:line_coordinate}, under \textbf{Line Parameters} in \textbf{Properties}, select the coordinates for two arbitrary points you want (i.e. \textbf{Point1} and \textbf{Point2}). In this case, plot the line from \textbf{Point1} to \textbf{Point2} with (0,0.5,0) and (1.5,0.5,0), respectively, and then click \textbf{Apply}.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=.45\textwidth]{tut02/linecoord.pdf}
     \caption{Define the coordinates for plotting over the line.}
     \label{fig2:line_coordinate}
 \end{figure}
-Eventually, a plot will be generated. According to Fig.\ref{fig2:plot_line_setting}, under \textbf{X Axis Parameters} from \textbf{Display}, pick \textit{Point\_X} from \textbf{X Array Name} drop-down menu. Furthermore, under \textbf{Series Parameters}, toggle the box beside \textbf{Variable} to uncheck everything, then select the \textit{Mach} among all variables existed.
+A new line plot item will be generated. As shown in Figure \ref{fig2:plot_line_setting}, under the \textbf{X Axis Parameters} from \textbf{Display}, pick \textit{Point\_X} from the \textbf{X Array Name} drop-down menu. Now, under the \textbf{Series Parameters}, toggle the box beside \textbf{Variable} to uncheck everything, then select only the \textit{Mach} item.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=.45\textwidth]{tut02/plotmachline.pdf}
     \caption{How to plot Mach number over a line.}
     \label{fig2:plot_line_setting}
 \end{figure}
-The plot of Mach number vs the \textit{x-coordinate} will be displayed in main window like Fig.\ref{fig2:plot_line}.
+The plot of Mach number vs the \textit{x-coordinate} will be displayed in the main window as shown in Figure \ref{fig2:plot_line}.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=.85\textwidth]{tut02/plot2contourline.pdf}
     \caption{Mach number plot over a specified line in \textit{x-coordinate}.}
     \label{fig2:plot_line}
 \end{figure}
-In order to see the spreadsheet view, click the upper right icon as shown in Fig.\ref{fig2:open_spreadsheet}, then click on the \textit{Spreadsheet View} like Fig.\ref{fig2:spreadsheet}.
+In order to see a spreadsheet view, click the upper right icon as shown in Figure \ref{fig2:open_spreadsheet}, then click on the \textit{Spreadsheet View} like Figure \ref{fig2:spreadsheet}.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=.3\textwidth]{tut02/openspreadsheet.pdf}
@@ -541,8 +565,9 @@ In order to see the spreadsheet view, click the upper right icon as shown in Fig
     \caption{Selecting \textit{Spreadsheet View} among different views.}
     \label{fig2:spreadsheet}
 \end{figure}
-Additionally, you can save .csv file and plot it with other available software such as Microsoft Excel. To export the spreadsheet as a .csv file, go to \textbf{File} $\rightarrow$ \textbf{Export}, and then \textbf{Save as} .csv.
+Additionally, you can export a .csv file and plot it with any other plotting software. To export the spreadsheet as a .csv file, go to \textbf{File} $\rightarrow$ \textbf{Export}, and then \textbf{Save as} .csv.
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+\clearpage
 \section{Questions}
 1. Run the default case as provided which uses 2ND\_ORDER and the HLLC Riemann solver.
 \begin{enumerate}[label=(\alph*)]

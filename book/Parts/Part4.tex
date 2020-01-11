@@ -329,7 +329,7 @@ In this tutorial we are going to demonstrate how to simulate supersonic inviscid
     \item Mach number = 2.0
     \item Wedge angle = 10 degrees
 \end{itemize}
-This tutorial has two parts: Flow Solution and Post-processing. In the first part, we will explain how to manage yjr prerequisite files and settings, and how to run the CFD simulation using SU2. In the second part we explain how to use Paraview to visualize the data obtained from SU2.
+This tutorial has two parts: Flow Solution and Post-processing. In the first part, we will explain how to manage the prerequisite files and settings, and how to run the CFD simulation using SU2. In the second part we explain how to use Paraview to visualize the data obtained from SU2.
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 \section{Flow solution}
 To run this simulation SU2 needs two files: a configuration file (.cfg) and a mesh file (.su2). Links to the required files and executables are provided at the start of this tutorial. The files include:
@@ -586,8 +586,15 @@ Additionally, you can export a .csv file and plot it with any other plotting sof
 \chapter{Inviscid ONERA M6}
 \label{ch:Inviscid ONERA M6}
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+\section{Required Files}
+\begin{su2note}
+	Use the following links to download the same version of SU2 for Windows (\href{}{click here}) or Mac (\href{}{click here}), and the required configuration (\href{}{click here}) and mesh files (\href{}{click here}).
+\end{su2note}
+\begin{paraviewnote}
+	Use the following links to download the same version of Paraview for Windows (\href{}{click here}) or Mac (\href{}{click here}).
+\end{paraviewnote}
 \section{Problem Description}
-In this tutorial, we are going to explain how to simulate external, compressible, and transonic inviscid flow past a 3D wing. The chosen wing is ONERA M6 which is a well-known CFD test case for supersonic flows. This wing was designed by ONERA Aerodynamics Department as a bench mark for experimental studies. Due to availability of experimental data and simple geometry of wing, this wing has also attracted the attention of CFD engineers. Furthermore, CFD analysis of ONERA M6 wing is notable, since some of important phenomena occurs in this case, like transonic-shock, flow separation over the wing, 3D structure of flow around the tip of the wing. In this tutorial, the computational domain with unstructured mesh consists of 582,752 tetrahedral elements and 108,396 nodes. For this example, the flow specifications are provided as follows:
+In this tutorial, we are going to explain how to simulate transonic inviscid flow around the three-dimensional ONERA M6 wing. This is a commonly used benchmark problem for computational aerodynamics, due to availability of experimental data and its relatively simple geometry. In this tutorial, the computational domain is discretized using an unstructured mesh with of 582,752 tetrahedral elements. The flow specification is as follows:
 \begin{itemize}
     \item Pressure = 101,325 Pa
     \item Temperature = 273.15 K
@@ -595,17 +602,17 @@ In this tutorial, we are going to explain how to simulate external, compressible
     \item angle of attack = 3.06 degrees
 \end{itemize}
 
-The tutorial has two parts: Flow Solution and Post-processing. In the first part, we explain how to manage prerequisite files and settings, and how to run the CFD simulation using SU2. In the second part, we explain how to use Paraview software to visualize data obtained form SU2.
+This tutorial has two parts: Flow Solution and Post-processing. In the first part, we will explain how to manage the prerequisite files and settings, and how to run the CFD simulation using SU2. In the second part we explain how to use Paraview to visualize the data obtained from SU2.
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 \section{Flow solution}
-In the configuration file, you can specify the multi-grid parameters. For the tutorial case, you will see that \texttt{MGLEVEL=0}. However, you can choose different level for your multi-grid method by giving an integer number to \texttt{MGLEVEL}. You can also select type of multi-grid cycle by setting one of existing options in \texttt{MGCYCLE (V Cycle, W Cycle or Full MG Cycle)}. Another parameter of interest is the total number of iterations. This can be modified by changing the value in \texttt{EXT\_ITER}. For this example it will be kept at 200 for brevity; but depending on the method used, higher iteration numbers may be necessary before solution can converge. In this tutorial, we want to look at the pressure coefficient and Mach number contours, solve for the lift coefficient ($C_L$) and drag coefficient ($C_D$) of the ONERA M6 wing, as well as observe the rate of convergence. This helps you to get to know how to speed up your simulation using multi-grid technique, and how to check convergence rate to assure your results are converged.
+In the configuration file you can manually adjust the multi-grid control parameters. For the tutorial case you will see that the number of multigrid levels is set to 0, \texttt{MGLEVEL=0}. In the later questions the number of multigrid levels will be changed by adjusting this \texttt{MGLEVEL} parameter. You can also select the multi-grid cycle type choosing one of \texttt{MGCYCLE (V Cycle, W Cycle or Full MG Cycle)}. Another parameter of interest is the total number of iterations. This can be modified by changing the value in \texttt{EXT\_ITER}. For this example it will be kept at 200, but depending on the method used more iterations may be required to reach convergence. We will post-process the results by obtaining pressure coefficient and Mach number contours, lift coefficient ($C_L$), and drag coefficient ($C_D$) of the ONERA M6 wing. We will also explore the rate of convergence as a function of the number of multigrid levels used.
 
-To run the simulation, the SU2 needs two essential files: configuration file (.cfg) and mesh file (.su2). In this example, the following files are located in \textit{03InviscidOneraM6} folder:
+To run the simulation SU2 needs two essential files: the configuration file (.cfg) and the mesh file (.su2). Links to the required files and executables are provided at the start of this tutorial. The files include:
 \begin{enumerate}
 \item \textit{inv\_ONERAM6}.cfg as a configuration file.
 \item \textit{mesh\_ONERAM6\_inv}.su2 as a mesh file.
 \end{enumerate}
-The next step is to copy these two files in directory of SU2, where the execution and script files are located there. To run this simulation, open the command line terminal and enter the following commands:
+The next step is to copy these two files into the same directory as your SU2 executable. Then open a terminal window and execute the following commands to run the simulation:
 \begin{table}[htbp]
     \centering
     \begin{tabular}{|l|l|}
@@ -619,22 +626,22 @@ The next step is to copy these two files in directory of SU2, where the executio
     \end{tabular}
 \end{table}
 
-The SU2 solver will commence calculation and print out the residuals at every iteration until the specified convergence criteria is achieved. After calculations are done, the following output files should be generated and saved in the SU2 folder:
+The SU2 solver will commence solving the problem and will print out the residuals at every iteration, until the specified convergence criteria is achieved. After the calculations are complete the following output files should have been generated within in the SU2 folder:
 \begin{itemize}
-    \item \textit{flow}.vtk: contains the full volume flow solution.
-    \item \textit{force\_breakdown}.dat: contains forces and moment on the surface of the wing.
-    \item \textit{history}.vtk: contains convergence history of calculations.
-    \item \textit{restart\_flow}.dat: for restarting simulation.
-    \item \textit{surface\_flow}.vtk: flow solution on the surface of the wing.
-    \item \textit{surface\_flow}.csv: comma separated values of flow solution on the surface of the wing (If you want to plot data in another software, like Microsoft Excel, you can use this file).
+    \item \textit{flow}.vtk: The flow solution on the entire domain.
+    \item \textit{force\_breakdown}.dat: Forces and moment on the airfoil.
+    \item \textit{history}.vtk: Convergence history.
+    \item \textit{restart\_flow}.dat: Restart file.
+    \item \textit{surface\_flow}.vtk: The flow solution on the airfoil surface.
+    \item \textit{surface\_flow}.csv: A comma separated value file of the flow solution on the airfoil.
 \end{itemize}
-Please keep in mind that every time you run SU2, the output data will be overwritten. Hence, before launching new simulation, you could make a new folder and transfer your data from previous simulation to this folder.
+Please keep in mind that every time you run SU2, the output data will be overwritten. Hence, before launching a new simulation you should backup your files in another directory.
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 \section{Post-processing}
-In this section, we explain how to use Paraview to visualize CFD data for this example. First of all, install Paraview (this tutorial uses Paraview 3.12.0) if you do not have it on your computer. Otherwise, take following steps for visualization:
+In this section, we will explain how to use Paraview to visualize the results produced by SU2. 
 %--------------------------------------------------------------
 \subsection{Load Solution File:}
-Launch Paraview. Go to \textbf{File} $\rightarrow$ \textbf{Open}, and then select \textit{surface\_flow}.vtk file. On the left-hand side of Paraview window you will see the file appears under \textbf{builtin} in \textbf{Pipeline Browser}. Now press \textbf{Apply} button in \textbf{Properties} tab, just right under the  \textbf{Pipeline Browser}. After taking these steps, your file is loaded by software and is ready to visualize (Fig.\ref{fig3:load}).
+Launch Paraview. Go to \textbf{File} $\rightarrow$ \textbf{Open}, and select the \textit{surface\_flow}.vtk file. On the left-hand side of the Paraview window you will see the file is loaded under \textbf{builtin} in \textbf{Pipeline Browser}. Press the \textbf{Apply} button in the \textbf{Properties} tab, right under the \textbf{Pipeline Browser} heading. Paraview will now load the data associated with your file, and it will now be ready for visualization (Figure \ref{fig3:load}).
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.4\textwidth]{tut03/surface_flow.pdf}
@@ -643,7 +650,7 @@ Launch Paraview. Go to \textbf{File} $\rightarrow$ \textbf{Open}, and then selec
 \end{figure}
 %--------------------------------------------------------------
 \subsection{Visualize Mesh Domain}
-In order to view mesh, according to Fig.\ref{fig3:wireframe}, select \textit{Solid Color} with \textit{Wireframe} in the toolbar. As you can see from Fig.\ref{fig3:mesh}, the mesh around the ONERA M6 wing is unstructured, and the grids are clustered around the tip, leading and trailing edges of the wing. The reason for this clustering is that the changes in flow variables are high at these regions and the mesh should be fine enough at vicinity of these regions in order to solve flow accurately.
+In order to view the mesh, as shown in Figure \ref{fig3:wireframe}, select \textit{Solid Color} with \textit{Wireframe} in the toolbar. As you can see in Figure \ref{fig3:mesh}, the mesh around the ONERA M6 wing is unstructured, and the elements are clustered around the wingtip, leading edge, and trailing edge of the wing. This is to accommodate large changes in the flow solution in the vicinity of the features.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.6\textwidth]{tut03/wireframe.pdf}
@@ -658,14 +665,14 @@ In order to view mesh, according to Fig.\ref{fig3:wireframe}, select \textit{Sol
 \end{figure}
 %--------------------------------------------------------------
 \subsection{Visualize Pressure Coefficient Contour and Much Number Contour}
-To display the pressure contour, click on the \textit{surface\_flow}.vtk in the \textbf{Pipeline Browser}, and then click on the \textbf{Display} in \textbf{Properties} tab. Next, under \textbf{Coloring}, select \textit{Pressure\_Coefficient} from drop-down menu (Fig.\ref{fig3:pressure_coeff_1}).
+To display pressure contours on the surface of the wing click on \textit{surface\_flow}.vtk in the \textbf{Pipeline Browser}. Then click on the \textbf{Display} in \textbf{Properties} tab. Next, under \textbf{Coloring}, select \textit{Pressure\_Coefficient} from the drop-down menu (Figure \ref{fig3:pressure_coeff_1}).
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.4\textwidth]{tut03/coloring.pdf}
     \caption{Display contour by selecting variable.}
     \label{fig3:pressure_coeff_1}
 \end{figure}
-Eventually, the pressure coefficient contour should be similar to Fig.\ref{fig3:plot_pressure_coeff}
+The pressure coefficient contour should now be displayed similar to Figure \ref{fig3:plot_pressure_coeff}
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.65\textwidth]{tut03/cont1_pressure_coefficient.pdf}
@@ -673,21 +680,21 @@ Eventually, the pressure coefficient contour should be similar to Fig.\ref{fig3:
     \label{fig3:plot_pressure_coeff}
 \end{figure}
 
-In order to add contour lines to the plot, click again on the \textit{surface\_flow}.vtk in the \textbf{Pipeline Browser}, and then click on the \textbf{Contour} icon (Fig.\ref{fig3:contour_icon}) in toolbar.
+To add contour lines to the plot click on \textit{surface\_flow}.vtk in the \textbf{Pipeline Browser}, and then click on the \textbf{Contour} icon (Figure \ref{fig3:contour_icon}) in the toolbar.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.5\textwidth]{tut03/contourlineicon.pdf}
     \caption{\textbf{Contour} icon in toolbar.}
     \label{fig3:contour_icon}
 \end{figure}
-Eventually, \textit{Contour1} appears under \textit{flow}.vtk file in the \textbf{Pipeline Browser} (Fig.\ref{fig3:contour1}). Then, click on \textbf{Apply} to proceed next step.
+The \textit{Contour1} item now appears under the \textit{flow}.vtk file in the \textbf{Pipeline Browser} (Figure \ref{fig3:contour1}). Click on \textbf{Apply} to proceed to the next step.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.4\textwidth]{tut03/contour1.pdf}
     \caption{Adding \textit{Contour1} in \textbf{Pipeline Browser}.}
     \label{fig3:contour1}
 \end{figure}
-According to Fig.\ref{fig3:contourby a}, go to the \textbf{Properties}, and choose \textit{Pressure\_Coefficient} from \textbf{Contour By} drop-down menu. Then, click on the \textbf{Add Range} icon to customize the range of pressure contour. As seen from Fig.\ref{fig3:contourby b},  max/min (i.e. \textbf{From}/\textbf{To}) range of contour lines, as well as the number steps required to divide this range into the equal portions exist. So, set \textbf{Step} to 20, and click on \textbf{OK}. At the end, click on \textbf{Apply} to illustrate contour lines in display window.
+As shown in Figure \ref{fig3:contourby a}, go to the \textbf{Properties}, and choose \textit{Pressure\_Coefficient} from \textbf{Contour By} drop-down menu. Then, click on the \textbf{Add Range} icon to customize the range used for the pressure contours. As shown in Figure \ref{fig3:contourby b}, set the max/min (i.e. \textbf{From}/\textbf{To}) range of contour lines, as well as the number steps used to divide this range into the equal contour levels. Set \textbf{Step} to 20, and then click on \textbf{OK}. At the end, click on \textbf{Apply} to generate the contour lines in the display window.
 \begin{figure}[htbp]
     \centering
      \begin{subfigure}[b]{.4\textwidth}
@@ -706,14 +713,14 @@ According to Fig.\ref{fig3:contourby a}, go to the \textbf{Properties}, and choo
     \caption{How to define a new range for the contour lines.}
     \label{fig3:contourby}
 \end{figure}
-Next, as it is shown in Fig.\ref{fig3:colorby2}, click on the \textbf{Display} under \textbf{Properties} tab. In \textbf{Coloring} section, select \textbf{Solid Color} form drop-down menu, and choose black color from \textbf{Edit}.
+Next, as shown in Figure \ref{fig3:colorby2}, click on \textbf{Display} under the \textbf{Properties} tab. In the \textbf{Coloring} section select \textbf{Solid Color} from the drop-down menu and choose black from \textbf{Edit}.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.4\textwidth]{tut03/coloring2.pdf}
     \caption{Changing contour lines color in \textbf{Coloring} section.}
     \label{fig3:colorby2}
 \end{figure}
-Eventually, the pressure contour with black contour lines should be similar to Fig.\ref{fig3:pressure_contour_lines}.
+The pressure contours will now be displayed in black and should be similar to Figure \ref{fig3:pressure_contour_lines}.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=.65\textwidth]{tut03/cont2_pressure_coefficient.pdf}
@@ -721,7 +728,7 @@ Eventually, the pressure contour with black contour lines should be similar to F
     \label{fig3:pressure_contour_lines}
 \end{figure}
 
-To display the Mach number contour, similar to Fig.\ref{fig3:pressure_coeff_1}, click on the \textit{surface\_flow}.vtk in the \textbf{Pipeline Browser}, and under \textbf{Coloring} from \textbf{Display}, select \textit{Mach} from drop-down menu. In the next step, click on "\textit{Contour1}" in the \textbf{Pipeline Browser}. As it is shown in Fig.\ref{fig3:contourby2 a}, under \textbf{Properties}, select \textit{Mach} from \textbf{Contour By} drop-down menu. Next, click on \textbf{Remove All} icon to remove previous value range belonged to pressure coefficient. Similar to Fig.\ref{fig3:contourby2 b}, click on \textbf{Add Range} icon and set \textbf{Steps} to 20. Next, click on \textbf{OK}, and then, \textbf{Apply} to show plot.
+To display Mach number contours, similar to Figure \ref{fig3:pressure_coeff_1}, click on \textit{surface\_flow}.vtk in the \textbf{Pipeline Browser}. Under \textbf{Coloring} from the \textbf{Display} section select \textit{Mach} from drop-down menu. Now click on "\textit{Contour1}" in the \textbf{Pipeline Browser}. As shown in Figure \ref{fig3:contourby2 a}, under the \textbf{Properties} tab, select \textit{Mach} from the \textbf{Contour By} drop-down menu. Next, click on the \textbf{Remove All} icon to remove previous the range used for the pressure coefficient. Similar to Figure \ref{fig3:contourby2 b}, click on the \textbf{Add Range} icon and set \textbf{Steps} to 20. Next, click on \textbf{OK} and \textbf{Apply} to show the plot.
 \begin{figure}[htbp]
     \centering
      \begin{subfigure}[b]{.4\textwidth}
@@ -740,7 +747,7 @@ To display the Mach number contour, similar to Fig.\ref{fig3:pressure_coeff_1}, 
     \caption{How to define a new range for the contour lines.}
     \label{fig3:contourby2}
 \end{figure}
-Now the Mach number contour of the wing surface should be similar to Fig.\ref{fig3:mach_contour}.
+Now the Mach number contours on the wing surface should be shown, similar to Figure \ref{fig3:mach_contour}.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.5\textwidth]{tut03/machcontour1.pdf}
@@ -749,14 +756,14 @@ Now the Mach number contour of the wing surface should be similar to Fig.\ref{fi
 \end{figure}
 %--------------------------------------------------------------
 \subsection{Comparison of Convergence Rate}
-Launch Microsoft Excel or any other plotting software. For Microsoft Excel, open the file \textit{history}.vtk from the tutorial folder. Then, you are asked to choose the file type that best describes your data. You should select \textbf{Delimiters}, and in the next step, Under the \textbf{Delimiters}, select only the check boxes for \textit{Tab}, \textit{Semicolon}, and \textit{Comma} (Fig.\ref{fig3:importvtkxlxs}).
+We will now explore the rate of convergence of the SU2 solver. Open any suitable plotting or spreadsheet software. Open the file \textit{history}.vtk that was generated by SU2. Choose the file type that best describes your data, and tell your software to use \textit{Tab}, \textit{Semicolon}, and \textit{Comma} as delimiters (Figure \ref{fig3:importvtkxlxs}).
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.5\textwidth]{tut03/16.png}
     \caption{Import .vtk file in Microsoft Excel.}
     \label{fig3:importvtkxlxs}
 \end{figure}
-As shown in Fig.\ref{fig3:columnsxlxs}, the first column shows the iteration number. The lift coefficient ($C_L$) and the drag coefficient ($C_D$) are displayed in the second and third column, respectively. Additionally, the residuals can also be examined to check convergence (Column \textit{L} to Column \textit{P} in Fig.\ref{fig3:residualxlxs}).
+As shown in Figure \ref{fig3:columnsxlxs}, the first column shows the iteration number. The lift coefficient ($C_L$) and the drag coefficient ($C_D$) are displayed in the second and third columns, respectively. Finally, the residuals can also be examined to check the rate of convergence (Column \textit{L} to Column \textit{P} in Figure \ref{fig3:residualxlxs}).
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.5\textwidth]{tut03/17.png}
@@ -769,7 +776,7 @@ As shown in Fig.\ref{fig3:columnsxlxs}, the first column shows the iteration num
     \caption{Residuals in \textit{history}.vtk}
     \label{fig3:residualxlxs}
 \end{figure}
-Now we plot the lift coefficient, drag coefficient, and density residual against the number of iterations to see how many iterations it takes to converge to a steady solution. Fig.\ref{fig3:clcdxlxs} and Fig.\ref{fig3:res_vs_itr} shows the plots for aerodynamic loads and residual versus the number of iterations, respectively, for the case of \texttt{MGLEVEL=0} on tetrahedral mesh.
+Now we can plot the predicted lift coefficient, drag coefficient, and density residual against the number of iterations to see how many iterations it takes to converge to a steady solution. Figure \ref{fig3:clcdxlxs} and Figure \ref{fig3:res_vs_itr} show plots for the aerodynamic loads and residual as a function of the number of iterations, respectively, for the case of no multigrid, \texttt{MGLEVEL=0}.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.75\textwidth]{tut03/22.png}
@@ -782,6 +789,7 @@ Now we plot the lift coefficient, drag coefficient, and density residual against
     \caption{Density residual versus the number of iterations.}
     \label{fig3:res_vs_itr}
 \end{figure}
+\clearpage
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 \section{Questions}
 1. Run the simulation without multi-grid scheme (\texttt{MGLEVEL=0}).
@@ -847,7 +855,7 @@ Please keep in mind that every time you run SU2, the output data will be overwri
 In this section, we explain how to use Paraview to visualize CFD data for this example. First of all, install Paraview (this tutorial uses Paraview 3.12.0) if you do not have it on your computer. Otherwise, take following steps for visualization:
 %--------------------------------------------------------------
 \subsection{Load Solution File:}
-Launch Paraview. Go to \textbf{File} $\rightarrow$ \textbf{Open}, and then select \textit{flow}.vtk file. On the left-hand side of Paraview window you will see the file appears under \textbf{builtin} in \textbf{Pipeline Browser}. Now press \textbf{Apply} button in \textbf{Properties} tab, just right under the \textbf{Pipeline Browser}. After taking these steps, your file is loaded by software and is ready to visualize (Fig.\ref{fig4:load}).
+Launch Paraview. Go to \textbf{File} $\rightarrow$ \textbf{Open}, and then select \textit{flow}.vtk file. On the left-hand side of Paraview window you will see the file appears under \textbf{builtin} in \textbf{Pipeline Browser}. Now press \textbf{Apply} button in \textbf{Properties} tab, just right under the \textbf{Pipeline Browser}. After taking these steps, your file is loaded by software and is ready to visualize (Figure \ref{fig4:load}).
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.4\textwidth]{tut04/loadvtkfile.pdf}
@@ -856,7 +864,7 @@ Launch Paraview. Go to \textbf{File} $\rightarrow$ \textbf{Open}, and then selec
 \end{figure}
 %--------------------------------------------------------------
 \subsection{Visualize Mesh Domain}
-In order to display mesh used as computational domain, according to Fig.\ref{fig4:wireframe_4}, select \textit{Solid Color} with \textit{Wireframe} in the toolbar. Then, you can zoom-in to see mesh around the cylinder like Fig.\ref{fig4:mesh_4}. As you can see, the mesh around the cylinder is unstructured, and the grids are clustered around the cylinder to be able to capture boundary layer and wake region properly.
+In order to display mesh used as computational domain, according to Figure \ref{fig4:wireframe_4}, select \textit{Solid Color} with \textit{Wireframe} in the toolbar. Then, you can zoom-in to see mesh around the cylinder like Figure \ref{fig4:mesh_4}. As you can see, the mesh around the cylinder is unstructured, and the grids are clustered around the cylinder to be able to capture boundary layer and wake region properly.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.6\textwidth]{tut04/wireframe.pdf}
@@ -871,21 +879,21 @@ In order to display mesh used as computational domain, according to Fig.\ref{fig
 \end{figure}
 %--------------------------------------------------------------
 \subsection{Visualize Pressure Contour and Much Number Contour}
-To display the pressure contour, activate the \textit{flow}.vtk by clicking on it in the \textbf{Pipeline Browser}, and then, go to \textbf{Display} in \textbf{Properties} tab. Next, under \textbf{Coloring} section, select \textit{Pressure} from drop-down menu (Fig.\ref{fig4:pressure_coloring_4}).
+To display the pressure contour, activate the \textit{flow}.vtk by clicking on it in the \textbf{Pipeline Browser}, and then, go to \textbf{Display} in \textbf{Properties} tab. Next, under \textbf{Coloring} section, select \textit{Pressure} from drop-down menu (Figure \ref{fig4:pressure_coloring_4}).
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.4\textwidth]{tut04/coloring_pressure.pdf}
     \caption{How to display contour by selecting variable.}
     \label{fig4:pressure_coloring_4}
 \end{figure}
-Eventually, your pressure contour should be similar to Fig.\ref{fig4:pressure_plot1_4}.
+Eventually, your pressure contour should be similar to Figure \ref{fig4:pressure_plot1_4}.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.75\textwidth]{tut04/plot1_pressure.pdf}
     \caption{Pressure coefficient contour around a cylinder.}
     \label{fig4:pressure_plot1_4}
 \end{figure}
-To change color range for pressure coefficient, you can also click on the \textbf{Edit} under the same \textbf{Coloring} section. In order to add contour lines to plot, click again on the \textit{flow}.vtk file in \textbf{Pipeline Browser}, and then click on the \textbf{Contour} icon (Fig.\ref{fig4:contourline1_4}). Hence, similar to Fig.\ref{fig4:contourline2_4}, you should see \textit{Contour1} under \textit{flow}.vtk file in \textbf{Pipeline Browser}. 
+To change color range for pressure coefficient, you can also click on the \textbf{Edit} under the same \textbf{Coloring} section. In order to add contour lines to plot, click again on the \textit{flow}.vtk file in \textbf{Pipeline Browser}, and then click on the \textbf{Contour} icon (Figure \ref{fig4:contourline1_4}). Hence, similar to Figure \ref{fig4:contourline2_4}, you should see \textit{Contour1} under \textit{flow}.vtk file in \textbf{Pipeline Browser}. 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.4\textwidth]{tut04/contourline.pdf}
@@ -898,7 +906,7 @@ To change color range for pressure coefficient, you can also click on the \textb
     \caption{Adding \textit{Contour1} to \textbf{Pipeline Browser}.}
     \label{fig4:contourline2_4}
 \end{figure}
-As it is shown in Fig.\ref{fig4:contourby_4 a}, in the \textbf{Properties}, select \textit{Pressure} from \textbf{Contour By} drop-down menu. You can use \textbf{Remove All} icon to remove default range, and then, click on the \textbf{Add Range} icon to make a new range based on your preference. Similar to Fig.\ref{fig4:contourby_4 b}, set the \textbf{Steps} to 20, and then, click on \textbf{OK} and \textbf{Apply}, respectively.
+As it is shown in Figure \ref{fig4:contourby_4 a}, in the \textbf{Properties}, select \textit{Pressure} from \textbf{Contour By} drop-down menu. You can use \textbf{Remove All} icon to remove default range, and then, click on the \textbf{Add Range} icon to make a new range based on your preference. Similar to Figure \ref{fig4:contourby_4 b}, set the \textbf{Steps} to 20, and then, click on \textbf{OK} and \textbf{Apply}, respectively.
 \begin{figure}[htbp]
     \centering
     \begin{subfigure}[b]{.4\textwidth}
@@ -918,14 +926,14 @@ As it is shown in Fig.\ref{fig4:contourby_4 a}, in the \textbf{Properties}, sele
     \label{fig4:contourby_4}
 \end{figure}
 
-To change the color of contour lines, first of all, activate \textit{Contour1} by clicking on it in \textbf{Pipeline Browser}, and similar to Fig.\ref{fig4:pressure_coloring_4}, you can go to \textbf{Edit} under \textbf{Coloring} section and select white color for the contour lines. Finally, the pressure contour superimposed by contour lines should be similar to Fig.\ref{fig4:contourline6_4}
+To change the color of contour lines, first of all, activate \textit{Contour1} by clicking on it in \textbf{Pipeline Browser}, and similar to Figure \ref{fig4:pressure_coloring_4}, you can go to \textbf{Edit} under \textbf{Coloring} section and select white color for the contour lines. Finally, the pressure contour superimposed by contour lines should be similar to Figure \ref{fig4:contourline6_4}
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.75\textwidth]{tut04/contourline6.pdf}.
     \caption{Pressure contour superimposed by contour lines around a cylinder.}
     \label{fig4:contourline6_4}
 \end{figure}
-Please keep in mind that to display both contour and contour lines, the eye beside times in \textbf{Pipeline Browser} should be activated (Fig.\ref{fig4:contourline5_4})
+Please keep in mind that to display both contour and contour lines, the eye beside times in \textbf{Pipeline Browser} should be activated (Figure \ref{fig4:contourline5_4})
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.4\textwidth]{tut04/contourline5.pdf}.
@@ -933,14 +941,14 @@ Please keep in mind that to display both contour and contour lines, the eye besi
     \label{fig4:contourline5_4}
 \end{figure}
 
-Additionally, to display the Mach number contour, click on \textit{flow}.vtk again in the \textbf{Pipeline Browser}. According to Fig.\ref{fig4:mach1_4}, under \textbf{Coloring} section in the \textbf{Display}, select \textit{Mach} from drop-down menu.
+Additionally, to display the Mach number contour, click on \textit{flow}.vtk again in the \textbf{Pipeline Browser}. According to Figure \ref{fig4:mach1_4}, under \textbf{Coloring} section in the \textbf{Display}, select \textit{Mach} from drop-down menu.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.4\textwidth]{tut04/mach1.pdf}.
     \caption{How to change color for contour lines of Mach number.}
     \label{fig4:mach1_4}
 \end{figure}
-Next, click on \textit{Contour1} in the \textbf{Pipeline Browser}. Similar to Fig.\ref{fig4:mach2_4 a}, in the \textbf{Properties}, select \textit{Mach} from \textbf{Contour By} drop-down menu. Next, click on \textbf{Remove All} to remove previous value range belonged to pressure. Next, click on \textbf{Add Range} and set the \textbf{Steps} to 20. Then, click \textbf{OK} and \textbf{Apply}, respectively (Fig.\ref{fig4:mach2_4 b}).
+Next, click on \textit{Contour1} in the \textbf{Pipeline Browser}. Similar to Figure \ref{fig4:mach2_4 a}, in the \textbf{Properties}, select \textit{Mach} from \textbf{Contour By} drop-down menu. Next, click on \textbf{Remove All} to remove previous value range belonged to pressure. Next, click on \textbf{Add Range} and set the \textbf{Steps} to 20. Then, click \textbf{OK} and \textbf{Apply}, respectively (Figure \ref{fig4:mach2_4 b}).
 \begin{figure}[htbp]
     \centering
     \begin{subfigure}[b]{0.4\textwidth}
@@ -959,7 +967,7 @@ Next, click on \textit{Contour1} in the \textbf{Pipeline Browser}. Similar to Fi
     \caption{How to define a new range for the contour lines.}
     \label{fig4:mach2_4}
 \end{figure}
-Finally, the Mach number contour around the cylinder should be similar to Fig.\ref{fig4:mach5_4}.
+Finally, the Mach number contour around the cylinder should be similar to Figure \ref{fig4:mach5_4}.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.85\textwidth]{tut04/mach5.pdf}
@@ -968,56 +976,56 @@ Finally, the Mach number contour around the cylinder should be similar to Fig.\r
 \end{figure}
 %--------------------------------------------------------------
 \subsection{Streamlines and Separation Length}
-Streamlines are the paths that show the direction of flow in computational domain. Using streamlines, it is usually possible to see flow separations, wake region behind bluff bodies, flow direction in ducts and ect. One of ways to measure the separation length behind the cylinder is to plot streamlines and detect the length of flow separation (i.e. bubble behind the cylinder). To do this, activate \textit{flow}.vtk by clicking on it in \textbf{Pipeline Browser}. As it is shown in Fig.\ref{fig4:stream1_4}, click on \textbf{Calculator} icon, which allows you to define new variables and add it to the list of variables.
+Streamlines are the paths that show the direction of flow in computational domain. Using streamlines, it is usually possible to see flow separations, wake region behind bluff bodies, flow direction in ducts and ect. One of ways to measure the separation length behind the cylinder is to plot streamlines and detect the length of flow separation (i.e. bubble behind the cylinder). To do this, activate \textit{flow}.vtk by clicking on it in \textbf{Pipeline Browser}. As it is shown in Figure \ref{fig4:stream1_4}, click on \textbf{Calculator} icon, which allows you to define new variables and add it to the list of variables.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.4\textwidth]{tut04/stream1.pdf}
     \caption{How to define new variable using \textbf{Calculator}.}
     \label{fig4:stream1_4}
 \end{figure}
-Next, click on the \textit{Calculator1} in the \textbf{Pipeline Browser}, and according to Fig.\ref{fig4:stream3_4}, rename the \textbf{Result Array Name} as \textit{Velocity}. Furthermore, according to Fig.\ref{fig4:stream3_4}, write the velocity equation for velocity components in the equation box. Keep in mind that dividing Momentum by Density results in flow velocities in space. Then, click on \textbf{Apply} to proceed the next step.
+Next, click on the \textit{Calculator1} in the \textbf{Pipeline Browser}, and according to Figure \ref{fig4:stream3_4}, rename the \textbf{Result Array Name} as \textit{Velocity}. Furthermore, according to Figure \ref{fig4:stream3_4}, write the velocity equation for velocity components in the equation box. Keep in mind that dividing Momentum by Density results in flow velocities in space. Then, click on \textbf{Apply} to proceed the next step.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.4\textwidth]{tut04/stream3.pdf}
     \caption{How to use \textbf{Calculator} to define velocity.}
     \label{fig4:stream3_4}
 \end{figure}
-As seen from Fig.\ref{fig4:stream4_4}, the \textit{Calculator1} appears in the \textbf{Pipeline Browser} as a subset of \textit{flow}.vtk.
+As seen from Figure \ref{fig4:stream4_4}, the \textit{Calculator1} appears in the \textbf{Pipeline Browser} as a subset of \textit{flow}.vtk.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.4\textwidth]{tut04/stream4.pdf}
     \caption{\textit{Calculator1} as a subset of \textit{flow}.vtk in \textbf{Pipeline Browser}.}
     \label{fig4:stream4_4}
 \end{figure}
-Please note that we made a new variable which contains velocity values, and we saved it in variables list. Now click again on \textit{Calculator1} in the \textbf{Pipeline Browser}, and then, click on the \textbf{Stream Tracer} icon in the toolbar (Fig.\ref{fig4:stream5_4}).
+Please note that we made a new variable which contains velocity values, and we saved it in variables list. Now click again on \textit{Calculator1} in the \textbf{Pipeline Browser}, and then, click on the \textbf{Stream Tracer} icon in the toolbar (Figure \ref{fig4:stream5_4}).
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.5\textwidth]{tut04/stream5.pdf}
     \caption{How to add streamlines using \textbf{Stream Tracer}.}
     \label{fig4:stream5_4}
 \end{figure}
-Next, click on the \textit{StreamTracer1} in the \textbf{Pipeline Browser}, and according to Fig.\ref{fig4:stream6_4}, in the \textbf{Properties} select \textit{Velocity} from \textbf{Vectors} drop-down menu. Additionally, select \textit{High Resolution Line Source} from \textbf{Seed Type} drop-down menu. Furthermore, under \textbf{Line Parameters}, set \textbf{Point1} and \textbf{Point2} as (-15,0,0) and (15,0,0), respectively. These two points describe a line that shows the direction of streamline movement.  
+Next, click on the \textit{StreamTracer1} in the \textbf{Pipeline Browser}, and according to Figure \ref{fig4:stream6_4}, in the \textbf{Properties} select \textit{Velocity} from \textbf{Vectors} drop-down menu. Additionally, select \textit{High Resolution Line Source} from \textbf{Seed Type} drop-down menu. Furthermore, under \textbf{Line Parameters}, set \textbf{Point1} and \textbf{Point2} as (-15,0,0) and (15,0,0), respectively. These two points describe a line that shows the direction of streamline movement.  
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.4\textwidth]{tut04/stream6.pdf}
     \caption{Streamline setting in \textbf{Stream Tracer} panel.}
     \label{fig4:stream6_4}
 \end{figure}
-Next, as it is shown in Fig.\ref{fig4:stream7_4}, under \textbf{Coloring} section in \textbf{Display}, select \textit{Solid Color} and from \textbf{Edit}, choose white color for stream lines. Additionally, click on the check-box beside \textbf{Data Axis Grid} to display axis range in plot.
+Next, as it is shown in Figure \ref{fig4:stream7_4}, under \textbf{Coloring} section in \textbf{Display}, select \textit{Solid Color} and from \textbf{Edit}, choose white color for stream lines. Additionally, click on the check-box beside \textbf{Data Axis Grid} to display axis range in plot.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.4\textwidth]{tut04/stream7.pdf}
     \caption{Changing stream line's color in \textbf{Display} panel.}
     \label{fig4:stream7_4}
 \end{figure}
-Next, hide all items, except \textit{flow}.vtk and \textit{StreamTracer1}, by deactivating eye beside items (Fig.\ref{fig4:stream8_4}).
+Next, hide all items, except \textit{flow}.vtk and \textit{StreamTracer1}, by deactivating eye beside items (Figure \ref{fig4:stream8_4}).
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.4\textwidth]{tut04/stream8.pdf}
     \caption{Activating both \textit{flow}.vtk and \textit{StreamTracer1} in \textbf{Pipeline Browser}.}
     \label{fig4:stream8_4}
 \end{figure}
-Finally, Fig.\ref{fig4:stream9_4} shows the Mach number contour with the streamlines. As mentioned before, the length of cylinder is 1m, and from Fig.\ref{fig4:stream9_4} you can approximate the separation length to be around 2m for $Re=40$.
+Finally, Figure \ref{fig4:stream9_4} shows the Mach number contour with the streamlines. As mentioned before, the length of cylinder is 1m, and from Figure \ref{fig4:stream9_4} you can approximate the separation length to be around 2m for $Re=40$.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.75\textwidth]{tut04/stream9.pdf}
@@ -1025,28 +1033,28 @@ Finally, Fig.\ref{fig4:stream9_4} shows the Mach number contour with the streaml
     \label{fig4:stream9_4}
 \end{figure}
 
-There is also alternative way to compute separation length precisely. In this method, we try to plot the velocity along the computational domain's center-line and measure the length of reverse flow along that line. Keep in mind that in the separation zone, the velocity in $x$-coordinate (\textit{Velocity\_X}) has negative value. Therefore, the separation length can be found from cylinder to the location where the \textit{Velocity\_X} is zero. To get started, in the \textbf{Pipeline Browser}, click on \textit{Calculator1}, and then go to the \textbf{Filters} $\rightarrow$ \textbf{Data Analysis} $\rightarrow$ \textbf{Plot Over Line} (Fig.\ref{fig4:stream10_4}).
+There is also alternative way to compute separation length precisely. In this method, we try to plot the velocity along the computational domain's center-line and measure the length of reverse flow along that line. Keep in mind that in the separation zone, the velocity in $x$-coordinate (\textit{Velocity\_X}) has negative value. Therefore, the separation length can be found from cylinder to the location where the \textit{Velocity\_X} is zero. To get started, in the \textbf{Pipeline Browser}, click on \textit{Calculator1}, and then go to the \textbf{Filters} $\rightarrow$ \textbf{Data Analysis} $\rightarrow$ \textbf{Plot Over Line} (Figure \ref{fig4:stream10_4}).
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.55\textwidth]{tut04/stream10.pdf}
     \caption{How to plot over an arbitrary line.}
     \label{fig4:stream10_4}
 \end{figure}
-Next, activate \textit{PlotOverLine1} by clicking on it form \textbf{Pipeline Browser}. According to Fig.\ref{fig4:stream11_4}, under \textbf{Line Parameters} in the \textbf{Properties}, set \textbf{Point1} and \textbf{Point2} as (-15,0,0) and (15,0,0), respectively. Please note that this line is different from previous line we defined for streamline. This line is the one we want to plot the \textit{Velocity\_X} along it. Additionally, set the \textbf{Resolution} to 10,000, and then click on \textbf{Apply} to proceed the next step.
+Next, activate \textit{PlotOverLine1} by clicking on it form \textbf{Pipeline Browser}. According to Figure \ref{fig4:stream11_4}, under \textbf{Line Parameters} in the \textbf{Properties}, set \textbf{Point1} and \textbf{Point2} as (-15,0,0) and (15,0,0), respectively. Please note that this line is different from previous line we defined for streamline. This line is the one we want to plot the \textit{Velocity\_X} along it. Additionally, set the \textbf{Resolution} to 10,000, and then click on \textbf{Apply} to proceed the next step.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.4\textwidth]{tut04/stream11.pdf}
     \caption{Settings for \textbf{Plot Over Line}.}
     \label{fig4:stream11_4}
 \end{figure}
-According to Fig.\ref{fig4:stream12_4}, in the \textbf{Display} panel, choose \textit{Point\_X} form \textbf{X Array Name} drop-down menu. Next, under \textbf{Series Parameters}, unselect all variables except \textit{Velocity\_X}, which corresponds to velocity in $x$-direction.
+According to Figure \ref{fig4:stream12_4}, in the \textbf{Display} panel, choose \textit{Point\_X} form \textbf{X Array Name} drop-down menu. Next, under \textbf{Series Parameters}, unselect all variables except \textit{Velocity\_X}, which corresponds to velocity in $x$-direction.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.4\textwidth]{tut04/stream12.pdf}
     \caption{How to Plot \textit{Velocity\_X} versus \textit{X Axis}.}
     \label{fig4:stream12_4}
 \end{figure}
-Eventually, Fig.\ref{fig4:stream14_4} displays velocity profile over the defined line (\textit{X Axis}). As it is shown in Fig.\ref{fig4:stream14_4}, the separation length, $L$, can be measured when \textit{Velocity\_X} is zero. Please note that there is not any velocity component inside of cylinder, and that is why the velocity line has a discontinuity in \textit{X Axis} form 0 to 1 (location of cylinder).
+Eventually, Figure \ref{fig4:stream14_4} displays velocity profile over the defined line (\textit{X Axis}). As it is shown in Figure \ref{fig4:stream14_4}, the separation length, $L$, can be measured when \textit{Velocity\_X} is zero. Please note that there is not any velocity component inside of cylinder, and that is why the velocity line has a discontinuity in \textit{X Axis} form 0 to 1 (location of cylinder).
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.95\textwidth]{tut04/stream14.pdf}
@@ -1055,7 +1063,7 @@ Eventually, Fig.\ref{fig4:stream14_4} displays velocity profile over the defined
 \end{figure}
 %--------------------------------------------------------------
 \subsection{Shedding Frequency}
-When the Reynolds number is high, the flow becomes unstable since flow's inetria force is high enough to overcome flow's viscous force. When the flow past the cylinder, the separation occurs, and due to unsteadiness, the separation points on the cylinder's surface begin to vary. These changes in the location of separation points change the pressure/velocity profile around the cylinder, and hence, it affects all the flow in down-stream. Finally, this unsteadiness results in the formation of the pair vortices, and hence, vortex shedding phenomenon. The vortex shedding is a common phenomenon in fluid engineering, and there are many studies on this phenomenon since few past decades (put references here). Contribution of vortices in vortex shedding results in the oscillations in the flow properties, and this oscillations are characterized with oscillation frequency. This oscillation frequency is so-called "shedding frequency". Now let us show you how to get the vortex frequency. To get started, open the \textit{history}.vtk in Microsoft excel. As seen in Fig.\ref{fig4:time_history}, the first column in the file shows the number of iterations. Note that the physical time can be computed by multiplying the iteration with the time-step, which is $\Delta t = 0.001$s for the unsteady case. Additionally, please note that the time step for all unsteady simulations can be found in configuration file.
+When the Reynolds number is high, the flow becomes unstable since flow's inetria force is high enough to overcome flow's viscous force. When the flow past the cylinder, the separation occurs, and due to unsteadiness, the separation points on the cylinder's surface begin to vary. These changes in the location of separation points change the pressure/velocity profile around the cylinder, and hence, it affects all the flow in down-stream. Finally, this unsteadiness results in the formation of the pair vortices, and hence, vortex shedding phenomenon. The vortex shedding is a common phenomenon in fluid engineering, and there are many studies on this phenomenon since few past decades (put references here). Contribution of vortices in vortex shedding results in the oscillations in the flow properties, and this oscillations are characterized with oscillation frequency. This oscillation frequency is so-called "shedding frequency". Now let us show you how to get the vortex frequency. To get started, open the \textit{history}.vtk in Microsoft excel. As seen in Figure \ref{fig4:time_history}, the first column in the file shows the number of iterations. Note that the physical time can be computed by multiplying the iteration with the time-step, which is $\Delta t = 0.001$s for the unsteady case. Additionally, please note that the time step for all unsteady simulations can be found in configuration file.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.95\textwidth]{tut04/26.png}
@@ -1127,7 +1135,7 @@ Please keep in mind that every time you run SU2, the output data will be overwri
 In this section, we explain how to use Paraview to visualize CFD data for this example. First of all, install Paraview (this tutorial uses Paraview 3.12.0) if you do not have it on your computer. Otherwise, take following steps for visualization:
 %--------------------------------------------------------------
 \subsection{Load Solution File:}
-Launch Paraview. Go to \textbf{File} $\rightarrow$ \textbf{Open}, and then select \textit{surface\_flow}.vtk file. On the left-hand side of Paraview window you will see the file appears under \textbf{builtin} in \textbf{Pipeline Browser}. Now press \textbf{Apply} button in \textbf{Properties} tab, under the  \textbf{Pipeline Browser}. After taking these steps, your file is loaded by software and is ready to visualize (Fig.\ref{fig5:load}).
+Launch Paraview. Go to \textbf{File} $\rightarrow$ \textbf{Open}, and then select \textit{surface\_flow}.vtk file. On the left-hand side of Paraview window you will see the file appears under \textbf{builtin} in \textbf{Pipeline Browser}. Now press \textbf{Apply} button in \textbf{Properties} tab, under the  \textbf{Pipeline Browser}. After taking these steps, your file is loaded by software and is ready to visualize (Figure \ref{fig5:load}).
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.4\textwidth]{tut05/loakvtk5.png}
@@ -1136,7 +1144,7 @@ Launch Paraview. Go to \textbf{File} $\rightarrow$ \textbf{Open}, and then selec
 \end{figure}
 %--------------------------------------------------------------
 \subsection{Visualize Mesh Domain}
-In order to view mesh, according to Fig.\ref{fig5:wireframe}, select \textit{Solid Color} with \textit{Wireframe} in the toolbar. Then, you can zoom-in to see mesh around the airfoil like Fig.\ref{fig5:mesh}. As you can see, the mesh for ONERA M6 wing is structured, and the grids are clustered around the tip, leading and trailing edges of the wing.
+In order to view mesh, according to Figure \ref{fig5:wireframe}, select \textit{Solid Color} with \textit{Wireframe} in the toolbar. Then, you can zoom-in to see mesh around the airfoil like Figure \ref{fig5:mesh}. As you can see, the mesh for ONERA M6 wing is structured, and the grids are clustered around the tip, leading and trailing edges of the wing.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.75\textwidth]{tut05/wireframe.pdf}
@@ -1151,7 +1159,7 @@ In order to view mesh, according to Fig.\ref{fig5:wireframe}, select \textit{Sol
 \end{figure}
 %--------------------------------------------------------------
 \subsection{Visualize Pressure Coefficient at Different Stations}
-In this section, we want to explain how to plot pressure coefficient on the surface of the wing versus the chord length at different stations along the wing span. So, we need to select slices at different stations on the surface of the wing, and then, plot the pressure coefficient for each slice. To get started, activate \textit{surface\_flow}.vtk by clicking on it in \textbf{Pipeline Browser}, and click on the \textbf{Slice} icon in the toolbar, as shown in Fig.\ref{fig5:slice1}.
+In this section, we want to explain how to plot pressure coefficient on the surface of the wing versus the chord length at different stations along the wing span. So, we need to select slices at different stations on the surface of the wing, and then, plot the pressure coefficient for each slice. To get started, activate \textit{surface\_flow}.vtk by clicking on it in \textbf{Pipeline Browser}, and click on the \textbf{Slice} icon in the toolbar, as shown in Figure \ref{fig5:slice1}.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=.6\textwidth]{tut05/slice1.pdf}
@@ -1159,7 +1167,7 @@ In this section, we want to explain how to plot pressure coefficient on the surf
     \label{fig5:slice1}
 \end{figure}
 This will allow the option to slice a plane so we can observe the pressure coefficient ($C_p$) at a specific station
-or location along the span-wise direction (along $y$-axis in this example). According to Fig.\ref{fig5:slice2}, click on \textit{Y Normal}, and under \textbf{Plane Parameters}, specify the $y$-coordinate location in \textbf{Origin}, where we want the slice to be taken. For this example we select (0.5705415, 0.6081815, 0) as a default values for \textbf{Origin}, where it shows the middle of the wing (Fig.\ref{fig5:slice3}). Please note that this coordinate is absolute (i.e. not a ratio of the wing span). Click on \textbf{Apply} after specifying the $y$-coordinate.
+or location along the span-wise direction (along $y$-axis in this example). According to Figure \ref{fig5:slice2}, click on \textit{Y Normal}, and under \textbf{Plane Parameters}, specify the $y$-coordinate location in \textbf{Origin}, where we want the slice to be taken. For this example we select (0.5705415, 0.6081815, 0) as a default values for \textbf{Origin}, where it shows the middle of the wing (Figure \ref{fig5:slice3}). Please note that this coordinate is absolute (i.e. not a ratio of the wing span). Click on \textbf{Apply} after specifying the $y$-coordinate.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=.45\textwidth]{tut05/slice2.pdf}
@@ -1172,28 +1180,28 @@ or location along the span-wise direction (along $y$-axis in this example). Acco
     \caption{Determining the slice to be taken (red line shows the location where a cross-sectional slice will be taken form the wing).}
     \label{fig5:slice3}
 \end{figure}
-After clicking on the \textbf{Apply}, you will generate a slice of the wing span at the specified $y$-coordinate, as shown in Fig.\ref{fig5:slice4}.
+After clicking on the \textbf{Apply}, you will generate a slice of the wing span at the specified $y$-coordinate, as shown in Figure \ref{fig5:slice4}.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=.75\textwidth]{tut05/slice4.pdf}
     \caption{Slice to be taken form the wing.}
     \label{fig5:slice4}
 \end{figure}
-To plot $C_p$ for this slice along the chord line, the coordinate along the chord line should be non-dimensionalized. To do this, click on the upper left icon, as shown in Fig.\ref{fig5:toprighticon}.
+To plot $C_p$ for this slice along the chord line, the coordinate along the chord line should be non-dimensionalized. To do this, click on the upper left icon, as shown in Figure \ref{fig5:toprighticon}.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=.35\textwidth]{tut05/toprighticon.pdf}
     \caption{How to make alternative viewing options.}
     \label{fig5:toprighticon}
 \end{figure}
-It will create another set of viewing options. By click on the \textit{Spreadsheet View}, as it is shown in Fig.\ref{fig5:slice6}, it will generate a spreadsheet view of the data contained in that slice. As seen from Fig.\ref{fig5:slice7}, we want to pan to the right where the data set of \textbf{Points} are located. You can vary the display \textbf{Precision} when looking up the maximum and minimum values as well.
+It will create another set of viewing options. By click on the \textit{Spreadsheet View}, as it is shown in Figure \ref{fig5:slice6}, it will generate a spreadsheet view of the data contained in that slice. As seen from Figure \ref{fig5:slice7}, we want to pan to the right where the data set of \textbf{Points} are located. You can vary the display \textbf{Precision} when looking up the maximum and minimum values as well.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=.55\textwidth]{tut05/slice6.pdf}
     \caption{How to make spreadsheet view.}
     \label{fig5:slice6}
 \end{figure}
-Next, double click on the \textbf{Points} to sort them by descending or ascending order. We want to get the maximum and minimum values in the array. According to Fig.\ref{fig5:slice7 a} and Fig.\ref{fig5:slice7 b}, the maximum and minimum values for this slice are 0.97631m and 0.349704m, respectively. These two values correspond to $x$-coordinate for the trailing edge and leading edge of the wing section, respectively. As you can see in Fig.\ref{fig5:slice7}, the $y$-coordinate is constant for all values, since we slice it along $y$-coordinate.
+Next, double click on the \textbf{Points} to sort them by descending or ascending order. We want to get the maximum and minimum values in the array. According to Figure \ref{fig5:slice7 a} and Figure \ref{fig5:slice7 b}, the maximum and minimum values for this slice are 0.97631m and 0.349704m, respectively. These two values correspond to $x$-coordinate for the trailing edge and leading edge of the wing section, respectively. As you can see in Figure \ref{fig5:slice7}, the $y$-coordinate is constant for all values, since we slice it along $y$-coordinate.
 \begin{figure}[htbp]
     \centering
      \begin{subfigure}[b]{.85\textwidth}
@@ -1212,14 +1220,14 @@ Next, double click on the \textbf{Points} to sort them by descending or ascendin
     \caption{How to find maximum/minimum of the \textbf{Points}.}
     \label{fig5:slice7}
 \end{figure}
-Next, click on \textit{Slice1} in the \textbf{Pipeline Browser}, and click on the \textbf{Calculator} icon (Fig.\ref{fig5:slice8}).
+Next, click on \textit{Slice1} in the \textbf{Pipeline Browser}, and click on the \textbf{Calculator} icon (Figure \ref{fig5:slice8}).
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=.55\textwidth]{tut05/slice8.pdf}
     \caption{How to use \textbf{Calculator}.}
     \label{fig5:slice8}
 \end{figure}
-We want to create a new array field called \textit{Normalized chord}. We want to plot the pressure coefficient ($C_p$) along a local normalized chord length instead of the chord length at the base of the wing. Therefore, according to Fig.\ref{fig5:slice9}, type the \textit{Normalized chord} in \textbf{Result Array Name} text-box. Additionally, type the following equation in the equation-box to normalize the local chord length at that chosen station along the wing span. Please note that the variable \textit{coordsX} can be chosen from the \textbf{Scalars} drop-down menu. Then, click on the \textbf{Apply} to proceed the next step.
+We want to create a new array field called \textit{Normalized chord}. We want to plot the pressure coefficient ($C_p$) along a local normalized chord length instead of the chord length at the base of the wing. Therefore, according to Figure \ref{fig5:slice9}, type the \textit{Normalized chord} in \textbf{Result Array Name} text-box. Additionally, type the following equation in the equation-box to normalize the local chord length at that chosen station along the wing span. Please note that the variable \textit{coordsX} can be chosen from the \textbf{Scalars} drop-down menu. Then, click on the \textbf{Apply} to proceed the next step.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=.55\textwidth]{tut05/slice9.pdf}
@@ -1234,14 +1242,14 @@ After taking this step, the \textit{Normalized chord} is made and added to the l
     \label{fig5:slice10}
 \end{figure}
 
-In order to plot pressure coefficient, activate \textit{Calculator1} by clicking on it in \textbf{Pipeline Browser}, and then go to \textbf{Filter} $\rightarrow$ \textbf{Data Analysis} $\rightarrow$ \textbf{Plot Data} (Fig.\ref{fig5:plotdata5}).
+In order to plot pressure coefficient, activate \textit{Calculator1} by clicking on it in \textbf{Pipeline Browser}, and then go to \textbf{Filter} $\rightarrow$ \textbf{Data Analysis} $\rightarrow$ \textbf{Plot Data} (Figure \ref{fig5:plotdata5}).
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=.65\textwidth]{tut05/plotdata.pdf}
     \caption{How to plot data versus a variable list.}
     \label{fig5:plotdata5}
 \end{figure}
-Consequently, \textit{PlotData1} is created and added to the \textbf{Pipeline Browser} (Fig.\ref{fig5:slice11}).
+Consequently, \textit{PlotData1} is created and added to the \textbf{Pipeline Browser} (Figure \ref{fig5:slice11}).
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=.45\textwidth]{tut05/slice11.pdf}
@@ -1256,21 +1264,21 @@ In the \textbf{Properties} tab, click on the \textbf{Display} panel. Next, under
     \caption{How to plot pressure coefficient versus \textit{Normalized chord}.}
     \label{fig5:slice13}
 \end{figure}
-Additionally, at the below of the \textbf{Series Parameters}, select \textit{Diamond} for the \textbf{Marker Style}. After taking these steps, the plot for pressure coefficient should be similar to Fig.\ref{fig5:slice14}.
+Additionally, at the below of the \textbf{Series Parameters}, select \textit{Diamond} for the \textbf{Marker Style}. After taking these steps, the plot for pressure coefficient should be similar to Figure \ref{fig5:slice14}.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=.95\textwidth]{tut05/slice14.pdf}
     \caption{Pressure coefficient on the surface of the airfoil versus \textit{Normalized chord}.}
     \label{fig5:slice14}
 \end{figure}
-Again we want to have the $C_p$ from the suction surface (lower pressure side) to be on top of the pressure side (higher pressure side). To do this, go to \textbf{Properties} tab and select \textbf{View} panel. According to Fig.\ref{fig5:slice16}, under \textbf{Left Axis Range}, you can click on the check-box beside the \textbf{Left Axis Use Custom Range}, and then switch the values for \textbf{Left Axis Range}. Furthermore, to rearrange numbers along the left axis, you can click on the check-box beside \textbf{Left Axis Use Custom Labels}, and give different numbers based on your preference.
+Again we want to have the $C_p$ from the suction surface (lower pressure side) to be on top of the pressure side (higher pressure side). To do this, go to \textbf{Properties} tab and select \textbf{View} panel. According to Figure \ref{fig5:slice16}, under \textbf{Left Axis Range}, you can click on the check-box beside the \textbf{Left Axis Use Custom Range}, and then switch the values for \textbf{Left Axis Range}. Furthermore, to rearrange numbers along the left axis, you can click on the check-box beside \textbf{Left Axis Use Custom Labels}, and give different numbers based on your preference.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=.5\textwidth]{tut05/slice16.pdf}
     \caption{Settings for changing the range of variables in left axis of 2D plot.}
     \label{fig5:slice16}
 \end{figure}
-Eventually, the plot you get should be similar to Fig.\ref{fig5:slice15}.
+Eventually, the plot you get should be similar to Figure \ref{fig5:slice15}.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=.95\textwidth]{tut05/slice15.pdf}
@@ -1279,21 +1287,21 @@ Eventually, the plot you get should be similar to Fig.\ref{fig5:slice15}.
 \end{figure}
 %--------------------------------------------------------------
 \subsection{Visualize Pressure Coefficient (Alternative Method) Exporting .csv file at Different Stations}
-If you would like to try plotting in other software (i.e. Microsoft Excel), you can collect data for each station (or slice) and then export to .csv file. To get started, activate \textit{surface\_flow}.vtk by clicking on it in \textbf{Pipeline Browser}, and then go to \textbf{Filter} $\rightarrow$ \textbf{Data Analysis} $\rightarrow$ \textbf{Plot On Intersection Curves} (Fig.\ref{fig5:plotinintersectioncurve5}).
+If you would like to try plotting in other software (i.e. Microsoft Excel), you can collect data for each station (or slice) and then export to .csv file. To get started, activate \textit{surface\_flow}.vtk by clicking on it in \textbf{Pipeline Browser}, and then go to \textbf{Filter} $\rightarrow$ \textbf{Data Analysis} $\rightarrow$ \textbf{Plot On Intersection Curves} (Figure \ref{fig5:plotinintersectioncurve5}).
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=.55\textwidth]{tut05/plotintersectioncurve.pdf}
     \caption{How to extract data from an intersection of the surface curve. }
     \label{fig5:plotinintersectioncurve5}
 \end{figure}
-Next, according to Fig.\ref{fig5:slice17}, under \textbf{Plane Parameters} from \textbf{Properties} panel, click on the \textit{Y Normal}. Please note that the span of wing is $b=1.2$m. To get the $C_p$ curve in station at $y/b=0.2$, for the \textbf{Origin} coordinate, keep the default values of the $x$-coordinate and $z$-coordinate; set the $y$-coordinate to 0.24. This value is obtained by multiplying the wing span of 1.2 by $y/b$ of 0.2.
+Next, according to Figure \ref{fig5:slice17}, under \textbf{Plane Parameters} from \textbf{Properties} panel, click on the \textit{Y Normal}. Please note that the span of wing is $b=1.2$m. To get the $C_p$ curve in station at $y/b=0.2$, for the \textbf{Origin} coordinate, keep the default values of the $x$-coordinate and $z$-coordinate; set the $y$-coordinate to 0.24. This value is obtained by multiplying the wing span of 1.2 by $y/b$ of 0.2.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=.55\textwidth]{tut05/slice17.pdf}
     \caption{Settings for specifying the curve intersection on the wing.}
     \label{fig5:slice17}
 \end{figure}
-You should see the plane to be located at $y/b = 0.2$ (Fig.\ref{fig5:slice18}), and then, click on the \textbf{Apply}.
+You should see the plane to be located at $y/b = 0.2$ (Figure \ref{fig5:slice18}), and then, click on the \textbf{Apply}.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=.55\textwidth]{tut05/slice18.pdf}
@@ -1326,7 +1334,7 @@ the inviscid case (multigrid results). Comment on possible sources of discrepanc
 In this tutorial, we are going to explain how to design and generate a mesh depending on different engineering demands and various purposes in the CFD simulation. The software we are going to use is Gmsh. As mentioned before, the Gmsh is free and open-source software (for more information, please visit http://gmsh.info). However, to design a qualified mesh using Gmsh some preparations are required. These preparations should be done before starting the Gmsh, in order to ease and accelerate the mesh design procedure. Therefore, all steps required for mesh generation using Gmsh are explained in details in following sections.
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 \section{Airfoil Coordinate Preparation}
-For mesh generation around an airfoil geometry, we need to have access to the coordinates of the airfoil. One of the websites that contains the coordinates for a large variety of the airfoils is the AirfoilTools (for more information, please visit www.airfoiltools.com) (Fig.\ref{fig6:gmsh1}). In this tutorial we want to generate a mesh for one of NACA series airfoils, so we can select either \textbf{NACA 4 digit generator} or \textbf{NACA 5 digit generator}. Here, we chose NACA2312 from \textbf{NACA 4 digit generator} (Fig.\ref{fig6:gmsh2}). Therefore, according to NACA2312, the \textbf{Max Camber}, \textbf{Max camber position} and \textbf{Thickness} are 2, 30 and 12, respectively. Furthermore, we select \textbf{Number of points} as 50 for simplicity, but you can increase it if you want to have more precise airfoil coordinates. At the end, click on the \textbf{Plot}, and copy the coordinates data from \textbf{Data file}. Next, make a new file using one of the text editors (i.e. Notpad) and then paste the data there. Finally, in the text editor go to \textbf{File} $\rightarrow$ \textbf{Save as} and save it as \textit{naca2312}.dat.
+For mesh generation around an airfoil, we need to have access to the coordinates of the airfoil. One of the websites that contains the coordinates for a large variety of the airfoils is the AirfoilTools (for more information, please visit www.airfoiltools.com) (Figure \ref{fig6:gmsh1}). In this tutorial we want to generate a mesh for one of NACA series airfoils, so we can select either \textbf{NACA 4 digit generator} or \textbf{NACA 5 digit generator}. Here, we chose NACA2312 from \textbf{NACA 4 digit generator} (Figure \ref{fig6:gmsh2}). Therefore, according to NACA2312, the \textbf{Max Camber}, \textbf{Max camber position} and \textbf{Thickness} are 2, 30 and 12, respectively. Furthermore, we select \textbf{Number of points} as 50 for simplicity, but you can increase it if you want to have more precise airfoil coordinates. At the end, click on the \textbf{Plot}, and copy the coordinates data from \textbf{Data file}.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.9\textwidth]{tut06/gmsh1.pdf}
@@ -1339,12 +1347,21 @@ For mesh generation around an airfoil geometry, we need to have access to the co
     \caption{Settings for making NACA 4 digit airfoil coordinate.}
     \label{fig6:gmsh2}
 \end{figure}
-Additionally, make sure you activate the check-box beside \textbf{Cosine spacing} and \textbf{Close Trailing edge}. The \textbf{Cosine spacing} increases the number of points (or decreases the distance between points) around the leading edge and trailing edge of the airfoil in order to define precise curvatures. Additionally, \textbf{Close Trailing edge} leads to have the same starting and ending points in the coordinates list. In other words, both starting point and ending point have the same coordinate as (1, 0) in 2D space. 
+Additionally, make sure you activate the check-box beside \textbf{Cosine spacing} and \textbf{Close Trailing edge}. The \textbf{Cosine spacing} increases the number of points (or decreases the distance between points) around the leading edge and trailing edge of the airfoil in order to define precise curvatures. Additionally, \textbf{Close Trailing edge} leads to have the same starting and ending points in the coordinates list. In other words, both starting point and ending point have the same coordinate as (1, 0) in $xy$ plane. 
+Next, launch Microsoft Excel, and paste the coordinates data in the excel sheet. Since the airfoil coordinates have only $x$ and $y$ components, we need to add another column as $z$ component with zero values (Figure \ref{fig6:gmsh3}). The reason is that the coordinates in Gmsh must be defined in 3D space, and because our mesh is 2D, we put zero value for $z$ component. Next, save data as .dat file (you can make a new file using a text editor (i.e. Notepad), and then copy/paste data from Excel sheet to there. Finally, in the text editor go to \textbf{File} $\rightarrow$ \textbf{Save as} and save it as \textit{naca2312.dat}).
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.6\textwidth]{tut06/gmsh3.pdf}
+    \caption{Three components of airfoil coordinate in Excel sheet .}
+    \label{fig6:gmsh3}
+\end{figure}
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 \section{Converting Coordinate to Gmsh format}
-The Gmsh can not import the coordinates directly from .dat file, while it only reads data from its specific file (.geo file). All data is written in form of Gmsh-language, and then, stored in the .geo file. This .geo file allows users to modify the design variables or add commands in an open-source environment. Since programing for mesh generation in the .geo file is beyond the concept of this tutorial, we try to use Graphical User Interface (GUI) environment as much as possible. In the first step, the points in the Gmsh is defined like: \\
+The Gmsh can not import the coordinates directly from .dat file, while it only reads data from its specific file (.geo file). All data is written in form of Gmsh-language, and then, stored in the .geo file. The .geo file allows users to modify the design variables or add commands in an open-source environment. Since programing for mesh generation in the .geo file is beyond the concept of this tutorial, we try to use Graphical User Interface (GUI) environment as much as possible.
+
+In the first step, the points in Gmsh is defined like: \\
 \texttt{Point(1)=\{1.00000000, 0.00000000, 0.00000000, 1.000\};}, \\
-where, the number in \texttt{Point(1)} shows the index of corresponding point, and the first three numbers in brackets indicate the point coordinates in space ($x$, $y$, and $z$ components). Please note that the data in \textit{naca2312}.dat represent a 2D airfoil geometry ($x$ and $y$ components), while the Gmsh only interprets the data in 3D space. Therefore, we add zero as $z$ component of the coordinates for all geometry points. Additionally, the last number is the scale of mesh distribution around the corresponding point, which is 1 by default. Since typing commands one-by-one for all points in this way is time consuming, we added a Python-language script in the tutorial folder that reads coordinates for all points in the \textit{naca2312}.dat file, and converts them into the interpretable Gmsh-language data, and store them in a new .geo file. To use this converter, first of all, copy the \textit{gmshconverter}.py script file in the same directory you already saved \textit{naca2312}.dat, and then open command line terminal and enter following commands:
+where, index in \texttt{Point(1)} shows the index of the corresponding point, and the first three numbers in brackets indicate the point coordinates in space ($x$, $y$, and $z$ components). Additionally, the last number is the scale of mesh distribution around the corresponding point, which is 1 by default. Since typing commands one-by-one for all points in this way is time consuming, we added a Python-language script in the tutorial folder that reads coordinates for all points in the \textit{naca2312}.dat file, and converts them into the Gmsh-language data, and store them in a new .geo file. To use this converter, first of all, copy the \textit{gmshconverter}.py script file in the same directory you already saved \textit{naca2312}.dat, and then open command line terminal and enter following commands:
 \begin{table}[htbp]
     \centering
     \begin{tabular}{|l|l|}
@@ -1357,7 +1374,8 @@ where, the number in \texttt{Point(1)} shows the index of corresponding point, a
     \hline
     \end{tabular}
 \end{table}
-After taking these steps, the .geo file is saved in the same directory and is ready to be loaded by the Gmsh.
+
+Please note that \textit{naca2312}.geo is the name of the .geo file that we are going to generate. After taking these steps, your .geo file is saved in the same directory and is ready to be loaded by Gmsh.
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 \section{Mesh Design Using Gmsh}
 Launch Gmsh and go to \textbf{File} $\rightarrow$ \textbf{Open}, and select \textit{naca2312}.geo file. As it is shown in Fig\ref{fig6:gmsh22}, once you load the \textit{naca2312}.geo file you will see the points in display window.
@@ -1367,21 +1385,21 @@ Launch Gmsh and go to \textbf{File} $\rightarrow$ \textbf{Open}, and select \tex
     \caption{Points defining NACA2312 airfoil.}
     \label{fig6:gmsh22}
 \end{figure}
-To make surface for the airfoil, we use spline to make smooth surfaces for the upper and lower side of the airfoil. On the right-hand side of the Gmsh display window, go to \textbf{Modules} $\rightarrow$ \textbf{Geometry} $\rightarrow$ \textbf{Elementary entities} $\rightarrow$ \textbf{Add} $\rightarrow$ \textbf{Spline} (Fig.\ref{fig6:gmsh4}).
+To make surface for the airfoil, we use spline to make smooth surfaces for the upper and lower side of the airfoil. On the right-hand side of the Gmsh display window, go to \textbf{Modules} $\rightarrow$ \textbf{Geometry} $\rightarrow$ \textbf{Elementary entities} $\rightarrow$ \textbf{Add} $\rightarrow$ \textbf{Spline} (Figure \ref{fig6:gmsh4}).
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.35\textwidth]{tut06/gmsh4.pdf}
     \caption{How to add spline to design platform.}
     \label{fig6:gmsh4}
 \end{figure}
-Next, start to click on points from the trailing edge (1,0,0) toward the leading edge (0,0,0) for the upper side of the airfoil. When you reach (0,0,0) press \texttt{E} button on your keyboard to apply your command (or design). Then, start again from (1,0,0) toward (0,0,0) for the lower side of the airfoil, and again when you reach (0,0,0), press \texttt{E} button. It is worth pointing out that by pressing \texttt{E} button, the Gmsh applies the commands for what you selected or designed in the display window. Additionally, the Gmsh terminates the design or commands by pressing \texttt{Q} button. Once you are done with making the upper and lower surfaces for the airfoil, press \texttt{Q} button to exit from this command. As it is shown in Fig.\ref{fig6:gmsh6}, the splines for both upper and lower surfaces of the airfoil are added to geometry.
+Next, start to click on points from the trailing edge (1,0,0) toward the leading edge (0,0,0) for the upper side of the airfoil. When you reach (0,0,0) press \texttt{E} button on your keyboard to apply your command (or design). Then, start again from (1,0,0) toward (0,0,0) for the lower side of the airfoil, and again when you reach (0,0,0), press \texttt{E} button. It is worth pointing out that by pressing \texttt{E} button, the Gmsh applies the commands for what you selected or designed in the display window. Additionally, the Gmsh terminates the design or commands by pressing \texttt{Q} button. Once you are done with making the upper and lower surfaces for the airfoil, press \texttt{Q} button to exit from this command. As it is shown in Figure \ref{fig6:gmsh6}, the splines for both upper and lower surfaces of the airfoil are added to geometry.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.9\textwidth]{tut06/gmsh6.pdf}
     \caption{Splines added to define smooth surface for NACA2312 airfoil.}
     \label{fig6:gmsh6}
 \end{figure}
-In order to define the outer boundaries for computational domain, according to Fig.\ref{fig6:gmsh5}, go to \textbf{Modules} $\rightarrow$ \textbf{Geometry} $\rightarrow$ \textbf{Elementary entities} $\rightarrow$ \textbf{Add} $\rightarrow$ \textbf{Point}. Another display window similar to Fig.\ref{fig6:gmsh7} will appear that you need to define the coordinates for each point and then click on the \textbf{Apply}. Here, we give four points with following coordinates as follows: (10,-10,0), (10,10,0), (-10,-10,0), and (-10,10,0). Next, press \texttt{Q} button on your keyboard to terminate the commands.
+In order to define the outer boundaries for computational domain, according to Figure \ref{fig6:gmsh5}, go to \textbf{Modules} $\rightarrow$ \textbf{Geometry} $\rightarrow$ \textbf{Elementary entities} $\rightarrow$ \textbf{Add} $\rightarrow$ \textbf{Point}. Another display window similar to Figure \ref{fig6:gmsh7} will appear that you need to define the coordinates for each point and then click on the \textbf{Apply}. Here, we give four points with following coordinates as follows: (10,-10,0), (10,10,0), (-10,-10,0), and (-10,10,0). Next, press \texttt{Q} button on your keyboard to terminate the commands.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.35\textwidth]{tut06/gmsh5.pdf}
@@ -1394,14 +1412,14 @@ In order to define the outer boundaries for computational domain, according to F
     \caption{Setting for adding point in domain.}
     \label{fig6:gmsh7}
 \end{figure}
-As seen form Fig.\ref{fig6:gmsh8}, four points are added in the display window.
+As seen form Figure \ref{fig6:gmsh8}, four points are added in the display window.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.75\textwidth]{tut06/gmsh8.pdf}
     \caption{Generated points in design platform at the corners of domain.}
     \label{fig6:gmsh8}
 \end{figure}
-The next step is to connect these four pints, and define the outer boundaries. To do this, according to Fig.\ref{fig6:gmsh10}, go to \textbf{Modules} $\rightarrow$ \textbf{Geometry} $\rightarrow$ \textbf{Elementary entities} $\rightarrow$ \textbf{Add} $\rightarrow$ \textbf{Straight line}. Next, try to connect the points by clicking on them. Once they are connected, four straight blue lines show the connection between each two points (Fig.\ref{fig6:gmsh9}). At the end, press \texttt{Q} button on your keyboard to end the commands.
+The next step is to connect these four pints, and define the outer boundaries. To do this, according to Figure \ref{fig6:gmsh10}, go to \textbf{Modules} $\rightarrow$ \textbf{Geometry} $\rightarrow$ \textbf{Elementary entities} $\rightarrow$ \textbf{Add} $\rightarrow$ \textbf{Straight line}. Next, try to connect the points by clicking on them. Once they are connected, four straight blue lines show the connection between each two points (Figure \ref{fig6:gmsh9}). At the end, press \texttt{Q} button on your keyboard to end the commands.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.35\textwidth]{tut06/gmsh10.pdf}
@@ -1414,7 +1432,7 @@ The next step is to connect these four pints, and define the outer boundaries. T
     \caption{Straight lines added to define outer boundaries of domain.}
     \label{fig6:gmsh9}
 \end{figure}
-The next step is to specify the boundaries of the domain/geometry with respect to the lines/splines, and define a united computational domain. According to Fig. \ref{fig6:gmsh11}, go to \textbf{Modules} $\rightarrow$ \textbf{Geometry} $\rightarrow$ \textbf{Elementary entities} $\rightarrow$ \textbf{Add} $\rightarrow$ \textbf{Plane Surface}. Next, click on all lines and splines, and then, press \texttt{E} button on your keyboard. As it is seen from Fig.\ref{fig6:gmsh12}, the dash lines with grey color appear, which demonstrate a computational surface that contains geometry and outer boundaries. At the end, press \texttt{Q} button on your keyboard to end the commands.
+The next step is to specify the boundaries of the domain/geometry with respect to the lines/splines, and define a united computational domain. According to Figure  \ref{fig6:gmsh11}, go to \textbf{Modules} $\rightarrow$ \textbf{Geometry} $\rightarrow$ \textbf{Elementary entities} $\rightarrow$ \textbf{Add} $\rightarrow$ \textbf{Plane Surface}. Next, click on all lines and splines, and then, press \texttt{E} button on your keyboard. As it is seen from Figure \ref{fig6:gmsh12}, the dash lines with grey color appear, which demonstrate a computational surface that contains geometry and outer boundaries. At the end, press \texttt{Q} button on your keyboard to end the commands.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.35\textwidth]{tut06/gmsh11.pdf}
@@ -1427,14 +1445,14 @@ The next step is to specify the boundaries of the domain/geometry with respect t
     \caption{Surface generated to define computational domain.}
     \label{fig6:gmsh12}
 \end{figure}
-After having the computational domain in Gmsh, we should determine the physical boundaries (type of boundaries) to be able to implement boundary conditions in SU2 (or any other CFD software). To get started, according to Fig.\ref{fig6:gmsh13}, go to \textbf{Modules} $\rightarrow$ \textbf{Geometry} $\rightarrow$ \textbf{Physical groups} $\rightarrow$ \textbf{Add} $\rightarrow$ \textbf{Line}.
+After having the computational domain in Gmsh, we should determine the physical boundaries (type of boundaries) to be able to implement boundary conditions in SU2 (or any other CFD software). To get started, according to Figure \ref{fig6:gmsh13}, go to \textbf{Modules} $\rightarrow$ \textbf{Geometry} $\rightarrow$ \textbf{Physical groups} $\rightarrow$ \textbf{Add} $\rightarrow$ \textbf{Line}.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.35\textwidth]{tut06/gmsh13.pdf}
     \caption{How to define boundary type in design platform.}
     \label{fig6:gmsh13}
 \end{figure}
-To define the outer boundaries, according to Fig.\ref{fig6:gmsh14 a}, type \textit{farfield}, and then select four straight lines in display window by clicking on them. Next, press \texttt{E} button on your keyboard. This step specifies the name of these four lines as \textit{farfield}, and later in CFD software you can specify boundary conditions for the \textit{farfield}. According to Fig.\ref{fig6:gmsh14 b}, do the same for the airfoil, and then press \texttt{E} button on your keyboard. At the end, to specify the fluid for computational domain, go to \textbf{Modules} $\rightarrow$ \textbf{Geometry} $\rightarrow$ \textbf{Physical groups} $\rightarrow$ \textbf{Add} $\rightarrow$ \textbf{Surface} (Fig.\ref{fig6:gmsh15}). Then, according to Fig.\ref{fig6:gmsh14 c}, type \textit{fluid} in text-box, and then select surface of the domain in display window by clicking on one of the dash lines (which indicate the surface of the domain). Next, press \texttt{E} button, and then \texttt{Q} button on your keyboard.
+To define the outer boundaries, according to Figure \ref{fig6:gmsh14 a}, type \textit{farfield}, and then select four straight lines in display window by clicking on them. Next, press \texttt{E} button on your keyboard. This step specifies the name of these four lines as \textit{farfield}, and later in CFD software you can specify boundary conditions for the \textit{farfield}. According to Figure \ref{fig6:gmsh14 b}, do the same for the airfoil, and then press \texttt{E} button on your keyboard. At the end, to specify the fluid for computational domain, go to \textbf{Modules} $\rightarrow$ \textbf{Geometry} $\rightarrow$ \textbf{Physical groups} $\rightarrow$ \textbf{Add} $\rightarrow$ \textbf{Surface} (Figure \ref{fig6:gmsh15}). Then, according to Figure \ref{fig6:gmsh14 c}, type \textit{fluid} in text-box, and then select surface of the domain in display window by clicking on one of the dash lines (which indicate the surface of the domain). Next, press \texttt{E} button, and then \texttt{Q} button on your keyboard.
 \begin{figure}[htbp]
     \centering
      \begin{subfigure}[b]{.4\textwidth}
@@ -1466,14 +1484,14 @@ To define the outer boundaries, according to Fig.\ref{fig6:gmsh14 a}, type \text
     \caption{Defining different boundary type.}
     \label{fig6:gmsh15}
 \end{figure}
-In order to add grids to the domain, we should specify the number of grids for each line or spline, and then make the mesh for entire computational domain. Please note that we are going to generate unstructured mesh for the computational domain. To get started, go to \textbf{Modules} $\rightarrow$ \textbf{Mesh} $\rightarrow$ \textbf{Define} $\rightarrow$ \textbf{Transfinite} $\rightarrow$ \textbf{Line} (Fig.\ref{fig6:gmsh16}).
+In order to add grids to the domain, we should specify the number of grids for each line or spline, and then make the mesh for entire computational domain. Please note that we are going to generate unstructured mesh for the computational domain. To get started, go to \textbf{Modules} $\rightarrow$ \textbf{Mesh} $\rightarrow$ \textbf{Define} $\rightarrow$ \textbf{Transfinite} $\rightarrow$ \textbf{Line} (Figure \ref{fig6:gmsh16}).
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.35\textwidth]{tut06/gmsh16.pdf}
     \caption{How to specify grids on the boundaries.}
     \label{fig6:gmsh16}
 \end{figure}
-According to Fig.\ref{fig6:gmsh17 a}, choose 100 grid points in \textbf{Number of points}. Also, select \textit{Bump} form \textbf{Type} drop-down menu, and set 0.3 for \textbf{Parameter}. Next, click on both splines for the upper and lower surface of the airfoil, and at the end, press \texttt{E} button on your keyboard. In this step, we selected 100 grid points for each surface of the airfoil, and with selecting \textit{Bump} with 0.3 as parameter set, we distributed the grid nodes along the spline with more concentration on the leading edge and trailing edge of the airfoil geometry. You can change the clustering rate by setting different values for \textbf{Parameter}.
+According to Figure \ref{fig6:gmsh17 a}, choose 100 grid points in \textbf{Number of points}. Also, select \textit{Bump} form \textbf{Type} drop-down menu, and set 0.3 for \textbf{Parameter}. Next, click on both splines for the upper and lower surface of the airfoil, and at the end, press \texttt{E} button on your keyboard. In this step, we selected 100 grid points for each surface of the airfoil, and with selecting \textit{Bump} with 0.3 as parameter set, we distributed the grid nodes along the spline with more concentration on the leading edge and trailing edge of the airfoil geometry. You can change the clustering rate by setting different values for \textbf{Parameter}.
 \begin{figure}[htbp]
     \centering
      \begin{subfigure}[b]{.4\textwidth}
@@ -1492,16 +1510,16 @@ According to Fig.\ref{fig6:gmsh17 a}, choose 100 grid points in \textbf{Number o
     \caption{Settings for defining different type of grid points.}
     \label{fig6:gmsh17}
 \end{figure}
-Next, according to Fig.\ref{fig6:gmsh17 b}, set the number of grid to 20 in \textbf{Number of points}. Then, to have equalized distribution of the grids on each line of the outer boundaries, select \textit{Progression} from \textbf{Type} drop-down menu with value of 1 as \textbf{Parameter}. Next, click on all four straight lines at outer boundaries, and then press \texttt{E} button on your keyboard. At the end, press \texttt{Q} button on your keyboard to end commands.
+Next, according to Figure \ref{fig6:gmsh17 b}, set the number of grid to 20 in \textbf{Number of points}. Then, to have equalized distribution of the grids on each line of the outer boundaries, select \textit{Progression} from \textbf{Type} drop-down menu with value of 1 as \textbf{Parameter}. Next, click on all four straight lines at outer boundaries, and then press \texttt{E} button on your keyboard. At the end, press \texttt{Q} button on your keyboard to end commands.
 
-The next step is to generate mesh for 2D domain we already designed. To do this, according to Fig.\ref{fig6:gmsh23}, go to \textbf{Modules} $\rightarrow$ \textbf{Mesh} $\rightarrow$ \textbf{2D}. Once you select \textbf{2D}, it  automatically starts to generate unstructured mesh for the computational domain.
+The next step is to generate mesh for 2D domain we already designed. To do this, according to Figure \ref{fig6:gmsh23}, go to \textbf{Modules} $\rightarrow$ \textbf{Mesh} $\rightarrow$ \textbf{2D}. Once you select \textbf{2D}, it  automatically starts to generate unstructured mesh for the computational domain.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.35\textwidth]{tut06/gmsh23pdf.pdf}
     \caption{How to generate 2D mesh.}
     \label{fig6:gmsh23}
 \end{figure}
-The mesh you get should be similar to Fig.\ref{fig6:gmsh18}. As you can see form Fig.\ref{fig6:gmsh18 a}, the mesh is coarse around the outer boundaries, while it is finer around the airfoil (Fig.\ref{fig6:gmsh18 b}), especially near the leading edge and trailing edges of the airfoil geometry.
+The mesh you get should be similar to Figure \ref{fig6:gmsh18}. As you can see form Figure \ref{fig6:gmsh18 a}, the mesh is coarse around the outer boundaries, while it is finer around the airfoil (Figure \ref{fig6:gmsh18 b}), especially near the leading edge and trailing edges of the airfoil geometry.
 \begin{figure}[htbp]
     \centering
      \begin{subfigure}[b]{.75\textwidth}
@@ -1520,7 +1538,7 @@ The mesh you get should be similar to Fig.\ref{fig6:gmsh18}. As you can see form
     \caption{Mesh generated for computational domain.}
     \label{fig6:gmsh18}
 \end{figure}
-Eventually, the mesh generation is done, and in this step we should save it in proper format that is known by SU2 software. Fortunately, Gmsh can generate the mesh which is compatible with SU2 software (.su2 format). To do this, go to \textbf{File} $\rightarrow$ \textbf{Export}. Next, according to Fig.\ref{fig6:gmsh20}, select \textit{Mesh-SU2(*.su2)} from \textbf{Format} drop-down menu, and in the \textbf{Filename} address bar, type \textit{naca2312.su2} to create .su2 mesh file. Then, click on \textbf{OK} to proceed the next step. Afterward, a display window appears that asks about \textbf{SU2 Options}. You should ignore this option by clicking on \textbf{OK} to terminate mesh generation. Finally, the \textit{naca2312}.su2 mesh file is generated and saved in the directory you already chose.
+Eventually, the mesh generation is done, and in this step we should save it in proper format that is known by SU2 software. Fortunately, Gmsh can generate the mesh which is compatible with SU2 software (.su2 format). To do this, go to \textbf{File} $\rightarrow$ \textbf{Export}. Next, according to Figure \ref{fig6:gmsh20}, select \textit{Mesh-SU2(*.su2)} from \textbf{Format} drop-down menu, and in the \textbf{Filename} address bar, type \textit{naca2312.su2} to create .su2 mesh file. Then, click on \textbf{OK} to proceed the next step. Afterward, a display window appears that asks about \textbf{SU2 Options}. You should ignore this option by clicking on \textbf{OK} to terminate mesh generation. Finally, the \textit{naca2312}.su2 mesh file is generated and saved in the directory you already chose.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.6\textwidth]{tut06/gmsh20.pdf}
@@ -1529,14 +1547,14 @@ Eventually, the mesh generation is done, and in this step we should save it in p
 \end{figure}
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 \section{Run Tutorial In Chapter\ref{ch:Inviscid NACA0012} Using New Mesh}
-In order to go over Chapter\ref{ch:Inviscid NACA0012} again with new mesh, just replace the new mesh with the default mesh in \textit{01QuickStart/tutorial} folder and proceed the same steps in Chapter\ref{ch:Inviscid NACA0012} to run the CFD simulation. If you want to change the name of physical boundaries in Gmsh, or choose different name for your .su2 mesh file, you can go to configuration file (.cfg) and change the related settings for mesh options. To do this, open the \textit{inv\_NACA0012}.cfg, and search for \texttt{INPUT/OUTPUT INFORMATION}. According to Fig.\ref{fig6:gmsh24}, in \texttt{MESH\_FILENAME} under \texttt{INPUT/OUTPUT INFORMATION}, you can change the name of mesh you are going to use. You can also select different types of mesh in \texttt{MESH\_FORMAT}. In this tutorial we leave it as \texttt{SU2}.
+In order to go over Chapter\ref{ch:Inviscid NACA0012} again with new mesh, just replace the new mesh with the default mesh in \textit{01QuickStart/tutorial} folder and proceed the same steps in Chapter\ref{ch:Inviscid NACA0012} to run the CFD simulation. If you want to change the name of physical boundaries in Gmsh, or choose different name for your .su2 mesh file, you can go to configuration file (.cfg) and change the related settings for mesh options. To do this, open the \textit{inv\_NACA0012}.cfg, and search for \texttt{INPUT/OUTPUT INFORMATION}. According to Figure \ref{fig6:gmsh24}, in \texttt{MESH\_FILENAME} under \texttt{INPUT/OUTPUT INFORMATION}, you can change the name of mesh you are going to use. You can also select different types of mesh in \texttt{MESH\_FORMAT}. In this tutorial we leave it as \texttt{SU2}.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.85\textwidth]{tut06/gmsh24.pdf}
     \caption{Settings for mesh in SU2 configuration file.}
     \label{fig6:gmsh24}
 \end{figure}
-Additionally, if you would like to pick different name for the physical boundaries in the Gmsh, you should change the boundary names in the configuration file as well. To do this, search for \texttt{BOUNDARY CONDITION DEFINITION} in \textit{inv\_NACA0012}.cfg. According to Fig.\ref{fig6:gmsh25}, you can change the names with those you defined in the Gmsh for the physical boundaries. In this section, \texttt{MARKER\_EULER} and \texttt{MARKER\_FAR} correspond to the wall boundary for the upper and lower surfaces of the airfoil, and the far-field boundary for the outer boundaries, respectively.
+Additionally, if you would like to pick different name for the physical boundaries in the Gmsh, you should change the boundary names in the configuration file as well. To do this, search for \texttt{BOUNDARY CONDITION DEFINITION} in \textit{inv\_NACA0012}.cfg. According to Figure \ref{fig6:gmsh25}, you can change the names with those you defined in the Gmsh for the physical boundaries. In this section, \texttt{MARKER\_EULER} and \texttt{MARKER\_FAR} correspond to the wall boundary for the upper and lower surfaces of the airfoil, and the far-field boundary for the outer boundaries, respectively.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.85\textwidth]{tut06/gmsh25.pdf}

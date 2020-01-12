@@ -808,6 +808,13 @@ Now we can plot the predicted lift coefficient, drag coefficient, and density re
 \chapter{Laminar Cylinder}
 \label{ch:Laminar Cylinder}
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+\section{Required Files}
+\begin{su2note}
+	Use the following links to download the same version of SU2 for Windows (\href{}{click here}) or Mac (\href{}{click here}), and the required configuration (\href{}{click here}) and mesh files (\href{}{click here}).
+\end{su2note}
+\begin{paraviewnote}
+	Use the following links to download the same version of Paraview for Windows (\href{}{click here}) or Mac (\href{}{click here}).
+\end{paraviewnote}
 \section{Problem Description}
 In this tutorial we will explain how to simulate external viscous flow past a 2D cylinder. To simulate this the Navier-Stokes equations will be solved in steady and unsteady forms, depending on the chosen Reynolds number. For this type of flow, the wake is expected to remain steady up to a Reynolds number of around 46. At higher Reynolds numbers the flow becomes unsteady, with oscillating vortices being shed in its wake. This is the  Von-Karman vortex street, which is a well-known phenomenon in fluid mechanics. The computational domain for this tutorial uses an O-topology mesh with the cylinder in the center of the domain. The outer boundary is situated at a radial distance of 15$D$, where $D$ is cylinder diameter. The resulting mesh is composed of 26,192 triangular elements. The elements around the surface of the cylinder are refined to resolve the viscous boundary layer in this region.  For this example, the flow specifications are provided as follows:
 \begin{itemize}
@@ -1091,6 +1098,13 @@ Plotting $C_L$ or $C_D$ as a function of time demonstrates that the shedding amp
 \chapter{Turbulent ONERA M6}
 \label{ch:Turbulent ONERA M6}
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+\section{Required Files}
+\begin{su2note}
+	Use the following links to download the same version of SU2 for Windows (\href{}{click here}) or Mac (\href{}{click here}), and the required configuration (\href{}{click here}) and mesh files (\href{}{click here}).
+\end{su2note}
+\begin{paraviewnote}
+	Use the following links to download the same version of Paraview for Windows (\href{}{click here}) or Mac (\href{}{click here}).
+\end{paraviewnote}
 \section{Problem Description}
 In this tutorial will demonstrate how to simulate transonic viscous flow past a three-dimensional wing. We will use the ONERA M6 again, and detailed information is given in the previous tutorial for inviscid flow in Chapter\ref{ch:Inviscid ONERA M6}. We will use the Reynolds-Averaged Navier-Stokes (RANS) equations and compare the Spalar-Almaras (SA) and $k-\omega$ Shear Stress Transport (SST) turbulence models for the eddy viscosity. The computational domain uses a structured mesh with 43,008 hexahedral. Note that this mesh is relatively coarse to allow for relatively small computation mesh. The flow specifications are provided as follows:
 \begin{itemize}
@@ -1333,6 +1347,13 @@ the inviscid case (multigrid results). Comment on possible sources of discrepanc
 \chapter{Mesh Generation Using Gmsh}
 \label{ch:Mesh Generation Unisg Gmsh}
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+\section{Required Files}
+\begin{gmshnote}
+	Use the following links to download the same version of Gmsh for Windows (\href{}{click here}) or Mac (\href{}{click here}).
+\end{gmshnote}
+\begin{pythonnote}
+	Use the following links to download the python file for this toturial (\href{}{click here}).
+\end{pythonnote}
 \section{Problem Description}
 In this tutorial, we are going to explain how to design and generate a mesh depending on different engineering demands and various purposes in the CFD simulation. The software we are going to use is Gmsh. As mentioned before, the Gmsh is free and open-source software (for more information, please visit http://gmsh.info). However, to design a qualified mesh using Gmsh some preparations are required. These preparations should be done before starting the Gmsh, in order to ease and accelerate the mesh design procedure. Therefore, all steps required for mesh generation using Gmsh are explained in details in following sections.
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

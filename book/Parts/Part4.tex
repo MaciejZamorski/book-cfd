@@ -1358,7 +1358,8 @@ the inviscid case (multigrid results). Comment on possible sources of discrepanc
 In this tutorial, we are going to explain how to design and generate a mesh depending on different engineering demands and various purposes in the CFD simulation. The software we are going to use is Gmsh. As mentioned before, the Gmsh is free and open-source software (for more information, please visit http://gmsh.info). However, to design a qualified mesh using Gmsh some preparations are required. These preparations should be done before starting the Gmsh, in order to ease and accelerate the mesh design procedure. Therefore, all steps required for mesh generation using Gmsh are explained in details in following sections.
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 \section{Airfoil Coordinate Preparation}
-For mesh generation around an airfoil, we need to have access to the coordinates of the airfoil. One of the websites that contains the coordinates for a large variety of the airfoils is the AirfoilTools (for more information, please visit www.airfoiltools.com) (Figure \ref{fig6:gmsh1}). In this tutorial we want to generate a mesh for one of NACA series airfoils, so we can select either \textbf{NACA 4 digit generator} or \textbf{NACA 5 digit generator}. Here, we chose NACA2312 from \textbf{NACA 4 digit generator} (Figure \ref{fig6:gmsh2}). Therefore, according to NACA2312, the \textbf{Max Camber}, \textbf{Max camber position} and \textbf{Thickness} are 2, 30 and 12, respectively. Furthermore, we select \textbf{Number of points} as 50 for simplicity, but you can increase it if you want to have more precise airfoil coordinates. At the end, click on the \textbf{Plot}, and copy the coordinates data from \textbf{Data file}.
+For mesh generation around an airfoil, we need to have access to the coordinates of the airfoil geometry. One of the websites that contains the coordinates for a large variety of the airfoils is the AirfoilTools (for more information, please visit www.airfoiltools.com) (Figure \ref{fig6:gmsh1}). In this tutorial we want to generate a mesh for one of NACA series airfoils, so we can select either \textbf{NACA 4 digit generator} or \textbf{NACA 5 digit generator}. Here, we chose NACA2312 from \textbf{NACA 4 digit generator} (Figure \ref{fig6:gmsh2}). Therefore, according to NACA2312, the \textbf{Max Camber}, \textbf{Max camber position} and \textbf{Thickness} are 2, 30 and 12, respectively. Furthermore, we select \textbf{Number of points} as 50 for simplicity, but you can increase it if you want to have more precise airfoil coordinates. At the end, click on the \textbf{Plot}, and copy the coordinates data from \textbf{Data file}. Next, make a new file using one of text editors (i.e. Notepad), and then paste the data there. Finally, in the text editor go to \textbf{File} $\rightarrow$ \textbf{Save as} and save it as \textit{naca2312}.dat.
+
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.9\textwidth]{tut06/gmsh1.pdf}
@@ -1372,20 +1373,13 @@ For mesh generation around an airfoil, we need to have access to the coordinates
     \label{fig6:gmsh2}
 \end{figure}
 Additionally, make sure you activate the check-box beside \textbf{Cosine spacing} and \textbf{Close Trailing edge}. The \textbf{Cosine spacing} increases the number of points (or decreases the distance between points) around the leading edge and trailing edge of the airfoil in order to define precise curvatures. Additionally, \textbf{Close Trailing edge} leads to have the same starting and ending points in the coordinates list. In other words, both starting point and ending point have the same coordinate as (1, 0) in $xy$ plane. 
-Next, launch Microsoft Excel, and paste the coordinates data in the excel sheet. Since the airfoil coordinates have only $x$ and $y$ components, we need to add another column as $z$ component with zero values (Figure \ref{fig6:gmsh3}). The reason is that the coordinates in Gmsh must be defined in 3D space, and because our mesh is 2D, we put zero value for $z$ component. Next, save data as .dat file (you can make a new file using a text editor (i.e. Notepad), and then copy/paste data from Excel sheet to there. Finally, in the text editor go to \textbf{File} $\rightarrow$ \textbf{Save as} and save it as \textit{naca2312.dat}).
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.6\textwidth]{tut06/gmsh3.pdf}
-    \caption{Three components of airfoil coordinate in Excel sheet .}
-    \label{fig6:gmsh3}
-\end{figure}
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 \section{Converting Coordinate to Gmsh format}
-The Gmsh can not import the coordinates directly from .dat file, while it only reads data from its specific file (.geo file). All data is written in form of Gmsh-language, and then, stored in the .geo file. The .geo file allows users to modify the design variables or add commands in an open-source environment. Since programing for mesh generation in the .geo file is beyond the concept of this tutorial, we try to use Graphical User Interface (GUI) environment as much as possible.
+The Gmsh can not import the coordinates directly from .dat file, while it only interprets the data from its specific file (.geo file). All data is written in form of Gmsh-language, and then, stored in the .geo file. The .geo file allows users to modify the design variables or add commands in an open-source environment. Since programing for mesh generation in the .geo file is beyond the concept of this tutorial, we try to use Graphical User Interface (GUI) environment as much as possible.
 
 In the first step, the points in Gmsh is defined like: \\
 \texttt{Point(1)=\{1.00000000, 0.00000000, 0.00000000, 1.000\};}, \\
-where, index in \texttt{Point(1)} shows the index of the corresponding point, and the first three numbers in brackets indicate the point coordinates in space ($x$, $y$, and $z$ components). Additionally, the last number is the scale of mesh distribution around the corresponding point, which is 1 by default. Since typing commands one-by-one for all points in this way is time consuming, we added a Python-language script in the tutorial folder that reads coordinates for all points in the \textit{naca2312}.dat file, and converts them into the Gmsh-language data, and store them in a new .geo file. To use this converter, first of all, copy the \textit{gmshconverter}.py script file in the same directory you already saved \textit{naca2312}.dat, and then open command line terminal and enter following commands:
+where, the number in \texttt{Point(1)} shows the index of the corresponding point, and the first three numbers in brackets indicate the point coordinates in space ($x$, $y$, and $z$ components). Additionally, the last number is the scale of mesh distribution around the corresponding point, which is 1 by default. Keep in mind that the coordinates in \textit{naca2312}.dat are in 2D space, while the Gmsh needs coordinates in 3D space. However, we must add zero as the $z$ component to the \textit{naca2312}.dat file. Since adding $z$ component to 2D coordinates and typing commands one-by-one for all points in this way is time consuming, we added a Python-language script in the tutorial folder that reads coordinates for all points in the \textit{naca2312}.dat file, and converts them into the Gmsh-language data, and store them in a new .geo file. To use this converter, first of all, copy the \textit{gmshconverter}.py script file in the same directory you already saved \textit{naca2312}.dat, and then open command line terminal and enter following commands:
 \begin{table}[htbp]
     \centering
     \begin{tabular}{|l|l|}
@@ -1398,8 +1392,7 @@ where, index in \texttt{Point(1)} shows the index of the corresponding point, an
     \hline
     \end{tabular}
 \end{table}
-
-Please note that \textit{naca2312}.geo is the name of the .geo file that we are going to generate. After taking these steps, your .geo file is saved in the same directory and is ready to be loaded by Gmsh.
+After taking these steps, your .geo file is saved in the same directory and is ready to be loaded by Gmsh.
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 \section{Mesh Design Using Gmsh}
 Launch Gmsh and go to \textbf{File} $\rightarrow$ \textbf{Open}, and select \textit{naca2312}.geo file. As it is shown in Fig\ref{fig6:gmsh22}, once you load the \textit{naca2312}.geo file you will see the points in display window.

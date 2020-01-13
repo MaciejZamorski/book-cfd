@@ -29,7 +29,7 @@ which can be written compactly for an expansion truncated to $k$ terms as
 f(x + \Delta x) = \sum_{i=0}^{k} \frac{\partial^i f}{\partial x^i}\frac{\Delta x^i}{i!}.
 \end{align}
 \end{theorem}
-While there are some limitations, particularly around the smoothness of the function and its derivatives, it is worth taking a moment to consider just how powerful Taylor series can be. It allows us to represent the entirety of a smooth function using the value of the solution and its derivatives at only one point in the domain. In addition, similar to Fourier series, we often find that a truncated expansion, which omits high-order terms in the summation, is sufficient for many applications.
+While there are some limitations, particularly around the smoothness of the function and its derivatives, it is worth taking a moment to consider just how powerful Taylor series can be. It allows us to represent the entirety of a smooth function using the value of the solution and its derivatives at only one point in the domain. In addition, similar to Fourier series, we often find that a truncated expansion, which omits higher-order terms in the summation, is sufficient for many applications.
 
 We will demonstrate the utility of Taylor series via example. Consider a simple sine wave 
 \begin{equation}
@@ -58,7 +58,7 @@ which is not a particularly accurate approximation of a sine wave except very cl
 where the subscript denotes the power of the highest degree expansion term included in the approximation. Each of these is a polynomial approximation of a sine wave about the point $x=0$, and are plotted in Figure \ref{fig:taylor_series}. We can make a few observations about the behaviour of Taylor series in general. First, when we are close to the expansion point $x=0$, even approximations with a small number of terms are close to the true function. For example, the $f_1$ expansion is the well-known small angle approximation of a sine wave. Then, as we add more terms the accuracy of the expansion improves rapidly. For example, by ten terms the approximation is nearly indistinguishable from the true function on the entire interval. Hence, we note that Taylor series becomes more accurate as we get closer to the expansion point and/or as we increase the number of terms.
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.6\linewidth]{Pictures/ch9_taylor_series_sin}
+	\includegraphics[width=0.6\linewidth]{Pictures/taylor_series_sin}
 	\caption{Taylor series expansion of $sin(x)$ about $x=0$}
 	\label{fig:taylor_series}
 \end{figure}
@@ -76,7 +76,7 @@ we note that the leading term omitted from the $f_1(\Delta x)$ approximation beh
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.6\linewidth]{Pictures/ch10_fd_scheme}
+	\includegraphics[width=0.6\linewidth]{Pictures/fd_scheme}
 	\caption{One-dimensional discretization using Finite Difference methods}
 	\label{fig:fd_scheme}
 \end{figure}
@@ -269,7 +269,7 @@ By inspecting this equation, and assuming that we know the solution at each grid
 Looking at Equation \ref{eqn:7hH8UBeG} we note that, provided we know the current solution at all grid points at time $t$, we can predict the solution at time $t+\Delta t$ with an error term of $\mathcal{O}(\Delta x, \Delta t)$. Then we will have an approximation of the solution at all grid points at time $t+\Delta t$, and we can use this to find an approximation of the solution at time $t+2\Delta t$ by applying the same equation, and so on. Hence, we are able to advance the linear advection equation to any final time we desire, noting that each time step we take will introduce some numerical error. An series of example solutions using different numbers of grid points is shown in Figure \ref{fig:advection_upwind} with an advection velocity of $\alpha = 1$, and a final solution time of $t=1$, which allows the Gaussian bump to travel once through the domain. If the error is measured in terms of the height of the peak of the Gaussian bump, it is apparent that it converges linearly as the grid spacing is refined.
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.65\linewidth]{Pictures/ch10_advection_upwind}
+	\includegraphics[width=0.65\linewidth]{Pictures/advection_upwind}
 	\caption{First-order advection of a gaussian bump using different levels of grid refinement.}
 	\label{fig:advection_upwind}
 \end{figure}
@@ -305,7 +305,7 @@ Looking at this expression we note it is remarkably similar to the expression fo
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.65\linewidth]{Pictures/ch10_burgers_upwind}
+	\includegraphics[width=0.65\linewidth]{Pictures/burgers_upwind}
 	\caption{First-order nonlinear burgers equation with a gaussian bump using different levels of grid refinement.}
 	\label{fig:burgers_upwind}
 \end{figure}
@@ -341,7 +341,7 @@ u_i^{t+1}  = u_{i}^t + \frac{\beta \Delta t}{\Delta x^2} \left(u_{i-1} - 2u_i + 
 Again, this is very similar to the approximations for linear advection and Burgers equations. However, one important thing to note is that the error in space is of $\mathcal{O}(\Delta x^2)$ instead of $\mathcal{O}(\Delta x)$, meaning that as we refine the grid the solution will converge more quickly to the exact solution of the linear diffusion equation.
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.65\linewidth]{Pictures/ch10_diffusion_central}
+	\includegraphics[width=0.65\linewidth]{Pictures/diffusion_central}
 	\caption{Second-order linear diffusion of a gaussian bump using different levels of grid refinement and $\alpha=1\times 10^{-3}$.}
 	\label{fig:diffusion_central}
 \end{figure}
@@ -352,17 +352,17 @@ Again, this is very similar to the approximations for linear advection and Burge
 \chapter{Finite Volume Methods}
 \begin{figure}[htbp]
  \centering
- \includegraphics[width=0.6\linewidth]{Pictures/ch11_fv_scheme}
+ \includegraphics[width=0.6\linewidth]{Pictures/fv_scheme}
  \caption{One-dimensional Finite Volume discretization}
  \label{fig:fv_scheme}
 \end{figure}
-In the previous chapter, we derived and characterized the finite difference method. While it is generally simple to apply, it requires the use of structured grids. Suppose now you want to simulate flow over an aircraft or one of its components. Generating structured meshes can become challenging, if not impossible, for complex geometries. Hence, we need methods that are flexible enough such that the geometry is not a fundamental limitation. Instead of evaluating the solution in a pointwise fashion, consider subdividing a generic domain $\Omega$ into volumes or cells $\Omega_i$, as shown in Figure~\ref{fig:fv_scheme}. Within each cell, the value of the function $u(x)$ can be assumed constant and is calculated using an integral approach. This idea leads to the derivation of the finite volume method, which is one of the most commonly used spatial discretizations in the industry. It was initially developed for its application on the general form of the conservation laws, meaning it can be fundamentally applied to solutions that present discontinuities. In this chapter, we present the theory required to apply the finite volume method on scalar as well as systems of conservation laws.
+In the previous chapter, we derived and characterized the finite difference method. While it is generally simple to apply, it requires the use of structured grids. Suppose now you want to simulate flow over an aircraft or one of its components. Generating structured meshes can become challenging, if not impossible, for complex geometries. Hence, we need methods that are flexible enough such that the geometry is not a fundamental limitation. Instead of evaluating the solution in a pointwise fashion, consider subdividing a generic domain $\Omega$ into volumes or cells $\Omega_i$, as shown in Figure~\ref{fig:fv_scheme}. Within each cell, the value of the function $u(x)$ can be assumed constant and is calculated using an integral approach. This idea leads to the derivation of the finite volume method, which is one of the most commonly used spatial discretizations in industry. It was initially developed for its application on the general form of the conservation laws, meaning it can be fundamentally applied to solutions that present discontinuities. In this chapter, we present the theory required to apply the finite volume method on scalar as well as systems of conservation laws. Additional useful references include~\cite{levequeFiniteVolumeMethods2002,hirschNumericalComputationInternal2007a,andersonComputationalFluidMechanics2016, toroRiemannSolversEvolved2006}.
 
 \section{Derivation}
 Consider the general conservation law applied to a volume of arbitrary shape $\Omega$, as shown in Figure~\ref{fig:fv_omega}
 \begin{figure}[htbp]
  \centering
- \includegraphics[width=0.4\linewidth]{Pictures/ch11_fv_arbitrary_volume}
+ \includegraphics[width=0.4\linewidth]{Pictures/fv_arbitrary_volume}
  \caption{Representation of an arbitrary volume of undefined shape.}
  \label{fig:fv_omega}
 \end{figure}
@@ -370,9 +370,9 @@ Consider the general conservation law applied to a volume of arbitrary shape $\O
  \int_\Omega \frac{\partial \vec u}{\partial t} d \Omega + \int_s \vec F\cdot \hat n ds = 0,
  \label{eq:fv_gcl}
 \end{equation}
-where $\vec{u}$ is a vector of conserved variables, such as mass, momentum, and energy. $\vec{F}=\vec F(\vec f)$ is the vector of fluxes, $S$ is the area of $\Omega$ with outward unit normal $\hat n$. Recall that for constant volumes, integration and differentiation commute so we can rewrite Equation~\ref{eq:fv_gcl}
+where $\vec{u}$ is a vector of conserved variables, such as mass, momentum, and energy. $\vec{F}=\vec F(\vec u)$ is the vector of fluxes, $S$ is the area of $\Omega$ with outward unit normal $\hat n$. Recall that for constant volumes, integration and differentiation commute so we can rewrite Equation~\ref{eq:fv_gcl}
 \begin{equation}
- \frac{\partial}{\partial t} \int_\Omega \vec{u} d\Omega + \int_s \vec F\cdot \hat n ds = 0.
+ \frac{d}{dt} \int_\Omega \vec{u} d\Omega + \int_s \vec F\cdot \hat n ds = 0.
  \label{eq:fv_gclleibniz}
 \end{equation}
 Clearly, the integral of the solution represents its total amount within $\Omega$. Hence, the rate of change of the total amount of $\vec{u}$ in a volume is the result of the net flux across the surface $S$ of $\Omega$. As we have stated in the introduction of this chapter, we are looking for averaged values of the solution, specifically the \textit{cell-average} of $\vec u$, which is given by
@@ -404,7 +404,7 @@ where $d/dt$ can be solved using an appropriate temporal discretization (see Cha
 Generally, we can make relatively good approximations of arbitrary volumes using straight-sided elements such as triangles and tetrahedra. Consider the triangular volume $\Omega_i$ displayed in Figure~\ref{fig:fv_straightsided}. The solution $\vec{\overline u}$ is constant within the triangular shape. In addition, each of the faces has an area of $S_1$, $S_2$ and $S_3$. Observe that since the sides of the considered volume are straight, the flux vectors are constant across each of the faces. Hence, the surface integral in Equation~\ref{eq:fvm} can be trivially solved via summation. For the $i$-th volume, the general form of the FV method for straight grids can be written
 \begin{figure}[htbp]
  \centering
- \includegraphics[width=0.3\linewidth]{Pictures/ch11_fv_cellavg}
+ \includegraphics[width=0.3\linewidth]{Pictures/fv_cellavg}
  \caption{Representation of solution, fluxes and faces of a straight-sided element.}
  \label{fig:fv_straightsided}
 \end{figure}
@@ -419,7 +419,7 @@ where $m$ is the number of faces, $F_i$ is the flux across the $j$-th face with 
 \section{The Riemann Problem}
 \begin{figure}[htbp]
  \centering
- \includegraphics[width=0.4\linewidth]{Pictures/ch11_fv_riemann_diagram}
+ \includegraphics[width=0.4\linewidth]{Pictures/fv_riemann_diagram}
  \caption{Representation of the Riemann problem}
  \label{fig:fv_riemannproblem}
 \end{figure}
@@ -429,7 +429,7 @@ You may now realize that the solution is piecewise linear, i.e., we have approxi
  \vec{F} = \vec{F} (\vec{\overline{u}}_L,~\vec{\overline{u}}_R).
  \end{equation}
 \end{eqBox}
-This is known as the \textit{Riemann problem}. The solution to the Riemann problem depends on the physics of the problem. For hyperbolic equations, it is said to be a similarity solution and is related to the \textit{characteristic speed} of PDE. We now present some examples of the Riemann problem for scalar conservation laws and the resulting finite-volume discretizations. Later in this chapter, we will come back to this topic and derive some solutions for systems of hyperbolic equations.
+This is known as the \textit{Riemann problem}. The solution to the Riemann problem depends on the physics of the problem. For hyperbolic equations, it is said to be a similarity solution and is related to the \textit{characteristic speed} of the PDE. We now present some examples of the Riemann problem for scalar conservation laws and the resulting finite-volume discretizations. Later in this chapter, we will come back to this topic and derive some solutions for systems of hyperbolic equations.
 
 \section{Example Applications}
 We have now derived the finite volume method and described some of its characteristics. We have introduced a consequence of the discretization, which is the Riemann problem. In this section, we present finite-volume schemes applied to our simple one-dimensional scalar conservation laws, as well as solutions to the Riemann problem for each of these equations.
@@ -445,7 +445,7 @@ and hence the advection flux is given by
 where $\alpha$ is the advection velocity. A finite-volume discretization for this problem can be seen in Figure~\ref{fig:fv_advection}, where $\alpha >0$. Consider the cell $\Omega_i$. We need to find the value of the flux at each of the faces of the cell. 
 \begin{figure}[htbp]
  \centering
- \includegraphics[width=0.5\linewidth]{Pictures/ch11_fv_advection}
+ \includegraphics[width=0.5\linewidth]{Pictures/fv_advection}
  \caption{Finite-volume linear advection.}
  \label{fig:fv_advection}
 \end{figure}
@@ -515,7 +515,7 @@ where $\phi$ is a weighting parameter that can recover the upwind, central or yi
  f_b & \text{if}~0 < \phi < 1. 
 \end{cases}
 \]
-We have shown that we can recover finite-difference schemes on structured grids for the linear advection equation considering appropriate choices of Riemann solver. We now explore whether this is also true for the Burgers equation.
+We have shown that we can recover finite-difference schemes on structured grids for the linear advection equation considering appropriate choices for the Riemann solver. We now explore whether this is also true for the Burgers equation.
 \subsection{Burgers Equation}
 We now consider the Burgers equation. As we have previously stated, for scalar conservation laws
 \begin{equation}
@@ -561,7 +561,7 @@ and the corresponding flux can be obtained from Fourier's law
 where $\beta$ is a constant diffusion coefficient. The resulting finite-volume discretization for this problem can be observed in Figure~\ref{fig:fv_diffusion}. Note that at each interface, we need to compute the derivative of the solution. Due to the behaviour of the diffusion equation, one should expect the Riemann flux to include the effects from both sides of the element.
 \begin{figure}[htbp]
  \centering
- \includegraphics[width=0.5\linewidth]{Pictures/ch11_fv_diffusion}
+ \includegraphics[width=0.5\linewidth]{Pictures/fv_diffusion}
  \caption{Finite-volume linear diffusion.}
  \label{fig:fv_diffusion}
 \end{figure}
@@ -598,7 +598,7 @@ In Chapter 2, we stated that first-order partial differential equations are natu
 \end{equation}
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.5\linewidth]{Pictures/ch11_lsc_advection_dye}
+	\includegraphics[width=0.5\linewidth]{Pictures/lsc_advection_dye}
 	\caption{Initial and final state of the advection of a dye particle in a one-dimensional flow.}
 	\label{fig:advection_dye}
 \end{figure}
@@ -625,7 +625,7 @@ Hence the \textit{characteristic speed} of a scalar hyperbolic equation is its a
 where a curve can be drawn for each initial value of $x_0$ corresponding to $u(x,t=0)=u(x_0)$. 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.5\linewidth]{Pictures/ch11_lsc_characteristics}
+	\includegraphics[width=0.5\linewidth]{Pictures/lsc_characteristics}
 	\caption{Characteristic lines for the linear advection equation with $\alpha>0$ for different values of $x_0$.}
 	\label{fig:linscal_charact}
 \end{figure}
@@ -701,7 +701,7 @@ Similar to the scalar case, we can now draw characteristic curves in the $x\time
 \end{equation}
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.5\linewidth]{Pictures/ch11_lsys_characteristics}
+	\includegraphics[width=0.5\linewidth]{Pictures/lsys_characteristics}
 	\caption{Characteristic lines for a linear hyperbolic system of equations.}
 	\label{fig:linsys_charact}
 \end{figure}
@@ -722,14 +722,14 @@ Consider the following initial-value problem (Figure~\ref{fig:scalar_riemann_u0}
 \end{align}
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.5\linewidth]{Pictures/ch11_riem_lsc_u0}
+	\includegraphics[width=0.5\linewidth]{Pictures/riem_lsc_u0}
 	\caption{Scalar initial condition with discontinuity}
 	\label{fig:scalar_riemann_u0}
 \end{figure}
 where $u_L$ and $u_R$ are piecewise constants and $u_L\neq u_R$. Based on our previous discussions, these constant values simply propagate along some characteristic curve in the $x\times t$ plane along with the discontinuity initially located at $x=0$. The characteristic line with the origin at this point defines the path of the discontinuity with equation $x=\alpha t$, as shown in Figure~\ref{fig:riem_charact_scalar}. Hence, on the left side of this curve, specifically where $x<\alpha t$, the solution is simply $u_L$, and on the right-hand side, where $x>\alpha t$, the solution is $u_R$. Hence, the Riemann solution to the scalar problem is simply
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.5\linewidth]{Pictures/ch11_riem_lsc_characteristics}
+	\includegraphics[width=0.5\linewidth]{Pictures/riem_lsc_characteristics}
 	\caption{Chacteristic line along which discontinuity propagates}
 	\label{fig:riem_charact_scalar}
 \end{figure}
@@ -771,8 +771,8 @@ where the $i$-th equation has solution
 \end{equation}
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.5\linewidth]{Pictures/ch11_riem_lsys_characteristics}
-	\caption{Characteristic curves for the Riemann problem with $m=4$. Note the value of the maximum sub-index changes for each point $P$. For $P_{m,L}^*$, $I=1$, for $P_{m}$, $I=2$ and for $P_{m,R}^*$, $I=3$. (Adapted from~\cite{leveque})}
+	\includegraphics[width=0.5\linewidth]{Pictures/riem_lsys_characteristics}
+	\caption{Characteristic curves for the Riemann problem with $m=4$. Note the value of the maximum sub-index changes for each point $P$. For $P_{m,L}^*$, $I=1$, for $P_{m}$, $I=2$ and for $P_{m,R}^*$, $I=3$. (Adapted from~\cite{levequeFiniteVolumeMethods2002})}
 	\label{fig:characteristics_riemann}
 \end{figure}
 The eigenvalues of $A$ can be observed in Figure~\ref{fig:characteristics_riemann} for the case of $m=4$ equations. Now, suppose you have a set of coordinates $(x,t)$ where you want to know the value of the solution. At any point in the $x\times t$ domain, the solution only depends on $u(x,0)=u(x_0)=u_0$. Hence, we can determine the value of $\vec u$ at any point by drawing lines parallel to the characteristic curves. On the left of $\lambda_1$, tracing parallel lines only yields initial values which correspond to the left state $\vec u_L$, hence the solution can be computed by
@@ -912,7 +912,7 @@ with inverse
 \end{align}
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.5\linewidth]{Pictures/ch11_riem_linacoustics_characteristics}
+	\includegraphics[width=0.5\linewidth]{Pictures/riem_linacoustics_characteristics}
 	\caption{Characteristic curves for the linear acoustics example}
 	\label{fig:acoustics_charact}
 \end{figure}
@@ -957,7 +957,7 @@ which yields the exact Riemann solution for the linear acoustics equation
 		\label{eq:riemann_solution_acoustics}
 	\end{align}
 \end{eqBox}
-Similar to~\cite{toro_riemann}, we can define the values of $\rho_0=1$, $c=1$ and given the initial left and right states
+Similar to~\cite{toroRiemannSolversEvolved2006}, we can define the values of $\rho_0=1$, $c=1$ and given the initial left and right states
 \begin{equation}
 	\vec u_L = 
 	\begin{bmatrix}
@@ -981,12 +981,12 @@ as shown in Figure~\ref{fig:riem_acoustics_example_u0}, we can determine the mid
 \begin{figure}[htbp]
 	\centering
 	\begin{subfigure}[b]{0.49\textwidth}
-		\includegraphics[width=\linewidth]{Pictures/ch11_riem_linacoustics_u0}
+		\includegraphics[width=\linewidth]{Pictures/riem_linacoustics_u0}
 		\caption{Initial condition}
 		\label{fig:riem_acoustics_example_u0}
 	\end{subfigure}
 	\begin{subfigure}[b]{0.49\textwidth}
-		\includegraphics[width=\linewidth]{Pictures/ch11_riem_linacoustics_sol}
+		\includegraphics[width=\linewidth]{Pictures/riem_linacoustics_sol}
 		\caption{Solution at $t>0$}
 		\label{fig:riem_acoustics_example_sol}
 	\end{subfigure}
@@ -1025,7 +1025,7 @@ as shown in Figure~\ref{fig:riem_acoustics_example_u0}, we can determine the mid
 % \subsection{Approximate Riemann Solvers}
 
 \chapter{Consistency, Stability, Convergence}
-Now that we have derived a few different schemes for solving linear advection, Burgers equation, and linear diffusion, we should now ask ourselves whether they will give us accurate predictions, and are there any restrictions on when they can be used. We have already discussed the importance of order of accuracy, which governs the rate at which the error will converge to zero. Now we will introduce the concepts of consistency, stability, and convergence. If we can prove that our numerical scheme satisfies all three of these properties we can be confident that it is promising approach for the Euler or Navier-Stokes equations. In the current section we will explore these properties in the context of finite difference methods, but the exact same steps can be taken to check whether a finite volume method is suitable or not.
+Now that we have derived a few different schemes for solving linear advection, Burgers equation, and linear diffusion, we should now ask ourselves whether they will give us accurate predictions, and are there any restrictions on when they can be used. We have already discussed the importance of order of accuracy, which governs the rate at which the error will converge to zero. Now we will introduce the concepts of consistency, stability, and convergence. If we can prove that our numerical scheme satisfies all three of these properties we can be confident that it is promising approach for the Euler or Navier-Stokes equations. In the current section we will explore these properties in the context of finite difference methods, but the exact same steps can be taken to check whether a finite volume method is suitable or not. Some additional references on these topics include~\cite{hirschNumericalComputationInternal2007a,andersonComputationalFluidMechanics2016}.
 
 \section{Consistency}
 A numerical scheme is consistent if it recovers the exact initial partial differential equation as the grid spacing and time step size are reduced. In other words, the truncation error of the scheme must go to zero in the limit $\Delta x \rightarrow 0$ and $\Delta t \rightarrow 0$. This is usually the case, and it is left as an exercise for the reader to check that our previous finite difference schemes for linear advection, Burgers equation, and linear diffusion satisfy this property. 
@@ -1145,7 +1145,7 @@ That is, it is only stable for CFL numbers less than one. Hence, for a given gri
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.6\linewidth]{Pictures/ch12_explicit_advection}
+	\includegraphics[width=0.6\linewidth]{Pictures/explicit_advection}
 	\caption{Stability region for the explicit linear advection scheme.}
 	\label{fig:explicit_advection}
 \end{figure}
@@ -1207,7 +1207,7 @@ Although this scheme is unconditionally stable, making at appealing since it all
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.6\linewidth]{Pictures/ch12_implicit_advection}
+	\includegraphics[width=0.6\linewidth]{Pictures/implicit_advection}
 	\caption{Stability region for the implicit linear advection scheme.}
 	\label{fig:implicit_advection}
 \end{figure}
@@ -1271,7 +1271,7 @@ We note that this scheme is {\it conditionally stable}, similar to the first lin
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.6\linewidth]{Pictures/ch12_explicit_diffusion}
+	\includegraphics[width=0.6\linewidth]{Pictures/explicit_diffusion}
 	\caption{Stability region for the explicit linear diffusion scheme.}
 	\label{fig:explicit_diffusion}
 \end{figure}
@@ -1334,7 +1334,7 @@ Based on the form of the amplification factor, we can conclude that this scheme 
 Hence, this linear diffusion scheme is {\it unconditionally stable}.
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.6\linewidth]{Pictures/ch12_implicit_diffusion}
+	\includegraphics[width=0.6\linewidth]{Pictures/implicit_diffusion}
 	\caption{Stability region for the implicit linear diffusion scheme.}
 	\label{fig:implicit_diffusion}
 \end{figure}
@@ -1348,11 +1348,11 @@ In CFD the numerical error introduced by a scheme is typically classified into t
 \begin{figure}[htbp]
 	\centering
 	\begin{subfigure}[b]{0.49\linewidth}
-		\includegraphics[width=\linewidth]{Pictures/ch13_dissipation_diagram}
+		\includegraphics[width=\linewidth]{Pictures/dissipation_diagram}
 		\caption{Dissipation}
 	\end{subfigure}
 	\begin{subfigure}[b]{0.49\linewidth}
-		\includegraphics[width=\linewidth]{Pictures/ch13_dispersion_diagram}
+		\includegraphics[width=\linewidth]{Pictures/dispersion_diagram}
 		\caption{Dispersion}
 	\end{subfigure}
 	\caption{Types of numerical error}
@@ -1375,7 +1375,7 @@ we found that the amplification factor was
 Recall that, for a given wavenumber $\kappa_m$ and CFL number $\sigma$ this told us how much the solution will be damped over a time step. Hence, we can plot this for a range of permissible wavenumbers in the range $\kappa_m \Delta x \in [0,\pi]$ and CFL numbers within the stability limit $\sigma \in [0,1]$. A plot of this is shown in Figure \ref{fig:dissipation_advection_explicit}. We can observe a few interesting features that define the dissipation error of this particular scheme. First, we note that when the wave size is large relative to the grid spacing, the wave is well resolved regardless of the CFL number. However, as we move to larger wavenumbers there is significant numerical dissipation. Also, the amount of numerical in this region dissipation depends on the CFL number, with larger CFL numbers corresponding to less dissipation. Finally, when the CFL number approaches unity the numerical dissipation approaches zero for all wavenumbers. Hence, when this CFL number is used we recover the exact dissipation relation for linear advection, that the waves do not get damped. The dissipation error of this scheme becomes particularly important in the context of turbulent flows. In this case, large scale structures in the turbulent flow have small wavenumbers relative to the grid spacing. This means that our large scale features will be simulated with relative accuracy. However, small scale turbulent structures that are of a size proportional to the grid spacing have high relative wavenumbers. This means that these fine scale structures will be heavily dissipated by this first order scheme.
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.6\linewidth]{Pictures/ch13_dissipation_adv_explct}
+	\includegraphics[width=0.6\linewidth]{Pictures/dissipation_adv_explct}
 	\caption{Amplification factor vs wavenumber for the explicit advection scheme}
 	\label{fig:dissipation_advection_explicit}
 \end{figure}
@@ -1390,7 +1390,7 @@ that had the amplification factor
 We can generate the exact same type of plot for permissible wave numbers $\kappa_m \Delta x \in [0,\pi]$ and, since this scheme is unconditionally stable, we will look at a few CFL numbers in the range $\sigma \in [0,10]$, as shown in Figure \ref{fig:dissipation_advection_implicit}. We note for this scheme, similar to the explicit scheme, that when the wave size is large relative to the grid spacing it is well resolved regardless of the CFL number. However, there is again a strong dependence of the numerical dissipation on the CFL number for high wavenumbers. As the wavenumber gets larger or as the CFL number gets larger the amount of numerical dissipation increases rapidly. Hence, while this scheme was found to be unconditionally stable, using large CFL numbers introduces significant numerical dissipation to all but the largest structures in the flow. Hence, this scheme is typically only used for solving steady-state problems that are not a function of time.
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.6\linewidth]{Pictures/ch13_dissipation_adv_implct}
+	\includegraphics[width=0.6\linewidth]{Pictures/dissipation_adv_implct}
 	\caption{Amplification factor vs wavenumber for the implicit advection scheme}
 	\label{fig:dissipation_advection_implicit}
 \end{figure}
@@ -1448,7 +1448,7 @@ In the ideal case this should be identical to the exact dispersion relation, but
 which tells us the speed of the numerical wave relative to the exact wave speed. When this value is less than 1 the wave moves too slowly, and when this value is greater than 1 the wave moves to fast.
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.6\linewidth]{Pictures/ch13_dispersion_adv_explct}
+	\includegraphics[width=0.6\linewidth]{Pictures/dispersion_adv_explct}
 	\caption{Dispersion curve for the implicit advection scheme}
 	\label{fig:dissipation_advection_implicit}
 \end{figure}
@@ -1547,7 +1547,7 @@ The forward Euler, or explicit Euler, scheme uses just one stage to predict the 
 Graphically, this can be interpreted as using the current derivative of the solution in time at time $t$, and simply extrapolating based on this derivative to the time $t+1$. This approach is $\mathcal{O}(\Delta t)$ in time.
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.6\linewidth]{Pictures/ch15_explicit_euler}
+	\includegraphics[width=0.6\linewidth]{Pictures/explicit_euler}
 	\caption{Explicit Euler}
 	\label{fig:explicit_euler_method}
 \end{figure}
@@ -1563,7 +1563,7 @@ where $\tilde{u}$ is an initial guess for the solution. Then, we use an average 
 This approach is called a two-stage scheme, since we had to compute our solution at one intermediate stage before the final solution is obtained. This requires us to evaluate two right hand sides, one for each stage, so is approximately twice as expensive as the explicit Euler method. However, it can be shown that it achieves $\mathcal{O}(\Delta t^2)$ in time. Hence, when the time step is small it is significantly more accurate.
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.6\linewidth]{Pictures/ch15_heuns_method}
+	\includegraphics[width=0.6\linewidth]{Pictures/heuns_method}
 	\caption{Heun's method}
 	\label{fig:heuns_method}
 \end{figure}
@@ -1580,7 +1580,7 @@ Since we have divided $\Delta t$ by two, we are now halfway between the current 
 Similar to Heun's method, this is also a two stage scheme and has a temporal error of $\mathcal{O}(\Delta t^2)$.
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.6\linewidth]{Pictures/ch15_midpoint_method}
+	\includegraphics[width=0.6\linewidth]{Pictures/midpoint_method}
 	\caption{Midpoint method}
 	\label{fig:midpoint_method}
 \end{figure}
@@ -1627,7 +1627,7 @@ where $a_{i,j}$ and $b_i$ and a set of constants. These can be compacted into a 
 This will yield an explicit scheme if the $A$ matrix is strictly lower-triangular. In that case, we find the solution at any stage is simple a function of the solution of earlier stages. In that case, the method consists of a number of intermediate stage solutions computed using an explicit Euler approach. The following are some example tableaus for commonly-used explicit schemes, including those already introduced.
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.6\linewidth]{Pictures/ch15_rk_method}
+	\includegraphics[width=0.6\linewidth]{Pictures/rk_method}
 	\caption{Fourth-order four-stage RK method}
 	\label{fig:midpoint_method}
 \end{figure}
@@ -2094,8 +2094,14 @@ Hence, after only 5 iterations, or three times as fast as Jacobi in this case, G
 
 \section{Successive Over-Relaxation}
 When using the Gauss-Seidel approach, we often observe that the iterated solutions converge gradually to the exact solution for $\vec{x}$. That is, each iteration takes a step towards the exact solution in a somewhat uniform manner. We can exploit this by simply extrapolating each iteration to move a bit further towards the exact solution, which is known as Successive Over-Relaxation (SOR). This is usually done to accelerate convergence, but as will be discussed later, it can be used to also stabilize convergence.
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.5\linewidth]{Pictures/itermethods_sor}
+	\caption{Successive Over-Relaxation method.}
+	\label{fig:sor}
+\end{figure}
 
-With SOR we simply apply a Gauss Seidel iteration to our current approximation of the solution, $\vec{x}_n$. We store the results of this Gauss-Seidel iteration temporarily as $\tilde{\vec{x}}_{n+1}$. Then, using the SOR approach, we linearly project our updated solution using our current and previous approximations, that is
+With SOR we simply apply a Gauss Seidel iteration to our current approximation of the solution, $\vec{x}_n$. We store the results of this Gauss-Seidel iteration temporarily as $\tilde{\vec{x}}_{n+1}$. Then, using the SOR approach, we linearly project our updated solution using our current and previous approximations, as shown in Figure~\ref{fig:sor}. Hence,
 \begin{eqBox}
 \begin{equation}
 	\vec{x}_{n+1} = \omega \tilde{\vec{x}}_{n+1} + (1-\omega) \vec{x}_n.

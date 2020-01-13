@@ -1,16 +1,14 @@
 import os
 import sys
 
+import numpy as np
+import matplotlib.pyplot as plt
+
 module_path = os.path.abspath(os.path.join('../code/'))
 if module_path not in sys.path:
     sys.path.append(module_path)
 
-import time
-from IPython import display
-import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.ticker as ticker
-
+# Run this line as soon as script is called
 plt.style.use('../code/style.mplstyle')
 
 def get_colors(n, start=0.2, end=1, rev=True):

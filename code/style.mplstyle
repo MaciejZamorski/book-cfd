@@ -1,15 +1,19 @@
 figure.figsize : 6.4, 4.8
 figure.dpi : 120
+#figure.subplot.wspace  : 0.005
 
 font.size : 13
 font.family : serif
 font.serif : Times New Roman
 text.usetex : True
-text.latex.preamble : \usepackage{txfonts}
+text.latex.preamble :  \usepackage{txfonts}
 savefig.bbox : tight
+savefig.pad_inches: 0.01
 
 axes.xmargin : 0
 axes.linewidth : 0.5
+axes.prop_cycle    : cycler('color', ['ff9933', 'ee3f00', 'ac0000', '690000', '250000'])
+
 legend.frameon : False
 legend.facecolor : None
 legend.labelspacing  : 0.1

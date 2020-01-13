@@ -8,21 +8,22 @@ import matplotlib.patches as mpatch
 import matplotlib.path as mpath
 import matplotlib as mpl
 
-
 def _rotate_vector(v, rad):
     M = np.array([[np.cos(rad), -np.sin(rad)], 
                   [np.sin(rad), np.cos(rad)]])
     return v @ M
 
 
-def _get_colors(n, start=0.2, end=1, rev=True):
+def _get_colors(n, start=0.2, end=1, rev=True, cmap='gist_heat'):
     if rev:
-        return plt.cm.gist_heat_r(np.linspace(start, end, n))
-    return plt.cm.gist_heat(np.linspace(start, end, n))   
+        cmap += '_r'
+    cmap = plt.get_cmap(cmap)
+    if rev:
+        return cmap(np.linspace(start, end, n))
+    return cmap(np.linspace(start, end, n))   
 
-def convert_to_graph(fig, ax, log=False):
+def convert_to_graph(fig, ax, use_min_xaxis=False, keep_ticks=False):
     # Taken from
-    # https://stackoverflow.com/questions/17646247/how-to-make-fuller-axis-arrows-with-matplotlib
     xmin, xmax = ax.get_xlim()
     ymin, ymax = ax.get_ylim()
 
@@ -31,8 +32,9 @@ def convert_to_graph(fig, ax, log=False):
         ax.spines[side].set_visible(False)
 
     # removing the axis ticks
-    plt.xticks([])  # labels
-    plt.yticks([])
+    if not keep_ticks:
+        plt.xticks([])  # labels
+        plt.yticks([])
     ax.tick_params(axis=u'both', which=u'both',length=0)
     ax.xaxis.set_ticks_position('none')  # tick markers
     ax.yaxis.set_ticks_position('none')
@@ -53,15 +55,18 @@ def convert_to_graph(fig, ax, log=False):
     yhw = hw/(ymax-ymin)*(xmax-xmin) * height/width
     yhl = hl/(xmax-xmin)*(ymax-ymin) * width/height
 
-    if not log:
-        # draw x and y axis
-        ax.arrow(xmin, 0, xmax-xmin, 0., fc='k', ec='k', lw=lw, 
-                head_width=hw, head_length=hl, overhang=ohg, 
-                length_includes_head=True, clip_on=False)
+    if use_min_xaxis:
+        yminn = ymin
+    else:
+        yminn = 0
+    # draw x and y axis
+    ax.arrow(xmin, yminn, xmax-xmin, 0., fc='k', ec='k', lw=lw, 
+            head_width=hw, head_length=hl, overhang=ohg, 
+            length_includes_head=True, clip_on=False)
 
-        ax.arrow(xmin, ymin, 0, ymax-ymin, fc='k', ec='k', lw=lw, 
-                head_width=yhw, head_length=yhl, overhang=ohg, 
-                length_includes_head=True, clip_on=False)
+    ax.arrow(xmin, ymin, 0, ymax-ymin, fc='k', ec='k', lw=lw, 
+            head_width=yhw, head_length=yhl, overhang=ohg, 
+            length_includes_head=True, clip_on=False)
 
     return fig, ax
 
@@ -108,7 +113,7 @@ def ensemble_average():
 
     fig, ax = convert_to_graph(fig, ax)
     plt.legend()
-    plt.savefig('ch7_ensemble_averaging.pdf')
+    plt.savefig('ensemble_averaging.pdf')
     plt.close(fig)
 
 
@@ -137,7 +142,7 @@ def time_average():
 
     fig, ax = convert_to_graph(fig, ax)
     plt.legend()
-    plt.savefig('ch7_time_averaging.pdf')
+    plt.savefig('time_averaging.pdf')
     plt.close(fig)
 
 
@@ -315,7 +320,7 @@ def stability_advection():
         plt.legend(loc=9, ncol=3, handlelength=0.8, borderaxespad=0)
 
         plt.tight_layout()
-        fig.savefig(f'ch12_{which}_advection.pdf')
+        fig.savefig(f'{which}_advection.pdf')
         plt.close(fig)
 
 
@@ -370,7 +375,7 @@ def stability_diffusion():
         plt.legend(loc=9, ncol=3, handlelength=0.8, borderaxespad=0)
         plt.tight_layout()
 
-        fig.savefig(f'ch12_{which}_diffusion.pdf')
+        fig.savefig(f'{which}_diffusion.pdf')
         plt.close(fig)
 
 
@@ -429,7 +434,7 @@ def fv_arbitrary_volume():
     ax.margins(0.2)
     fig, ax = remove_axes(fig, ax)
     plt.show()
-    fig.savefig(f'ch11_fv_arbitrary_volume.pdf')
+    fig.savefig(f'fv_arbitrary_volume.pdf')
     plt.close(fig)
 
 
@@ -491,7 +496,7 @@ def fv_trivolume():
     ax.set_ylim([-0.4, 1])
     fig, ax = remove_axes(fig, ax)
 
-    fig.savefig('ch11_fv_cellavg.pdf')
+    fig.savefig('fv_cellavg.pdf')
     plt.close(fig)
 
 
@@ -527,7 +532,7 @@ def fv_riemann_diagram():
         xfv[0]+0.25, xfv[1]-0.25), ha='center')
 
     fig, ax = remove_axes(fig, ax)
-    fig.savefig('ch11_fv_riemann_diagram.pdf')
+    fig.savefig('fv_riemann_diagram.pdf')
     # plt.show()
     plt.close(fig)
 
@@ -580,7 +585,7 @@ def fv_1d_advection():
                r'$\Omega_{i+1}$'], va='center' )
     fig.tight_layout()
     # plt.show()
-    fig.savefig('ch11_fv_advection.pdf')
+    fig.savefig('fv_advection.pdf')
     plt.close(fig)
 
 def fv_1d_diffusion():
@@ -644,7 +649,7 @@ def fv_1d_diffusion():
                        r'$\Omega_{i}$', r'$\Omega_{i+1}$'], va='center' )
     fig.tight_layout()
     # plt.show()
-    fig.savefig('ch11_fv_diffusion.pdf')
+    fig.savefig('fv_diffusion.pdf')
     plt.close(fig)
 
 def lsc_advection_dye():
@@ -661,7 +666,7 @@ def lsc_advection_dye():
     ax.text(1.05, 0.15, r'$t>0$', va='center')
     ax.set_xlim([0, 1.15])
     fig, ax = remove_axes(fig, ax)
-    fig.savefig('ch11_lsc_advection_dye.pdf')
+    fig.savefig('lsc_advection_dye.pdf')
 
 def lsc_characteristics():
     """Draws characteristic lines of the scalar advection equation"""
@@ -689,7 +694,7 @@ def lsc_characteristics():
     ax.set_ylabel('$t$')
     ax.set_xlabel('$x$')
 
-    fig.savefig('ch11_lsc_characteristics.pdf')
+    fig.savefig('lsc_characteristics.pdf')
 
     
 def lsys_characteristics():
@@ -718,7 +723,7 @@ def lsys_characteristics():
     ax.plot([-1, 1], [0, 0], 'k', lw=0.75)
     fig, ax = remove_axes(fig, ax)   
     # plt.show()
-    fig.savefig('ch11_lsys_characteristics.pdf')
+    fig.savefig('lsys_characteristics.pdf')
 
 def riem_lsc_u0():
     """Draws the initial condition for the scalar Riemann problem"""
@@ -737,7 +742,7 @@ def riem_lsc_u0():
     ax.set_xlabel('$x=0$')
     ax.set_ylabel('$u$')
     fig, ax = convert_to_graph(fig, ax)
-    fig.savefig('ch11_riem_lsc_u0.pdf')
+    fig.savefig('riem_lsc_u0.pdf')
     plt.show()
 
 def riem_lsc_characteristics():
@@ -762,7 +767,7 @@ def riem_lsc_characteristics():
     ax.set_aspect('equal')
     ax.set_ylabel('$t$')
     ax.set_xlabel('$x$')
-    fig.savefig('ch11_riem_lsc_characteristics.pdf')
+    fig.savefig('riem_lsc_characteristics.pdf')
 
 def riem_lsys_characteristics():
     """Draws characteristic lines of the linear system Riemann problem"""
@@ -807,7 +812,7 @@ def riem_lsys_characteristics():
     ax.set_xlim([-1, 1.4])
     plt.xticks(ticks, [r'$x-\lambda_4 t$', r'$x-\lambda_3 t$', r'$x-\lambda_2 t$', r'$x-\lambda_1 t$'])
     ax.tick_params(axis=u'both', which=u'both',length=0)
-    fig.savefig('ch11_riem_lsys_characteristics.pdf')
+    fig.savefig('riem_lsys_characteristics.pdf')
 
 def riem_linacoustics_characteristics():
     """Draws sound wave characteristic curves for linear acoustics example"""
@@ -830,7 +835,7 @@ def riem_linacoustics_characteristics():
     fig, ax = remove_axes(fig, ax)
     ax.set_ylim([-0.01, 0.6])
     ax.set_xlim([-1, 1])
-    fig.savefig('ch11_riem_linacoustics_characteristics.pdf')
+    fig.savefig('riem_linacoustics_characteristics.pdf')
 
 def riem_linacoustics_u0():
     """Draws the initial condition for the linear acoustics example (Riemann)"""
@@ -856,7 +861,7 @@ def riem_linacoustics_u0():
     plt.xticks([0.5], ['$x=0$'])
     ax.tick_params(axis=u'both', which=u'both',length=0)
 
-    fig.savefig('ch11_riem_linacoustics_u0.pdf')
+    fig.savefig('riem_linacoustics_u0.pdf')
 
 def riem_linacoustics_sol():
     """Draws solution to the Riemann problem example (linear acoustics)"""
@@ -892,7 +897,7 @@ def riem_linacoustics_sol():
     plt.xticks([0.25, 0.75], ['$-ct$', '$ct$'])
     ax.tick_params(axis=u'both', which=u'both',length=0)
     ax.set_ylabel(r'$\vec u$')
-    fig.savefig('ch11_riem_linacoustics_sol.pdf')
+    fig.savefig('riem_linacoustics_sol.pdf')
 
 def reynolds_transport():
     """Draws abitrary shape for the Reynolds transport theorem"""
@@ -946,7 +951,7 @@ def reynolds_transport():
                     length_includes_head=True, color=darkgray)
 
     # Annotate graph
-    ax.text(pts2[3,0], pts2[3,1]*0.99, '$S$', ha='right', va='top')
+    ax.text(pts2[3,0], pts2[3,1]*0.9, '$S$', ha='right', va='top')
     ax.text(np.mean(pts2[:,0]), np.mean(pts2[:,1]), 
             '$\Omega$', ha='center', va='center')
     ax.text(1.2*np.min(pts2[:,0]), np.min(pts2[:,1]), 
@@ -963,7 +968,7 @@ def reynolds_transport():
     # Remove the axes   
     ax.margins(0.2)
     fig, ax = remove_axes(fig, ax)
-    fig.savefig('ch4_reytrans_volume.pdf')
+    fig.savefig('reytrans_volume.pdf')
 
 def exact_solutions():
     """Draws the exact solution for the advection, diffusion and burgers eqs"""
@@ -1083,7 +1088,7 @@ def energy_cascade():
     ax.set_ylabel(r'$\log E(\kappa)$')
     ax.set_xlabel(r'$\log \kappa$')
     ax.set_aspect('equal')
-    fig.savefig('ch7_energy_cascade.pdf')
+    fig.savefig('energy_cascade.pdf')
     plt.show()
 
 def law_of_the_wall():
@@ -1092,43 +1097,43 @@ def law_of_the_wall():
     # Viscous layer relation
     y_subv = np.linspace(1, 15, 40)
     u_subv = y_subv
-    ax.plot(np.log(y_subv), u_subv, 'k--', lw=1)
+    ax.semilogx(y_subv, u_subv, 'k--', lw=1)
 
     # Log law relation
     y_log = np.linspace(6, 1000, 40)
     u_log = 1/0.41 * np.log(y_log) + 5.2
-    ax.plot(np.log(y_log), u_log, 'k--', lw=1)
+    ax.semilogx(y_log, u_log, 'k--', lw=1)
 
     # Use Spalding's relation
     u = np.linspace(1, 25, 100)
     y = u + 0.1108*(np.exp(0.4*u) - 1 - 0.4*u - \
         (0.4*u)**2/2 - (0.4*u)**3/6 - (0.4*u)**4/24)
     idx = y <= 1001
-    ax.plot(np.log(y[idx]), u[idx], 'k')
-    ax.vlines(np.log([5, 30]), 0, 28, lw=1, linestyle=':')
+    ax.semilogx(y[idx], u[idx], 'k')
+    ax.vlines([5, 30], 0, 28, lw=1, linestyle=':')
 
     # Viscous sub-layer annotations
-    x, y = np.log(np.sqrt(5)), 25
+    x, y = np.sqrt(5), 25
     ax.text(x, y, 'Viscous\nsub-layer', ha='center', va='center')
-    ax.annotate(r'$u^+=y^+$', xytext=(x, 7), xy=(np.log(4), 4), ha='center',
+    ax.annotate(r'$u^+=y^+$', xytext=(x, 7), xy=(4, 4), ha='center',
                 arrowprops=dict(arrowstyle="-|>", lw=0.7, color='black'))
 
     # Buffer layer
-    ax.text(np.log(np.sqrt(5*30)), 25, 'Buffer\nlayer', 
+    ax.text(np.sqrt(5*30), 25, 'Buffer\nlayer', 
             ha='center', va='center')
 
     # Outer layer
-    x, y = np.log(np.sqrt(30*1000)), 25
+    x, y = np.sqrt(30*1000), 25
     ax.text(x, y, 'Log-law\nregion', ha='center', va='center')
     ax.annotate(r'$\frac{1}{\kappa}\ln y^+ + B$', 
-                xytext=(x, 7), xy=(np.log(100), 16.5),
+                xytext=(x, 7), xy=(100, 16.5),
                 arrowprops=dict(arrowstyle="-|>", lw=0.7, color='black'))
-
     ax.set_ylim(0, 30)
     ax.set_xlabel(r'$y^+$')
     ax.set_ylabel(r'$u^+$')
-    fig, ax = convert_to_graph(fig, ax)
-    fig.savefig('ch7_law_of_the_wall.pdf')
+    # fig, ax = convert_to_graph(fig, ax, keep_ticks=True)
+    ax.tick_params(axis='x', which='major', pad=10)
+    fig.savefig('law_of_the_wall.pdf')
     # plt.show()
 
 def dispersion_dissipation_diagram():
@@ -1144,7 +1149,7 @@ def dispersion_dissipation_diagram():
     ax.text(1.02, 0, '$x$', va='center')
     fig, ax = convert_to_graph(fig, ax)
     ax.set_xlim(0, 1.1)
-    fig.savefig('ch13_dissipation_diagram.pdf')
+    fig.savefig('dissipation_diagram.pdf')
     # Dispersion
     fig, ax = plt.subplots(figsize=(5, 3))
     y = np.sin(2*np.pi*x)
@@ -1155,7 +1160,7 @@ def dispersion_dissipation_diagram():
     ax.text(1.12, 0, '$x$', va='center')
     fig, ax = convert_to_graph(fig, ax)
     ax.set_xlim(0, 1.1)
-    fig.savefig('ch13_dispersion_diagram.pdf')
+    fig.savefig('dispersion_diagram.pdf')
 
     plt.show()
 
@@ -1174,7 +1179,7 @@ def spectral_dissipation_adv_explct():
                ['0', r'$\frac{\pi}{4}$',  r'$\frac{\pi}{2}$',  r'$\frac{3\pi}{4}$', r'$\pi$'])
     ax.tick_params(axis='x', which='major', pad=10)
     fig.tight_layout()
-    fig.savefig('ch13_dissipation_adv_explct.pdf')
+    fig.savefig('dissipation_adv_explct.pdf')
     # plt.show()
 
 def spectral_dissipation_adv_implct():
@@ -1192,7 +1197,7 @@ def spectral_dissipation_adv_implct():
                ['0', r'$\frac{\pi}{4}$',  r'$\frac{\pi}{2}$',  r'$\frac{3\pi}{4}$', r'$\pi$'])
     ax.tick_params(axis='x', which='major', pad=10)
     fig.tight_layout()
-    fig.savefig('ch13_dissipation_adv_implct.pdf')
+    fig.savefig('dissipation_adv_implct.pdf')
     # plt.show()
 
 def spectral_dispersion_adv_explct():
@@ -1210,7 +1215,7 @@ def spectral_dispersion_adv_explct():
                ['0', r'$\frac{\pi}{4}$',  r'$\frac{\pi}{2}$',  r'$\frac{3\pi}{4}$', r'$\pi$'])
     ax.tick_params(axis='x', which='major', pad=10)
     fig.tight_layout()
-    fig.savefig('ch13_dispersion_adv_explct.pdf')
+    fig.savefig('dispersion_adv_explct.pdf')
     # plt.show()
 
 def taylor_series():
@@ -1237,17 +1242,18 @@ def taylor_series():
     ax.vlines(x0, -1.2, 1.2, lw=0.5, linestyle='--')
     ax.set_ylim(-1.2, 1.2)
     ax.legend()
-    fig.savefig('ch9_taylor_series_sin.pdf')
+    fig.savefig('taylor_series_sin.pdf')
     # plt.show()
 
 def heated_plate_flow():
     fig1, ax1 = plt.subplots(figsize=(5.8, 2.8))
     fig2, ax2 = plt.subplots(figsize=(5.4, 2.8))
-    mpl.rcParams['hatch.linewidth'] = 0.5
+    fig3, ax3 = plt.subplots(figsize=(5.4, 2.8))
+    # mpl.rcParams['hatch.linewidth'] = 0.5
 
-    for j, (fig, ax) in enumerate(zip([fig1, fig2], [ax1, ax2])):
+    for j, (fig, ax) in enumerate(zip([fig1, fig2, fig3], [ax1, ax2, ax3])):
         ax.plot([0, 1], [0, 0], 'k', lw=1)
-        ax.fill([0, 1, 1, 0], [0, 0, -0.03, -0.03], 'w', hatch='/////', lw=0.5)
+        ax.fill([0, 1, 1, 0], [0, 0, -0.03, -0.03], 'w', edgecolor='gray', hatch='/////', lw=0.3, zorder=20)
 
         x = [0, 0.3, 1.5]
         y = [0, 0.3, 0.5]
@@ -1266,7 +1272,7 @@ def heated_plate_flow():
 
         fig, ax = remove_axes(fig, ax)
 
-        if j == 1:
+        if j < 2:
             # Draw velocity profile
             p = int(len(x)/2)
             ax.vlines([x[p]], [0], [y[p]], darkgray)
@@ -1279,9 +1285,16 @@ def heated_plate_flow():
                     ax.arrow(x[p], yp[i], xp[i]-x[p], 0, 
                             fc=darkgray, lw=0.5, head_width=0.01, head_length=0.02, 
                             length_includes_head=True, color=darkgray)
-            ax.text(0.75, 0.11, 'Turbulent\ndiffusion', ha='left', va='center')
-            ax.arrow(0.72, 0.03, 0, 0.19, fc='k', lw=0.8, head_width=0.025, 
-                     head_length=0.04, length_includes_head=True, color='k')
+            if j == 0:
+                ax.text(0.75, 0.11, 'Viscous\ndiffusion', ha='left', va='center')
+                ax.arrow(0.72, 0.03, 0, 0.19, fc='k', lw=0.8, head_width=0.025, 
+                        head_length=0.04, length_includes_head=True, color='k')
+            else:
+                ax.text(0.75, 0.11, 'Viscous\ndiffusion', ha='left', va='center')
+                ax.text(0.91, 0.11, '+', ha='left', va='center')
+                ax.text(0.94, 0.11, 'Turbulent\ndiffusion', ha='left', va='center')
+                ax.arrow(0.72, 0.03, 0, 0.19, fc='k', lw=2.2, head_width=0.025, 
+                        head_length=0.04, length_includes_head=True, color='k')
         else:
             c = [[0.25, 0], 
                  [0.3, 0.1125], 
@@ -1307,8 +1320,8 @@ def heated_plate_flow():
             ax.set_xlim(0, 1.2)
 
         fig.tight_layout()
-        fig.savefig(f'ch7_heated_plate_flow_{j}.pdf')
-    # plt.show()
+        fig.savefig(f'heated_plate_flow_{j}.pdf')
+    plt.show()
 
 def _time_stepping_curve(coords=False):
     x = [0, 0.1, 0.25, 0.5, 0.75, 1]
@@ -1363,7 +1376,7 @@ def explicit_euler_method():
     fig, ax = convert_to_graph(fig, ax)
     plt.xticks([xt, xtt], ['$t$', r'$t+1$'])
     ax.set_ylabel('$u$')
-    fig.savefig('ch15_explicit_euler.pdf')
+    fig.savefig('explicit_euler.pdf')
     plt.show()
 
 def heuns_method():
@@ -1439,7 +1452,7 @@ def heuns_method():
     fig, ax = convert_to_graph(fig, ax)
     plt.xticks([xt, xtt], ['$t$', r'$t+1$'])
     ax.set_ylabel('$u$')
-    fig.savefig('ch15_heuns_method.pdf')
+    fig.savefig('heuns_method.pdf')
     plt.show()
 
 def midpoint_method():
@@ -1512,7 +1525,7 @@ def midpoint_method():
     fig, ax = convert_to_graph(fig, ax)
     plt.xticks([xt, xth, xtt], ['$t$', r'$t+1/2$', r'$t+1$'])
     ax.set_ylabel('$u$')
-    fig.savefig('ch15_midpoint_method.pdf')
+    fig.savefig('midpoint_method.pdf')
     plt.show()
 
 def rk_methods():
@@ -1584,7 +1597,7 @@ def rk_methods():
     plt.xticks([xt, xth, xtt], ['$t$', r'$t+1/2$', r'$t+1$'])
     ax.set_ylabel('$u$')
 
-    fig.savefig('ch15_rk_method.pdf')
+    fig.savefig('rk_method.pdf')
     plt.show()
     plt.show()
 
@@ -1601,17 +1614,349 @@ def logistic_map():
 
     ax.set_xlabel('$a$')
     ax.set_ylabel('$x$')
-    fig.savefig('ch7_logistic_map.pdf')
+    fig.savefig('logistic_map.pdf')
     # plt.show()
+
+
+def advection_equation():
+    """Draws the exact (small dx) solution for the advection equation"""
+    a = 1
+    L = 1
+    dx = 0.001
+    dt = 0.001
+    tf = 1
+
+    # Build grid
+    x = np.arange(0, L, dx)
+    n = len(x)
+    
+    # Initialize solution
+    u0 = np.exp(-40*(x-1/2)**2)
+    u = np.copy(u0)
+    ut = np.zeros(u.shape)
+    
+    # Pre-compute CFL number
+    cfl = a*dt/dx
+    
+    # Prepare figure to plot
+    fig, ax = plt.subplots()
+    ax.set_xlabel('$x$')
+    ax.set_ylabel('$u(x,t)$')
+    
+    colors = _get_colors(6, end=0.8)
+    # Advance solution in time
+    t = 0
+    nt = 0
+    ind = 0
+    while(t < tf):
+        for i in range(n):
+            # Enforce periodic boundary condition at x=0
+            if i == 0:
+                ut[i] = u[i] - cfl*(u[i]-u[n-1])
+            else:
+                ut[i] = u[i] - cfl*(u[i]-u[i-1])
+        u[:] = ut[:]
+        
+        if nt % 50 == 0 and t <= 0.25:
+            if ind == 0:
+                ls = '-'
+            else:
+                ls = '--'
+            ax.plot([*x, x[-1]+dx], [*u, u[0]], ls, color=colors[ind], lw=0.9, label=f'$t = {t:.2f}$')
+            ind += 1
+
+        t += dt
+        nt += 1
+    
+    ax.text(0.6, 1.05, r'$\alpha$', ha='center')
+    ax.arrow(0.55, 1.03, 0.1, 0, 
+            fc='k', head_width=0.02, head_length=0.03, 
+            length_includes_head=True, color='k')
+    ax.set_ylim(0, 1.1)
+    fig, ax = convert_to_graph(fig, ax)
+    ax.legend()
+    plt.show()
+    fig.savefig('advection_equation.pdf')
+
+def diffusion_equation():
+    """Draws the exact (small dx) solution for the burgers equation"""
+    b = 2e-3
+    L = 1
+    dx = 0.01
+    dt = 0.001
+    tf = 5
+
+    # Build grid
+    x = np.arange(0, L, dx)
+    n = len(x)
+    
+    # Initialize solution
+    u0 = np.exp(-40*(x-1/2)**2)
+    u = np.copy(u0)
+    ut = np.zeros(u.shape)
+    
+    # Prepare figure to plot
+    fig, ax = plt.subplots()
+    ax.set_xlabel('$x$')
+    ax.set_ylabel('$u(x,t)$')
+    
+    # Advance solution in time
+    t = 0
+    nt = 0
+    ind = 0
+    colors = _get_colors(6, end=0.8)
+    while(t < tf):
+        for i in range(n):
+            if i == 0:
+                # Enforce periodic boundary condition at x=0
+                ut[i] = u[i] + b*dt/dx**2 * (u[n-1]-2*u[i]+u[i+1])
+            elif i == n-1:
+                # Enforce periodic boundary condition at x=L
+                ut[i] = u[i] + b*dt/dx**2 * (u[i-1]-2*u[i]+u[0])
+            else:
+                ut[i] = u[i] + b*dt/dx**2 * (u[i-1]-2*u[i]+u[i+1])
+        u[:] = ut[:]
+
+        if nt % 1000 == 0:
+            if ind == 0:
+                ls = '-'
+            else:
+                ls = '--'
+            ax.plot(x, u, ls, color=colors[ind], lw=0.9, label=f'$t = {t:.1f}$')
+            ind += 1
+
+        t += dt
+        nt += 1
+    
+    ax.legend()
+    ax.set_ylim(0, 1.1)
+    fig, ax = convert_to_graph(fig, ax)
+    plt.show()
+    fig.savefig('diffusion_equation.pdf')
+
+def burgers_equation():
+    """Draws the exact (small dx) solution for the burgers equation"""
+    L = 1
+    dx = 0.0001
+    dt = 0.0001
+    tf = 0.5
+
+    # Build grid
+    x = np.arange(0, L, dx)
+    n = len(x)
+    
+    # Initialize solution
+    u0 = np.exp(-40*(x-1/2)**2)
+    u = np.copy(u0)
+    ut = np.zeros(u.shape)
+    
+    # Prepare figure to plot
+    fig, ax = plt.subplots()
+    ax.set_xlabel('$x$')
+    ax.set_ylabel('$u(x,t)$')
+    
+    colors = _get_colors(6, end=0.8)
+    # Advance solution in time
+    t = 0
+    nt = 0
+    ind = 0
+    while(t < tf):
+        ut[0] = u[0] - 0.5*dt/dx * (u[0]**2-u[-1]**2)
+        ut[1:] = u[1:] - 0.5*dt/dx * (u[1:]**2-u[:-1]**2)
+        u[:] = ut[:]
+
+        if nt % 1000 == 0:
+            if ind == 0:
+                ls = '-'
+            else:
+                ls = '--'
+            ax.plot(x, u, ls, color=colors[ind], lw=0.9, label=f'$t = {t:.1f}$')
+            ind += 1
+
+        t += dt
+        nt += 1
+
+    ax.legend()
+    ax.set_ylim(0, 1.1)
+    fig, ax = convert_to_graph(fig, ax)
+    plt.show()
+    fig.savefig('burgers_equation.pdf')
+
+def advection_upwind():
+    """Computes and draws the solution for the upwind advection fv/fd approach"""
+    a = 1
+    L = 1
+
+    # Prepare figure to plot
+    fig, ax = plt.subplots()
+    ax.set_xlabel('$x$')
+    ax.set_ylabel('$u(x,t)$')
+    ind = 0
+    colors = _get_colors(5, end=0.9)
+    for n in [10, 20, 40, 80, 160]:
+        dx = L/n
+        dt = 0.001
+        tf = 1
+
+        # Build grid
+        x = np.linspace(0, L, n)
+
+        # Initialize solution
+        u0 = np.exp(-40*(x-1/2)**2)
+        u = np.copy(u0)
+        ut = np.zeros(u.shape)
+        
+        # Pre-compute CFL number
+        cfl = a*dt/dx
+        
+        # Advance solution in time
+        t = 0
+        while(t < tf):
+            for i in range(n):
+                # Enforce periodic boundary condition at x=0
+                if i == 0:
+                    ut[i] = u[i] - cfl*(u[i]-u[n-1])
+                else:
+                    ut[i] = u[i] - cfl*(u[i]-u[i-1])
+                    
+            u[:] = ut[:]
+            t += dt
+
+        ax.plot(x, u, 'o-', markersize=2, color=colors[ind], label=f'$n={n}$')
+        ind += 1
+
+    ax.legend()
+    plt.show()
+    fig.savefig('advection_upwind.pdf')
+
+def diffusion_central():
+    """Computes and draws the solution for the central diffusion fv/fd approach"""
+    b = 1e-2
+    L = 1
+
+    # Prepare figure to plot
+    fig, ax = plt.subplots()
+    ax.set_xlabel('$x$')
+    ax.set_ylabel('$u(x,t)$')
+    ind = 0
+    colors = _get_colors(5, end=0.9)
+    
+    for ind, n in enumerate([10, 20, 40, 80, 160]):
+        dx = L/n
+        dt = 1e-3
+        tf = 5
+
+        # Build grid
+        x = np.linspace(0, L, n)
+
+        # Initialize solution
+        u0 = np.exp(-40*(x-1/2)**2)
+        u = np.copy(u0)
+        ut = np.zeros(u.shape)
+        
+        # Advance solution in time
+        t = 0
+        while(t < tf):
+            for i in range(n):
+                if i == 0:
+                    # Enforce periodic boundary condition at x=0
+                    ut[i] = u[i] + b*dt/dx**2 * (u[n-1]-2*u[i]+u[i+1])
+                elif i == n-1:
+                    # Enforce periodic boundary condition at x=L
+                    ut[i] = u[i] + b*dt/dx**2 * (u[i-1]-2*u[i]+u[0])
+                else:
+                    ut[i] = u[i] + b*dt/dx**2 * (u[i-1]-2*u[i]+u[i+1])
+            u[:] = ut[:]
+            t += dt
+        ax.plot(x, u, 'o-', markersize=2, color=colors[ind], label=f'$n={n}$')
+
+    ax.legend()
+    plt.show()
+    fig.savefig('diffusion_central.pdf')
+
+def burgers_upwind():
+    """Computes and draws the solution for the upwind burgers fv/fd approach"""
+    # Prepare figure to plot
+    fig, ax = plt.subplots()
+    ax.set_xlabel('$x$')
+    ax.set_ylabel('$u(x,t)$')
+    ind = 0
+    colors = _get_colors(5, end=0.9)
+    
+    for ind, n in enumerate([10, 20, 40, 80, 160]):
+        L = 1
+        dx = L/n
+        dt = 0.005
+        tf = 0.5
+
+        # Build grid
+        x = np.linspace(0, L, n)
+    
+        # Initialize solution
+        u0 = np.exp(-40*(x-1/2)**2)
+        u = np.copy(u0)
+        ut = np.zeros(u.shape)
+    
+        # Advance solution in time
+        t = 0
+        while(t < tf):
+            for i in range(n):
+                # Enforce periodic boundary condition at x=0
+                if i == 0:
+                    ut[i] = u[i] - 0.5*dt/dx * (u[i]**2-u[n-1]**2)
+                else:
+                    ut[i] = u[i] - 0.5*dt/dx * (u[i]**2-u[i-1]**2)
+
+            u[:] = ut[:]
+            t += dt
+    
+        ax.plot(x, u, 'o-', markersize=2, color=colors[ind], label=f'$n={n}$')
+    ax.legend()
+    plt.show()
+    fig.savefig('burgers_upwind.pdf')
+
+
+def itermethods_sor():
+    """Draws diagram for the successive overrelaxation method"""
+    fig, ax = plt.subplots(figsize=(4,3))
+
+    x = np.linspace(0.2, 0.6, 2)
+    y = x
+    ax.plot(x, y, '-ok', markersize=3)
+    x = np.linspace(0.6, 0.8, 2)
+    y = x
+    ax.plot(x, y, '--ok', markersize=3)
+    w = 0.1
+    x = np.linspace(0.15, 0.75, 2)
+    y = x + 0.1
+    ax.plot(x, y, 'k', lw=0.7)
+    ax.plot([0.15, 0.175], [0.25, 0.225], 'k', lw=0.7)
+    ax.plot([0.75, 0.775], [0.85, 0.825], 'k', lw=0.7)
+
+    ax.text(0.225, 0.2, r'$x_n$', ha='left', va='top')
+    ax.text(0.625, 0.6, r'$\tilde x_{n+1}$', ha='left', va='top')
+    ax.text(0.825, 0.8, r'$x_{n+1}$', ha='left', va='top')
+    ax.text(0.45, 0.55, r'$\omega\left(\tilde x_{n+1}-x_n\right)$', 
+            va='bottom', ha='center', rotation=45, rotation_mode='anchor')
+
+    ax.set_ylim(0, 1)
+    ax.set_xlim(-0.15, 1.15)
+    ax.set_xlabel('$n$')
+    ax.set_ylabel('$x$')
+
+    ax.set_aspect('equal')
+    fig, ax = convert_to_graph(fig, ax)
+    plt.show()
+    fig.savefig('itermethods_sor.pdf')
 
 
 def main():
 
-    # Chapter: Conservation Laws
+    # Conservation laws derivation
     # reynolds_transport()
     # exact_solutions()
 
-    # Chapter: Turbulence
+    # Turbulence
     # logistic_map()
     # energy_cascade()
     # law_of_the_wall()
@@ -1621,34 +1966,44 @@ def main():
     # ensemble_average()
     # heated_plate_flow()
 
+    # Simplified systems
+    # advection_equation()
+    # diffusion_equation()
+    # burgers_equation()
+
     # FD, FV schemes
+    # advection_upwind()
+    # diffusion_central()
+    # burgers_upwind()
     # discrete_scheme()
+
+    # FV derivation
     # fv_arbitrary_volume()
     # fv_trivolume()
     # fv_riemann_diagram()
     # fv_1d_advection()
     # fv_1d_diffusion()
 
-    # Chapter: Taylor-Series
+    # Taylor Series
     # taylor_series()
 
-    # # Stability plots
+    # Stability plots
     # stability_advection()
     # stability_diffusion()
     # dispersion_dissipation_diagram()
 
-    # Chapter: Spectral Properties
+    # Spectral Properties
     # spectral_dissipation_adv_explct()
     # spectral_dissipation_adv_implct()
     # spectral_dispersion_adv_explct()
 
-    # Chapter: Time-stepping methods
+    # Time-stepping methods
     # explicit_euler_method()
-    heuns_method()
+    # heuns_method()
     # midpoint_method()
     # rk_methods()
 
-    # Hyperbolic problems
+    # Linear hyperbolic problems 
     # lsc_advection_dye()
     # lsc_characteristics()
     # lsys_characteristics()
@@ -1659,6 +2014,7 @@ def main():
     # riem_linacoustics_u0()
     # riem_linacoustics_sol()
 
+    itermethods_sor()
 
 if __name__ == '__main__':
     plt.style.use('style.mplstyle')

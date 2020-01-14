@@ -55,7 +55,7 @@
 %----------------------------------------------------------------------------------------
 
 \newcommand{\repourl}{www.gitlab.com/bvermeir/book-cfd}
-\newcommand{\binderurl}{www.mybinder.org/}
+\newcommand{\binderurl}{https://mybinder.org/v2/gl/bvermeir\%2Fbook-cfd/master}
 
 \begin{document}
 
@@ -66,13 +66,24 @@
 \begingroup
 \thispagestyle{empty} % Suppress headers and footers on the title page
 \begin{tikzpicture}[remember picture,overlay]
-\node[inner sep=0pt] (background) at (current page.center) {\includegraphics[width=\paperwidth]{background.pdf}};
-\draw (current page.center) node [fill=ocre!30!white,fill opacity=0.6,text opacity=1,inner sep=1cm]{\Huge\centering\bfseries\sffamily\parbox[c][][t]{\paperwidth}{\centering Computational Fluid Dynamics\\[15pt] % Book title
-{\huge An Open Source Approach}\\[20pt] % Subtitle
-{\large Brian C. Vermeire, Carlos A. Pereira, and Hamidreza Karbasian}}}; % Author name
+\node[inner sep=0pt] (background) at (current page.center) {\includegraphics[width=\paperwidth]{titlepage.pdf}};
 \end{tikzpicture}
 \vfill
 \endgroup
+
+%----------------------------------------------------------------------------------------
+%	HALF TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\begingroup
+\newpage
+\thispagestyle{empty} % Suppress headers and footers on the title page
+\begin{tikzpicture}[remember picture,overlay]
+\node[inner sep=0pt] (background) at (current page.center) {\includegraphics[width=\paperwidth]{halftitle.pdf}};
+\end{tikzpicture}
+\vfill
+\endgroup
+
 
 %----------------------------------------------------------------------------------------
 %	COPYRIGHT PAGE

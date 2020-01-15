@@ -69,7 +69,7 @@ To understand the behaviour of these truncated expansions, we note that their er
 \end{equation}
 we note that the leading term omitted from the $f_1(\Delta x)$ approximation behaves like $\Delta x^3$, the leading error term of the $f_1(\Delta x)$ approximation behaves like $\Delta x^5$, and so on. Hence, as we get closer to the expansion point $x=0$ we expect that the error shrinks, and that the rate at which the error shrinks will be proportional to the exponent of the leading truncated term of the expansion.
 \begin{jupyternote}
-	Check out the Taylor Series Jupyter notebook on \url{\binderurl}. You can also download the files from the Gitlab repository \url{\repourl}.
+	Check out the Burgers Jupyter notebook \href{\binderurl}{\underline{here}}. You can also download the files from the Gitlab repository \href{\repourl}{\underline{here}}.
 \end{jupyternote}
 \chapter{Finite Difference Methods}
 \section{The First Derivative}
@@ -274,7 +274,7 @@ Looking at Equation \ref{eqn:7hH8UBeG} we note that, provided we know the curren
 	\label{fig:advection_upwind}
 \end{figure}
 \begin{jupyternote}
-	Check out the Advection Jupyter notebook on \url{\binderurl}. You can also download the files from the Gitlab repository \url{\repourl}.
+	Check out the Advection Jupyter notebook \href{\binderurl}{\underline{here}}. You can also download the files from the Gitlab repository \href{\repourl}{\underline{here}}.
 \end{jupyternote}
 \subsection{Burgers Equation}
 We recall that the one-dimensional Burgers equation was
@@ -310,7 +310,7 @@ Looking at this expression we note it is remarkably similar to the expression fo
 	\label{fig:burgers_upwind}
 \end{figure}
 \begin{jupyternote}
-	Check out the Burgers Jupyter notebook on \url{\binderurl}. You can also download the files from the Gitlab repository \url{\repourl}.
+	Check out the Burgers Jupyter notebook \href{\binderurl}{\underline{here}}. You can also download the files from the Gitlab repository \href{\repourl}{\underline{here}}.
 \end{jupyternote}
 
 \subsection{Linear Diffusion}
@@ -346,7 +346,7 @@ Again, this is very similar to the approximations for linear advection and Burge
 	\label{fig:diffusion_central}
 \end{figure}
 \begin{jupyternote}
-	Check out the Diffusion Jupyter notebook on \url{\binderurl}. You can also download the files from the Gitlab repository \url{\repourl}.
+	Check out the Diffusion Jupyter notebook \href{\binderurl}{\underline{here}}. You can also download the files from the Gitlab repository \href{\repourl}{\underline{here}}.
 \end{jupyternote}
 
 \chapter{Finite Volume Methods}
@@ -1395,7 +1395,7 @@ We can generate the exact same type of plot for permissible wave numbers $\kappa
 	\label{fig:dissipation_advection_implicit}
 \end{figure}
 \begin{jupyternote}
-	Check out the Von Neumann Jupyter notebook on \url{\binderurl}. You can also download the files from the Gitlab repository \url{\repourl}.
+	Check out the Von Neumann Jupyter notebook \href{\binderurl}{\underline{here}}. You can also download the files from the Gitlab repository \href{\repourl}{\underline{here}}.
 \end{jupyternote}
 \section{Dispersion Error}
 From the linear advection equation we know that the solution should translate at an exact wave speed $\alpha$. However, our numerical schemes will often introduce another error whereby the numerical wave does not move at the correct velocity. As a results, we often observe that the numerical solution is out of phase with the exact solution, which is referred to as dispersion error. Similar to the dissipation error, dispersion error can also be found from our results from von Neumann analysis. Recall that our assumed form of the solution for any isolated wave component of the full solution was
@@ -1453,7 +1453,7 @@ which tells us the speed of the numerical wave relative to the exact wave speed.
 	\label{fig:dissipation_advection_implicit}
 \end{figure}
 \begin{jupyternote}
-	Check out the Von Neumann Jupyter notebook on \url{\binderurl}. You can also download the files from the Gitlab repository \url{\repourl}.
+	Check out the Von Neumann Jupyter notebook \href{\binderurl}{\underline{here}}. You can also download the files from the Gitlab repository \href{\repourl}{\underline{here}}.
 \end{jupyternote}
 \chapter{Modified Equation Analysis}
 In the previous sections we have demonstrated that our numerical schemes only approximate the exact PDE we are trying to solve. Furthermore, via von Neumann analysis that we can quantify the type of error we will observe as either dissipation or dispersion. Modified equation analysis is another powerful technique that allows us to better understand how and why a particular numerical scheme behaves the way it does. Using modified equation analysis we can show that, while our numerical scheme does not exactly satisfy the PDE we are trying to solve, it does provide an exact solution to a similar PDE. By determining what this similar PDE is, we can gain further insight into the behaviour of our scheme. In this section we will demonstrate by example how to perform modified equation analysis in the context of linear advection.

@@ -9,7 +9,7 @@
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 \section{Gmsh}
 \begin{gmshnote}
-	Read all about Gmsh and download its source and executables at \href{http://gmsh.info}{http://gmsh.info}.
+	To read all about Gmsh and download its source and executables, \href{http://gmsh.info}{\underline{click here}}.
 \end{gmshnote}
 Gmsh is an 2D/3D mesh generator including a built-in CAD engine and post-processor. Gmsh was developed to provide a fast, light, and user-friendly meshing environment with additional visualization capabilities. It is open source, and the source code and executables for various operating systems (Windows, Mac, Linux) are available. Gmsh contains modules for geometry definition, meshing, solving and post-processing. each module has its own set of commands, which can be easily manipulated using the graphical user-interface (GUI).
 
@@ -39,14 +39,14 @@ Additionally, there is another module named \textbf{Solver}, which allows a nume
 
 \section{SU2}
 \begin{su2note}
-	Read all about SU2 and download its source and executables at \href{https://su2code.github.io/}{https://su2code.github.io/}.
+	To read all about SU2 and download its source and executables, \href{https://su2code.github.io/}{\underline{click here}}.
 \end{su2note}
 As discussed in the Physics and Numerics parts of this book, ultimately an approximate solution to the Navier-Stokes or RANS equations is obtained by solving a discrete system of equations on a computational grid, or mesh. SU2 is an open-source CFD solver built specifically for this task. SU2 is written in C++, and its primary applications are computational aerodynamics and shape optimization. SU2 is generally user-friendly, and pre-compiled versions are available for all major operating systems (Windows, Mac, Linux). In the following laboratories we will demonstrate the utility of SU2 as a CFD tool for computational aerodynamics.
 
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 \section{Paraview}
 \begin{paraviewnote}
-	Read all about Paraview and download its source and executables at \href{https://www.paraview.org/}{https://www.paraview.org/}.
+	To read all about Paraview and download its source and executables, \href{https://www.paraview.org/}{\underline{click here}}.
 \end{paraviewnote}
 After SU2 runs it generates a set of data files, which includes the complete flow field solved on the mesh generated previously using Gmsh. This data must be post-processed to visualize the flow structures, such as the velocity or pressure distributions. Paraview is an open-source and multi-platform visualization tool designed for this task. It is also available for all operating systems (Windows, Mac, Linux) and is free to download and use. Paraview is designed specifically to handle large complex data sets, such as those generated in CFD simulations. In the following laboratory experiments, we will use Paraview as a post-processing tool for the analysis of the data produced by SU2. Typically, this analysis consists of contours of flow parameters, extracting line plots, slices, or pressure coefficient distributions.
 
@@ -56,10 +56,10 @@ After SU2 runs it generates a set of data files, which includes the complete flo
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 \section{Required Files}
 \begin{su2note}
-	Use the following links to download the same version of SU2 for Windows (\href{}{https://github.com/su2code/SU2/releases/download/v7.0.0/SU2-v7.0.0-win64.zip}) or Mac (\href{}{https://github.com/su2code/SU2/releases/download/v7.0.0/SU2-v7.0.0-macos64.zip}), and the required configuration (\href{}{click here}) and mesh files (\href{}{click here}).
+	Use the following links to download the same version of SU2 for Windows (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/windows/SU2-v7.0.0-win64.zip}{\underline{click here}}) or Mac (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/osx/SU2-v7.0.0-macos64.zip}{\underline{click here}}), and the required configuration (\href{https://gitlab.com/bvermeir/book-cfd/blob/master/tutorial/tut1_inviscid_naca0012/inv_NACA0012.cfg}{\underline{click here}}) and mesh files (\href{https://gitlab.com/bvermeir/book-cfd/blob/master/tutorial/tut1_inviscid_naca0012/mesh_NACA0012_inv.su2}{\underline{click here}}).
 \end{su2note}
 \begin{paraviewnote}
-	Use the following links to download the same version of Paraview for Windows (\href{}{}) or Mac (\href{}{}).
+	Use the following links to download the same version of Paraview for Windows (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/windows/ParaView-5.4.0-Qt5-OpenGL2-Windows-64bit.exe}{\underline{click here}}) or Mac (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/osx/ParaView-5.4.0-Qt5-OpenGL2-MPI-OSX10.8-64bit.dmg}{\underline{click here}}).
 \end{paraviewnote}
 
 \section{Problem Description}
@@ -229,7 +229,7 @@ As shown in Figure \ref{fig1:plotdata}, select \textit{surface\_flow}.vtk in \te
     \label{fig1:plotdata}
 \end{figure}
 
-After taking this step, as shown in Figure \ref{fig1:plotdata-list}, the \textit{PlotData1} item is added to tthe \textbf{Pipeline Browser}. Hide (deactivate) all items in the list of \textbf{Pipeline Browser} except \textit{PlotData1} by clicking on the eye icons beside each item, and then click on \textbf{Apply}.
+After taking this step, as shown in Figure \ref{fig1:plotdata-list}, the \textit{PlotData1} item is added to the \textbf{Pipeline Browser}. Hide (deactivate) all items in the list of \textbf{Pipeline Browser} except \textit{PlotData1} by clicking on the eye icons beside each item, and then click on \textbf{Apply}.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.5\textwidth]{tut01/plotdata1.pdf}
@@ -292,19 +292,19 @@ Additionally, as shown in Figure \ref{fig1:forcefile2}, the aerodynamic forces a
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 \clearpage
 \section{Questions}
-1. Run the provided default NACA0012 test case at Ma = 0.8.
+1. Run the provided default NACA0012 test case at $Ma=0.8$.
 \begin{enumerate}[label=(\alph*)]
     \item Plot and comment on the mesh.
     \item Plot and comment on the pressure contours around the airfoil.
     \item Plot and comment on the pressure coefficient on the surface of the airfoil.
 \end{enumerate}
-2. Re-run the default NACA0012 case but change the Mach number to Ma = 0.3 and run several simulations using alpha = 0, 2, 4, 6, 8, 10, 12, 14, 16 degrees.
+2. Re-run the default NACA0012 case but change the Mach number to $Ma=0.3$, and run several simulations using $\alpha = 0, 2, 4, 6, 8, 10, 12, 14, 16$ degrees.
 \begin{enumerate}[label=(\alph*)]
-    \item Plots Cl vs alpha alongside the provided experimental data \cite{ladson1988effects} in the test case folder.
-    \item Repeat 1.b with Ma = 0.3 for the alpha = 0, 8, 16 degree cases.
-    \item Repeat 1.c with for the alpha = 0, 8, 16 degree cases and include the provided experimental data  in the \cite{ladson1987pressure}.
+    \item Plots $C_{L}$ vs $\alpha$ alongside the provided experimental data\cite{ladson1988effects} (download \href{https://gitlab.com/bvermeir/book-cfd/blob/master/tutorial/tut1_inviscid_naca0012/experimental_values.zip}{\underline{here}}) in the test case folder.
+    \item Repeat 1.b with $Ma = 0.3$ for the $\alpha = 0, 8, 16$ degree cases.
+    \item Repeat 1.c with for the $\alpha = 0, 8, 16$ degree cases, and include the provided experimental data in the \cite{ladson1987pressure}.
 \end{enumerate}
-3. Compare your CFD results in Question 2). Discuss sources of error that could have led to any discrepancies in your results.
+3. Compare your CFD results in Q.2, and discuss sources of error that could have led to any discrepancies in your results.
 %--------------------------------------------------------------
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -314,11 +314,12 @@ Additionally, as shown in Figure \ref{fig1:forcefile2}, the aerodynamic forces a
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 \section{Required Files}
 \begin{su2note}
-	Use the following links to download the same version of SU2 for Windows (\href{}{https://github.com/su2code/SU2/releases/download/v7.0.0/SU2-v7.0.0-win64.zip}) or Mac (\href{}{https://github.com/su2code/SU2/releases/download/v7.0.0/SU2-v7.0.0-macos64.zip}), and the required configuration (\href{}{click here}) and mesh files (\href{}{click here}).
+	Use the following links to download the same version of SU2 for Windows (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/windows/SU2-v7.0.0-win64.zip}{\underline{click here}}) or Mac (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/osx/SU2-v7.0.0-macos64.zip}{\underline{click here}}), and the required configuration (\href{https://gitlab.com/bvermeir/book-cfd/blob/master/tutorial/tut2_supersonic_wedge/inv_wedge_HLLC.cfg}{\underline{click here}}) and mesh files (\href{https://gitlab.com/bvermeir/book-cfd/blob/master/tutorial/tut2_supersonic_wedge/mesh_wedge_inv.su2}{\underline{click here}}).
 \end{su2note}
 \begin{paraviewnote}
-	Use the following links to download the same version of Paraview for Windows (\href{}{}) or Mac (\href{}{}).
+	Use the following links to download the same version of Paraview for Windows (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/windows/ParaView-5.4.0-Qt5-OpenGL2-Windows-64bit.exe}{\underline{click here}}) or Mac (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/osx/ParaView-5.4.0-Qt5-OpenGL2-MPI-OSX10.8-64bit.dmg}{\underline{click here}}).
 \end{paraviewnote}
+
 \section{Problem Description}
 In this tutorial we are going to demonstrate how to simulate supersonic inviscid flow past a simple 2D wedge. This wedge generates an oblique-shock wave moving outwards from its surface. Assuming the Reynolds number is high enough, and that the fluid is an ideal gas, we will be using the Euler equations. The domain is approximated using a structured mesh with 3,750 nodes. The domain consists of a flat upper wall, and a lower wall with an inclined a wedge starting at $x/L=1/3$, where $L$ is the length of duct. The wedge angle is taken to be 10 degrees, and the inlet flow paramaters are:
 \begin{itemize}
@@ -586,11 +587,12 @@ Additionally, you can export a .csv file and plot it with any other plotting sof
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 \section{Required Files}
 \begin{su2note}
-	Use the following links to download the same version of SU2 for Windows (\href{}{https://github.com/su2code/SU2/releases/download/v7.0.0/SU2-v7.0.0-win64.zip}) or Mac (\href{}{https://github.com/su2code/SU2/releases/download/v7.0.0/SU2-v7.0.0-macos64.zip}), and the required configuration (\href{}{click here}) and mesh files (\href{}{click here}).
+	Use the following links to download the same version of SU2 for Windows (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/windows/SU2-v7.0.0-win64.zip}{\underline{click here}}) or Mac (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/osx/SU2-v7.0.0-macos64.zip}{\underline{click here}}), and the required configuration (\href{https://gitlab.com/bvermeir/book-cfd/blob/master/tutorial/tut3_invisicd_oneram6/inv_ONERAM6.cfg}{\underline{click here}}) and mesh files (\href{https://gitlab.com/bvermeir/book-cfd/blob/master/tutorial/tut3_invisicd_oneram6/mesh_ONERAM6_inv.su2}{\underline{click here}}).
 \end{su2note}
 \begin{paraviewnote}
-	Use the following links to download the same version of Paraview for Windows (\href{}{}) or Mac (\href{}{}).
+	Use the following links to download the same version of Paraview for Windows (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/windows/ParaView-5.4.0-Qt5-OpenGL2-Windows-64bit.exe}{\underline{click here}}) or Mac (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/osx/ParaView-5.4.0-Qt5-OpenGL2-MPI-OSX10.8-64bit.dmg}{\underline{click here}}).
 \end{paraviewnote}
+
 \section{Problem Description}
 In this tutorial, we are going to explain how to simulate transonic inviscid flow around the three-dimensional ONERA M6 wing. This is a commonly used benchmark problem for computational aerodynamics, due to availability of experimental data and its relatively simple geometry. In this tutorial, the computational domain is discretized using an unstructured mesh with of 582,752 tetrahedral elements. The flow specification is as follows:
 \begin{itemize}
@@ -788,6 +790,7 @@ Now we can plot the predicted lift coefficient, drag coefficient, and density re
     \label{fig3:res_vs_itr}
 \end{figure}
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+\clearpage
 \section{Questions}
 1. Run the simulation without multi-grid scheme (\texttt{MGLEVEL=0}).
 \begin{enumerate}[label=(\alph*)]
@@ -807,11 +810,12 @@ Now we can plot the predicted lift coefficient, drag coefficient, and density re
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 \section{Required Files}
 \begin{su2note}
-	Use the following links to download the same version of SU2 for Windows (\href{}{https://github.com/su2code/SU2/releases/download/v7.0.0/SU2-v7.0.0-win64.zip}) or Mac (\href{}{https://github.com/su2code/SU2/releases/download/v7.0.0/SU2-v7.0.0-macos64.zip}), and the required configuration (\href{}{click here}) and mesh files (\href{}{click here}).
+	Use the following links to download the same version of SU2 for Windows (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/windows/SU2-v7.0.0-win64.zip}{\underline{click here}}) or Mac (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/osx/SU2-v7.0.0-macos64.zip}{\underline{click here}}), and the required configuration (\href{https://gitlab.com/bvermeir/book-cfd/blob/master/tutorial/tut4_laminar_cylinder/steady/lam_cylinder.cfg}{\underline{click here}}) and mesh files (\href{https://gitlab.com/bvermeir/book-cfd/blob/master/tutorial/tut4_laminar_cylinder/steady/mesh_cylinder_lam.su2}{\underline{click here}}).
 \end{su2note}
 \begin{paraviewnote}
-	Use the following links to download the same version of Paraview for Windows (\href{}{}) or Mac (\href{}{}).
+	Use the following links to download the same version of Paraview for Windows (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/windows/ParaView-5.4.0-Qt5-OpenGL2-Windows-64bit.exe}{\underline{click here}}) or Mac (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/osx/ParaView-5.4.0-Qt5-OpenGL2-MPI-OSX10.8-64bit.dmg}{\underline{click here}}).
 \end{paraviewnote}
+
 \section{Problem Description}
 In this tutorial we will explain how to simulate external viscous flow past a 2D cylinder. To simulate this the Navier-Stokes equations will be solved in steady and unsteady forms, depending on the chosen Reynolds number. For this type of flow, the wake is expected to remain steady up to a Reynolds number of around 46. At higher Reynolds numbers the flow becomes unsteady, with oscillating vortices being shed in its wake. This is the  Von-Karman vortex street, which is a well-known phenomenon in fluid mechanics. The computational domain for this tutorial uses an O-topology mesh with the cylinder in the center of the domain. The outer boundary is situated at a radial distance of 15$D$, where $D$ is cylinder diameter. The resulting mesh is composed of 26,192 triangular elements. The elements around the surface of the cylinder are refined to resolve the viscous boundary layer in this region.  For this example, the flow specifications are provided as follows:
 \begin{itemize}
@@ -1082,12 +1086,12 @@ Plotting $C_L$ or $C_D$ as a function of time demonstrates that the shedding amp
 \begin{enumerate}[label=(\alph*)]
     \item Plot Mach contours with streamlines for $Re$ = 10, 20, and 40
     \item Plot the $x$-velocity component vs the $x$-coordinate beginning at $x = 1$ (location of rear surface of cylinder)
-    \item Calculate the $L/D$ (non-dimensional separation length) for the three Re cases and compare with the experimental $L/D$ values (cite). Also include the $C_D$ values for the three $Re$ cases from the simulation results. Comment on the effect of $Re$ on the non-dimensional separation length $L/D$ and $C_D$.
+    \item Calculate the $L/D$ (non-dimensional separation length) for the three Re cases and compare with the experimental $L/D$ values\cite{coutanceau1977experimental} (download \href{https://gitlab.com/bvermeir/book-cfd/blob/master/tutorial/tut4_laminar_cylinder/experimental_values.zip}{\underline{here}}). Also include the $C_D$ values for the three $Re$ cases from the simulation results. Comment on the effect of $Re$ on the non-dimensional separation length $L/D$ and $C_D$.
 \end{enumerate}
-2. Run an unsteady simulation for $Re$ = 150.
+2. Download configuration (\href{https://gitlab.com/bvermeir/book-cfd/blob/master/tutorial/tut4_laminar_cylinder/unsteady/lam_cylinder_re150_unsteady.cfg}{\underline{click here}}) and mesh (\href{https://gitlab.com/bvermeir/book-cfd/blob/master/tutorial/tut4_laminar_cylinder/unsteady/mesh_cylinder_lam.su2}{\underline{click here}}) files, and run an unsteady simulation for $Re$ = 150.
 \begin{enumerate}[label=(\alph*)]
     \item Plot the $C_L$ and $C_D$ versus time.
-    \item Calculate the $\Delta C_L$ , $\Delta C_D$ and Strouhal number, and compare your results with experimental values (cite).
+    \item Calculate the $\Delta C_L$ , $\Delta C_D$ and Strouhal number, and compare your results with experimental values\cite{inoue2002sound}.
 \end{enumerate}
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1097,11 +1101,12 @@ Plotting $C_L$ or $C_D$ as a function of time demonstrates that the shedding amp
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 \section{Required Files}
 \begin{su2note}
-	Use the following links to download the same version of SU2 for Windows (\href{}{https://github.com/su2code/SU2/releases/download/v7.0.0/SU2-v7.0.0-win64.zip}) or Mac (\href{}{https://github.com/su2code/SU2/releases/download/v7.0.0/SU2-v7.0.0-macos64.zip}), and the required configuration (\href{}{click here}) and mesh files (\href{}{click here}).
+	Use the following links to download the same version of SU2 for Windows (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/windows/SU2-v7.0.0-win64.zip}{\underline{click here}}) or Mac (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/osx/SU2-v7.0.0-macos64.zip}{\underline{click here}}), and the required configuration (\href{https://gitlab.com/bvermeir/book-cfd/blob/master/tutorial/tut5_turbulent_oneram6/turb_ONERAM6.cfg}{\underline{click here}}) and mesh files (\href{https://gitlab.com/bvermeir/book-cfd/blob/master/tutorial/tut5_turbulent_oneram6/mesh_ONERAM6_turb_hexa_43008.su2}{\underline{click here}}).
 \end{su2note}
 \begin{paraviewnote}
-	Use the following links to download the same version of Paraview for Windows (\href{}{}) or Mac (\href{}{}).
+	Use the following links to download the same version of Paraview for Windows (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/windows/ParaView-5.4.0-Qt5-OpenGL2-Windows-64bit.exe}{\underline{click here}}) or Mac (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/osx/ParaView-5.4.0-Qt5-OpenGL2-MPI-OSX10.8-64bit.dmg}{\underline{click here}}).
 \end{paraviewnote}
+
 \section{Problem Description}
 In this tutorial will demonstrate how to simulate transonic viscous flow past a three-dimensional wing. We will use the ONERA M6 again, and detailed information is given in the previous tutorial for inviscid flow in Chapter\ref{ch:Inviscid ONERA M6}. We will use the Reynolds-Averaged Navier-Stokes (RANS) equations and compare the Spalar-Almaras (SA) and $k-\omega$ Shear Stress Transport (SST) turbulence models for the eddy viscosity. The computational domain uses a structured mesh with 43,008 hexahedral. Note that this mesh is relatively coarse to allow for relatively small computation mesh. The flow specifications are provided as follows:
 \begin{itemize}
@@ -1334,10 +1339,8 @@ For other .csv files, edit the column variable and range accordingly. You can th
 1. Plot and comment on the mesh and compare it with the one used for the inviscid ONERA M6. \\
 2. Run the Onera M6 with Spalart-Allmaras (SA) turbulence model as described in the tutorial documentation. Plot the pressure coefficient contour and contour lines of the wing surface. \\
 3. Perform Q.2 again but with $k-\omega$ SST turbulence model. \\
-4. Plot the pressure coefficient vs $x/c$ at the stations $y/b$ = 0.2, 0.44, 0.65, 0.8, 0.9, 0.95, 0.99 for SA and $k-\omega$ SST with the
-experimental data \cite{schmitt1979pressure} for each of these stations. \\
-5. Compare the $C_L$ and $C_D$ values of the SA and $k-\omega$ SST model; compare as well with the $C_L$ and $C_D$ values obtained from
-the inviscid case (multigrid results). Comment on possible sources of discrepancies.
+4. Plot the pressure coefficient vs $x/c$ at the stations $y/b$ = 0.2, 0.44, 0.65, 0.8, 0.9, 0.95, 0.99 for SA and $k-\omega$ SST with the experimental data\cite{schmitt1979pressure} (download \href{https://gitlab.com/bvermeir/book-cfd/blob/master/tutorial/tut5_turbulent_oneram6/experimental_values.zip}{\underline{here}}) for each of these stations. \\
+5. Compare the $C_L$ and $C_D$ values of the SA and $k-\omega$ SST model; compare as well with the $C_L$ and $C_D$ values obtained from the inviscid case (multigrid results). Comment on possible sources of discrepancies.
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1346,11 +1349,12 @@ the inviscid case (multigrid results). Comment on possible sources of discrepanc
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 \section{Required Files}
 \begin{gmshnote}
-	Use the following links to download the same version of Gmsh for Windows (\href{}{http://gmsh.info/bin/Windows/gmsh-4.5.1-Windows64.zip}) or Mac (\href{}{http://gmsh.info/bin/MacOSX/gmsh-4.5.1-MacOSX.dmg}).
+	Use the following links to download the same version of Gmsh for Windows (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/windows/gmsh-3.0.5-Windows64.zip}{\underline{click here}}) or Mac (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/osx/gmsh-3.0.5-MacOSX.dmg}{\underline{click here}}).
 \end{gmshnote}
 \begin{pythonnote}
-	Use the following links to download the python file for this toturial (\href{}{click here}).
+	Use the following links to download the python file for this toturial (\href{https://gitlab.com/bvermeir/book-cfd/blob/master/tutorial/tut6_mesh_generation/gmshconverter.py}{\underline{click here}}).
 \end{pythonnote}
+
 \section{Problem Description}
 In this tutorial, we are going to explain how to design and generate a mesh for inviscid flow around an airfoil.
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1585,7 +1589,7 @@ Additionally, if you would like to pick different name for the physical boundari
 \end{enumerate}
 2. Re-run the default NACA2312 case but change the Mach number to Ma = 0.3 and run several simulations using alpha = 0, 2, 4, 6, 8, 10, 12, 14, 16 degrees.
 \begin{enumerate}[label=(\alph*)]
-    \item Plots Cl vs alpha alongside the provided experimental data \cite{ladson1988effects} in the test case folder.
+    \item Plots Cl vs alpha alongside the provided experimental data\cite{ladson1988effects} in the test case folder.
     \item Repeat 1.b with Ma = 0.3 for the alpha = 0, 8, 16 degree cases.
     \item Repeat 1.c with for the alpha = 0, 8, 16 degree cases.
 \end{enumerate}

@@ -59,7 +59,7 @@ After SU2 runs it generates a set of data files, which includes the complete flo
 	Use the following links to download the same version of SU2 for Windows (\href{}{https://github.com/su2code/SU2/releases/download/v7.0.0/SU2-v7.0.0-win64.zip}) or Mac (\href{}{https://github.com/su2code/SU2/releases/download/v7.0.0/SU2-v7.0.0-macos64.zip}), and the required configuration (\href{}{click here}) and mesh files (\href{}{click here}).
 \end{su2note}
 \begin{paraviewnote}
-	Use the following links to download the same version of Paraview for Windows (\href{}{https://www.paraview.org/paraview-downloads/download.php?submit=Download&version=v5.4&type=binary&os=Windows&downloadFile=ParaView-SC17-5.5.preview-Qt5-Windows-64bit.zip}) or Mac (\href{}{https://www.paraview.org/paraview-downloads/download.php?submit=Download&version=v5.4&type=binary&os=macOS&downloadFile=ParaView-SC17-5.5.preview-Qt5-MPI-OSX10.8-64bit.dmg}).
+	Use the following links to download the same version of Paraview for Windows (\href{}{}) or Mac (\href{}{}).
 \end{paraviewnote}
 
 \section{Problem Description}
@@ -317,7 +317,7 @@ Additionally, as shown in Figure \ref{fig1:forcefile2}, the aerodynamic forces a
 	Use the following links to download the same version of SU2 for Windows (\href{}{https://github.com/su2code/SU2/releases/download/v7.0.0/SU2-v7.0.0-win64.zip}) or Mac (\href{}{https://github.com/su2code/SU2/releases/download/v7.0.0/SU2-v7.0.0-macos64.zip}), and the required configuration (\href{}{click here}) and mesh files (\href{}{click here}).
 \end{su2note}
 \begin{paraviewnote}
-	Use the following links to download the same version of Paraview for Windows (\href{}{https://www.paraview.org/paraview-downloads/download.php?submit=Download&version=v5.4&type=binary&os=Windows&downloadFile=ParaView-SC17-5.5.preview-Qt5-Windows-64bit.zip}) or Mac (\href{}{https://www.paraview.org/paraview-downloads/download.php?submit=Download&version=v5.4&type=binary&os=macOS&downloadFile=ParaView-SC17-5.5.preview-Qt5-MPI-OSX10.8-64bit.dmg}).
+	Use the following links to download the same version of Paraview for Windows (\href{}{}) or Mac (\href{}{}).
 \end{paraviewnote}
 \section{Problem Description}
 In this tutorial we are going to demonstrate how to simulate supersonic inviscid flow past a simple 2D wedge. This wedge generates an oblique-shock wave moving outwards from its surface. Assuming the Reynolds number is high enough, and that the fluid is an ideal gas, we will be using the Euler equations. The domain is approximated using a structured mesh with 3,750 nodes. The domain consists of a flat upper wall, and a lower wall with an inclined a wedge starting at $x/L=1/3$, where $L$ is the length of duct. The wedge angle is taken to be 10 degrees, and the inlet flow paramaters are:
@@ -589,7 +589,7 @@ Additionally, you can export a .csv file and plot it with any other plotting sof
 	Use the following links to download the same version of SU2 for Windows (\href{}{https://github.com/su2code/SU2/releases/download/v7.0.0/SU2-v7.0.0-win64.zip}) or Mac (\href{}{https://github.com/su2code/SU2/releases/download/v7.0.0/SU2-v7.0.0-macos64.zip}), and the required configuration (\href{}{click here}) and mesh files (\href{}{click here}).
 \end{su2note}
 \begin{paraviewnote}
-	Use the following links to download the same version of Paraview for Windows (\href{}{https://www.paraview.org/paraview-downloads/download.php?submit=Download&version=v5.4&type=binary&os=Windows&downloadFile=ParaView-SC17-5.5.preview-Qt5-Windows-64bit.zip}) or Mac (\href{}{https://www.paraview.org/paraview-downloads/download.php?submit=Download&version=v5.4&type=binary&os=macOS&downloadFile=ParaView-SC17-5.5.preview-Qt5-MPI-OSX10.8-64bit.dmg}).
+	Use the following links to download the same version of Paraview for Windows (\href{}{}) or Mac (\href{}{}).
 \end{paraviewnote}
 \section{Problem Description}
 In this tutorial, we are going to explain how to simulate transonic inviscid flow around the three-dimensional ONERA M6 wing. This is a commonly used benchmark problem for computational aerodynamics, due to availability of experimental data and its relatively simple geometry. In this tutorial, the computational domain is discretized using an unstructured mesh with of 582,752 tetrahedral elements. The flow specification is as follows:
@@ -777,17 +777,16 @@ As shown in Figure \ref{fig3:columnsxlxs}, the first column shows the iteration 
 Now we can plot the predicted lift coefficient, drag coefficient, and density residual against the number of iterations to see how many iterations it takes to converge to a steady solution. Figure \ref{fig3:clcdxlxs} and Figure \ref{fig3:res_vs_itr} show plots for the aerodynamic loads and residual as a function of the number of iterations, respectively, for the case of no multigrid, \texttt{MGLEVEL=0}.
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.75\textwidth]{tut03/22.png}
+    \includegraphics[trim=3cm 17cm 4cm 3cm, clip=true, width=0.75\textwidth]{tut03/clcd03.pdf}
     \caption{Lift and Drag coefficients versus the number of iterations.}
     \label{fig3:clcdxlxs}
 \end{figure}
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.75\textwidth]{tut03/21.png}
+    \includegraphics[trim=3cm 17cm 4cm 3cm, clip=true, width=0.75\textwidth]{tut03/res03.pdf}
     \caption{Density residual versus the number of iterations.}
     \label{fig3:res_vs_itr}
 \end{figure}
-\clearpage
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 \section{Questions}
 1. Run the simulation without multi-grid scheme (\texttt{MGLEVEL=0}).
@@ -811,7 +810,7 @@ Now we can plot the predicted lift coefficient, drag coefficient, and density re
 	Use the following links to download the same version of SU2 for Windows (\href{}{https://github.com/su2code/SU2/releases/download/v7.0.0/SU2-v7.0.0-win64.zip}) or Mac (\href{}{https://github.com/su2code/SU2/releases/download/v7.0.0/SU2-v7.0.0-macos64.zip}), and the required configuration (\href{}{click here}) and mesh files (\href{}{click here}).
 \end{su2note}
 \begin{paraviewnote}
-	Use the following links to download the same version of Paraview for Windows (\href{}{https://www.paraview.org/paraview-downloads/download.php?submit=Download&version=v5.4&type=binary&os=Windows&downloadFile=ParaView-SC17-5.5.preview-Qt5-Windows-64bit.zip}) or Mac (\href{}{https://www.paraview.org/paraview-downloads/download.php?submit=Download&version=v5.4&type=binary&os=macOS&downloadFile=ParaView-SC17-5.5.preview-Qt5-MPI-OSX10.8-64bit.dmg}).
+	Use the following links to download the same version of Paraview for Windows (\href{}{}) or Mac (\href{}{}).
 \end{paraviewnote}
 \section{Problem Description}
 In this tutorial we will explain how to simulate external viscous flow past a 2D cylinder. To simulate this the Navier-Stokes equations will be solved in steady and unsteady forms, depending on the chosen Reynolds number. For this type of flow, the wake is expected to remain steady up to a Reynolds number of around 46. At higher Reynolds numbers the flow becomes unsteady, with oscillating vortices being shed in its wake. This is the  Von-Karman vortex street, which is a well-known phenomenon in fluid mechanics. The computational domain for this tutorial uses an O-topology mesh with the cylinder in the center of the domain. The outer boundary is situated at a radial distance of 15$D$, where $D$ is cylinder diameter. The resulting mesh is composed of 26,192 triangular elements. The elements around the surface of the cylinder are refined to resolve the viscous boundary layer in this region.  For this example, the flow specifications are provided as follows:
@@ -1101,7 +1100,7 @@ Plotting $C_L$ or $C_D$ as a function of time demonstrates that the shedding amp
 	Use the following links to download the same version of SU2 for Windows (\href{}{https://github.com/su2code/SU2/releases/download/v7.0.0/SU2-v7.0.0-win64.zip}) or Mac (\href{}{https://github.com/su2code/SU2/releases/download/v7.0.0/SU2-v7.0.0-macos64.zip}), and the required configuration (\href{}{click here}) and mesh files (\href{}{click here}).
 \end{su2note}
 \begin{paraviewnote}
-	Use the following links to download the same version of Paraview for Windows (\href{}{https://www.paraview.org/paraview-downloads/download.php?submit=Download&version=v5.4&type=binary&os=Windows&downloadFile=ParaView-SC17-5.5.preview-Qt5-Windows-64bit.zip}) or Mac (\href{}{https://www.paraview.org/paraview-downloads/download.php?submit=Download&version=v5.4&type=binary&os=macOS&downloadFile=ParaView-SC17-5.5.preview-Qt5-MPI-OSX10.8-64bit.dmg}).
+	Use the following links to download the same version of Paraview for Windows (\href{}{}) or Mac (\href{}{}).
 \end{paraviewnote}
 \section{Problem Description}
 In this tutorial will demonstrate how to simulate transonic viscous flow past a three-dimensional wing. We will use the ONERA M6 again, and detailed information is given in the previous tutorial for inviscid flow in Chapter\ref{ch:Inviscid ONERA M6}. We will use the Reynolds-Averaged Navier-Stokes (RANS) equations and compare the Spalar-Almaras (SA) and $k-\omega$ Shear Stress Transport (SST) turbulence models for the eddy viscosity. The computational domain uses a structured mesh with 43,008 hexahedral. Note that this mesh is relatively coarse to allow for relatively small computation mesh. The flow specifications are provided as follows:
@@ -1157,7 +1156,7 @@ Launch Paraview. Go to \textbf{File} $\rightarrow$ \textbf{Open}, and then selec
 \end{figure}
 %--------------------------------------------------------------
 \subsection{Visualize Mesh Domain}
-In order to view the mesh, as shown in Figure \ref{fig5:wireframe}, select \textit{Solid Color} with \textit{Wireframe} in the toolbar. Then, you can zoom-in to see mesh around the airfoil, as shown in Figure \ref{fig5:mesh}. You can see that this mesh uses structured elements, and is highly refine in the boundary layer, leading edge, and trailing edge regions.
+In order to view the mesh, as shown in Figure \ref{fig5:wireframe}, select \textit{Solid Color} with \textit{Wireframe} in the toolbar. Then, you can zoom-in to see mesh around the airfoil, as shown in Figure \ref{fig5:mesh}. You can see that this mesh uses structured elements, and is highly refined in the boundary layer, leading edge, and trailing edge regions.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.75\textwidth]{tut05/wireframe.pdf}
@@ -1166,8 +1165,8 @@ In order to view the mesh, as shown in Figure \ref{fig5:wireframe}, select \text
 \end{figure}
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=.75\textwidth]{tut05/mesh.pdf}
-    \caption{Structured mesh for ONERA M6 wing.}
+    \includegraphics[trim=0.1cm 5cm 0.1cm 3cm, clip=true, width=.75\textwidth]{tut05/meshb.pdf}
+    \caption{Structured mesh for ONERA M6 wing. The mesh around the surface is refined to capture the boundary layer.}
     \label{fig5:mesh}
 \end{figure}
 %--------------------------------------------------------------

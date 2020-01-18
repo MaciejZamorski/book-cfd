@@ -604,9 +604,9 @@ In this tutorial, we are going to explain how to simulate transonic inviscid flo
 This tutorial has two parts: Flow Solution and Post-processing. In the first part, we will explain how to manage the prerequisite files and settings, and how to run the CFD simulation using SU2. In the second part we explain how to use Paraview to visualize the data obtained from SU2.
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 \section{Flow solution}
-In the configuration file you can manually adjust the multi-grid control parameters. For the tutorial case you will see that the number of multigrid levels is set to 0, \texttt{MGLEVEL=0}. In the assigned questions the number of multigrid levels will be changed by adjusting this \texttt{MGLEVEL} parameter. You can also select the multi-grid cycle type choosing one of \texttt{MGCYCLE (V Cycle, W Cycle or Full MG Cycle)}. Another parameter of interest is the total number of iterations. This can be modified by changing the value in \texttt{EXT\_ITER}. For this example it will be kept at 200, but depending on the method used more iterations may be required to reach convergence. We will post-process the results by obtaining pressure coefficient and Mach number contours, lift coefficient ($C_L$), and drag coefficient ($C_D$) of the ONERA M6 wing. We will also explore the rate of convergence as a function of the number of multigrid levels used.
+In the configuration file you can manually adjust the multi-grid control parameters. For the tutorial case you will see that the number of multigrid levels is set to 0, \texttt{MGLEVEL=0}. In the assigned questions the number of multigrid levels will be changed by adjusting this \texttt{MGLEVEL} parameter. You can also select the multi-grid cycle type by choosing one of either \texttt{MGCYCLE (V Cycle, W Cycle or Full MG Cycle)}. Another parameter that can be controlled is the total number of iterations. This can be modified by changing the value of \texttt{EXT\_ITER}. For this example it will be kept at 200 for demonstration purposes, but depending on the method used more iterations may be required to reach convergence. We will post-process the results by obtaining pressure coefficient and Mach number contours, the lift coefficient ($C_L$), and drag coefficient ($C_D$) of the ONERA M6 wing. We will also explore the rate of convergence as a function of the number of multigrid levels used.
 
-To run the simulation SU2 needs two essential files: the configuration file (.cfg) and the mesh file (.su2). Links to the required files and executables are provided at the start of this tutorial. The files include:
+To run the simulation SU2 needs two files: the configuration file (.cfg) and the mesh file (.su2). Links to the required files and executables are provided at the start of this tutorial. The files include:
 \begin{enumerate}
 \item \textit{inv\_ONERAM6}.cfg as a configuration file.
 \item \textit{mesh\_ONERAM6\_inv}.su2 as a mesh file.
@@ -625,7 +625,7 @@ The next step is to copy these two files into the same directory as your SU2 exe
     \end{tabular}
 \end{table}
 
-The SU2 solver will commence solving the problem and will print out the residuals at every iteration, until the specified convergence criteria is achieved. After the calculations are complete the following output files should have been generated within in the SU2 folder:
+The solver will begin solving the problem and will print out the residuals at every iteration, until the specified convergence criteria is achieved. After the calculations are complete the following output files will be generated within in the SU2 folder:
 \begin{itemize}
     \item \textit{flow}.vtk: The flow solution on the entire domain.
     \item \textit{force\_breakdown}.dat: Forces and moment on the airfoil.
@@ -640,38 +640,38 @@ Please keep in mind that every time you run SU2, the output data will be overwri
 In this section, we will explain how to use Paraview to visualize the results produced by SU2. 
 %--------------------------------------------------------------
 \subsection{Load the Solution File:}
-Launch Paraview. Go to \textbf{File} $\rightarrow$ \textbf{Open}, and select the \textit{surface\_flow}.vtk file. On the left-hand side of the Paraview window you will see the file is loaded under \textbf{builtin} in \textbf{Pipeline Browser}. Press the \textbf{Apply} button in the \textbf{Properties} tab, right under the \textbf{Pipeline Browser} heading. Paraview will now load the data associated with your file, and it will now be ready for visualization (Figure \ref{fig3:load}).
+Launch Paraview. Go to \textbf{File} $\rightarrow$ \textbf{Open}, and select the \textit{surface\_flow}.vtk file. On the left-hand side of the Paraview window you will see the file is loaded under \textbf{builtin} in \textbf{Pipeline Browser}. Press the \textbf{Apply} button in the \textbf{Properties} tab, right under the \textbf{Pipeline Browser} heading. Paraview will now load the data associated with your file, and it will be ready for visualization (Figure \ref{fig3:load}).
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.4\textwidth]{tut03/surface_flow.pdf}
-    \caption{Loading \textit{surface\_flow}.vtk file in the \textbf{Pipeline Browser}.}
+    \caption{Loading \textit{surface\_flow}.vtk file into the \textbf{Pipeline Browser}.}
     \label{fig3:load}
 \end{figure}
 %--------------------------------------------------------------
 \subsection{Visualize the Mesh}
-In order to view the mesh, as shown in Figure \ref{fig3:wireframe}, select \textit{Solid Color} with \textit{Wireframe} in the toolbar. As you can see in Figure \ref{fig3:mesh}, the mesh around the ONERA M6 wing is unstructured, and the elements are clustered around the wingtip, leading edge, and trailing edge of the wing. This is to accommodate large changes in the flow solution in the vicinity of the features.
+In order to view the mesh, as shown in Figure \ref{fig3:wireframe}, select \textit{Solid Color} with \textit{Wireframe} in the toolbar. As you can see in Figure \ref{fig3:mesh}, the mesh around the ONERA M6 wing is unstructured and the elements are clustered around the wingtip, leading edge, and trailing edge of the wing. This is to accommodate large changes in the flow solution in the vicinity of the features.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.6\textwidth]{tut03/wireframe.pdf}
-    \caption{How to display mesh in computational domain.}
+    \caption{How to display the ONERA M6 mesh.}
     \label{fig3:wireframe}
 \end{figure}
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=.75\textwidth]{tut03/mesh2.pdf}
-    \caption{Unstructured mesh around ONERA M6 wing.}
+    \caption{The unstructured mesh around the ONERA M6 wing.}
     \label{fig3:mesh}
 \end{figure}
 %--------------------------------------------------------------
-\subsection{Visualize Pressure Coefficient Contour and Much Number Contour}
-To display pressure contours on the surface of the wing click on \textit{surface\_flow}.vtk in the \textbf{Pipeline Browser}. Then click on the \textbf{Display} in \textbf{Properties} tab. Next, under \textbf{Coloring}, select \textit{Pressure\_Coefficient} from the drop-down menu (Figure \ref{fig3:pressure_coeff_1}).
+\subsection{Pressure Coefficient and Mach Number Contours}
+To display pressure coefficient contours on the surface of the wing click on \textit{surface\_flow}.vtk in the \textbf{Pipeline Browser}. Then click on \textbf{Display} in \textbf{Properties} tab. Next, under \textbf{Coloring} select \textit{Pressure\_Coefficient} from the drop-down menu (Figure \ref{fig3:pressure_coeff_1}).
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.4\textwidth]{tut03/coloring.pdf}
-    \caption{Display contour by selecting variable.}
+    \caption{Display contours by selecting the appropriate variable.}
     \label{fig3:pressure_coeff_1}
 \end{figure}
-The pressure coefficient contour should now be displayed similar to Figure \ref{fig3:plot_pressure_coeff}
+Pressure coefficient contours should now be displayed, similar to Figure \ref{fig3:plot_pressure_coeff}
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.65\textwidth]{tut03/cont1_pressure_coefficient.pdf}
@@ -686,27 +686,27 @@ To add contour lines to the plot click on \textit{surface\_flow}.vtk in the \tex
     \caption{\textbf{Contour} icon in toolbar.}
     \label{fig3:contour_icon}
 \end{figure}
-The \textit{Contour1} item now appears under the \textit{flow}.vtk file in the \textbf{Pipeline Browser} (Figure \ref{fig3:contour1}). Click on \textbf{Apply} to proceed to the next step.
+The \textit{Contour1} item now appears under \textit{flow}.vtk file in the \textbf{Pipeline Browser} (Figure \ref{fig3:contour1}). Click on \textbf{Apply} to proceed to the next step.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.4\textwidth]{tut03/contour1.pdf}
-    \caption{Adding \textit{Contour1} in \textbf{Pipeline Browser}.}
+    \caption{Adding \textit{Contour1} in the \textbf{Pipeline Browser}.}
     \label{fig3:contour1}
 \end{figure}
-As shown in Figure \ref{fig3:contourby a}, go to the \textbf{Properties}, and choose \textit{Pressure\_Coefficient} from \textbf{Contour By} drop-down menu. Then, click on the \textbf{Add Range} icon to customize the range used for the pressure contours. As shown in Figure \ref{fig3:contourby b}, set the max/min (i.e. \textbf{From}/\textbf{To}) range of contour lines, as well as the number steps used to divide this range into the equal contour levels. Set \textbf{Step} to 20, and then click on \textbf{OK}. At the end, click on \textbf{Apply} to generate the contour lines in the display window.
+As shown in Figure \ref{fig3:contourby a}, go to \textbf{Properties} and choose \textit{Pressure\_Coefficient} from \textbf{Contour By} drop-down menu. Then, click on the \textbf{Add Range} icon to customize the range used for the pressure contours. As shown in Figure \ref{fig3:contourby b}, set the max/min (i.e. \textbf{From}/\textbf{To}) range of contour lines, as well as the number of steps used to divide this range into equally spaced contour levels. Set \textbf{Step} to 20, and then click on \textbf{OK}. At the end, click on \textbf{Apply} to generate the contour lines in the display window.
 \begin{figure}[htbp]
     \centering
      \begin{subfigure}[b]{.4\textwidth}
          \centering
          \includegraphics[width=1.0\textwidth]{tut03/pressure_coeff_addrange1.pdf}
-         \caption{Define new range}
+         \caption{Define a new range}
          \label{fig3:contourby a}
      \end{subfigure}
      \hfill
      \begin{subfigure}[b]{.4\textwidth}
          \centering
          \includegraphics[width=1.0\textwidth]{tut03/pressure_coeff_addrange2.pdf}
-         \caption{Add range}
+         \caption{Add the new range}
          \label{fig3:contourby b}
      \end{subfigure}     
     \caption{How to define a new range for the contour lines.}
@@ -716,31 +716,31 @@ Next, as shown in Figure \ref{fig3:colorby2}, click on \textbf{Display} under th
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.4\textwidth]{tut03/coloring2.pdf}
-    \caption{Changing contour lines color in \textbf{Coloring} section.}
+    \caption{Changing contour line colors in the \textbf{Coloring} section.}
     \label{fig3:colorby2}
 \end{figure}
-The pressure contours will now be displayed in black and should be similar to Figure \ref{fig3:pressure_contour_lines}.
+Pressure coefficient contours will now be displayed in black and should be similar to those shown in Figure \ref{fig3:pressure_contour_lines}.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=.65\textwidth]{tut03/cont2_pressure_coefficient.pdf}
-    \caption{Pressure coefficient contour superimposed by contour lines for ONERA M6 wing.}
+    \caption{Pressure coefficient contours superimposed with contour lines for the ONERA M6 wing.}
     \label{fig3:pressure_contour_lines}
 \end{figure}
 
-To display Mach number contours, similar to Figure \ref{fig3:pressure_coeff_1}, click on \textit{surface\_flow}.vtk in the \textbf{Pipeline Browser}. Under \textbf{Coloring} from the \textbf{Display} section select \textit{Mach} from drop-down menu. Now click on "\textit{Contour1}" in the \textbf{Pipeline Browser}. As shown in Figure \ref{fig3:contourby2 a}, under the \textbf{Properties} tab, select \textit{Mach} from the \textbf{Contour By} drop-down menu. Next, click on the \textbf{Remove All} icon to remove previous the range used for the pressure coefficient. Similar to Figure \ref{fig3:contourby2 b}, click on the \textbf{Add Range} icon and set \textbf{Steps} to 20. Next, click on \textbf{OK} and \textbf{Apply} to show the plot.
+To display Mach number contours, similar to Figure \ref{fig3:pressure_coeff_1}, click on \textit{surface\_flow}.vtk in the \textbf{Pipeline Browser}. Under \textbf{Coloring} in the \textbf{Display} section select \textit{Mach} from the drop-down menu. Now click on "\textit{Contour1}" in the \textbf{Pipeline Browser}. As shown in Figure \ref{fig3:contourby2 a}, under the \textbf{Properties} tab, select \textit{Mach} from the \textbf{Contour By} drop-down menu. Next, click on the \textbf{Remove All} icon to remove the previous range used for the pressure coefficient. Similar to Figure \ref{fig3:contourby2 b}, click on the \textbf{Add Range} icon and set \textbf{Steps} to 20. Next, click on \textbf{OK} and \textbf{Apply} to show the plot.
 \begin{figure}[htbp]
     \centering
      \begin{subfigure}[b]{.4\textwidth}
          \centering
          \includegraphics[width=1.0\textwidth]{tut03/del_add_range_mach.pdf}
-         \caption{Define new range}
+         \caption{Define a new range}
          \label{fig3:contourby2 a}
      \end{subfigure}
      \hfill
      \begin{subfigure}[b]{.4\textwidth}
          \centering
          \includegraphics[width=1.0\textwidth]{tut03/AddRangemach.pdf}
-         \caption{Add range}
+         \caption{Add the new range}
          \label{fig3:contourby2 b}
      \end{subfigure}     
     \caption{How to define a new range for the contour lines.}
@@ -754,12 +754,12 @@ Now the Mach number contours on the wing surface should be shown, similar to Fig
     \label{fig3:mach_contour}
 \end{figure}
 %--------------------------------------------------------------
-\subsection{Comparison of Convergence Rate}
-We will now explore the rate of convergence of the SU2 solver. Open any suitable plotting or spreadsheet software. Open the file \textit{history}.vtk that was generated by SU2. Choose the file type that best describes your data, and tell your software to use \textit{Tab}, \textit{Semicolon}, and \textit{Comma} as delimiters (Figure \ref{fig3:importvtkxlxs}).
+\subsection{Comparison of Convergence Rates}
+We will now explore the rate of convergence of SU2 for this problem. Open any suitable plotting or spreadsheet software. Open the file \textit{history}.vtk that was generated by SU2. Choose the file type that best describes your data, and tell your software to use \textit{Tab}, \textit{Semicolon}, and \textit{Comma} as possible delimiters (Figure \ref{fig3:importvtkxlxs}).
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.5\textwidth]{tut03/16.png}
-    \caption{Import .vtk file in Microsoft Excel.}
+    \caption{Import the .vtk file into plotting or spreadsheet software.}
     \label{fig3:importvtkxlxs}
 \end{figure}
 As shown in Figure \ref{fig3:columnsxlxs}, the first column shows the iteration number. The lift coefficient ($C_L$) and the drag coefficient ($C_D$) are displayed in the second and third columns, respectively. Finally, the residuals can also be examined to check the rate of convergence (Column \textit{L} to Column \textit{P} in Figure \ref{fig3:residualxlxs}).
@@ -775,7 +775,7 @@ As shown in Figure \ref{fig3:columnsxlxs}, the first column shows the iteration 
     \caption{Residuals in \textit{history}.vtk}
     \label{fig3:residualxlxs}
 \end{figure}
-Now we can plot the predicted lift coefficient, drag coefficient, and density residual against the number of iterations to see how many iterations it takes to converge to a steady solution. Figure \ref{fig3:clcdxlxs} and Figure \ref{fig3:res_vs_itr} show plots for the aerodynamic loads and residual as a function of the number of iterations, respectively, for the case of no multigrid, \texttt{MGLEVEL=0}.
+Now we can plot the predicted lift coefficient, drag coefficient, and density residual against the number of iterations to see how many iterations it takes to converge to a steady solution. Figure \ref{fig3:clcdxlxs} and Figure \ref{fig3:res_vs_itr} show plots for the aerodynamic loads and residual as a function of the number of iterations, respectively, for the default case of no multigrid, \texttt{MGLEVEL=0}.
 \begin{figure}[htbp]
     \centering
     \includegraphics[trim=3cm 17cm 4cm 3cm, clip=true, width=0.75\textwidth]{tut03/clcd03.pdf}
@@ -791,15 +791,15 @@ Now we can plot the predicted lift coefficient, drag coefficient, and density re
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 \clearpage
 \section{Questions}
-1. Run the simulation without multi-grid scheme (\texttt{MGLEVEL=0}).
+1. Run the simulation without multi-grid (\texttt{MGLEVEL=0}).
 \begin{enumerate}[label=(\alph*)]
-    \item Follow the procedure in the guideline document to run the simulation and record the number of iterations and wall-clock time for the simulation to complete.
+    \item Follow the procedure in the guideline document to run the simulation and record the number of iterations and wall-clock time for the simulation to converge.
     \item Record the lift and drag coefficients.
     \item Plot the surface pressure coefficient with coloured contours and contour lines.
     \item Plot the surface Mach number with coloured contours and contour lines.
     \item Plot the value of $C_L$, $C_D$ and the density residual vs. the number of iterations.
 \end{enumerate}
-2. Modify the configuration file in the multi-grid folder (\texttt{MGLEVEL= 3, MGCYCLE= W\_CYCLE}) and repeat Q.1 using multi-grid scheme.\\
+2. Modify the configuration file in the multi-grid folder (\texttt{MGLEVEL= 3, MGCYCLE= W\_CYCLE}) and repeat Q.1 using multi-grid.\\
 3. Compare the results in part (a)-(e) of Q.1 and Q.2. In what way is the use of multi-grid advantageous for this test case?\\
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -816,12 +816,12 @@ Now we can plot the predicted lift coefficient, drag coefficient, and density re
 \end{paraviewnote}
 
 \section{Problem Description}
-In this tutorial we will explain how to simulate external viscous flow past a 2D cylinder. To simulate this the Navier-Stokes equations will be solved in steady and unsteady forms, depending on the chosen Reynolds number. For this type of flow, the wake is expected to remain steady up to a Reynolds number of around 46. At higher Reynolds numbers the flow becomes unsteady, with oscillating vortices being shed in its wake. This is the  Von-Karman vortex street, which is a well-known phenomenon in fluid mechanics. The computational domain for this tutorial uses an O-topology mesh with the cylinder in the center of the domain. The outer boundary is situated at a radial distance of 15$D$, where $D$ is cylinder diameter. The resulting mesh is composed of 26,192 triangular elements. The elements around the surface of the cylinder are refined to resolve the viscous boundary layer in this region.  For this example, the flow specifications are provided as follows:
+In this tutorial we will explain how to simulate external viscous flow past a 2D cylinder. To simulate this the Navier-Stokes equations will be solved in both steady and unsteady forms, depending on the chosen Reynolds number. For this type of flow, the wake is expected to remain steady up to a Reynolds number of around 46. At higher Reynolds numbers the flow becomes unsteady, with oscillating vortices being shed in its wake. This is known as a Von-Karman vortex street, which is a well-known phenomenon in fluid mechanics. The computational domain for this tutorial uses an O-topology mesh with the cylinder in the center of the domain. The outer boundary is situated at a radial distance of 15$D$, where $D$ is cylinder diameter. The resulting mesh is composed of 26,192 triangular elements. The elements around the surface of the cylinder are refined to resolve the viscous boundary layer in this region.  For this example, the flow specifications are provided as follows:
 \begin{itemize}
     \item Pressure = 101,325Pa
     \item Temperature = 273.15K
     \item Mach number = 0.1
-    \item angle of attack = 0 degrees
+    \item Angle of attack = 0 degrees
     \item Reynolds number = 40
     \item Characteristic length = 1m
 \end{itemize}
@@ -847,7 +847,7 @@ The next step is to copy these two files into the same directory as the SU2 exec
     \end{tabular}
 \end{table}
 
-SU2 solver will commence solving the problem, and will print out the residuals at every iteration until the specified convergence criteria is reached. After thus, the following output files will be generated and saved in the SU2 folder:
+SU2 will begin solving the problem, and will print out the residuals at every iteration until the specified convergence criteria is reached. After converging, the following output files will be generated and saved in the SU2 folder:
 \begin{itemize}
  \item \textit{flow}.vtk: The flow solution on the entire domain.
  \item \textit{force\_breakdown}.dat: Forces and moment on the cylinder.
@@ -859,10 +859,10 @@ SU2 solver will commence solving the problem, and will print out the residuals a
 Please keep in mind that every time you run SU2, the output data will be overwritten. Hence, before launching a new simulation you should backup your files in another directory.
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 \section{Post-processing}
-In this section, we explain how to use Paraview to visualize the data produced by SU2.
+In this section, we will explain how to use Paraview to visualize the data produced by SU2.
 %--------------------------------------------------------------
 \subsection{Load the Solution File:}
-Launch Paraview. Go to \textbf{File} $\rightarrow$ \textbf{Open}, and then select the \textit{flow}.vtk file. On the left-hand side of the Paraview window you will see the file appear under \textbf{builtin} in the \textbf{Pipeline Browser}. Now press the \textbf{Apply} button in the \textbf{Properties} tab, directly under the \textbf{Pipeline Browser}. The solution file is now loaded by Paraview and is ready to visualize (Figure \ref{fig4:load}).
+Launch Paraview. Go to \textbf{File} $\rightarrow$ \textbf{Open}, and then select the \textit{flow}.vtk file. On the left-hand side of the Paraview window you will see the file appear under \textbf{builtin} in the \textbf{Pipeline Browser}. Now press the \textbf{Apply} button in the \textbf{Properties} tab, directly under the \textbf{Pipeline Browser}. The solution file is now loaded by Paraview and is ready to be visualized (Figure \ref{fig4:load}).
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.4\textwidth]{tut04/loadvtkfile.pdf}
@@ -871,17 +871,17 @@ Launch Paraview. Go to \textbf{File} $\rightarrow$ \textbf{Open}, and then selec
 \end{figure}
 %--------------------------------------------------------------
 \subsection{Visualize the Mesh}
-In order to display the mesh, as shown in Figure \ref{fig4:wireframe_4}, select \textit{Solid Color} with \textit{Wireframe} in the toolbar. Then, you can zoom-in to see mesh around the surface of the cylinder, as shown in Figure \ref{fig4:mesh_4}. The mesh around the cylinder is unstructured, and the elements are clustered around the cylinder to be able to capture boundary layer and wake region properly.
+In order to display the mesh, as shown in Figure \ref{fig4:wireframe_4}, select \textit{Solid Color} with \textit{Wireframe} in the toolbar. Then, you can zoom-in to see mesh around the surface of the cylinder, as shown in Figure \ref{fig4:mesh_4}. The mesh around the cylinder is unstructured, and the elements are clustered around the cylinder to be able to capture the boundary layer region properly.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.6\textwidth]{tut04/wireframe.pdf}
-    \caption{How to display mesh in computational domain.}
+    \caption{How to display the cylinder mesh.}
     \label{fig4:wireframe_4}
 \end{figure}
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=.75\textwidth]{tut04/mesh.pdf}
-    \caption{Unstructured mesh around cylinder.}
+    \caption{The cylinder mesh.}
     \label{fig4:mesh_4}
 \end{figure}
 %--------------------------------------------------------------
@@ -890,43 +890,43 @@ To visualize pressure contours in the domain activate \textit{flow}.vtk by click
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.4\textwidth]{tut04/coloring_pressure.pdf}
-    \caption{How to display contour by selecting variable.}
+    \caption{How to display contours by selecting the variable.}
     \label{fig4:pressure_coloring_4}
 \end{figure}
 Contours of the pressure coefficient will now be displayed, similar to Figure \ref{fig4:pressure_plot1_4}.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.75\textwidth]{tut04/plot1_pressure.pdf}
-    \caption{Pressure coefficient contour around a cylinder.}
+    \caption{Pressure contours around the cylinder.}
     \label{fig4:pressure_plot1_4}
 \end{figure}
-To change the color range used for pressure coefficient you can also click on \textbf{Edit} under the same \textbf{Coloring} section. In order to add contour lines to the plot, click again on the \textit{flow}.vtk file in the \textbf{Pipeline Browser}. Then click on the \textbf{Contour} icon (Figure \ref{fig4:contourline1_4}). Similar to Figure \ref{fig4:contourline2_4}, you should now see \textit{Contour1} under the \textit{flow}.vtk file in the \textbf{Pipeline Browser}. 
+To change the color range used for pressure you can also click on \textbf{Edit} under the same \textbf{Coloring} section. In order to add contour lines to the plot, click again on the \textit{flow}.vtk file in the \textbf{Pipeline Browser}. Then click on the \textbf{Contour} icon (Figure \ref{fig4:contourline1_4}). Similar to Figure \ref{fig4:contourline2_4}, you should now see \textit{Contour1} under the \textit{flow}.vtk file in the \textbf{Pipeline Browser}. 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.4\textwidth]{tut04/contourline.pdf}
-    \caption{\textbf{Contour} icon in toolbar.}
+    \caption{The \textbf{Contour} icon in the toolbar.}
     \label{fig4:contourline1_4}
 \end{figure}
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.4\textwidth]{tut04/contourline2.pdf}
-    \caption{Adding \textit{Contour1} to \textbf{Pipeline Browser}.}
+    \caption{Adding \textit{Contour1} to the \textbf{Pipeline Browser}.}
     \label{fig4:contourline2_4}
 \end{figure}
-As shown in Figure \ref{fig4:contourby_4 a}, in the \textbf{Properties} select \textit{Pressure} from the \textbf{Contour By} drop-down menu. You can use the \textbf{Remove All} icon to remove the default range, and then, click on the \textbf{Add Range} icon to make a new range based on your preference. Similar to Figure \ref{fig4:contourby_4 b}, set the \textbf{Steps} to 20, and then, click on \textbf{OK} and \textbf{Apply}, respectively.
+As shown in Figure \ref{fig4:contourby_4 a}, in the \textbf{Properties} section select \textit{Pressure} from the \textbf{Contour By} drop-down menu. You can use the \textbf{Remove All} icon to remove the default range, and then, click on the \textbf{Add Range} icon to make a new range based on your preferences. Similar to Figure \ref{fig4:contourby_4 b}, set \textbf{Steps} to 20, and then, click on \textbf{OK} and \textbf{Apply}, respectively.
 \begin{figure}[htbp]
     \centering
     \begin{subfigure}[b]{.4\textwidth}
         \centering
         \includegraphics[width=1.0\textwidth]{tut04/contourline3.pdf}
-        \caption{Define new range}
+        \caption{Define a new range}
         \label{fig4:contourby_4 a}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{.4\textwidth}
         \centering
         \includegraphics[width=1.0\textwidth]{tut04/contourline4.pdf}
-        \caption{Add range}
+        \caption{Add the new range}
         \label{fig4:contourby_4 b}
     \end{subfigure}     
     \caption{How to define a new range for the contour lines.}
@@ -937,22 +937,22 @@ To change the color of the contour lines activate \textit{Contour1} by clicking 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.75\textwidth]{tut04/contourline6.pdf}.
-    \caption{Pressure contour superimposed by contour lines around a cylinder.}
+    \caption{Pressure contours superimposed by contour lines around the cylinder.}
     \label{fig4:contourline6_4}
 \end{figure}
 Keep in mind that to display both contour and contour lines, the eye beside each iten in the \textbf{Pipeline Browser} should be activated (Figure \ref{fig4:contourline5_4})
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.4\textwidth]{tut04/contourline5.pdf}.
-    \caption{How to display contour and contourlines at the same time in plot.}
+    \caption{How to display contour and contour lines at the same time in the plot.}
     \label{fig4:contourline5_4}
 \end{figure}
 
-To display the Mach number contours click on \textit{flow}.vtk again in the \textbf{Pipeline Browser}. As shown in Figure \ref{fig4:mach1_4}, under \textbf{Coloring} section in \textbf{Display}, select \textit{Mach} from the drop-down menu.
+To display the Mach number contours click on \textit{flow}.vtk again in the \textbf{Pipeline Browser}. As shown in Figure \ref{fig4:mach1_4}, under the \textbf{Coloring} section in \textbf{Display}, select \textit{Mach} from the drop-down menu.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.4\textwidth]{tut04/mach1.pdf}.
-    \caption{How to change color for contour lines of Mach number.}
+    \caption{How to change the color for contour lines of Mach number.}
     \label{fig4:mach1_4}
 \end{figure}
 Click on \textit{Contour1} in the \textbf{Pipeline Browser}. Similar to Figure \ref{fig4:mach2_4 a}, in \textbf{Properties} select \textit{Mach} from the \textbf{Contour By} drop-down menu. Click on \textbf{Remove All} to remove the previous value range used for pressure. Click on \textbf{Add Range} and set the the value of \textbf{Steps} to 20. Then, click \textbf{OK} and \textbf{Apply}, respectively (Figure \ref{fig4:mach2_4 b}).
@@ -961,14 +961,14 @@ Click on \textit{Contour1} in the \textbf{Pipeline Browser}. Similar to Figure \
     \begin{subfigure}[b]{0.4\textwidth}
         \centering
         \includegraphics[width=1.0\textwidth]{tut04/mach2.pdf}
-        \caption{Define new range}
+        \caption{Define a new range}
         \label{fig4:mach2_4 a}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{.4\textwidth}
         \centering
         \includegraphics[width=1.0\textwidth]{tut04/mach3.pdf}
-        \caption{Add range}
+        \caption{Add the new range}
         \label{fig4:mach2_4 b}
     \end{subfigure}     
     \caption{How to define a new range for the contour lines.}
@@ -987,21 +987,21 @@ Streamlines show the path that a fluid element will follow, when released. Strea
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.4\textwidth]{tut04/stream1.pdf}
-    \caption{How to define new variable using \textbf{Calculator}.}
+    \caption{How to define new variables using the \textbf{Calculator}.}
     \label{fig4:stream1_4}
 \end{figure}
-Next, click on the \textit{Calculator1} in the \textbf{Pipeline Browser}, and as shown in Figure \ref{fig4:stream3_4}, rename the \textbf{Result Array Name} as \textit{Velocity}. Furthermore, following Figure \ref{fig4:stream3_4}, write the contribution of each velocity component in the equation box. Keep in mind that dividing Momentum by Density results the corresponding fluid velocity component. Then, click on \textbf{Apply} to proceed to the next step.
+Next, click on \textit{Calculator1} in the \textbf{Pipeline Browser} and, as shown in Figure \ref{fig4:stream3_4}, rename the \textbf{Result Array Name} to \textit{Velocity}. Furthermore, following Figure \ref{fig4:stream3_4}, write the contribution of each velocity component in the equation box. Keep in mind that dividing momentum by density results the corresponding fluid velocity component. Then, click on \textbf{Apply} to proceed to the next step.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.4\textwidth]{tut04/stream3.pdf}
-    \caption{How to use \textbf{Calculator} to define velocity.}
+    \caption{How to use a \textbf{Calculator} to compute the velocity.}
     \label{fig4:stream3_4}
 \end{figure}
 As shown in Figure \ref{fig4:stream4_4}, \textit{Calculator1} now appears in the \textbf{Pipeline Browser} as a subset of \textit{flow}.vtk.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.4\textwidth]{tut04/stream4.pdf}
-    \caption{\textit{Calculator1} as a subset of \textit{flow}.vtk in \textbf{Pipeline Browser}.}
+    \caption{\textit{Calculator1} as a subset of \textit{flow}.vtk in the \textbf{Pipeline Browser}.}
     \label{fig4:stream4_4}
 \end{figure}
 Now click again on \textit{Calculator1} in the \textbf{Pipeline Browser}, and then click on the \textbf{Stream Tracer} icon in the toolbar (Figure \ref{fig4:stream5_4}).
@@ -1015,82 +1015,82 @@ Next, click on \textit{StreamTracer1} in the \textbf{Pipeline Browser}, and as s
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.4\textwidth]{tut04/stream6.pdf}
-    \caption{Streamline setting in \textbf{Stream Tracer} panel.}
+    \caption{Streamline settings in the \textbf{Stream Tracer} panel.}
     \label{fig4:stream6_4}
 \end{figure}
-As shown in Figure \ref{fig4:stream7_4}, under \textbf{Coloring} in the \textbf{Display} section select \textit{Solid Color} from \textbf{Edit}, and then choose white for the stream lines. Additionally, click on the check-box beside \textbf{Data Axis Grid} to display the axis range in plot.
+As shown in Figure \ref{fig4:stream7_4}, under \textbf{Coloring} in the \textbf{Display} section select \textit{Solid Color} from \textbf{Edit}, and then choose white for the streamlines. Additionally, click on the check-box beside \textbf{Data Axis Grid} to display the axis range in the plot.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.4\textwidth]{tut04/stream7.pdf}
-    \caption{Changing stream line's color in \textbf{Display} panel.}
+    \caption{Changing the streamline colors in the \textbf{Display} panel.}
     \label{fig4:stream7_4}
 \end{figure}
 Next, hide all items except \textit{flow}.vtk and \textit{StreamTracer1} by deactivating the eye icon beside each of them (Figure \ref{fig4:stream8_4}).
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.4\textwidth]{tut04/stream8.pdf}
-    \caption{Activating both \textit{flow}.vtk and \textit{StreamTracer1} in \textbf{Pipeline Browser}.}
+    \caption{Activating both \textit{flow}.vtk and \textit{StreamTracer1} in the \textbf{Pipeline Browser}.}
     \label{fig4:stream8_4}
 \end{figure}
-Finally, Figure \ref{fig4:stream9_4} shows the Mach number contours with the streamlines superimposed on top of them. As mentioned previously, the diameter of cylinder is taken to be 1m. From Figure \ref{fig4:stream9_4} you can approximate the separation length to be around 2m behind the cylinder at the chosen $Re=40$.
+Finally, Figure \ref{fig4:stream9_4} shows Mach number contours with the streamlines superimposed on top of them. As mentioned previously, the diameter of the cylinder is taken to be 1m. From Figure \ref{fig4:stream9_4} you can approximate the separation length to be around 2m behind the cylinder at the chosen $Re=40$.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.75\textwidth]{tut04/stream9.pdf}
-    \caption{Mach number contour superimposed with streamlines.}
+    \caption{Mach number contours superimposed with streamlines.}
     \label{fig4:stream9_4}
 \end{figure}
 
-The length of the separated bubble can also be calculated more precisely. To do this we will plot the streamwise velocity component along the computational domain center-line, and measure the length of the separated bubble, which is defined as the region of reversed flow in the wake. Therefore, the separation bubble length can be found as the distance between the surface of the cylinder and the location where the \textit{Velocity\_X} switches from negative to positive. To get started, in the \textbf{Pipeline Browser} click on \textit{Calculator1} and then go to the \textbf{Filters} $\rightarrow$ \textbf{Data Analysis} $\rightarrow$ \textbf{Plot Over Line} option (Figure \ref{fig4:stream10_4}).
+The length of the separated bubble can also be calculated more precisely. To do this we will plot the streamwise velocity component along the computational domain center-line, and measure the length of the separation bubble, which is defined as the region of reversed flow in the wake. Therefore, the separation bubble length can be found as the distance between the surface of the cylinder and the location where the \textit{Velocity\_X} component switches from negative to positive. To get started, in the \textbf{Pipeline Browser} click on \textit{Calculator1} and then go to the \textbf{Filters} $\rightarrow$ \textbf{Data Analysis} $\rightarrow$ \textbf{Plot Over Line} option (Figure \ref{fig4:stream10_4}).
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.55\textwidth]{tut04/stream10.pdf}
     \caption{How to plot over an arbitrary line.}
     \label{fig4:stream10_4}
 \end{figure}
-Now, activate \textit{PlotOverLine1} by clicking on it in the \textbf{Pipeline Browser}. As shown in Figure \ref{fig4:stream11_4}, under \textbf{Line Parameters} in the \textbf{Properties} menu set \textbf{Point1} and \textbf{Point2} as (-15,0,0) and (15,0,0), respectively. Please note that this line is different from previous line we defined to generate streamlines. Set the \textbf{Resolution} to 10,000, and then click on \textbf{Apply}.
+Now, activate \textit{PlotOverLine1} by clicking on it in the \textbf{Pipeline Browser}. As shown in Figure \ref{fig4:stream11_4}, under \textbf{Line Parameters} in the \textbf{Properties} menu set \textbf{Point1} and \textbf{Point2} as (-15,0,0) and (15,0,0), respectively. Please note that this line is different from the previous line we defined to generate streamlines. Set the \textbf{Resolution} to 10,000, and then click on \textbf{Apply}.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.4\textwidth]{tut04/stream11.pdf}
     \caption{Settings for \textbf{Plot Over Line}.}
     \label{fig4:stream11_4}
 \end{figure}
-As shown in Figure \ref{fig4:stream12_4}, in the \textbf{Display} panel select \textit{Point\_X} from the \textbf{X Array Name} drop-down menu. Under \textbf{Series Parameters} unselect all variables except for \textit{Velocity\_X}.
+As shown in Figure \ref{fig4:stream12_4}, in the \textbf{Display} panel select \textit{Point\_X} from the \textbf{X Array Name} drop-down menu. Under the \textbf{Series Parameters} unselect all variables except for \textit{Velocity\_X}.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.4\textwidth]{tut04/stream12.pdf}
     \caption{How to Plot \textit{Velocity\_X} versus \textit{X Axis}.}
     \label{fig4:stream12_4}
 \end{figure}
-An figure similar to Figure \ref{fig4:stream14_4} will now display the velocity profile over the chosen line along the (\textit{X Axis}). As shown in Figure \ref{fig4:stream14_4}, the separation length, $L$, can be measured when \textit{Velocity\_X} approaches zero in the wake of the cylinder.
+A figure similar to Figure \ref{fig4:stream14_4} will now display the velocity profile over the chosen line along the (\textit{X Axis}). As shown in Figure \ref{fig4:stream14_4}, the separation length, $L$, can be measured when \textit{Velocity\_X} approaches zero in the wake of the cylinder.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.95\textwidth]{tut04/stream14.pdf}
-    \caption{\textit{Velocity\_X} versus \textit{X Axis}, and the length of flow separation.}
+    \caption{\textit{Velocity\_X} versus \textit{X Axis}, and the length of the separation bubble.}
     \label{fig4:stream14_4}
 \end{figure}
 %--------------------------------------------------------------
 \subsection{Shedding Frequency}
-When the Reynolds number is high enough the wake behind the cylinder becomes unstable, and vortex shedding occurs. The frequency of the wake oscillations is called the "shedding frequency". To explore this unsteady case open the \textit{history}.vtk in an appropriate plotting program. As shown in Figure \ref{fig4:time_history}, the first column in the file shows the number of iterations. Note that the physical time can be computed by multiplying the iteration number with the time-step size, which is $\Delta t = 0.001$s for the unsteady case as set in the configuration file.
+When the Reynolds number is high enough the wake behind the cylinder becomes unstady, and vortex shedding occurs. The frequency of the wake oscillations is called the "shedding frequency". To explore this unsteady case open the \textit{history}.vtk in an appropriate plotting program. As shown in Figure \ref{fig4:time_history}, the first column in the file shows the number of iterations. Note that the physical time can be computed by multiplying the iteration number with the time-step size, which is $\Delta t = 0.001$s for the unsteady case as set in the configuration file.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.95\textwidth]{tut04/26.png}
-    \caption{Time history of variables.}
+    \caption{Time history of flow variables.}
     \label{fig4:time_history}
 \end{figure}
-Plotting $C_L$ or $C_D$ as a function of time demonstrates that the shedding amplitude grows, and then remains quasi-steady. The non-dimensional Strouhal number of this vortex shedding can now calculated from $St=\frac{f D}{U}$, where $f$, $D$ and $U$ are shedding frequency, cylinder diameter, and free-stream velocity, respectively. The shedding frequency can be found manually by determining the time interval between vortex shedding events in the $C_L$ time history, within the quasi-steady region.
+Plotting $C_L$ or $C_D$ as a function of time demonstrates that the shedding amplitude grows, and then remains quasi-steady. The non-dimensional Strouhal number of this vortex shedding can now calculated from $St=\frac{f D}{U}$, where $f$, $D$ and $U$ are the shedding frequency, cylinder diameter, and free-stream velocity, respectively. The shedding frequency can be found manually by determining the time interval between vortex shedding events in the $C_L$ time history, within the quasi-steady region.
 \clearpage
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 \section{Questions}
-1. Run the laminar flow over a cylinder as per the tutorial case but with $Re$ = 10, 20, and 40.
+1. Run the laminar flow over a cylinder as per the tutorial case but at $Re$ = 10, 20, and 40.
 \begin{enumerate}[label=(\alph*)]
     \item Plot Mach contours with streamlines for $Re$ = 10, 20, and 40
     \item Plot the $x$-velocity component vs the $x$-coordinate beginning at $x = 1$ (location of rear surface of cylinder)
-    \item Calculate the $L/D$ (non-dimensional separation length) for the three Re cases and compare with the experimental $L/D$ values\cite{coutanceau1977experimental} (download \href{https://gitlab.com/bvermeir/book-cfd/blob/master/tutorial/tut4_laminar_cylinder/experimental_values.zip}{\underline{here}}). Also include the $C_D$ values for the three $Re$ cases from the simulation results. Comment on the effect of $Re$ on the non-dimensional separation length $L/D$ and $C_D$.
+    \item Calculate $L/D$ (non-dimensional separation length) for the three Re cases and compare with the experimental $L/D$ values~\cite{coutanceau1977experimental} (download \href{https://gitlab.com/bvermeir/book-cfd/blob/master/tutorial/tut4_laminar_cylinder/experimental_values.zip}{\underline{here}}). Also include the $C_D$ values for the three $Re$ cases from the simulation results. Comment on the effect of $Re$ on the non-dimensional separation length $L/D$ and $C_D$.
 \end{enumerate}
-2. Download configuration (\href{https://gitlab.com/bvermeir/book-cfd/blob/master/tutorial/tut4_laminar_cylinder/unsteady/lam_cylinder_re150_unsteady.cfg}{\underline{click here}}) and mesh (\href{https://gitlab.com/bvermeir/book-cfd/blob/master/tutorial/tut4_laminar_cylinder/unsteady/mesh_cylinder_lam.su2}{\underline{click here}}) files, and run an unsteady simulation for $Re$ = 150.
+2. Download the unsteady configuration (\href{https://gitlab.com/bvermeir/book-cfd/blob/master/tutorial/tut4_laminar_cylinder/unsteady/lam_cylinder_re150_unsteady.cfg}{\underline{click here}}) and mesh (\href{https://gitlab.com/bvermeir/book-cfd/blob/master/tutorial/tut4_laminar_cylinder/unsteady/mesh_cylinder_lam.su2}{\underline{click here}}) files, and run this unsteady simulation for $Re$ = 150.
 \begin{enumerate}[label=(\alph*)]
     \item Plot the $C_L$ and $C_D$ versus time.
-    \item Calculate the $\Delta C_L$ , $\Delta C_D$ and Strouhal number, and compare your results with experimental values\cite{inoue2002sound}.
+    \item Calculate the amplitudes $\Delta C_L$ , $\Delta C_D$, and the Strouhal number, and compare your results with experimental data~\cite{inoue2002sound}.
 \end{enumerate}
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1107,7 +1107,7 @@ Plotting $C_L$ or $C_D$ as a function of time demonstrates that the shedding amp
 \end{paraviewnote}
 
 \section{Problem Description}
-In this tutorial will demonstrate how to simulate transonic viscous flow past a three-dimensional wing. We will use the ONERA M6 again, and detailed information is given in the previous tutorial for inviscid flow in Chapter\ref{ch:Inviscid ONERA M6}. We will use the Reynolds-Averaged Navier-Stokes (RANS) equations and compare the Spalar-Almaras (SA) and $k-\omega$ Shear Stress Transport (SST) turbulence models for the eddy viscosity. The computational domain uses a structured mesh with 43,008 hexahedral. Note that this mesh is relatively coarse to allow for relatively small computation mesh. The flow specifications are provided as follows:
+In this tutorial will demonstrate how to simulate transonic viscous flow past a three-dimensional wing. We will use the ONERA M6 again, and detailed information is given in the previous tutorial for inviscid flow in Chapter \ref{ch:Inviscid ONERA M6}. We will use the Reynolds-Averaged Navier-Stokes (RANS) equations and compare the Spalart-Almaras (SA) and $k-\omega$ Shear Stress Transport (SST) turbulence models for turbulent eddy viscosity. The computational domain uses a structured mesh with 43,008 hexahedral elements. Note that this mesh is relatively coarse to allow for relatively small computation time. The flow specifications are provided as follows:
 \begin{itemize}
     \item Temperature = 288.15 K
     \item Mach number = 0.8395
@@ -1136,7 +1136,7 @@ The next step is to copy these two files into the same directory as the SU2 exec
     \end{tabular}
 \end{table}
 
-SU2 solver will begin solving the problem and will print out the residuals at every iteration until the specified convergence criteria is reached. After this, the following output files should be generated and saved in the SU2 folder:
+SU2 will begin solving the problem and will print out the residuals at every iteration until the specified convergence criteria is reached. After this, the following output files should be generated and saved in the SU2 folder:
 \begin{itemize}
  \item \textit{flow}.vtk: The flow solution on the entire domain.
  \item \textit{force\_breakdown}.dat: Forces and moment on the wing.

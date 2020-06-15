@@ -993,36 +993,183 @@ as shown in Figure~\ref{fig:riem_acoustics_example_u0}, we can determine the mid
 	\caption{Example solution with values for the linear acoustics case.}
 	\label{fig:riem_acoustics_example}
 \end{figure}
-% \section{Nonlinear Hyperbolic Problems}
-% Consider the following one-dimensional scalar conservation law
-% \begin{equation}
-% 	\frac{\partial u}{\partial t} + \frac{\partial f(u)}{\partial x} = 0,
-% \end{equation}
-% where $f(u)$ is the flux. In previous sections, we have considered a linear flux $f(u)=\alpha u$, which yields the advection equation. Now, consider a nonlinear flux $f(u)=\frac{1}{2}u^2$. Now, the solution is not expected to simply translate, but also various parts of the solution will deform, leading to the generation of shocks. This is one of our simplified system of equations, which we have referred to as the inviscid Burgers equation. 
+\section{Nonlinear Hyperbolic Problems}
+Consider the following one-dimensional scalar conservation law
+\begin{equation}
+	\frac{\partial u}{\partial t} + \frac{\partial f(u)}{\partial x} = 0,
+\end{equation}
+where $f(u)$ is the flux. In previous sections, we have considered a flux of the form $f(u)=\alpha u$, which yields the linear advection equation. Now, we analyze a flux of the form $f(u)=\frac{1}{2} u^2$, which is clearly nonlinear. Replacing this flux in the conservation law yields the inviscid Burgers equation. For this problem, the solution will not only translate but will also deform, often towards the formation of shocks.
+Similar to Section~\ref{sec:linear_hyperb_problems}, we want to analyze the characteristic behaviour of this equation. In order to do this, we write the \textit{quasilinear form} of Burgers' equation
+\begin{equation}
+	\frac{\partial u}{\partial t} + u\frac{\partial u}{\partial x} = 0,
+	\label{eq:nonconserv_burgers}
+\end{equation}
+which will allow us to analyze the behaviour of the characteristic curves. Note that $f'(u) = u$. Recall that in the $x-t$ plane, we look for lines along which the solution does not change. Hence, using the chain rule for $u(x(t), t)$, we can write
+\begin{equation}
+	\frac{du}{dt} = \frac{\partial u}{\partial t} + \frac{dx}{dt}\frac{\partial u}{\partial t} = 0.
+	\label{eq:chainrule_burgers}
+\end{equation}
+If we compare Equations~\ref{eq:chainrule_burgers} and~\ref{eq:nonconserv_burgers}, it is clear that 
+\begin{equation}
+	\frac{dx}{dt} = u,
+\end{equation}
+which allows us to define the characteristic curves such that
+\begin{equation}
+	x = x_0 + u_0 t,
+	\label{eq:charact_burgers}
+\end{equation}
+where $u_0=u(x,0)$. Clearly, the slope of each characteristic line will depend on the initial value of the solution. 
 
-% Similar to Section~\ref{sec:linear_hyperb_problems}, we want to analyze the characteristic behaviour of this equation. In order to do this, we write the \textit{quasilinear form} of Burgers' equation
-% \begin{equation}
-% 	\frac{\partial u}{\partial t} + u\frac{\partial u}{\partial x} = 0,
-% 	\label{eq:nonconserv_burgers}
-% \end{equation}
-% which we will use to analyze the characteristic curves. Note that $f'(u) = u$. Recall that in the $x\times t$ plane, we look for lines along which the solution does not change. Hence, using the chain rule for $u(x(t), t)$, we can write
-% \begin{equation}
-% 	\frac{du}{dt} = \frac{\partial u}{\partial t} + \frac{dx}{dt}{\partial t} = 0.
-% 	\label{eq:chainrule_burgers}
-% \end{equation}
-% If we compare Equations~\ref{eq:chainrule_burgers} and~\ref{eq:nonconserv_burgers}, it is clear that 
-% \begin{equation}
-% 	\frac{dx}{dt} = u,
-% \end{equation}
-% where the characteristic curve equation is
-% \begin{equation}
-% 	x = x_0 + ut.
-% \end{equation}
-% Since $u$ changes in time, so will the slope of the curves. Clearly, the speed of the solution is the solution itself. Hence, we expect larger values of the solution to travel faster than lower values of the solution. 
-% \subsection{Nonlinear Hyperbolic Systems}
-% \subsection{The Riemann Problem}
-% \subsection{An Exact Riemann Solver for the Euler Equations}
-% \subsection{Approximate Riemann Solvers}
+Consider the following example, illustrated in Figure~\ref{}
+\begin{equation}
+	u(x,0) = 
+	\begin{cases}
+		1 & \text{if}~x < 0,\\
+		1-x & \text{if}~0<x<1 \\ 
+		0 & \text{if}~x>1
+	\end{cases}
+\end{equation}
+according to Equation~\ref{eq:charact_burgers}, we can draw the characteristic lines in Figure~\ref{}. Observe that at $(x,t) = (1,1)$, multiple characteristic lines intersect for a single value of $u$. This point is a consequence of the formation a shock wave, which is a discontinuous characteristic of the Burgers equation. At $t=1$, the resulting form of the solution can be seen in Figure~\ref{}. 
+
+It is important to note that the differential form of the conservation law does not hold at discontinuities. Recall that the differential form of the conservation laws is derived from the assumption of smooth solutions and Green's theorem. In the problem states above, after the shock is formed, the method of characteristic breaks, and now we need to find the speed of the shock, which now simply advects with a speed that depends on the variables on both sides of the discontinuity. Consider the integral form of the conservation law applied to a finite region in the $(x,t)$ plane where the shock has already formed as shown in Figure~\ref{}. This is given by
+\begin{equation}
+	\frac{\partial}{\partial t} \int_{x_L}^{x_R} u(x,t) dx + [f(u_R) - f(u_L)] = 0.
+	\label{eq:integral_cl_rankinehugoniot}
+\end{equation}
+Assume constant values of $u$ on the left and right side of the discontinuity, hence we can rewrite Equation~\ref{eq:integral_cl_rankinehugoniot}
+\begin{equation}
+	\frac{u(x_R,t)-u(x_L,t)}{\Delta t} \Delta x + f(u_R)-f(u_L) = 0,
+\end{equation}
+which in the limit of $\Delta t\rightarrow 0$ helps us rewrite 
+\begin{equation}
+	\frac{dx}{dt} = \frac{f(u_R)-f(u_L)}{u_R-u_L}.
+\end{equation}
+Note in Figure~\ref{} that $\frac{dx}{dt}$ represents the speed of the discontinuity, which leads to the \textit{Rankine Hugoniot relation} 
+\begin{equation}
+	s = \frac{f(u_R)-f(u_L)}{u_R-u_L}.
+\end{equation}
+For the Burgers equation with $f(u)=u^2/2$, we find that the shock speed is given by
+\begin{equation}
+	s = \frac{1}{2} \frac{\left(u_R^2 - u_L^2\right)}{u_R-u_L} = \frac{1}{2} \left(u_L + u_R\right).
+\end{equation}
+For the example in Figure~\ref{}, the shock speed is then given by $s=\frac{1}{2}\left(0+1\right)=\frac{1}{2}$. 
+
+Now, consider instead the following initial conditions
+\begin{equation}
+	u(x,0) = 
+	\begin{cases}
+		-1 & \text{if}~x < 0,\\
+		1 & \text{if}~0<x<1 
+	\end{cases}
+\end{equation}
+where the charactetistic lines do not intersect, and instead look like those in Figure~\ref{}. However, we still need to determine the shape of the curves in the star region. It turns out that the solution to this problem may not be unique, and two possible solutions are shown in Figures~\ref{}, corresponding to an expansion shock and a rarefaction wave, respectively. The expansion shock is also known as an entropy-violating shock, since it shows that information comes out of the discontinuity. This is in fact not what happens in the physical world, where the flow is highly compressed into a very thin layer known as a very thin layer. Despite the solution in Figure~\ref{} being mathematically correct, we are only interested in the physical solution. Hence a shock wave is only considered physical if the entropy condition is met
+\begin{equation}
+	f'(u_L) > s > f'(u_R).
+\end{equation}
+This means that the permissible solution to this example is only that in Figure~\ref{}. This condition is very important and is essential for the development of numerical schemes. 
+
+\subsection{Nonlinear Hyperbolic Systems}
+The one-dimensional Euler Equations can be written in vector form such that
+\begin{equation}
+	\frac{\partial \vec u}{\partial t} + \frac{\partial  \vec{F}}{\partial x} = 0,
+\end{equation}
+where
+\begin{equation}
+	\vec u = \begin{bmatrix}
+		u_1 \\ u_2 \\ u_3
+	\end{bmatrix}
+	= 
+	\begin{bmatrix}
+		\rho \\ \rho v \\ \rho E
+	\end{bmatrix}
+	\quad\quad
+	\vec F = 
+	\begin{bmatrix}
+		f_1 \\ f_2 \\ f_3
+	\end{bmatrix}
+	= 
+	\begin{bmatrix}
+		\rho v \\ \rho v^2 + P \\ v(\rho E + p)
+	\end{bmatrix}
+\end{equation}
+where $\rho$ is density, $v$ is velocity and $E$ is the specific energy. Recall that the speed of sound is given by
+\begin{equation}
+	c = \sqrt{\frac{\gamma p}{\rho}}
+\end{equation}
+We can write the Euler equations in quasilinear form 
+\begin{equation}
+	\frac{\partial \vec u}{\partial t} + A(\vec u) \frac{\partial \vec u}{\partial x} = 0,
+\end{equation}
+where $A(u)$ is the jacobian matrix given by
+\begin{equation}
+	A(u) = \frac{d\vec F}{d \vec u} =
+	\begin{bmatrix}
+	\frac{\partial f_1}{\partial u_1} & \frac{\partial f_1}{\partial u_2} & \frac{\partial f_1}{\partial u_3} \\
+	\frac{\partial f_2}{\partial u_1} & \frac{\partial f_2}{\partial u_2} & \frac{\partial f_2}{\partial u_3} \\
+	\frac{\partial f_3}{\partial u_1} & \frac{\partial f_3}{\partial u_2} & \frac{\partial f_3}{\partial u_3} \\
+	\end{bmatrix},
+\end{equation}
+To determine the Jacobian of the flux vector, we write the Euler fluxes in terms of the conserved variables
+\begin{equation}
+	\vec F = 
+	\begin{bmatrix}
+		f_1 \\ f_2 \\ f_3
+	\end{bmatrix}
+	= 
+	\begin{bmatrix}
+		u_2 \\ u_2^2/u_1 + (\gamma-1)(u_3-u_2^2/2 u_1) \\ u_3 \frac{u_2}{u_1} \gamma - \frac{u_2^3}{u_1^2}\frac{(\gamma-1)}{2} 
+	\end{bmatrix}.
+\end{equation}
+This yields 
+\begin{align}
+	A(\vec u) &= 
+	\begin{bmatrix}
+		0 & 1 & 0 \\
+		\frac{1}{2}(3-\gamma)\left(\frac{u_2}{u_1}\right)^2 & (3-\gamma)\left(\frac{u_2}{u_1}\right) & \gamma-1 \\
+		(\gamma-1) \left(\frac{u_2}{u_1}\right)^2 - \gamma \frac{u_2 u_3}{u_1^2} & \gamma \frac{u_3}{u_1}-\frac{3}{2}(\gamma-1)\left(\frac{u_2}{u_1}\right)^2 & \gamma \frac{u_2}{u_1}
+	\end{bmatrix}\\
+	&= 
+	\begin{bmatrix}
+		0 & 1 & 0 \\
+		\frac{1}{2} (\gamma-3)v^2 & (3-\gamma)v & \gamma-1 \\ 
+		\frac{1}{2} (\gamma-2) v^3 - c^2 \frac{u}{\gamma-1} & \frac{1}{2}\frac{3-2\gamma}{2}v^2 + \frac{c^2}{\gamma-1} & \gamma v
+		\label{eq:eulerjacobian}
+	\end{bmatrix}
+\end{align}
+We have stated in previous sections that hyperbolic equations can be thought of as a superposition of travelling waves, with wavespeeds the eigenvectors of the Jacobian matrix. It turns out that for the system in Equation~\ref{eq:eulerjacobian}, the eigenvalues are 
+\begin{equation}
+	\lambda_1 = v - c, \quad\quad \lambda_2 = v, \quad\quad \lambda_3 = v + c,
+\end{equation}
+which shows that the Euler equations can be thought of a superposition of a left-travelling sound wave, a momentum wave and a right-going sound wave, which makes sense since the sound propagation happens in all directions, and in this one-dimensional case, two. The corresponding eigenvectors are 
+\begin{equation}
+	q_1 = \begin{bmatrix}
+		1 \\ v - c \\ \frac{E + p}{\rho} - vc
+	\end{bmatrix},
+	\quad\quad
+	q_2 = \begin{bmatrix}
+		1 \\ v \\ \frac{v^2}{2}
+	\end{bmatrix},
+	\quad\quad
+	q_3 = \begin{bmatrix}
+		1 \\ v + c \\ \frac{E+p}{\rho} + vc
+	\end{bmatrix}
+\end{equation}
+\subsection{The Riemann Problem}
+Consider a tube with a thin membrane at $x=0$ separating two different gases initially at rest ($v_L=v_R=0$) as shown in Figure~\ref{}. Note it can also be the same gas at different pressures. At time $t$, the thin membrane is ruptured, causing the gas in the region of high pressure move towards the low-pressure side looking for thermodynamic equilibrium. This case is known as \textit{Sod's shock tube} and is the physical equivalent to the Riemann problem in gas dynamics.
+
+It can be shown that the solution to this problem consists of a contact discontinuity associated with $\lambda_2$, and a shock or a rarefaction wave associated with $\lambda_1,~\lambda_3$, which we cannot identify a priori. Assume that $\lambda_1$ is the rarefaction wave and $\lambda_3$ is the shock wave, then the characteristic curves can be seen in Figure~\ref{}. For a rarefaction wave, we know that the change in the solution is smooth, hence we can state that
+\begin{equation}
+	\lambda_1(u_L) \leq \lambda_1(u^*_L).
+\end{equation}
+Across the shock, which moves into the lower pressure region, we must satisfy the entropy condition
+\begin{equation}
+	\lambda_3(u^*_R) < s_3 < \lambda_3(u_R,)
+\end{equation}
+where $s_3$ is the shock speed. Finally, for the contact discontinuity associated with $\lambda_2$, it can be shown that it moves at the speed of $s_2$. Hence 
+\begin{equation}
+	\lambda_2(u^*_L) = \lambda_2(u^*_R) = s_2.
+\end{equation}
+
 
 \chapter{Consistency, Stability, Convergence}
 Now that we have derived a few different schemes for solving linear advection, Burgers equation, and linear diffusion, we should now ask ourselves whether they will give us accurate predictions, and are there any restrictions on when they can be used. We have already discussed the importance of order of accuracy, which governs the rate at which the error will converge to zero. Now we will introduce the concepts of consistency, stability, and convergence. If we can prove that our numerical scheme satisfies all three of these properties we can be confident that it is promising approach for the Euler or Navier-Stokes equations. In the current section we will explore these properties in the context of finite difference methods, but the exact same steps can be taken to check whether a finite volume method is suitable or not. Some additional references on these topics include~\cite{hirschNumericalComputationInternal2007a,andersonComputationalFluidMechanics2016}.

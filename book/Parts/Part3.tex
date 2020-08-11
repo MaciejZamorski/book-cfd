@@ -730,7 +730,7 @@ where $u_L$ and $u_R$ are piecewise constants and $u_L\neq u_R$. Based on our pr
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=0.5\linewidth]{Pictures/riem_lsc_characteristics}
-	\caption{Chacteristic line along which discontinuity propagates}
+	\caption{Characteristic line along which discontinuity propagates}
 	\label{fig:riem_charact_scalar}
 \end{figure}
 \begin{eqBox}
@@ -998,75 +998,138 @@ Consider the following one-dimensional scalar conservation law
 \begin{equation}
 	\frac{\partial u}{\partial t} + \frac{\partial f(u)}{\partial x} = 0,
 \end{equation}
-where $f(u)$ is the flux. In previous sections, we have considered a flux of the form $f(u)=\alpha u$, which yields the linear advection equation. Now, we analyze a flux of the form $f(u)=\frac{1}{2} u^2$, which is clearly nonlinear. Replacing this flux in the conservation law yields the inviscid Burgers equation. For this problem, the solution will not only translate but will also deform, often towards the formation of shocks.
-Similar to Section~\ref{sec:linear_hyperb_problems}, we want to analyze the characteristic behaviour of this equation. In order to do this, we write the \textit{quasilinear form} of Burgers' equation
+where $f(u)$ is the flux. Previously, we had considered a flux of the form $f(u)=\alpha u$ corresponding to linear advection. In this section, we analyze a nonlinear flux function of the form $f(u)=\frac{1}{2} u^2$, which leads to the inviscid Burgers equation. For this type of problem, $u$ is expected not only to translate but also to deform towards the formation of shocks. Similar to Section~\ref{sec:linear_hyperb_problems}, we want to analyze the characteristic lines for this conservation law. Hence, we write the \textit{quasilinear form} of Burgers' equation
 \begin{equation}
 	\frac{\partial u}{\partial t} + u\frac{\partial u}{\partial x} = 0,
 	\label{eq:nonconserv_burgers}
 \end{equation}
-which will allow us to analyze the behaviour of the characteristic curves. Note that $f'(u) = u$. Recall that in the $x-t$ plane, we look for lines along which the solution does not change. Hence, using the chain rule for $u(x(t), t)$, we can write
+where we note that $f'(u) = u$. Recall that in the $x-t$ plane, we look for lines along which the solution remains unchanged. Using the chain rule for $u(x(t), t)$, we obtain
 \begin{equation}
 	\frac{du}{dt} = \frac{\partial u}{\partial t} + \frac{dx}{dt}\frac{\partial u}{\partial t} = 0.
 	\label{eq:chainrule_burgers}
 \end{equation}
-If we compare Equations~\ref{eq:chainrule_burgers} and~\ref{eq:nonconserv_burgers}, it is clear that 
+Comparing Equations~\ref{eq:chainrule_burgers} and~\ref{eq:nonconserv_burgers}, we observe that
 \begin{equation}
-	\frac{dx}{dt} = u,
+	\frac{dx}{dt} = u.
 \end{equation}
-which allows us to define the characteristic curves such that
+Then, the characteristic curves are given by
 \begin{equation}
 	x = x_0 + u_0 t,
 	\label{eq:charact_burgers}
 \end{equation}
-where $u_0=u(x,0)$. Clearly, the slope of each characteristic line will depend on the initial value of the solution. 
-
-Consider the following example, illustrated in Figure~\ref{}
+where $u_0=u(x,0)$ represents the slope of each line, showing that these slopes depend on the initial value of the solution. Note that since $u$ is the characteristic speed of the problem and $f$ is an increasing function, higher values of the solution will travel faster than smaller values of $u$. To illustrate this, consider the following example, as shown in Figure~\ref{fig:nslcexa}
 \begin{equation}
 	u(x,0) = 
 	\begin{cases}
 		1 & \text{if}~x < 0,\\
-		1-x & \text{if}~0<x<1 \\ 
-		0 & \text{if}~x>1
+		1-x & \text{if}~0<x<1, \\ 
+		0 & \text{if}~x>1.
 	\end{cases}
+	\label{eq:nlscex0}
 \end{equation}
-according to Equation~\ref{eq:charact_burgers}, we can draw the characteristic lines in Figure~\ref{}. Observe that at $(x,t) = (1,1)$, multiple characteristic lines intersect for a single value of $u$. This point is a consequence of the formation a shock wave, which is a discontinuous characteristic of the Burgers equation. At $t=1$, the resulting form of the solution can be seen in Figure~\ref{}. 
 
-It is important to note that the differential form of the conservation law does not hold at discontinuities. Recall that the differential form of the conservation laws is derived from the assumption of smooth solutions and Green's theorem. In the problem states above, after the shock is formed, the method of characteristic breaks, and now we need to find the speed of the shock, which now simply advects with a speed that depends on the variables on both sides of the discontinuity. Consider the integral form of the conservation law applied to a finite region in the $(x,t)$ plane where the shock has already formed as shown in Figure~\ref{}. This is given by
+\begin{figure}[htbp]
+	\centering
+	\begin{subfigure}[b]{0.49\linewidth}
+	\includegraphics[width=\linewidth]{Pictures/nonlinear_scalar_example_u0}
+	\caption{$u(x,0)$}
+	\label{fig:nslcexa}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.49\linewidth}
+		\includegraphics[width=\linewidth]{Pictures/nonlinear_scalar_example_uf}
+		\caption{$u(x,1)$}
+	\label{fig:nslcexb}
+	\end{subfigure}
+	\caption{Solution at $t=0$ and $t=1$ for Equation~\ref{eq:nlscex0}}
+	\label{fig:nslcex}
+\end{figure}
+
+Based on the previous discussion, we expect the region $x<1$ to move towards the right. Since the solution after $x=1$ remains stationary, then $u$ will accumulate towards $x=1$ until a shock has formed. Let us now visualize this via the method of characteristics. Using Equation~\ref{eq:charact_burgers} at different $x$-locations, we draw the characteristic lines in Figure~\ref{fig:nlscchar}. Observe that multiple characteristic lines intersect for a single value of $u$ at $(x,t) = (1,1)$. This is a consequence of the formation of a shock wave, a discontinuous characteristic of the Burgers equation. The resulting form of the solution can be seen in Figure~\ref{fig:nslcexb} at $t=1$. 
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.45\linewidth]{Pictures/nonlinear_scalar_characteristics}
+	\caption{Characteristic lines for Equation~\ref{eq:nlscex0}.}
+	\label{fig:nlscchar}
+\end{figure}
+After $t=1$, the method of characteristics breaks, and instead, the discontinuity is expected only to translate. The speed at which the translation occurs depends on the values of both sides of the discontinuity. Consider the integral form of the conservation law applied to a finite region in the $(x,t)$ plane where the shock has already formed similar to Figure~\ref{fig:riem_charact_scalar}. This is given by
 \begin{equation}
 	\frac{\partial}{\partial t} \int_{x_L}^{x_R} u(x,t) dx + [f(u_R) - f(u_L)] = 0.
 	\label{eq:integral_cl_rankinehugoniot}
 \end{equation}
-Assume constant values of $u$ on the left and right side of the discontinuity, hence we can rewrite Equation~\ref{eq:integral_cl_rankinehugoniot}
+Assuming constant values of $u$ on the left and right side of the discontinuity, we can rewrite Equation~\ref{eq:integral_cl_rankinehugoniot}
 \begin{equation}
 	\frac{u(x_R,t)-u(x_L,t)}{\Delta t} \Delta x + f(u_R)-f(u_L) = 0,
 \end{equation}
-which in the limit of $\Delta t\rightarrow 0$ helps us rewrite 
+which in the limit of $\Delta t\rightarrow 0$ becomes
 \begin{equation}
-	\frac{dx}{dt} = \frac{f(u_R)-f(u_L)}{u_R-u_L}.
+	s = \frac{dx}{dt} = \frac{f(u_R)-f(u_L)}{u_R-u_L},
 \end{equation}
-Note in Figure~\ref{} that $\frac{dx}{dt}$ represents the speed of the discontinuity, which leads to the \textit{Rankine Hugoniot relation} 
-\begin{equation}
-	s = \frac{f(u_R)-f(u_L)}{u_R-u_L}.
-\end{equation}
-For the Burgers equation with $f(u)=u^2/2$, we find that the shock speed is given by
+where $s$ is the shock speed. This equation is known as the Rankine-Hugoniot relation. For the Burgers equation with $f(u)=u^2/2$, we find that the shock speed is given by
 \begin{equation}
 	s = \frac{1}{2} \frac{\left(u_R^2 - u_L^2\right)}{u_R-u_L} = \frac{1}{2} \left(u_L + u_R\right).
 \end{equation}
-For the example in Figure~\ref{}, the shock speed is then given by $s=\frac{1}{2}\left(0+1\right)=\frac{1}{2}$. 
+Hence, the shock speed can be found to be $s=\frac{1}{2}\left(0+1\right)=\frac{1}{2}$ for the considered problem in Equation~\ref{eq:nlscex0}. 
 
-Now, consider instead the following initial conditions
+Now, consider the problem where the initial conditions are given by
 \begin{equation}
 	u(x,0) = 
 	\begin{cases}
-		-1 & \text{if}~x < 0,\\
-		1 & \text{if}~0<x<1 
+		0 & \text{if}~x < 0,\\
+		1 & \text{if}~x > 0. 
 	\end{cases}
+	\label{eq:nlscex00}
 \end{equation}
-where the charactetistic lines do not intersect, and instead look like those in Figure~\ref{}. However, we still need to determine the shape of the curves in the star region. It turns out that the solution to this problem may not be unique, and two possible solutions are shown in Figures~\ref{}, corresponding to an expansion shock and a rarefaction wave, respectively. The expansion shock is also known as an entropy-violating shock, since it shows that information comes out of the discontinuity. This is in fact not what happens in the physical world, where the flow is highly compressed into a very thin layer known as a very thin layer. Despite the solution in Figure~\ref{} being mathematically correct, we are only interested in the physical solution. Hence a shock wave is only considered physical if the entropy condition is met
+In this case, the characteristic lines do not intersect and can be shown in Figure~\ref{fig:nlscex2}. 
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.4\linewidth]{Pictures/nonlinear_scalar_entropycond_0}
+	\caption{Characteristic lines for Equation~\ref{eq:nlscex00}.}
+	\label{fig:nlscex2}
+\end{figure}
+While these curves do not cross, we are missing information in the star region.  Consider a solution of the form
 \begin{equation}
-	f'(u_L) > s > f'(u_R).
+	u(x,t) = 
+	\begin{cases}
+		0 & \text{if}~x < t/2,\\
+		1 & \text{if}~x > t/2,
+	\end{cases}
+	\label{eq:nlscsol1}
 \end{equation}
-This means that the permissible solution to this example is only that in Figure~\ref{}. This condition is very important and is essential for the development of numerical schemes. 
+illustrated in Figure~\ref{fig:expansionshock}. While Equation~\ref{eq:nlscsol1} satisfies the Rankine-Hugoniot relation, this solution is known as an expansion shock, where information appears to come out of a discontinuity. Clearly, from a physical point of view, this violates the entropy condition. In a physical shock, characteristics are expected to go into the discontinuity as time advances. Hence, while Equation~\ref{eq:nlscsol1} is a mathematical solution, it is not an entropy solution. Consider instead 
+\begin{figure}[htbp]
+	\centering
+	\begin{subfigure}[b]{0.4\linewidth}
+		\includegraphics[width=\linewidth]{Pictures/nonlinear_scalar_entropycond_1}
+	\caption{Expansion shock}
+	\label{fig:expansionshock}
+	\end{subfigure}
+	~
+	\begin{subfigure}[b]{0.4\linewidth}
+		\includegraphics[width=\linewidth]{Pictures/nonlinear_scalar_entropycond_2}
+		\caption{Rarefaction fan}
+	\label{fig:rarefactionfan}
+	\end{subfigure}
+	\caption{Mathematically admissible solutions to problem in Equation~\ref{eq:nlscex00}}
+	\label{fig:entropycond}
+\end{figure}
+\begin{equation}
+	u(x,t) = 
+	\begin{cases}
+		0 & \text{if}~x \leq t/2,\\
+		\frac{x}{t} & \text{if}~0 \leq x \leq t, \\
+		1 & \text{if } x \geq t,
+	\end{cases}
+	\label{eq:nlscsol1}
+\end{equation}
+which is known as a rarefaction wave, shown in Figure~\ref{fig:rarefactionfan}. Note that in this case, this is a smooth solution and it is physically admissible. 
+
+As we have observed, even with smooth initial conditions, nonlinear equations can develop discontinuities. For a general conservation law, we say a solution is a classical solution if it is continuously differentiable as required per the partial differential equation and if it satisfies it. However, we must expand the range of admissible solutions to include those that may not be differentiable, such that we can deal with the formation of shocks. This group of $u$ is known as weak solutions. 
+
+As we observed in the second problem, weak solutions need not be unique, and hence we must add a constraint to single out those relevant in the physical world.  Hence, to identify physical solutions, we consider a shock wave to be admissible only if the following entropy condition is satisfied 
+\begin{equation}
+	f'(u_L) > s > f'(u_R),
+\end{equation}
+which is consistent with the choice of Equation~\ref{eq:nlscsol1} as the physically relevant solution in our second example.
 
 \subsection{Nonlinear Hyperbolic Systems}
 The one-dimensional Euler Equations can be written in vector form such that
@@ -1133,8 +1196,8 @@ This yields
 		0 & 1 & 0 \\
 		\frac{1}{2} (\gamma-3)v^2 & (3-\gamma)v & \gamma-1 \\ 
 		\frac{1}{2} (\gamma-2) v^3 - c^2 \frac{u}{\gamma-1} & \frac{1}{2}\frac{3-2\gamma}{2}v^2 + \frac{c^2}{\gamma-1} & \gamma v
-		\label{eq:eulerjacobian}
 	\end{bmatrix}
+	\label{eq:eulerjacobian}
 \end{align}
 We have stated in previous sections that hyperbolic equations can be thought of as a superposition of travelling waves, with wavespeeds the eigenvectors of the Jacobian matrix. It turns out that for the system in Equation~\ref{eq:eulerjacobian}, the eigenvalues are 
 \begin{equation}
@@ -1154,6 +1217,7 @@ which shows that the Euler equations can be thought of a superposition of a left
 		1 \\ v + c \\ \frac{E+p}{\rho} + vc
 	\end{bmatrix}
 \end{equation}
+The eigenvalues of the Euler system are distinct and that a complete set of eigenvectors can be found, hence the Euler equations are strictly hyperbolic. 
 \subsection{The Riemann Problem}
 Consider a tube with a thin membrane at $x=0$ separating two different gases initially at rest ($v_L=v_R=0$) as shown in Figure~\ref{}. Note it can also be the same gas at different pressures. At time $t$, the thin membrane is ruptured, causing the gas in the region of high pressure move towards the low-pressure side looking for thermodynamic equilibrium. This case is known as \textit{Sod's shock tube} and is the physical equivalent to the Riemann problem in gas dynamics.
 
@@ -1169,8 +1233,45 @@ where $s_3$ is the shock speed. Finally, for the contact discontinuity associate
 \begin{equation}
 	\lambda_2(u^*_L) = \lambda_2(u^*_R) = s_2.
 \end{equation}
+Solving the exact Riemann problem for the Euler equations turns out to be very expensive. In the case of linear equations, the Jacobian matrix is constant. However, as shown in the previous section, this matrix depends on the value of the solution. Hence, computing the wave speeds introduces a large computational cost. In addition, we typically require the solution of nonlinear systems to compute the Riemann pressure. For more details on the exact Riemann solution for the Euler equations, consult~\cite{levequeFiniteVolumeMethods2002}. 
+\subsection{An approximate Riemann solver for the Euler Equations}
+A more cost-effective approach is the use of approximate Riemann solvers. In this section, we discuss the Riemann solver of Roe. Recall the quasilinear form of a conservation law
+\begin{equation}
+	\frac{\partial \vec u}{\partial t} + A(\vec u) \frac{\partial \vec u}{\partial x} = 0.
+\end{equation}
+For the Euler equations, $A(\vec u)$ is given by Equation~\ref{eq:eulerjacobian}. Note that the eigenvalues of $A$ depend on the value of the solution and hence vary in time. We are interested in finding solutions at the interfaces between cells, where the problem can be written
+\begin{equation}
+	\frac{\partial \vec u}{\partial t} + \frac{\partial \vec f}{\partial x} = 0,
+\end{equation}
+with initial conditions
+\begin{equation}
+	\vec u(x, 0) =
+	\begin{cases}
+		\vec u_L & \text{if } x<0,\\
+		\vec u_R & \text{if } x>0,
+	\end{cases}
+\end{equation}
+Roe proposed considering instead a constant Jacobian matrix $\tilde A$, which is required to yield a system which is
+\begin{itemize}
+	\item Hyperbolic, according to Equation~\ref{},
+	\item Consistent with the exact problem $\tilde A (\vec u, \vec u) = A(\vec u)$,
+	\item Conservative across discontinuities $\vec f(\vec u_R) - \vec f (\vec u_L) = \tilde A(\vec u_R - \vec u_L) $
+\end{itemize}
+Now, consider a numerical scheme of the Godunov form
+\begin{equation}
+	\vec u^{t+1}_i = \vec u^t_i - \frac{\Delta t}{\Delta x} \left(\vec f_{i+1/2} - \vec f_{i-1/2}\right) 
+\end{equation}
+where $f_{i+1/2}$ is a numerical flux at the interface between cell $\Omega_i$ and $\Omega_{i+1}$ and has the form
+\begin{equation}
+	\vec f_{i+1/2} = \vec f (\vec u_{i+1/2}),
+\end{equation}
+To approximate the flux at the interface, we need to compute the intermediate states in the star region.
 
-
+\begin{align}
+	\tilde u &= \frac{\sqrt{\rho_L} u_L + \sqrt{\rho_R} u_R}{\sqrt{\rho_L} + \sqrt{\rho_R}},\\
+	\tilde H &= \frac{\sqrt{\rho_L} H_L + \sqrt{\rho_R} H_R}{\sqrt{\rho_L} + \sqrt{\rho_R}},\\
+	\tilde a &= \sqrt{(\gamma-1)(\tilde H - \frac{1}{2} \tilde u^2)}
+\end{align}
 \chapter{Consistency, Stability, Convergence}
 Now that we have derived a few different schemes for solving linear advection, Burgers equation, and linear diffusion, we should now ask ourselves whether they will give us accurate predictions, and are there any restrictions on when they can be used. We have already discussed the importance of order of accuracy, which governs the rate at which the error will converge to zero. Now we will introduce the concepts of consistency, stability, and convergence. If we can prove that our numerical scheme satisfies all three of these properties we can be confident that it is promising approach for the Euler or Navier-Stokes equations. In the current section we will explore these properties in the context of finite difference methods, but the exact same steps can be taken to check whether a finite volume method is suitable or not. Some additional references on these topics include~\cite{hirschNumericalComputationInternal2007a,andersonComputationalFluidMechanics2016}.
 

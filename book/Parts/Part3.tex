@@ -1132,7 +1132,15 @@ As we observed in the second problem, weak solutions need not be unique, and hen
 which is consistent with the choice of Equation~\ref{eq:nlscsol1} as the physically relevant solution in our second example.
 
 \subsection{Nonlinear Hyperbolic Systems}
-The one-dimensional Euler Equations can be written in vector form such that
+Applications of engineering interest are typically described by a system of conservation laws 
+\begin{equation}
+	\frac{\partial \vec u}{\partial t} + \frac{\partial \vec f (\vec u)}{\partial x} = 0,
+\end{equation}
+where $\vec u$ is the vector of conserved variables and $\vec f(\vec u)$ is the vector of fluxes. In Section~\ref{sec:linear_hyper_systems}, we stated that a system of conservation laws is said to be hyperbolic if the flux Jacobian matrix has real eigenvalues and a complete set of linearly independnt eigenvectors. Previously, we considered constant acobian matrices that led to a set of linear equations. In this section, we consider problems whose jJacobian matrices have the form 
+\begin{equation}
+	A(\vec u) = \frac{\partial \vec f()\vec u)}{\partial \vec u},
+\end{equation}
+and hence both its eigenvalues and eigenvectors depend on the value of the solution, which in turn depends on time. An example of a hyperbolic system is the Euler equations. In one dimension, the system can be written in vector form such that
 \begin{equation}
 	\frac{\partial \vec u}{\partial t} + \frac{\partial  \vec{F}}{\partial x} = 0,
 \end{equation}
@@ -1206,7 +1214,7 @@ We have stated in previous sections that hyperbolic equations can be thought of 
 which shows that the Euler equations can be thought of a superposition of a left-travelling sound wave, a momentum wave and a right-going sound wave, which makes sense since the sound propagation happens in all directions, and in this one-dimensional case, two. The corresponding eigenvectors are 
 \begin{equation}
 	q_1 = \begin{bmatrix}
-		1 \\ v - c \\ \frac{E + p}{\rho} - vc
+		1 \\ v - c \\ H - vc
 	\end{bmatrix},
 	\quad\quad
 	q_2 = \begin{bmatrix}
@@ -1214,64 +1222,167 @@ which shows that the Euler equations can be thought of a superposition of a left
 	\end{bmatrix},
 	\quad\quad
 	q_3 = \begin{bmatrix}
-		1 \\ v + c \\ \frac{E+p}{\rho} + vc
-	\end{bmatrix}
+		1 \\ v + c \\ H + vc
+	\end{bmatrix},
 \end{equation}
-The eigenvalues of the Euler system are distinct and that a complete set of eigenvectors can be found, hence the Euler equations are strictly hyperbolic. 
-\subsection{The Riemann Problem}
-Consider a tube with a thin membrane at $x=0$ separating two different gases initially at rest ($v_L=v_R=0$) as shown in Figure~\ref{}. Note it can also be the same gas at different pressures. At time $t$, the thin membrane is ruptured, causing the gas in the region of high pressure move towards the low-pressure side looking for thermodynamic equilibrium. This case is known as \textit{Sod's shock tube} and is the physical equivalent to the Riemann problem in gas dynamics.
+where $H$ is the total enthalpy defined as
+\begin{equation}
+	H = \frac{E + p}{\rho}.
+\end{equation} 
+The eigenvalues of the Euler system are distinct and that a complete set of eigenvectors can be found, hence the Euler equations are strictly hyperbolic.  The nonlinearity of the Euler equations makes the study of the Riemann problem much more challenging than for the linear systems. In the next section, we briefly discuss some important considerations to analyze the Riemann problem for the Euler equations.
+\subsection{The Riemann Problem for the Euler equations}
+Consider a tube with a thin membrane at $x=0$ separating two different gases, each with a given density $\rho$ velocity $v$, and pressure $p$ as shown in Figure~\ref{fig:shocktube}.  Initially, both gases are considered at rest ($v_L=v_R=0$). Note it can also be the same gas at different pressures. At time $t$, the thin membrane is ruptured, causing the gas in the region of high pressure move towards the low-pressure side looking for thermodynamic equilibrium. This case is known as \textit{Sod's shock tube} and is the physical equivalent to the Riemann problem in gas dynamics.
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.6\linewidth]{Pictures/sod_shock_tube}
+	\caption{Sod's shock-tube problem}
+	\label{fig:shocktube}
+\end{figure}
 
-It can be shown that the solution to this problem consists of a contact discontinuity associated with $\lambda_2$, and a shock or a rarefaction wave associated with $\lambda_1,~\lambda_3$, which we cannot identify a priori. Assume that $\lambda_1$ is the rarefaction wave and $\lambda_3$ is the shock wave, then the characteristic curves can be seen in Figure~\ref{}. For a rarefaction wave, we know that the change in the solution is smooth, hence we can state that
-\begin{equation}
-	\lambda_1(u_L) \leq \lambda_1(u^*_L).
-\end{equation}
-Across the shock, which moves into the lower pressure region, we must satisfy the entropy condition
-\begin{equation}
-	\lambda_3(u^*_R) < s_3 < \lambda_3(u_R,)
-\end{equation}
-where $s_3$ is the shock speed. Finally, for the contact discontinuity associated with $\lambda_2$, it can be shown that it moves at the speed of $s_2$. Hence 
-\begin{equation}
-	\lambda_2(u^*_L) = \lambda_2(u^*_R) = s_2.
-\end{equation}
-Solving the exact Riemann problem for the Euler equations turns out to be very expensive. In the case of linear equations, the Jacobian matrix is constant. However, as shown in the previous section, this matrix depends on the value of the solution. Hence, computing the wave speeds introduces a large computational cost. In addition, we typically require the solution of nonlinear systems to compute the Riemann pressure. For more details on the exact Riemann solution for the Euler equations, consult~\cite{levequeFiniteVolumeMethods2002}. 
-\subsection{An approximate Riemann solver for the Euler Equations}
+It can be shown that the solution to this problem consists of a contact discontinuity associated with $\lambda_2$, and a shock or a rarefaction wave associated with $\lambda_1,~\lambda_3$. Hence, four different configurations are possible solutions for the Riemann problem, all of which need to be considered when deriving an exact solution. These are shown in Figure~\ref{fig:euler_characteristics}.
+\begin{figure}[htb]
+	\centering
+	\begin{subfigure}[b]{0.35\linewidth}
+		\includegraphics[width=\linewidth]{Pictures/euler_characteristics_0.pdf}
+		\caption{}
+	\end{subfigure}~
+	\begin{subfigure}[b]{0.35\linewidth}
+		\includegraphics[width=\linewidth]{Pictures/euler_characteristics_1.pdf}
+		\caption{}
+	\end{subfigure} \\
+	\begin{subfigure}[b]{0.35\linewidth}
+		\includegraphics[width=\linewidth]{Pictures/euler_characteristics_2.pdf}
+		\caption{}
+	\end{subfigure}~
+	\begin{subfigure}[b]{0.35\linewidth}
+		\includegraphics[width=\linewidth]{Pictures/euler_characteristics_3.pdf}
+		\caption{}
+	\end{subfigure}
+	\caption{Possible wave solutions for the Euler Riemann problem}
+	\label{fig:euler_characteristics}
+\end{figure}
+
+Solving the exact Riemann problem for the Euler equations turns out to be very expensive and requires the use of iterative methods to find the pressure between the left and right states. We refer the reader to \cite{levequeFiniteVolumeMethods2002,toroRiemannSolversEvolved2006} for a detailed derivation of the exact Riemann solver for the Euler equations. 
+\subsubsection{Example}
+Consider Sod's shock tube problem with initial conditions
+\begin{align}
+	\vec u_L = 
+	\begin{bmatrix}
+		\rho_L \\ v_L \\ p_L 
+	\end{bmatrix}
+	= 
+	\begin{bmatrix}
+		1 \\ 0 \\ 1
+	\end{bmatrix},
+	\quad \text{and} \quad 
+	\vec u_R = 
+	\begin{bmatrix}
+		\rho_R \\ v_R \\ p_R
+	\end{bmatrix}
+	= 
+	\begin{bmatrix}
+		\frac{1}{8} \\ 0 \\ \frac{1}{10}
+	\end{bmatrix}.
+\end{align}
+After some amount of time, $t=0.2$, the exact solution can be seen in Figure~\ref{fig:shocktubesol}. Note that the figures are divided into five regions, which we call A, B, C, D, E, from left to right. 
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=\linewidth]{Pictures/sod_shock_tube_solution}
+	\caption{Exact solution to Sod's shock tube problem at $t=0.2$}
+	\label{fig:shocktubesol}
+\end{figure}
+\begin{itemize}
+	\item Regions A and E contain the initial left and right states, respectively.
+	\item In region B, there exists a rarefaction wave, which is a smooth transition of quantities $\rho,~v,$ and $p$. 
+	\item At the interface between regions C and D, we observe a contact discontinuity. This wave represents the effects of the initial separation travelling to the right. Across this wave, pressure and velocity remain constant, but density and quantities that depend on it contain jumps.
+	\item At the interface between regions D and E, a shock wave has formed due to the nonlinearities of the Euler equations. This shock wave travels with a speed $s$, which satisfies the Rankine-Hugoniot relationship. In this case, all considered quantities $\rho,~v$ and $p$ present discontinuous behaviour across the wave. 
+\end{itemize}
+
+\subsection{A Riemann Solver for the Euler Equations}
 A more cost-effective approach is the use of approximate Riemann solvers. In this section, we discuss the Riemann solver of Roe. Recall the quasilinear form of a conservation law
 \begin{equation}
 	\frac{\partial \vec u}{\partial t} + A(\vec u) \frac{\partial \vec u}{\partial x} = 0.
 \end{equation}
-For the Euler equations, $A(\vec u)$ is given by Equation~\ref{eq:eulerjacobian}. Note that the eigenvalues of $A$ depend on the value of the solution and hence vary in time. We are interested in finding solutions at the interfaces between cells, where the problem can be written
+For the Euler equations, $A(\vec u)$ is given by Equation~\ref{eq:eulerjacobian}. Note that the eigenvalues of $A$ depend on the value of the solution and hence vary in time. Recall that for the Euler equations, three types of waves can be expected: contact, rarefaction and shock waves. We are interested in handling the formation of the shocks. 
+Generally, we use numerical schemes with enough dissipation such that the scheme remains stable. Consider the following finite volume scheme
 \begin{equation}
-	\frac{\partial \vec u}{\partial t} + \frac{\partial \vec f}{\partial x} = 0,
+	\vec u^{t+1}_i = \vec u^t_i - \frac{\Delta t}{\Delta x} \left(\vec f_{i+1/2} - \vec f_{i-1/2}\right) 
 \end{equation}
-with initial conditions
-\begin{equation}
-	\vec u(x, 0) =
+where $\vec f_{i-1/2}$ and $\vec f_{i+1/2}$ are interface fluxes on the left and right sides of the cell, respectively, and are defined such that
+\begin{align}
+	\vec f_{i-1/2} &= \vec f (\vec u_{i-1/2}), \\
+	\vec f_{i+1/2} &= \vec f (\vec u_{i+1/2}).
+\end{align}
+Hence, at the interfaces, we need to solve a Riemann problem of the form
+\begin{align}
+	\frac{\partial \vec u}{\partial t} + \frac{\partial \vec f}{\partial x} &= 0,\\
+	\vec u(x, 0) &=
 	\begin{cases}
 		\vec u_L & \text{if } x<0,\\
 		\vec u_R & \text{if } x>0,
 	\end{cases}
-\end{equation}
+\end{align}
 Roe proposed considering instead a constant Jacobian matrix $\tilde A$, which is required to yield a system which is
 \begin{itemize}
-	\item Hyperbolic, according to Equation~\ref{},
+	\item Hyperbolic,
 	\item Consistent with the exact problem $\tilde A (\vec u, \vec u) = A(\vec u)$,
 	\item Conservative across discontinuities $\vec f(\vec u_R) - \vec f (\vec u_L) = \tilde A(\vec u_R - \vec u_L) $
 \end{itemize}
-Now, consider a numerical scheme of the Godunov form
+Following these properties, he demonstrated that the matrix can be written,
 \begin{equation}
-	\vec u^{t+1}_i = \vec u^t_i - \frac{\Delta t}{\Delta x} \left(\vec f_{i+1/2} - \vec f_{i-1/2}\right) 
+	\tilde A = 
+	\begin{bmatrix}
+		0 & 1 & 0 \\ 
+		(\gamma-1)\tilde H - \tilde u^2-\tilde c^2 & (3-\gamma)\tilde u & \gamma-1 \\
+		\frac{1}{2}\left[(\gamma-3)\tilde H - \tilde c\right] & \tilde h - (\gamma-1)\tilde u^2 & \gamma \tilde u
+	\end{bmatrix}
 \end{equation}
-where $f_{i+1/2}$ is a numerical flux at the interface between cell $\Omega_i$ and $\Omega_{i+1}$ and has the form
-\begin{equation}
-	\vec f_{i+1/2} = \vec f (\vec u_{i+1/2}),
-\end{equation}
-To approximate the flux at the interface, we need to compute the intermediate states in the star region.
-
+which is equivalent to the original matrix we derived in Equation~\ref{eq:eulerjacobian} when evaluated at the Roe average states given by 
 \begin{align}
 	\tilde u &= \frac{\sqrt{\rho_L} u_L + \sqrt{\rho_R} u_R}{\sqrt{\rho_L} + \sqrt{\rho_R}},\\
 	\tilde H &= \frac{\sqrt{\rho_L} H_L + \sqrt{\rho_R} H_R}{\sqrt{\rho_L} + \sqrt{\rho_R}},\\
-	\tilde a &= \sqrt{(\gamma-1)(\tilde H - \frac{1}{2} \tilde u^2)}
+	\tilde c &= \sqrt{(\gamma-1)(\tilde H - \frac{1}{2} \tilde u^2)}
 \end{align}
+The eigenvalues can be found to be 
+\begin{equation}
+	\tilde\lambda_1 = \tilde u - \tilde c,\quad \tilde\lambda_2 = \tilde u,\quad\tilde\lambda_3 = \tilde u + \tilde c,
+\end{equation}
+and the matrix of eigenvectors $\tilde Q=[\tilde{\vec q}_1, \tilde{\vec q}_2, \tilde{\vec q}_3]$ is given by
+\begin{equation}
+	\tilde Q = 
+	\begin{bmatrix}
+	1 & 1 & 1 \\ 
+	\tilde u - \tilde c & \tilde u & \tilde u + \tilde c \\ 
+	\tilde H - \tilde u \tilde c & \frac{1}{2} \tilde u^2 & \tilde H + \tilde u \tilde c
+	\end{bmatrix}.
+\end{equation}
+The choice of a constant Jacobian matrix allows us to apply the theory in Section~\ref{sec:linear_hyper_systems} directly. On each side of a discontinuity, the solution jump can be computed by
+\begin{equation}
+	\Delta \vec u = \left(\vec u_R - \vec u_L\right) = \sum_{i=1}^m \tilde \alpha_i \tilde{\vec q}_i,
+	\label{eq:wavestrengths}
+\end{equation}
+where $\tilde \alpha_i$ is the jump in terms of the characteristic variables and $\tilde{\vec q}_i$ is an eigenvector of $\tilde A$. Hence, from Equation~\ref{eq:wavestrengths}, we obtain a system of equations 
+\begin{equation}
+	Q\tilde{\vec \alpha} = \Delta \vec u
+\end{equation}
+and hence we obtain the coefficients $\tilde{\vec \alpha}=[\tilde\alpha_1,\tilde\alpha_2,\tilde\alpha_3]^T$. The resulting expressions for these coefficients can be written
+\begin{align}
+	\tilde \alpha_1 &= \frac{1}{2\tilde a}\left(\Delta u_1 \tilde u + \Delta u_1\tilde c - \Delta u_2 - \tilde c \tilde \alpha_2\right)\\ 
+	\tilde \alpha_2 &= \frac{\gamma-1}{\tilde c^2} \left(\Delta u_1 \tilde H - \Delta u_1 \tilde u^2 + \tilde u \Delta u_2 - \Delta u_3 \right)\\
+	\tilde \alpha_3 &= \Delta u_1 - \tilde\alpha_1 - \tilde\alpha_2
+\end{align}
+The numerical flux can then be computed using
+\begin{equation}
+	\vec f_{i\pm1/2}(\vec u_L, \vec u_R) = \frac{1}{2} \left[\vec f(\vec u_L) + \vec f(\vec u_R)\right] - \frac{1}{2} \sum_{i=1}^3 \tilde \alpha_i |\tilde \lambda_i| \Delta u_i.
+\end{equation}
+A disadvantage of the Roe solver is that it might violate the entropy condition, considering both rarefaction and shock waves as discontinuous solutions. This occurs particularly when the eigenvalues approach zero, i.e. $|\tilde u|\approx \tilde c$ Hence, an entropy fix needs to be added. One of the several existing approaches is to simply replace the $\tilde\lambda_1$ or $\tilde\lambda_3$ eigenvalues if their absolute value is smaller than a given tolerance $\delta$. The recomputed eigenvalue is found by
+\begin{equation}
+	\tilde\lambda_i = \frac{\tilde\lambda_i^2}{2\delta} + 2\delta,
+\end{equation}
+however, the value of $\delta\ll1$ needs to be typically tuned for each specific problem.
+
+\section{MUSCL Schemes}
+
 \chapter{Consistency, Stability, Convergence}
 Now that we have derived a few different schemes for solving linear advection, Burgers equation, and linear diffusion, we should now ask ourselves whether they will give us accurate predictions, and are there any restrictions on when they can be used. We have already discussed the importance of order of accuracy, which governs the rate at which the error will converge to zero. Now we will introduce the concepts of consistency, stability, and convergence. If we can prove that our numerical scheme satisfies all three of these properties we can be confident that it is promising approach for the Euler or Navier-Stokes equations. In the current section we will explore these properties in the context of finite difference methods, but the exact same steps can be taken to check whether a finite volume method is suitable or not. Some additional references on these topics include~\cite{hirschNumericalComputationInternal2007a,andersonComputationalFluidMechanics2016}.
 

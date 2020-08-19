@@ -822,7 +822,7 @@ where
 		u_1 \\ u_2
 	\end{bmatrix},
 	\\
-	\vec f(\vec u) &= 
+	\vec F(\vec u) &= 
 	\begin{bmatrix}
 		\rho v \\ \rho v^2 + p(\rho)
 	\end{bmatrix}
@@ -1132,15 +1132,15 @@ As we observed in the second problem, weak solutions need not be unique, and hen
 which is consistent with the choice of Equation~\ref{eq:nlscsol1} as the physically relevant solution in our second example.
 
 \subsection{Nonlinear Hyperbolic Systems}
-Applications of engineering interest are typically described by a system of conservation laws 
+Applications of engineering interest are typically described by a system of conservation laws of the form
 \begin{equation}
-	\frac{\partial \vec u}{\partial t} + \frac{\partial \vec f (\vec u)}{\partial x} = 0,
+	\frac{\partial \vec u}{\partial t} + \frac{\partial \vec F (\vec u)}{\partial x} = 0,
 \end{equation}
-where $\vec u$ is the vector of conserved variables and $\vec f(\vec u)$ is the vector of fluxes. In Section~\ref{sec:linear_hyper_systems}, we stated that a system of conservation laws is said to be hyperbolic if the flux Jacobian matrix has real eigenvalues and a complete set of linearly independnt eigenvectors. Previously, we considered constant acobian matrices that led to a set of linear equations. In this section, we consider problems whose jJacobian matrices have the form 
+where $\vec u$ is the vector of conserved variables and $\vec F(\vec u)$ is the vector of fluxes. In Section~\ref{sec:linear_hyper_systems}, we stated that a system is said to be hyperbolic if the flux Jacobian matrix has real eigenvalues and a complete set of linearly independent eigenvectors. Previously, we considered constant Jacobian matrices that led to a set of linear equations. In this section, we consider problems whose Jacobian matrices have the form 
 \begin{equation}
-	A(\vec u) = \frac{\partial \vec f()\vec u)}{\partial \vec u},
+	A(\vec u) = \frac{\partial \vec F(\vec u)}{\partial \vec u},
 \end{equation}
-and hence both its eigenvalues and eigenvectors depend on the value of the solution, which in turn depends on time. An example of a hyperbolic system is the Euler equations. In one dimension, the system can be written in vector form such that
+and hence both the eigenvalues and eigenvectors depend on the value of the solution, which in turn depends on time. An example of a nonlinear hyperbolic system is given by the Euler equations, which can be written in one dimension
 \begin{equation}
 	\frac{\partial \vec u}{\partial t} + \frac{\partial  \vec{F}}{\partial x} = 0,
 \end{equation}
@@ -1152,7 +1152,7 @@ where
 	= 
 	\begin{bmatrix}
 		\rho \\ \rho v \\ \rho E
-	\end{bmatrix}
+	\end{bmatrix},
 	\quad\quad
 	\vec F = 
 	\begin{bmatrix}
@@ -1161,26 +1161,26 @@ where
 	= 
 	\begin{bmatrix}
 		\rho v \\ \rho v^2 + P \\ v(\rho E + p)
-	\end{bmatrix}
+	\end{bmatrix}.
 \end{equation}
-where $\rho$ is density, $v$ is velocity and $E$ is the specific energy. Recall that the speed of sound is given by
+$\rho$ is density, $v$ is velocity and $E$ is the specific energy. Recall that the speed of sound is given by
 \begin{equation}
-	c = \sqrt{\frac{\gamma p}{\rho}}
+	c = \sqrt{\frac{\gamma p}{\rho}}.
 \end{equation}
 We can write the Euler equations in quasilinear form 
 \begin{equation}
 	\frac{\partial \vec u}{\partial t} + A(\vec u) \frac{\partial \vec u}{\partial x} = 0,
 \end{equation}
-where $A(u)$ is the jacobian matrix given by
+where $A(\vec u)$ is the jacobian matrix given by
 \begin{equation}
-	A(u) = \frac{d\vec F}{d \vec u} =
+	A(\vec u) = \frac{\partial \vec F}{\partial \vec u} =
 	\begin{bmatrix}
 	\frac{\partial f_1}{\partial u_1} & \frac{\partial f_1}{\partial u_2} & \frac{\partial f_1}{\partial u_3} \\
 	\frac{\partial f_2}{\partial u_1} & \frac{\partial f_2}{\partial u_2} & \frac{\partial f_2}{\partial u_3} \\
 	\frac{\partial f_3}{\partial u_1} & \frac{\partial f_3}{\partial u_2} & \frac{\partial f_3}{\partial u_3} \\
 	\end{bmatrix},
 \end{equation}
-To determine the Jacobian of the flux vector, we write the Euler fluxes in terms of the conserved variables
+To calculate the Jacobian of the flux vector, we write the Euler fluxes in terms of the conserved variables $u_1,~u_2,~u_3$
 \begin{equation}
 	\vec F = 
 	\begin{bmatrix}
@@ -1191,37 +1191,41 @@ To determine the Jacobian of the flux vector, we write the Euler fluxes in terms
 		u_2 \\ u_2^2/u_1 + (\gamma-1)(u_3-u_2^2/2 u_1) \\ u_3 \frac{u_2}{u_1} \gamma - \frac{u_2^3}{u_1^2}\frac{(\gamma-1)}{2} 
 	\end{bmatrix}.
 \end{equation}
-This yields 
+This yields the Jacobian matrix for the Euler equations
 \begin{align}
-	A(\vec u) &= 
+	A(\vec u) = 
 	\begin{bmatrix}
 		0 & 1 & 0 \\
 		\frac{1}{2}(3-\gamma)\left(\frac{u_2}{u_1}\right)^2 & (3-\gamma)\left(\frac{u_2}{u_1}\right) & \gamma-1 \\
 		(\gamma-1) \left(\frac{u_2}{u_1}\right)^2 - \gamma \frac{u_2 u_3}{u_1^2} & \gamma \frac{u_3}{u_1}-\frac{3}{2}(\gamma-1)\left(\frac{u_2}{u_1}\right)^2 & \gamma \frac{u_2}{u_1}
 	\end{bmatrix}\\
-	&= 
-	\begin{bmatrix}
-		0 & 1 & 0 \\
-		\frac{1}{2} (\gamma-3)v^2 & (3-\gamma)v & \gamma-1 \\ 
-		\frac{1}{2} (\gamma-2) v^3 - c^2 \frac{u}{\gamma-1} & \frac{1}{2}\frac{3-2\gamma}{2}v^2 + \frac{c^2}{\gamma-1} & \gamma v
-	\end{bmatrix}
-	\label{eq:eulerjacobian}
 \end{align}
-We have stated in previous sections that hyperbolic equations can be thought of as a superposition of travelling waves, with wavespeeds the eigenvectors of the Jacobian matrix. It turns out that for the system in Equation~\ref{eq:eulerjacobian}, the eigenvalues are 
+\begin{eqBox}
+	\begin{align}
+		A(\vec u) = 
+		\begin{bmatrix}
+			0 & 1 & 0 \\
+			\frac{1}{2} (\gamma-3)v^2 & (3-\gamma)v & \gamma-1 \\ 
+			\frac{1}{2} (\gamma-2) v^3 - c^2 \frac{u}{\gamma-1} & \frac{1}{2}\frac{3-2\gamma}{2}v^2 + \frac{c^2}{\gamma-1} & \gamma v
+		\end{bmatrix}
+		\label{eq:eulerjacobian}
+	\end{align}
+\end{eqBox}
+We have stated in previous sections that hyperbolic equations can be thought of as a superposition of travelling waves, with wavespeeds the eigenvectors of the Jacobian matrix. The eigenvalues of $A(\vec u)$ are 
 \begin{equation}
 	\lambda_1 = v - c, \quad\quad \lambda_2 = v, \quad\quad \lambda_3 = v + c,
 \end{equation}
-which shows that the Euler equations can be thought of a superposition of a left-travelling sound wave, a momentum wave and a right-going sound wave, which makes sense since the sound propagation happens in all directions, and in this one-dimensional case, two. The corresponding eigenvectors are 
+which shows that the Euler equations can be thought of a superposition of a left-travelling sound wave, a momentum wave and a right-going sound wave, consistent with the propagation of sound. The corresponding eigenvectors are 
 \begin{equation}
-	q_1 = \begin{bmatrix}
+	\vec q_1 = \begin{bmatrix}
 		1 \\ v - c \\ H - vc
 	\end{bmatrix},
 	\quad\quad
-	q_2 = \begin{bmatrix}
+	\vec q_2 = \begin{bmatrix}
 		1 \\ v \\ \frac{v^2}{2}
 	\end{bmatrix},
 	\quad\quad
-	q_3 = \begin{bmatrix}
+	\vec q_3 = \begin{bmatrix}
 		1 \\ v + c \\ H + vc
 	\end{bmatrix},
 \end{equation}
@@ -1229,9 +1233,9 @@ where $H$ is the total enthalpy defined as
 \begin{equation}
 	H = \frac{E + p}{\rho}.
 \end{equation} 
-The eigenvalues of the Euler system are distinct and that a complete set of eigenvectors can be found, hence the Euler equations are strictly hyperbolic.  The nonlinearity of the Euler equations makes the study of the Riemann problem much more challenging than for the linear systems. In the next section, we briefly discuss some important considerations to analyze the Riemann problem for the Euler equations.
+The eigenvalues of the Euler system are distinct and a complete set of eigenvectors can be found, proving that the Euler equations are strictly hyperbolic.  The nonlinearity of these equations makes the study of the Riemann problem much more challenging compared to the linear systems. In the next section, we briefly discuss some important considerations when analyzing the Riemann problem for the Euler equations.
 \subsection{The Riemann Problem for the Euler equations}
-Consider a tube with a thin membrane at $x=0$ separating two different gases, each with a given density $\rho$ velocity $v$, and pressure $p$ as shown in Figure~\ref{fig:shocktube}.  Initially, both gases are considered at rest ($v_L=v_R=0$). Note it can also be the same gas at different pressures. At time $t$, the thin membrane is ruptured, causing the gas in the region of high pressure move towards the low-pressure side looking for thermodynamic equilibrium. This case is known as \textit{Sod's shock tube} and is the physical equivalent to the Riemann problem in gas dynamics.
+Consider a tube with a thin membrane at $x=0$ separating two different gases, each with a given density $\rho$ velocity $v$, and pressure $p$ as shown in Figure~\ref{fig:shocktube}.  Initially, both gases are considered at rest ($v_L=v_R=0$). Note it can also be the same gas at different pressures. At time $t$, the thin membrane is ruptured, causing the gas in the region of high pressure to move towards the low-pressure side to reach thermodynamic equilibrium. This configuration is known as \textit{Sod's shock tube} and is the physical equivalent to the Riemann problem in gas dynamics.
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=0.6\linewidth]{Pictures/sod_shock_tube}
@@ -1239,7 +1243,7 @@ Consider a tube with a thin membrane at $x=0$ separating two different gases, ea
 	\label{fig:shocktube}
 \end{figure}
 
-It can be shown that the solution to this problem consists of a contact discontinuity associated with $\lambda_2$, and a shock or a rarefaction wave associated with $\lambda_1,~\lambda_3$. Hence, four different configurations are possible solutions for the Riemann problem, all of which need to be considered when deriving an exact solution. These are shown in Figure~\ref{fig:euler_characteristics}.
+It can be shown that the solution to this problem consists of a contact discontinuity associated with $\lambda_2$, and a shock or a rarefaction wave associated with $\lambda_1$ and $~\lambda_3$. Hence, four different configurations are possible solutions for the Riemann problem, all of which need to be considered when deriving an exact solution. These are shown in Figure~\ref{fig:euler_characteristics}.
 \begin{figure}[htb]
 	\centering
 	\begin{subfigure}[b]{0.35\linewidth}
@@ -1262,9 +1266,9 @@ It can be shown that the solution to this problem consists of a contact disconti
 	\label{fig:euler_characteristics}
 \end{figure}
 
-Solving the exact Riemann problem for the Euler equations turns out to be very expensive and requires the use of iterative methods to find the pressure between the left and right states. We refer the reader to \cite{levequeFiniteVolumeMethods2002,toroRiemannSolversEvolved2006} for a detailed derivation of the exact Riemann solver for the Euler equations. 
+Solving the exact Riemann problem for the Euler equations turns out to be very expensive and requires the use of iterative methods to find the pressure between the left and right states. We refer the reader to \cite{levequeFiniteVolumeMethods2002,toroRiemannSolversEvolved2006} for a detailed derivation of the exact solution.
 \subsubsection{Example}
-Consider Sod's shock tube problem with initial conditions
+To visualize the behaviour of the Euler equations, consider Sod's shock tube problem with initial conditions
 \begin{align}
 	\vec u_L = 
 	\begin{bmatrix}
@@ -1284,7 +1288,7 @@ Consider Sod's shock tube problem with initial conditions
 		\frac{1}{8} \\ 0 \\ \frac{1}{10}
 	\end{bmatrix}.
 \end{align}
-After some amount of time, $t=0.2$, the exact solution can be seen in Figure~\ref{fig:shocktubesol}. Note that the figures are divided into five regions, which we call A, B, C, D, E, from left to right. 
+After $t=0.2$, the exact solution can be seen in Figure~\ref{fig:shocktubesol}. The figures are divided into five regions, which we call A, B, C, D, E, from left to right. 
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=\linewidth]{Pictures/sod_shock_tube_solution}
@@ -1293,67 +1297,67 @@ After some amount of time, $t=0.2$, the exact solution can be seen in Figure~\re
 \end{figure}
 \begin{itemize}
 	\item Regions A and E contain the initial left and right states, respectively.
-	\item In region B, there exists a rarefaction wave, which is a smooth transition of quantities $\rho,~v,$ and $p$. 
-	\item At the interface between regions C and D, we observe a contact discontinuity. This wave represents the effects of the initial separation travelling to the right. Across this wave, pressure and velocity remain constant, but density and quantities that depend on it contain jumps.
+	\item Region B consists of a rarefaction wave, which is a smooth transition of quantities $\rho,~v,$ and $p$. 
+	\item At the interface between regions C and D, we observe a contact discontinuity. This wave represents the effects of the initial separation of the left and right states travelling to the region of low pressure. Across this wave, pressure and velocity remain constant, but density and quantities that depend on it contain jumps.
 	\item At the interface between regions D and E, a shock wave has formed due to the nonlinearities of the Euler equations. This shock wave travels with a speed $s$, which satisfies the Rankine-Hugoniot relationship. In this case, all considered quantities $\rho,~v$ and $p$ present discontinuous behaviour across the wave. 
 \end{itemize}
 
 \subsection{A Riemann Solver for the Euler Equations}
-A more cost-effective approach is the use of approximate Riemann solvers. In this section, we discuss the Riemann solver of Roe. Recall the quasilinear form of a conservation law
+A more cost-effective approach is the use of approximate Riemann solvers to compute the behaviour of the left and right states of interfaces in finite volume schemes. In this section, we discuss the Riemann solver of Roe. Recall the quasilinear form of a conservation law
 \begin{equation}
 	\frac{\partial \vec u}{\partial t} + A(\vec u) \frac{\partial \vec u}{\partial x} = 0.
+	\label{eq:09707}
 \end{equation}
-For the Euler equations, $A(\vec u)$ is given by Equation~\ref{eq:eulerjacobian}. Note that the eigenvalues of $A$ depend on the value of the solution and hence vary in time. Recall that for the Euler equations, three types of waves can be expected: contact, rarefaction and shock waves. We are interested in handling the formation of the shocks. 
-Generally, we use numerical schemes with enough dissipation such that the scheme remains stable. Consider the following finite volume scheme
+For the Euler equations, $A(\vec u)$ is given by Equation~\ref{eq:eulerjacobian}. The eigenvalues of $A$ depend on the value of the solution and hence vary in time. Recall that for the Euler equations, three types of waves can be expected: contact, rarefaction and shock waves. We are interested in handling the formation of the shocks.  Consider the following finite volume scheme with forward Euler time-stepping
 \begin{equation}
-	\vec u^{t+1}_i = \vec u^t_i - \frac{\Delta t}{\Delta x} \left(\vec f_{i+1/2} - \vec f_{i-1/2}\right) 
+	\vec u^{t+1}_i = \vec u^t_i - \frac{\Delta t}{\Delta x} \left[\vec F_{i+1/2} - \vec F_{i-1/2}\right],
 \end{equation}
-where $\vec f_{i-1/2}$ and $\vec f_{i+1/2}$ are interface fluxes on the left and right sides of the cell, respectively, and are defined such that
+where $\vec F_{i-1/2}$ and $\vec F_{i+1/2}$ are interface fluxes on the left and right sides of the cell, respectively, and are defined such that
 \begin{align}
-	\vec f_{i-1/2} &= \vec f (\vec u_{i-1/2}), \\
-	\vec f_{i+1/2} &= \vec f (\vec u_{i+1/2}).
+	\vec F_{i-1/2} &= \vec F (\vec u_{i-1/2}), \\
+	\vec F_{i+1/2} &= \vec F (\vec u_{i+1/2}).
 \end{align}
 Hence, at the interfaces, we need to solve a Riemann problem of the form
 \begin{align}
-	\frac{\partial \vec u}{\partial t} + \frac{\partial \vec f}{\partial x} &= 0,\\
+	\frac{\partial \vec u}{\partial t} + \frac{\partial \vec F}{\partial x} &= 0,\\
 	\vec u(x, 0) &=
 	\begin{cases}
 		\vec u_L & \text{if } x<0,\\
-		\vec u_R & \text{if } x>0,
+		\vec u_R & \text{if } x>0.
 	\end{cases}
 \end{align}
-Roe proposed considering instead a constant Jacobian matrix $\tilde A$, which is required to yield a system which is
+Roe proposed considering instead a constant Jacobian matrix $\tilde A$ with the following properties
 \begin{itemize}
-	\item Hyperbolic,
-	\item Consistent with the exact problem $\tilde A (\vec u, \vec u) = A(\vec u)$,
-	\item Conservative across discontinuities $\vec f(\vec u_R) - \vec f (\vec u_L) = \tilde A(\vec u_R - \vec u_L) $
+	\item $\tilde A$ must have real eigenvalues and a complete set of eigenvectors such that the problem in Equation~\ref{eq:09707} is hyperbolic.
+	\item $\tilde A$ must be consistent with the exact problem $\tilde A (\vec u, \vec u) = A(\vec u)$.
+	\item The resulting system must be conservative across discontinuities, i.e. $\vec F(\vec u_R) - \vec F (\vec u_L) = \tilde A(\vec u_R - \vec u_L)$ must be satisfied.
 \end{itemize}
-Following these properties, he demonstrated that the matrix can be written,
+Roe demonstrated that the matrix can be written
 \begin{equation}
 	\tilde A = 
 	\begin{bmatrix}
 		0 & 1 & 0 \\ 
-		(\gamma-1)\tilde H - \tilde u^2-\tilde c^2 & (3-\gamma)\tilde u & \gamma-1 \\
-		\frac{1}{2}\left[(\gamma-3)\tilde H - \tilde c\right] & \tilde h - (\gamma-1)\tilde u^2 & \gamma \tilde u
-	\end{bmatrix}
+		(\gamma-1)\tilde H - \tilde v^2-\tilde c^2 & (3-\gamma)\tilde v & \gamma-1 \\
+		\frac{1}{2}\left[(\gamma-3)\tilde H - \tilde c\right] & \tilde H - (\gamma-1)\tilde v^2 & \gamma \tilde v
+	\end{bmatrix},
 \end{equation}
 which is equivalent to the original matrix we derived in Equation~\ref{eq:eulerjacobian} when evaluated at the Roe average states given by 
 \begin{align}
-	\tilde u &= \frac{\sqrt{\rho_L} u_L + \sqrt{\rho_R} u_R}{\sqrt{\rho_L} + \sqrt{\rho_R}},\\
+	\tilde v &= \frac{\sqrt{\rho_L} u_L + \sqrt{\rho_R} u_R}{\sqrt{\rho_L} + \sqrt{\rho_R}},\\
 	\tilde H &= \frac{\sqrt{\rho_L} H_L + \sqrt{\rho_R} H_R}{\sqrt{\rho_L} + \sqrt{\rho_R}},\\
-	\tilde c &= \sqrt{(\gamma-1)(\tilde H - \frac{1}{2} \tilde u^2)}
+	\tilde c &= \sqrt{(\gamma-1)(\tilde H - \frac{1}{2} \tilde v^2)}.
 \end{align}
-The eigenvalues can be found to be 
+The eigenvalues of $\tilde A$ are
 \begin{equation}
-	\tilde\lambda_1 = \tilde u - \tilde c,\quad \tilde\lambda_2 = \tilde u,\quad\tilde\lambda_3 = \tilde u + \tilde c,
+	\tilde\lambda_1 = \tilde v - \tilde c,\quad \tilde\lambda_2 = \tilde v,\quad\tilde\lambda_3 = \tilde v + \tilde c,
 \end{equation}
 and the matrix of eigenvectors $\tilde Q=[\tilde{\vec q}_1, \tilde{\vec q}_2, \tilde{\vec q}_3]$ is given by
 \begin{equation}
 	\tilde Q = 
 	\begin{bmatrix}
 	1 & 1 & 1 \\ 
-	\tilde u - \tilde c & \tilde u & \tilde u + \tilde c \\ 
-	\tilde H - \tilde u \tilde c & \frac{1}{2} \tilde u^2 & \tilde H + \tilde u \tilde c
+	\tilde v - \tilde c & \tilde v & \tilde v + \tilde c \\ 
+	\tilde H - \tilde v \tilde c & \frac{1}{2} \tilde v^2 & \tilde H + \tilde v \tilde c
 	\end{bmatrix}.
 \end{equation}
 The choice of a constant Jacobian matrix allows us to apply the theory in Section~\ref{sec:linear_hyper_systems} directly. On each side of a discontinuity, the solution jump can be computed by
@@ -1363,25 +1367,222 @@ The choice of a constant Jacobian matrix allows us to apply the theory in Sectio
 \end{equation}
 where $\tilde \alpha_i$ is the jump in terms of the characteristic variables and $\tilde{\vec q}_i$ is an eigenvector of $\tilde A$. Hence, from Equation~\ref{eq:wavestrengths}, we obtain a system of equations 
 \begin{equation}
-	Q\tilde{\vec \alpha} = \Delta \vec u
+	Q\tilde{\vec \alpha} = \Delta \vec u,
 \end{equation}
-and hence we obtain the coefficients $\tilde{\vec \alpha}=[\tilde\alpha_1,\tilde\alpha_2,\tilde\alpha_3]^T$. The resulting expressions for these coefficients can be written
+where $\tilde{\vec \alpha}=[\tilde\alpha_1,\tilde\alpha_2,\tilde\alpha_3]^T$. The resulting expressions for these coefficients can be written
 \begin{align}
-	\tilde \alpha_1 &= \frac{1}{2\tilde a}\left(\Delta u_1 \tilde u + \Delta u_1\tilde c - \Delta u_2 - \tilde c \tilde \alpha_2\right)\\ 
-	\tilde \alpha_2 &= \frac{\gamma-1}{\tilde c^2} \left(\Delta u_1 \tilde H - \Delta u_1 \tilde u^2 + \tilde u \Delta u_2 - \Delta u_3 \right)\\
-	\tilde \alpha_3 &= \Delta u_1 - \tilde\alpha_1 - \tilde\alpha_2
+	\tilde \alpha_1 &= \frac{1}{2\tilde a}\left(\Delta u_1 \tilde u + \Delta u_1\tilde c - \Delta u_2 - \tilde c \tilde \alpha_2\right),\\ 
+	\tilde \alpha_2 &= \frac{\gamma-1}{\tilde c^2} \left(\Delta u_1 \tilde H - \Delta u_1 \tilde u^2 + \tilde u \Delta u_2 - \Delta u_3 \right),\\
+	\tilde \alpha_3 &= \Delta u_1 - \tilde\alpha_1 - \tilde\alpha_2.
 \end{align}
-The numerical flux can then be computed using
+Finally, the numerical flux can then be computed using
 \begin{equation}
-	\vec f_{i\pm1/2}(\vec u_L, \vec u_R) = \frac{1}{2} \left[\vec f(\vec u_L) + \vec f(\vec u_R)\right] - \frac{1}{2} \sum_{i=1}^3 \tilde \alpha_i |\tilde \lambda_i| \Delta u_i.
+	\vec F_{i\pm1/2}(\vec u_L, \vec u_R) = \frac{1}{2} \left[\vec F(\vec u_L) + \vec F(\vec u_R)\right] - \frac{1}{2} \sum_{i=1}^3 \tilde \alpha_i |\tilde \lambda_i| \Delta u_i.
 \end{equation}
-A disadvantage of the Roe solver is that it might violate the entropy condition, considering both rarefaction and shock waves as discontinuous solutions. This occurs particularly when the eigenvalues approach zero, i.e. $|\tilde u|\approx \tilde c$ Hence, an entropy fix needs to be added. One of the several existing approaches is to simply replace the $\tilde\lambda_1$ or $\tilde\lambda_3$ eigenvalues if their absolute value is smaller than a given tolerance $\delta$. The recomputed eigenvalue is found by
+A disadvantage of the Roe solver is that it may violate the entropy condition in the presence of sonic rarefaction waves, where $\tilde v\approx \tilde c$ (or $\tilde \lambda_{1/3}\approx 0$). This occurs since the solver treats both rarefaction and shock waves as discontinuous solutions. Hence, an entropy fix needs to be added. A common approach consists of replacing the $\tilde\lambda_1$ or $\tilde\lambda_3$ eigenvalues if their absolute value is smaller than a given tolerance $\delta$. This is known as Harten's entropy fix, which can be written 
 \begin{equation}
-	\tilde\lambda_i = \frac{\tilde\lambda_i^2}{2\delta} + 2\delta,
+	\tilde\lambda_i = 
+	\begin{cases}
+		\tilde\lambda_i &\text{if } |\tilde \lambda_i| > \delta, \\
+		\frac{\tilde\lambda_i^2}{2\delta} + 2\delta &\text{if } |\tilde \lambda_i| \leq \delta.
+	\end{cases}
 \end{equation}
-however, the value of $\delta\ll1$ needs to be typically tuned for each specific problem.
+The drawback of this approach is that the value of $\delta\ll1$ needs to be typically tuned for each specific application.
 
-\section{MUSCL Schemes}
+\section{MUSCL Schemes}\label{sec:muscl}
+We have shown in previous sections that finite-volume schemes are typically written for a general conservation law in the form
+\begin{equation}
+	\frac{d  \vec u_i}{dt} = - \frac{1}{\Delta x_i} \left[  \vec F_{i+1/2} -   \vec F_{i-1/2}\right],
+\end{equation}
+where $\vec u_i$ is a constant approximation of the state variable vector within the cell defined by $\Omega_i = [x_{i-1/2}, x_{i+1/2}]$, and $\vec F_{i+1/2}$ and $\vec F_{i-1/2}$ are interface flux vectors of the form
+\begin{equation}
+	\vec F_{i+1/2} = \vec F(\vec u_{i+1/2}).
+\end{equation}
+At the interface between $\Omega_i$ and $\Omega_{i+1}$ defined at $x_{i+1/2}$, the value of the flux is generally obstained from a constant vector of the solution within the cell, i.e. $\vec u_{i+1/2}=\vec u_{i}$. This approach is known as the Godunov method, which is first order accurate. Nevertheless, we can derive methods with orders of accuracy higher than one, allowing the numerical error to significantly decrease. Increasing the order of a finite-volume method can be done replacing the constant interface values of the solution $\vec u_{i+1/2}$ by a reconstructed value interpolated introducing information from neighbouring cells. This idea, developed by van Leer, is an extension of Godunov's method, and is known as the MUSCL (monotone upstream-centered schemes for conservation laws) reconstruction approach. 
+
+For a second order scheme, we consider the solution to be a linear Taylor series expansion around the cell center $x_j$ by
+\begin{equation}
+	u(x) = u_i + (x-x_j)\frac{\partial u_i}{\partial x},
+	\label{eq:3209423}
+\end{equation}
+where $\frac{\partial u}{\partial x}$ can be computed using cell solution differences. Note that this reconstruction process can be done using additional terms in Equation~\ref{eq:3209423} to yield higher order schemes. Hence, on the left and right sides of the interface at $x=x_{i+1/2}$, the solution can be found by
+\begin{align}
+	\vec u_{i+1/2}^L &= \vec u_i + \frac{1}{2} \vec \delta_i,\\
+	\vec u_{i+1/2}^R &= \vec u_{i+1} - \frac{1}{2} \vec \delta_{i+1},
+\end{align}
+where the so-called slopes $\delta_i$ can be defined using a blended approach
+\begin{equation}
+	\vec \delta_i = \frac{1}{2}(1+r)\delta \vec u_{i-1/2} + \frac{1}{2}(1-r)\delta \vec u_{i+1/2},
+	\label{eq:48742938}
+\end{equation}
+such that $r=1$ is a upwind-biased approximation of the derivative. In Equation~\ref{eq:48742938},
+\begin{align}
+	 \delta \vec u_{i+1/2} = \vec u_{i+1} - \vec u_i, \\
+	 \delta \vec u_{i-1/2} = \vec u_{i} - \vec u_{i-1}.
+\end{align}
+Then, the common flux can be computed using an appropriate Riemann solver
+\begin{equation}
+	\vec F_{i+1/2} = F(\vec u^L_{i+1/2},\vec  u^R_{i+1/2}).
+\end{equation}
+\subsection{Second-Order Upwind Scheme for Linear Advection}
+For linear advection, we have shown that an appropriate solver is the upwind Riemann flux, given by
+\begin{equation}
+	F^{upw}(u^L, u^R) = \alpha u^L,
+	\label{eq:120398}
+\end{equation}
+where $\alpha$ is the advection velocity. At the $x_{i+1/2}$ and $x_{i-1/2}$ interfaces, the upwind flux can be found
+\begin{align}
+	F^{upw}_{i+1/2} = \alpha u^L_{i+1/2} &= \alpha u_i + \frac{\alpha}{2}\delta_i, \label{eq:09809435}\\
+	F^{upw}_{i-1/2} = \alpha u^L_{i-1/2} &= \alpha u_{i-1} + \frac{\alpha}{2}\delta_{i-1},
+\end{align}
+where we choose upwind-biased slopes in Equation~\ref{eq:48742938} with $r=1$ such that
+\begin{align}
+	\delta_i &= \delta u_{i-1/2} = u_i - u_{i-1}, \\
+	\delta_{i-1} &= \delta u_{i-3/2} = u_{i-1} - u_{i-2}.
+	\label{eq:98986986}
+\end{align}
+Hence, using Equations~\ref{eq:09809435}-\ref{eq:98986986}, the common fluxes can be written
+\begin{align}
+	F_{i+1/2} &= F(u_{i+1/2}) = \alpha u_i + \frac{\alpha}{2}\left(u_i-u_{i-1}\right),\\
+	F_{i-1/2} &= F(u_{i-1/2}) = \alpha u_{i-1} + \frac{\alpha}{2}\left(u_{i-1}-u_{i-2}\right),
+\end{align}
+which yields the following second-order upwind-biased scheme
+\begin{eqBox}
+	\begin{equation}
+		\frac{du_i}{dt} = -\frac{\alpha}{2\Delta x}\left(3u_i - 4 u_{i-1} + u_{i-2}\right).
+		\label{eq:34290}
+	\end{equation}	
+\end{eqBox}
+
+\subsection{Total Variation Diminishing}
+We can measure the total variation (TV) of a discrete solution
+\begin{equation}
+	TV(u) = \sum_{i=1}^N |u_{i+1}-u_i|,
+\end{equation}
+where $N$ is the number of finite volume cells. A numerical method is said to be total variation diminishing (TVD) if the solution does not spontaneously concentrate, i.e.
+\begin{equation}
+	TV(u^t+1)\leq TV(u^t).
+\end{equation}
+In addition, Godunov's theorem states
+\begin{theorem}
+	Linear numerical schemes for solving partial differential equations (PDE's), having the property of not generating new extrema (monotone scheme), can be at most first-order accurate.
+\end{theorem}
+Hence, while higher-order schemes are more accurate for smooth solutions, they introduce spurious oscillations in the presence of discontinuities, shocks and large solution gradients and are thus not TVD. Different approaches can be used to ensure the TVD property for high-order numerical methods. In the next section, we discuss one of these techniques, known as flux/slope limiters.
+
+
+\subsection{Limiters}
+Introducing limiters to high-order formulations prevents the generation of oscillations in regions where nonsmooth solutions are present. Recall that Godunov's theorem states that only first-order accurate schemes are able to produce solutions without generating new extrema. Hence, limiters are used as a switch mechanism which transforms the high-order numerical scheme into a first-order method in the presence of discontinuities. This is done by evaluating and comparing slopes between neighbouring cells. In this section, we introduce limiters to the MUSCL reconstruction framework in Section~\ref{sec:muscl}.
+Consider rewriting the MUSCL formulation in Equation~\ref{eq:48742938} using limited slopes 
+\begin{align}
+	\overline \delta_i = \frac{1}{2}(1+r)\phi^+_{i-1/2}\delta u_{i-1/2} + \frac{1}{2}(1-r)\phi^-_{i+1/2}\delta u_{i+1/2},
+\end{align}
+where the limiting functions can be defined using ratios of the slopes with neighbouring cells. At interface $x_{i+m}$, the slope limiter is given by
+\begin{eqnarray}
+	\phi^{\pm}_{i+m} = \phi(r^{\pm}_{i+m}),\quad r^{\pm}_{i+m} = \frac{\delta u_{i+m\pm 1}}{\delta u_{i+m}}.
+\end{eqnarray}
+Consider the second-order upwind-biased scheme in Equation~\ref{eq:34290}. We can rewrite it using slope limiters using interface fluxes of the form
+\begin{align}
+	F_{i+1/2} &= F(u_{i+1/2}) = \alpha u_i + \frac{\alpha}{2}\phi^+_{i-1/2}\left(u_i-u_{i-1}\right),\\
+	F_{i-1/2} &= F(u_{i-1/2}) = \alpha u_{i-1} + \frac{\alpha}{2}\phi^+_{i-3/2}\left(u_{i-1}-u_{i-2}\right).
+\end{align}
+Clearly, in the case $\phi(r) = 0$, the scheme will reduce to the first-order upwind scheme. Some slope limiting functions are shown in Table~\ref{table:limiters}. We now show an application of these functions using the linear advection equation.
+\begin{table}[h]
+	\centering
+	\caption{Common forms of slope limiter functions $\phi(r)$}
+	\begin{tabular}{cl}
+		\hline
+		Name & $\phi(r)$ \\ \hline
+		minmod & $\max[0, \min(1, r)]$ \\ 
+		van Leer & $\frac{r + |r|}{1 + |r|}$ \\ 
+		superbee & $\max[0, \min(2r, 1), \min(r, 2)]$
+	\end{tabular}
+	\label{table:limiters}
+\end{table}
+
+\subsection{Examples}
+\subsubsection{Linear Advection}
+Consider the following advection problem
+\begin{align}
+	\frac{\partial u}{\partial t} + \frac{\partial u}{\partial x} = 0
+\end{align}
+on a grid with $x\in[0,2]$ with periodic boundary conditions. The solution at $t=0$ is given by
+\begin{align}
+	u(x, 0) &= 
+	\begin{cases}
+		e^{-20(x-0.5)^2} & \text{if } x < 1.2, \\ 
+		1 & \text{if } 1.2 < x < 1.5,	 \\
+		0 & \text{otherwise}.
+	\end{cases}
+\end{align}
+As we see in Figure~\ref{fig:}, the initial conditions consist of a smooth gaussian profile and a step function. Due to the nature of the equation, we only expect a translation of the initial condition through the domain. At $t=2$, a complete advective cycle has passed and $u(x,2)$ is expected to be equal to $u(x,0)$. Using the second-order advection scheme with $r=1$ and $N=300$ cells, the solution is shown in Figure~\ref{fig: }. In the smooth region of the domain, the second-order scheme does a good job representing the solution, but we observe that the discontinuities on the right side of the domain contain large oscillations that overshoot and undershoot the solution. 
+
+Implementation of the limiters in Table~\ref{table:limiters} removes the presence of oscillations in the solution. 
+
+\subsubsection{The Euler Equations}
+Consider Sod's shock-tube problem with initial conditions
+\begin{align}
+	\vec u_L = 
+	\begin{bmatrix}
+		\rho_L \\ v_L \\ p_L 
+	\end{bmatrix}
+	= 
+	\begin{bmatrix}
+		1 \\ 0 \\ 1
+	\end{bmatrix},
+	\quad \text{and} \quad 
+	\vec u_R = 
+	\begin{bmatrix}
+		\rho_R \\ v_R \\ p_R
+	\end{bmatrix}
+	= 
+	\begin{bmatrix}
+		\frac{1}{8} \\ 0 \\ \frac{1}{10}
+	\end{bmatrix}.
+\end{align}
+on a domain $x\in[0, 1]$ and $t\in(0,0.2]$. Figure~\ref{} shows a comparison between Godunov's scheme and a linear MUSCL-reconstructed method with different limiters. The limited slopes for this problem have the form 
+\begin{equation}
+	\vec {\overline \delta_i} = \frac{1}{2}(1+r)\vec \phi^+_{i-1/2}
+	\begin{bmatrix}
+		\delta \rho_{i-1/2} \\ \delta (\rho u)_{i-1/2} \\ \delta (\rho E)_{i-1/2}
+	\end{bmatrix} + \frac{1}{2}(1-r)\vec \phi^-_{i+1/2}
+	\begin{bmatrix}
+		\delta \rho_{i+1/2} \\ \delta (\rho u)_{i+1/2} \\ \delta (\rho E)_{i+1/2}
+	\end{bmatrix}
+\end{equation}
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=\linewidth]{Pictures/euler_muscl}
+	\caption{}
+	\label{fig:euler_muscl}
+\end{figure}
+\begin{exercise}
+	Compute the total variation (TV) of the above example using the minmod, van Leer and superbee limiter functions. Which one is the most suitable for this problem?
+\end{exercise}
+\begin{exercise}
+	Repeat the previous problem with initial conditions
+	\begin{itemize}
+		\item \begin{align}
+			u^1(x, 0) &= 
+			\begin{cases}
+				e^{-20(x-0.5)^2} & \text{if } x < 1.2, \\ 
+				1 & \text{if } 1.2 < x < 1.5,	 \\
+				0 & \text{otherwise}.
+			\end{cases}
+		\end{align}
+		\item \begin{align}
+			u^2(x, 0) &= 
+			\begin{cases}
+				e^{-20(x-0.5)^2} & \text{if } x < 1.2, \\ 
+				1 & \text{if } 1.2 < x < 1.5,	 \\
+				0 & \text{otherwise}.
+			\end{cases}
+		\end{align}
+	\end{itemize}
+\end{exercise}
+
+\begin{jupyternote}
+	Check out the High-Order Finite Volume Jupyter notebook \href{\binderurl}{\underline{here}}. You can also download the files from the Gitlab repository \href{\repourl}{\underline{here}}.
+\end{jupyternote}
 
 \chapter{Consistency, Stability, Convergence}
 Now that we have derived a few different schemes for solving linear advection, Burgers equation, and linear diffusion, we should now ask ourselves whether they will give us accurate predictions, and are there any restrictions on when they can be used. We have already discussed the importance of order of accuracy, which governs the rate at which the error will converge to zero. Now we will introduce the concepts of consistency, stability, and convergence. If we can prove that our numerical scheme satisfies all three of these properties we can be confident that it is promising approach for the Euler or Navier-Stokes equations. In the current section we will explore these properties in the context of finite difference methods, but the exact same steps can be taken to check whether a finite volume method is suitable or not. Some additional references on these topics include~\cite{hirschNumericalComputationInternal2007a,andersonComputationalFluidMechanics2016}.
@@ -1701,7 +1902,7 @@ Hence, this linear diffusion scheme is {\it unconditionally stable}.
 \section{Convergence}
 If a scheme is consistent, recovering the exact partial differential equation in the limit $\Delta x \rightarrow 0$ and $\Delta t \rightarrow 0$, and stable, in that the approximate solution does not grow unbounded with time, then Lax's equivalence theorem can be applied. In summary, the theorem states that when given a properly-posed initial value problem, and a numerical scheme that is consistent, stability is the necessary and sufficient condition for convergence. In other words, if we can show that our numerical schemes is consistent and stable, then we can be sure that it will {\it converge} to the true solution of the partial differential equation in the limit $\Delta x \rightarrow 0$ and $\Delta t \rightarrow 0$.
 
-\chapter{Spectral Properties}
+\chapter{Spectral Properties}\label{ch:spectralproperties}
 In CFD the numerical error introduced by a scheme is typically classified into two general types, dissipation error and dispersion error. In this section we will discuss how to quantify these two types of error, and how they effect different types of solutions.
 
 \begin{figure}[htbp]

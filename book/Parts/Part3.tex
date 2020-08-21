@@ -173,7 +173,7 @@ We want to combine them is such a way that
 	\Eval{\frac{\partial u}{\partial x}}{x_i}{} = a(\ref{eqn:aHK8G4M7}) + b(\ref{eqn:6sbrhgAM})
 	\label{eqn:2KGWrZa5}
 \end{equation}
-gives a second-order approximating for the first derivative, and we need to find the coefficients $a$ and $b$ to achieve this. If we look at the left hand side, we want to keep the first derivative there. This can be achieve if we ensure that
+gives a second-order approximating for the first derivative, and we need to find the coefficients $a$ and $b$ to achieve this. If we look at the left hand side, we want to keep the first derivative there. This can be achieved if we ensure that
 \begin{equation}
 	a + b = 1.
 	\label{eqn:3Wxy2aCD}
@@ -266,7 +266,7 @@ By inspecting this equation, and assuming that we know the solution at each grid
 \end{equation}
 \end{eqBox}
 
-Looking at Equation \ref{eqn:7hH8UBeG} we note that, provided we know the current solution at all grid points at time $t$, we can predict the solution at time $t+\Delta t$ with an error term of $\mathcal{O}(\Delta x, \Delta t)$. Then we will have an approximation of the solution at all grid points at time $t+\Delta t$, and we can use this to find an approximation of the solution at time $t+2\Delta t$ by applying the same equation, and so on. Hence, we are able to advance the linear advection equation to any final time we desire, noting that each time step we take will introduce some numerical error. An series of example solutions using different numbers of grid points is shown in Figure \ref{fig:advection_upwind} with an advection velocity of $\alpha = 1$, and a final solution time of $t=1$, which allows the Gaussian bump to travel once through the domain. If the error is measured in terms of the height of the peak of the Gaussian bump, it is apparent that it converges linearly as the grid spacing is refined.
+Looking at Equation \ref{eqn:7hH8UBeG} we note that, provided we know the current solution at all grid points at time $t$, we can predict the solution at time $t+\Delta t$ with an error term of $\mathcal{O}(\Delta x, \Delta t)$. Then we will have an approximation of the solution at all grid points at time $t+\Delta t$, and we can use this to find an approximation of the solution at time $t+2\Delta t$ by applying the same equation, and so on. Hence, we are able to advance the linear advection equation to any final time we desire, noting that each time step we take will introduce some numerical error. A series of example solutions using different numbers of grid points is shown in Figure \ref{fig:advection_upwind} with an advection velocity of $\alpha = 1$, and a final solution time of $t=1$, which allows the Gaussian bump to travel once through the domain. If the error is measured in terms of the height of the peak of the Gaussian bump, it is apparent that it converges linearly as the grid spacing is refined.
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=0.65\linewidth]{Pictures/advection_upwind}

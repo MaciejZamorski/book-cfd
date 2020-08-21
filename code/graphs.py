@@ -2265,16 +2265,86 @@ def muscl_scheme():
     ax.text(xc[1], ui+0.01, r'$u_i$', va='bottom', ha='center')
     ax.text(xc[2], up1+0.01, r'$u_{i+1}$', va='bottom', ha='center')
 
-    
-
-
     ax.set_ylim(0, 1)
     ax.set_xlim(-0.1, 1.1)
     fig, ax = convert_to_graph(fig, ax, use_min_yaxis=True)
     plt.xticks(x[1:3],[r'$x_{i-1/2}$', r'$x_{i+1/2}$'])
     fig.savefig('muscl_scheme.pdf')
 
+def multigrid():
+    fig, ax = plt.subplots(figsize=(7, 3))
 
+    # V-cycle
+    d = 0.25
+    x = np.arange(0, 5*d, d) 
+    y = [1, 0.5, 0, 0.5, 1]
+    ax.plot(x, y, 'ko-')
+
+    # W-cycle
+    x0 = 1.5
+    x = np.arange(0, 7*d, d) + x0
+    y = [1, 0.5, 0, 0.5, 0, 0.5, 1]
+    ax.plot(x, y, 'ko-')
+
+    # Full-cycle
+    x0 = 3.2
+    x = np.arange(0, 9*d, d) + x0
+    y = [0, 0.5, 0, 0.5, 1, 0.5, 0, 0.5, 1]
+    ax.plot(x, y, 'ko-')
+
+    ax.hlines([0, 0.5, 1], -0.25, max(x)+0.25, ls='--', lw=0.75)
+    ax.set_ylim(-0.1, 1.25)
+    ax.text(0.5, 1.1, 'W-cycle', ha='center')
+    ax.text(2.25, 1.1, 'V-cycle', ha='center')
+    ax.text(4.25, 1.1, 'Full cycle', ha='center')
+
+    fig, ax = remove_axes(fig, ax)
+    plt.yticks([1.0, 0.5, 0], [r'$\Omega_h$', r'$\Omega_{2h}$', r'$\Omega_{4h}$'])
+    fig.savefig('multigrid.pdf')
+    # plt.show()
+
+def lid_cavity_flow():
+    fig, ax = plt.subplots(figsize=(6, 5))
+    ax.set_aspect('equal')
+
+
+    rectangle = plt.Rectangle((-0.25, 1), 1.5, 0.05, facecolor='k', edgecolor='k')
+    ax.add_artist(rectangle)
+    rectangle = plt.Rectangle((-0.25, 1), 1.5, -1.2,  hatch='///', facecolor='#ededed', edgecolor='#dbdbdb')
+    ax.add_artist(rectangle)
+    rectangle = plt.Rectangle((-0.25, 0.89), 0.14, -1.1, facecolor='white', edgecolor=None)
+    ax.add_artist(rectangle)
+    rectangle = plt.Rectangle((1.25, 0.89), -0.14, -1.1, facecolor='white', edgecolor=None)
+    ax.add_artist(rectangle)
+    rectangle = plt.Rectangle((-0.25, -0.11), 1.5, -1.1, facecolor='white', edgecolor=None)
+    ax.add_artist(rectangle)
+    rectangle = plt.Rectangle((0, 1), 1, -1, facecolor='white', edgecolor=None)
+    ax.add_artist(rectangle)
+    # ax.plot([-0.25, 1.25], [1, 1])
+    # ax.plot([-0.25, 1.25], [1.05, 1.05])
+
+    ax.plot([0, 0, 1, 1], [1, 0, 0, 1], 'k')
+
+    ax.arrow(-0.05, 0, 0, 1,  fc='k', lw=0.5, head_width=0.03, head_length=0.04,length_includes_head=True, color='k')
+    ax.arrow(-0.05, 1, 0, -1,  fc='k', lw=0.5, head_width=0.03, head_length=0.04,length_includes_head=True, color='k')
+    ax.arrow(0, -0.05, 1, 0,  fc='k', lw=0.5, head_width=0.03, head_length=0.04,length_includes_head=True, color='k')
+    ax.arrow(1, -0.05, -1, 0,  fc='k', lw=0.5, head_width=0.03, head_length=0.04,length_includes_head=True, color='k')
+
+    ax.arrow(0.4, 1.075, 0.2, 0,  fc='k', lw=0.5, head_width=0.03, head_length=0.04,length_includes_head=True, color='k')
+
+    ax.text(-0.055, 0.5, '$L_y$', ha='right', va='center')
+    ax.text(0.5, -0.065, '$L_x$', ha='center', va='top')
+    ax.text(0.5, 1.075, '$u_w$', ha='center', va='bottom')
+
+    ax.text(0.99, 0.5, '$u_b = 0$\n$v_b = 0$', ha='right', va='center')
+    ax.text(0.5, 0.01, '$u_b = 0$\n$v_b = 0$', ha='center', va='bottom')
+    ax.text(0.01, 0.5, '$u_b = 0$\n$v_b = 0$', ha='left', va='center')
+    ax.text(0.5, 0.99, '$u_b = u_w$\n$v_b = 0$', ha='center', va='top')
+    ax.set_xlim(-0.25, 1.25)
+    ax.set_ylim(-0.25, 1.15)
+    
+    fig, ax = remove_axes(fig, ax)
+    fig.savefig('cavity_flow.pdf')
 
 def main():
 
@@ -2351,7 +2421,9 @@ def main():
     # sod_shock_tube_solution()
     # euler_characteristics()
 
-    muscl_scheme()
+    # muscl_scheme()
+    # multigrid()
+    lid_cavity_flow()
 
 if __name__ == '__main__':
     plt.style.use('style.mplstyle')

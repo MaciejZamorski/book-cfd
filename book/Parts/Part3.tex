@@ -998,26 +998,26 @@ Consider the following one-dimensional scalar conservation law
 \begin{equation}
 	\frac{\partial u}{\partial t} + \frac{\partial f(u)}{\partial x} = 0,
 \end{equation}
-where $f(u)$ is the flux. Previously, we had considered a flux of the form $f(u)=\alpha u$ corresponding to linear advection. In this section, we analyze a nonlinear flux function of the form $f(u)=\frac{1}{2} u^2$, which leads to the inviscid Burgers equation. For this type of problem, $u$ is expected not only to translate but also to deform towards the formation of shocks. Similar to Section~\ref{sec:linear_hyperb_problems}, we want to analyze the characteristic lines for this conservation law. Hence, we write the \textit{quasilinear form} of Burgers' equation
+where $f(u)$ is the flux. In Section~\ref{sec:linear_hyperb_problems}, we analyzed a flux function of the form $f(u)=\alpha u$, corresponding to linear advection. In this section, we consider a nonlinear flux function of the form $f(u)=\frac{1}{2} u^2$, which leads to the inviscid Burgers equation. For this type of problem, $u$ is expected not only to translate but also to deform towards the formation of shocks. Similar to Section~\ref{sec:linear_hyperb_problems}, we want to analyze the behaviour of this PDE via the method of characteristics. Hence, we write the \textit{quasilinear form} of Burgers' equation
 \begin{equation}
-	\frac{\partial u}{\partial t} + u\frac{\partial u}{\partial x} = 0,
+	\frac{\partial u}{\partial t} + f'(u)\frac{\partial u}{\partial x} = 0,
 	\label{eq:nonconserv_burgers}
 \end{equation}
-where we note that $f'(u) = u$. Recall that in the $x-t$ plane, we look for lines along which the solution remains unchanged. Using the chain rule for $u(x(t), t)$, we obtain
+where $f'(u) = u$. Recall that in the $x-t$ plane, we look for lines along which the solution remains unchanged. Using the chain rule for $u(x(t), t)$, we obtain
 \begin{equation}
 	\frac{du}{dt} = \frac{\partial u}{\partial t} + \frac{dx}{dt}\frac{\partial u}{\partial t} = 0.
 	\label{eq:chainrule_burgers}
 \end{equation}
-Comparing Equations~\ref{eq:chainrule_burgers} and~\ref{eq:nonconserv_burgers}, we observe that
+Furthermore, comparing Equations~\ref{eq:chainrule_burgers} and~\ref{eq:nonconserv_burgers}, we observe that
 \begin{equation}
-	\frac{dx}{dt} = u.
+	\frac{dx}{dt} = u,
 \end{equation}
-Then, the characteristic curves are given by
+which allows us to obtain an equation for the characteristic line that passes through $x_0$
 \begin{equation}
 	x = x_0 + u_0 t,
 	\label{eq:charact_burgers}
 \end{equation}
-where $u_0=u(x,0)$ represents the slope of each line, showing that these slopes depend on the initial value of the solution. Note that since $u$ is the characteristic speed of the problem and $f$ is an increasing function, higher values of the solution will travel faster than smaller values of $u$. To illustrate this, consider the following example, as shown in Figure~\ref{fig:nslcexa}
+where $u_0=u(x,0)$ is the slope of each line. This means that each characteristic line has an inclination that depends on the initial value of the solution. Note that since $u$ is the characteristic speed of the problem and $f(u)$ is an increasing function, i.e. higher values of the solution travel faster than smaller values of $u$, causing the solution to deform. To illustrate this, consider the following example shown in Figure~\ref{fig:nslcexa}
 \begin{equation}
 	u(x,0) = 
 	\begin{cases}
@@ -1044,14 +1044,17 @@ where $u_0=u(x,0)$ represents the slope of each line, showing that these slopes 
 	\label{fig:nslcex}
 \end{figure}
 
-Based on the previous discussion, we expect the region $x<1$ to move towards the right. Since the solution after $x=1$ remains stationary, then $u$ will accumulate towards $x=1$ until a shock has formed. Let us now visualize this via the method of characteristics. Using Equation~\ref{eq:charact_burgers} at different $x$-locations, we draw the characteristic lines in Figure~\ref{fig:nlscchar}. Observe that multiple characteristic lines intersect for a single value of $u$ at $(x,t) = (1,1)$. This is a consequence of the formation of a shock wave, a discontinuous characteristic of the Burgers equation. The resulting form of the solution can be seen in Figure~\ref{fig:nslcexb} at $t=1$. 
+Since the solution is its own convective speed, we expect the region $x<1$ to move towards the right, and the region after this point to remain stationary. Then a portion of the initial solution will meet at $x=1$, where a shock will form. Let us now visualize this via the method of characteristics. Using Equation~\ref{eq:charact_burgers} at different $x$-locations, we draw the characteristic lines in Figure~\ref{fig:nlscchar}. Multiple curves can be seen to intersect for a single value of $u$ at $(x,t) = (1,1)$, corresponding to the solution illustrated in Figure~\ref{fig:nslcexb} at $t=1$. 
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=0.45\linewidth]{Pictures/nonlinear_scalar_characteristics}
 	\caption{Characteristic lines for Equation~\ref{eq:nlscex0}.}
 	\label{fig:nlscchar}
 \end{figure}
-After $t=1$, the method of characteristics breaks, and instead, the discontinuity is expected only to translate. The speed at which the translation occurs depends on the values of both sides of the discontinuity. Consider the integral form of the conservation law applied to a finite region in the $(x,t)$ plane where the shock has already formed similar to Figure~\ref{fig:riem_charact_scalar}. This is given by
+
+At $t=1$, the method of characteristics breaks. To ensure conservation after this moment, the discontinuity is expected only to translate at a speed $s$. This speed depends on the values of both sides of the discontinuity and can be obtained via the Rankine-Hugoniot relation, which we now derive. 
+
+Consider the integral form of the conservation law applied to a finite region in the $(x,t)$ plane where the shock has already formed and only translates, similar to Figure~\ref{fig:riem_charact_scalar}. This results in
 \begin{equation}
 	\frac{\partial}{\partial t} \int_{x_L}^{x_R} u(x,t) dx + [f(u_R) - f(u_L)] = 0.
 	\label{eq:integral_cl_rankinehugoniot}
@@ -1061,16 +1064,18 @@ Assuming constant values of $u$ on the left and right side of the discontinuity,
 	\frac{u(x_R,t)-u(x_L,t)}{\Delta t} \Delta x + f(u_R)-f(u_L) = 0,
 \end{equation}
 which in the limit of $\Delta t\rightarrow 0$ becomes
-\begin{equation}
-	s = \frac{dx}{dt} = \frac{f(u_R)-f(u_L)}{u_R-u_L},
-\end{equation}
+\begin{eqBox}
+	\begin{equation}
+		s = \frac{dx}{dt} = \frac{f(u_R)-f(u_L)}{u_R-u_L},
+	\end{equation}
+\end{eqBox}
 where $s$ is the shock speed. This equation is known as the Rankine-Hugoniot relation. For the Burgers equation with $f(u)=u^2/2$, we find that the shock speed is given by
 \begin{equation}
-	s = \frac{1}{2} \frac{\left(u_R^2 - u_L^2\right)}{u_R-u_L} = \frac{1}{2} \left(u_L + u_R\right).
+	s = \frac{1}{2} \frac{\left(u_R^2 - u_L^2\right)}{u_R-u_L} = \frac{1}{2} \left(u_L + u_R\right),
 \end{equation}
-Hence, the shock speed can be found to be $s=\frac{1}{2}\left(0+1\right)=\frac{1}{2}$ for the considered problem in Equation~\ref{eq:nlscex0}. 
-
-Now, consider the problem where the initial conditions are given by
+which can be computed for the problem in Equation~\ref{eq:nlscex0} to be $s=\frac{1}{2}\left(0+1\right)=\frac{1}{2}$. 
+\subsubsection{Weak solutions}
+Now, consider the following initial conditions
 \begin{equation}
 	u(x,0) = 
 	\begin{cases}
@@ -1079,14 +1084,14 @@ Now, consider the problem where the initial conditions are given by
 	\end{cases}
 	\label{eq:nlscex00}
 \end{equation}
-In this case, the characteristic lines do not intersect and can be shown in Figure~\ref{fig:nlscex2}. 
+In this case, the characteristic lines do not intersect and are displayed in Figure~\ref{fig:nlscex2}. 
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=0.4\linewidth]{Pictures/nonlinear_scalar_entropycond_0}
 	\caption{Characteristic lines for Equation~\ref{eq:nlscex00}.}
 	\label{fig:nlscex2}
 \end{figure}
-While these curves do not cross, we are missing information in the star region.  Consider a solution of the form
+While these curves do not cross, we are missing information in the star region.  One possible solution of this problem can be written
 \begin{equation}
 	u(x,t) = 
 	\begin{cases}
@@ -1095,8 +1100,8 @@ While these curves do not cross, we are missing information in the star region. 
 	\end{cases}
 	\label{eq:nlscsol1}
 \end{equation}
-illustrated in Figure~\ref{fig:expansionshock}. While Equation~\ref{eq:nlscsol1} satisfies the Rankine-Hugoniot relation, this solution is known as an expansion shock, where information appears to come out of a discontinuity. Clearly, from a physical point of view, this violates the entropy condition. In a physical shock, characteristics are expected to go into the discontinuity as time advances. Hence, while Equation~\ref{eq:nlscsol1} is a mathematical solution, it is not an entropy solution. Consider instead 
-\begin{figure}[htbp]
+as illustrated in Figure~\ref{fig:expansionshock}. This form of the solution satisfies the Rankine-Hugoniot relation and is known as an expansion shock, where information appears to come out of a discontinuity. From a physical point of view, this violates the entropy condition. In a physical shock wave, characteristics are expected to go into the discontinuity as time advances. Hence, while Equation~\ref{eq:nlscsol1} is a mathematical solution, it is not an entropy or physically relevant solution. 
+\begin{figure}[tb]
 	\centering
 	\begin{subfigure}[b]{0.4\linewidth}
 		\includegraphics[width=\linewidth]{Pictures/nonlinear_scalar_entropycond_1}
@@ -1112,6 +1117,8 @@ illustrated in Figure~\ref{fig:expansionshock}. While Equation~\ref{eq:nlscsol1}
 	\caption{Mathematically admissible solutions to problem in Equation~\ref{eq:nlscex00}}
 	\label{fig:entropycond}
 \end{figure}
+
+Consider instead 
 \begin{equation}
 	u(x,t) = 
 	\begin{cases}
@@ -1121,30 +1128,27 @@ illustrated in Figure~\ref{fig:expansionshock}. While Equation~\ref{eq:nlscsol1}
 	\end{cases}
 	\label{eq:nlscsol1}
 \end{equation}
-which is known as a rarefaction wave, shown in Figure~\ref{fig:rarefactionfan}. Note that in this case, this is a smooth solution and it is physically admissible. 
+which is known as a rarefaction wave, shown in Figure~\ref{fig:rarefactionfan}. In this case, the solution consists of a smooth transition between the left and right states, consistent with the entropy condition.
 
-As we have observed, even with smooth initial conditions, nonlinear equations can develop discontinuities. For a general conservation law, we say a solution is a classical solution if it is continuously differentiable as required per the partial differential equation and if it satisfies it. However, we must expand the range of admissible solutions to include those that may not be differentiable, such that we can deal with the formation of shocks. This group of $u$ is known as weak solutions. 
+Even with smooth initial conditions, nonlinear equations can develop discontinuities. For a general conservation law, we say a solution that satisfies a PDE of order $k$ is a classical solution if the first $k$ derivatives exist and are continuous. So, how is a discontinuous solution admitted in a PDE? It turns out that we need to expand the range of admissible solutions to include those that may not be differentiable so that we can deal with the formation of shocks. The set of both classical and discontinuous $u$ is generally known as weak solutions. They are considered to satisfy the conservation law in an integral sense, which was the approach that we used to derive the Rankine-Hugoniot relation.
 
-As we observed in the second problem, weak solutions need not be unique, and hence we must add a constraint to single out those relevant in the physical world.  Hence, to identify physical solutions, we consider a shock wave to be admissible only if the following entropy condition is satisfied 
+Recall our second example in Equation~\ref{eq:nlscex00}. We showed that weak solutions are not necessarily unique, and hence we must add a constraint to single out those relevant in the physical world. Hence, to identify physical solutions, we consider a discontinuity to be a physical shock wave only if the following entropy condition is satisfied 
 \begin{equation}
 	f'(u_L) > s > f'(u_R),
 \end{equation}
 which is consistent with the choice of Equation~\ref{eq:nlscsol1} as the physically relevant solution in our second example.
 
 \subsection{Nonlinear Hyperbolic Systems}
-Applications of engineering interest are typically described by a system of conservation laws of the form
+Applications of engineering interest can be described by a system of conservation laws of the form
 \begin{equation}
 	\frac{\partial \vec u}{\partial t} + \frac{\partial \vec F (\vec u)}{\partial x} = 0,
+	\label{eq:9348342432}
 \end{equation}
-where $\vec u$ is the vector of conserved variables and $\vec F(\vec u)$ is the vector of fluxes. In Section~\ref{sec:linear_hyper_systems}, we stated that a system is said to be hyperbolic if the flux Jacobian matrix has real eigenvalues and a complete set of linearly independent eigenvectors. Previously, we considered constant Jacobian matrices that led to a set of linear equations. In this section, we consider problems whose Jacobian matrices have the form 
+where $\vec u$ is the vector of conserved variables and $\vec F(\vec u)$ is the vector of fluxes. Previously, we considered constant Jacobian matrices that led to a set of linear equations. In this section, we consider problems whose Jacobian matrices have the form 
 \begin{equation}
 	A(\vec u) = \frac{\partial \vec F(\vec u)}{\partial \vec u},
 \end{equation}
-and hence both the eigenvalues and eigenvectors depend on the value of the solution, which in turn depends on time. An example of a nonlinear hyperbolic system is given by the Euler equations, which can be written in one dimension
-\begin{equation}
-	\frac{\partial \vec u}{\partial t} + \frac{\partial  \vec{F}}{\partial x} = 0,
-\end{equation}
-where
+and hence both the eigenvalues and eigenvectors depend on the value of the solution, which in turn depends on time. An example of a nonlinear hyperbolic system is given by the Euler equations, which can be written in one dimension using Equation~\ref{eq:9348342432} with
 \begin{equation}
 	\vec u = \begin{bmatrix}
 		u_1 \\ u_2 \\ u_3
@@ -1163,24 +1167,28 @@ where
 		\rho v \\ \rho v^2 + P \\ v(\rho E + p)
 	\end{bmatrix}.
 \end{equation}
-$\rho$ is density, $v$ is velocity and $E$ is the specific energy. Recall that the speed of sound is given by
+$\rho$ is density, $v$ is velocity and $E$ is the specific energy
 \begin{equation}
-	c = \sqrt{\frac{\gamma p}{\rho}}.
+E = e + \frac{1}{2}v^2.
 \end{equation}
-We can write the Euler equations in quasilinear form 
+We assume ideal gas law, hence the specific internal energy $e$ is given by
+\begin{equation}
+	e = \frac{p}{(\gamma-1)\rho},
+\end{equation}
+where $\gamma$ is the ratio of specific heats. In quasilinear form, we write 
 \begin{equation}
 	\frac{\partial \vec u}{\partial t} + A(\vec u) \frac{\partial \vec u}{\partial x} = 0,
 \end{equation}
-where $A(\vec u)$ is the jacobian matrix given by
+where $A(\vec u)$ is the Jacobian matrix given by
 \begin{equation}
-	A(\vec u) = \frac{\partial \vec F}{\partial \vec u} =
+	A(\vec u) = \frac{\partial \vec F(\vec u)}{\partial \vec u} =
 	\begin{bmatrix}
 	\frac{\partial f_1}{\partial u_1} & \frac{\partial f_1}{\partial u_2} & \frac{\partial f_1}{\partial u_3} \\
 	\frac{\partial f_2}{\partial u_1} & \frac{\partial f_2}{\partial u_2} & \frac{\partial f_2}{\partial u_3} \\
 	\frac{\partial f_3}{\partial u_1} & \frac{\partial f_3}{\partial u_2} & \frac{\partial f_3}{\partial u_3} \\
 	\end{bmatrix},
 \end{equation}
-To calculate the Jacobian of the flux vector, we write the Euler fluxes in terms of the conserved variables $u_1,~u_2,~u_3$
+To compute $A(\vec u)$, we write the Euler fluxes in terms of $u_1,~u_2,~u_3$
 \begin{equation}
 	\vec F = 
 	\begin{bmatrix}
@@ -1191,31 +1199,36 @@ To calculate the Jacobian of the flux vector, we write the Euler fluxes in terms
 		u_2 \\ u_2^2/u_1 + (\gamma-1)(u_3-u_2^2/2 u_1) \\ u_3 \frac{u_2}{u_1} \gamma - \frac{u_2^3}{u_1^2}\frac{(\gamma-1)}{2} 
 	\end{bmatrix}.
 \end{equation}
-This yields the Jacobian matrix for the Euler equations
+Hence, the Jacobian matrix for the Euler equations is given by
 \begin{align}
 	A(\vec u) = 
 	\begin{bmatrix}
 		0 & 1 & 0 \\
 		\frac{1}{2}(3-\gamma)\left(\frac{u_2}{u_1}\right)^2 & (3-\gamma)\left(\frac{u_2}{u_1}\right) & \gamma-1 \\
 		(\gamma-1) \left(\frac{u_2}{u_1}\right)^2 - \gamma \frac{u_2 u_3}{u_1^2} & \gamma \frac{u_3}{u_1}-\frac{3}{2}(\gamma-1)\left(\frac{u_2}{u_1}\right)^2 & \gamma \frac{u_2}{u_1}
-	\end{bmatrix}\\
+	\end{bmatrix},
 \end{align}
+or using the conserved variables
 \begin{eqBox}
 	\begin{align}
 		A(\vec u) = 
 		\begin{bmatrix}
 			0 & 1 & 0 \\
 			\frac{1}{2} (\gamma-3)v^2 & (3-\gamma)v & \gamma-1 \\ 
-			\frac{1}{2} (\gamma-2) v^3 - c^2 \frac{u}{\gamma-1} & \frac{1}{2}\frac{3-2\gamma}{2}v^2 + \frac{c^2}{\gamma-1} & \gamma v
-		\end{bmatrix}
+			\frac{1}{2} (\gamma-2) v^3 - c^2 \frac{v}{\gamma-1} & \frac{3-2\gamma}{2}v^2 + \frac{c^2}{\gamma-1} & \gamma v
+		\end{bmatrix},
 		\label{eq:eulerjacobian}
 	\end{align}
 \end{eqBox}
-We have stated in previous sections that hyperbolic equations can be thought of as a superposition of travelling waves, with wavespeeds the eigenvectors of the Jacobian matrix. The eigenvalues of $A(\vec u)$ are 
+where $c$ is the speed of sound
+\begin{equation}
+	c = \sqrt{\frac{\gamma p}{\rho}}.
+\end{equation}
+The eigenvalues of $A(\vec u)$ are 
 \begin{equation}
 	\lambda_1 = v - c, \quad\quad \lambda_2 = v, \quad\quad \lambda_3 = v + c,
 \end{equation}
-which shows that the Euler equations can be thought of a superposition of a left-travelling sound wave, a momentum wave and a right-going sound wave, consistent with the propagation of sound. The corresponding eigenvectors are 
+and the associated eigenvectors are 
 \begin{equation}
 	\vec q_1 = \begin{bmatrix}
 		1 \\ v - c \\ H - vc
@@ -1231,11 +1244,11 @@ which shows that the Euler equations can be thought of a superposition of a left
 \end{equation}
 where $H$ is the total enthalpy defined as
 \begin{equation}
-	H = \frac{E + p}{\rho}.
+	H = E + \frac{p}{\rho}.
 \end{equation} 
-The eigenvalues of the Euler system are distinct and a complete set of eigenvectors can be found, proving that the Euler equations are strictly hyperbolic.  The nonlinearity of these equations makes the study of the Riemann problem much more challenging compared to the linear systems. In the next section, we briefly discuss some important considerations when analyzing the Riemann problem for the Euler equations.
+The eigenvalues of the Euler system are distinct, and a complete set of eigenvectors can be found, proving that the Euler equations are strictly hyperbolic. The eigenvalues represent the characteristic speeds of the problem,  showing that the Euler equations can be interpreted as a superposition of a left-travelling sound wave, a momentum wave and a right-going sound wave, consistent with the propagation of sound. The nonlinearity of these equations makes the study of the Riemann problem much more challenging compared to the linear systems. In the next section, we briefly discuss some important considerations when analyzing the Riemann problem for the Euler equations.
 \subsection{The Riemann Problem for the Euler equations}
-Consider a tube with a thin membrane at $x=0$ separating two different gases, each with a given density $\rho$ velocity $v$, and pressure $p$ as shown in Figure~\ref{fig:shocktube}.  Initially, both gases are considered at rest ($v_L=v_R=0$). Note it can also be the same gas at different pressures. At time $t$, the thin membrane is ruptured, causing the gas in the region of high pressure to move towards the low-pressure side to reach thermodynamic equilibrium. This configuration is known as \textit{Sod's shock tube} and is the physical equivalent to the Riemann problem in gas dynamics.
+Consider a tube with a thin membrane at $x=0$ separating two different gases, each with a given density $\rho$ velocity $v$, and pressure $p$ as shown in Figure~\ref{fig:shocktube}.  Initially, both gases are considered at rest ($v_L=v_R=0$). Note it can also be the same gas at different pressures. At time $t$, the thin membrane is ruptured, causing the fluid in the region of high pressure to move towards the low-pressure side to reach thermodynamic equilibrium. This configuration is known as \textit{Sod's shock tube} and is the physical equivalent to the Riemann problem in gas dynamics.
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=0.6\linewidth]{Pictures/sod_shock_tube}
@@ -1243,7 +1256,7 @@ Consider a tube with a thin membrane at $x=0$ separating two different gases, ea
 	\label{fig:shocktube}
 \end{figure}
 
-It can be shown that the solution to this problem consists of a contact discontinuity associated with $\lambda_2$, and a shock or a rarefaction wave associated with $\lambda_1$ and $~\lambda_3$. Hence, four different configurations are possible solutions for the Riemann problem, all of which need to be considered when deriving an exact solution. These are shown in Figure~\ref{fig:euler_characteristics}.
+It can be shown that the solution to this problem consists of a contact discontinuity associated with $\lambda_2$, and a shock or a rarefaction wave associated with $\lambda_1$ and $~\lambda_3$. Four different configurations are then possible solutions for the Riemann problem, all of which need to be considered when deriving an exact solution. These are shown in Figure~\ref{fig:euler_characteristics}.
 \begin{figure}[htb]
 	\centering
 	\begin{subfigure}[b]{0.35\linewidth}
@@ -1262,7 +1275,7 @@ It can be shown that the solution to this problem consists of a contact disconti
 		\includegraphics[width=\linewidth]{Pictures/euler_characteristics_3.pdf}
 		\caption{}
 	\end{subfigure}
-	\caption{Possible wave solutions for the Euler Riemann problem}
+	\caption{Possible characteristic configurations for the Euler Riemann problem}
 	\label{fig:euler_characteristics}
 \end{figure}
 
@@ -1288,7 +1301,7 @@ To visualize the behaviour of the Euler equations, consider Sod's shock tube pro
 		\frac{1}{8} \\ 0 \\ \frac{1}{10}
 	\end{bmatrix}.
 \end{align}
-After $t=0.2$, the exact solution can be seen in Figure~\ref{fig:shocktubesol}. The figures are divided into five regions, which we call A, B, C, D, E, from left to right. 
+After $t=0.2$, the exact solution can be seen in Figure~\ref{fig:shocktubesol}. The figures are divided into five regions, which we denote A, B, C, D, E, from left to right. 
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=\linewidth]{Pictures/sod_shock_tube_solution}
@@ -1298,7 +1311,7 @@ After $t=0.2$, the exact solution can be seen in Figure~\ref{fig:shocktubesol}. 
 \begin{itemize}
 	\item Regions A and E contain the initial left and right states, respectively.
 	\item Region B consists of a rarefaction wave, which is a smooth transition of quantities $\rho,~v,$ and $p$. 
-	\item At the interface between regions C and D, we observe a contact discontinuity. This wave represents the effects of the initial separation of the left and right states travelling to the region of low pressure. Across this wave, pressure and velocity remain constant, but density and quantities that depend on it contain jumps.
+	\item At the interface between regions C and D, we observe a contact discontinuity. This wave represents the effects of the initial separation of the left and right states travelling to the region of low pressure. Across this wave, pressure and velocity remain constant, but density is discontinuous.
 	\item At the interface between regions D and E, a shock wave has formed due to the nonlinearities of the Euler equations. This shock wave travels with a speed $s$, which satisfies the Rankine-Hugoniot relationship. In this case, all considered quantities $\rho,~v$ and $p$ present discontinuous behaviour across the wave. 
 \end{itemize}
 
@@ -1308,7 +1321,7 @@ A more cost-effective approach is the use of approximate Riemann solvers to comp
 	\frac{\partial \vec u}{\partial t} + A(\vec u) \frac{\partial \vec u}{\partial x} = 0.
 	\label{eq:09707}
 \end{equation}
-For the Euler equations, $A(\vec u)$ is given by Equation~\ref{eq:eulerjacobian}. The eigenvalues of $A$ depend on the value of the solution and hence vary in time. Recall that for the Euler equations, three types of waves can be expected: contact, rarefaction and shock waves. We are interested in handling the formation of the shocks.  Consider the following finite volume scheme with forward Euler time-stepping
+For the Euler equations, $A(\vec u)$ is given by Equation~\ref{eq:eulerjacobian}. The eigenvalues of $A$ depend on the value of the solution and hence vary in time. Recall that for the Euler equations, three types of waves can be expected: contact, rarefaction and shock waves. We are interested in handling the formation of the shocks.  Consider the following finite volume scheme with the forward Euler time-stepping method
 \begin{equation}
 	\vec u^{t+1}_i = \vec u^t_i - \frac{\Delta t}{\Delta x} \left[\vec F_{i+1/2} - \vec F_{i-1/2}\right],
 \end{equation}
@@ -1329,7 +1342,7 @@ Hence, at the interfaces, we need to solve a Riemann problem of the form
 Roe proposed considering instead a constant Jacobian matrix $\tilde A$ with the following properties
 \begin{itemize}
 	\item $\tilde A$ must have real eigenvalues and a complete set of eigenvectors such that the problem in Equation~\ref{eq:09707} is hyperbolic.
-	\item $\tilde A$ must be consistent with the exact problem $\tilde A (\vec u, \vec u) = A(\vec u)$.
+	\item $\tilde A$ must be consistent with the exact problem, i.e. $\tilde A (\vec u, \vec u) = A(\vec u)$.
 	\item The resulting system must be conservative across discontinuities, i.e. $\vec F(\vec u_R) - \vec F (\vec u_L) = \tilde A(\vec u_R - \vec u_L)$ must be satisfied.
 \end{itemize}
 Roe demonstrated that the matrix can be written
@@ -1371,7 +1384,7 @@ where $\tilde \alpha_i$ is the jump in terms of the characteristic variables and
 \end{equation}
 where $\tilde{\vec \alpha}=[\tilde\alpha_1,\tilde\alpha_2,\tilde\alpha_3]^T$. The resulting expressions for these coefficients can be written
 \begin{align}
-	\tilde \alpha_1 &= \frac{1}{2\tilde a}\left(\Delta u_1 \tilde u + \Delta u_1\tilde c - \Delta u_2 - \tilde c \tilde \alpha_2\right),\\ 
+	\tilde \alpha_1 &= \frac{1}{2\tilde c}\left(\Delta u_1 \tilde u + \Delta u_1\tilde c - \Delta u_2 - \tilde c \tilde \alpha_2\right),\\ 
 	\tilde \alpha_2 &= \frac{\gamma-1}{\tilde c^2} \left(\Delta u_1 \tilde H - \Delta u_1 \tilde u^2 + \tilde u \Delta u_2 - \Delta u_3 \right),\\
 	\tilde \alpha_3 &= \Delta u_1 - \tilde\alpha_1 - \tilde\alpha_2.
 \end{align}
@@ -1388,7 +1401,9 @@ A disadvantage of the Roe solver is that it may violate the entropy condition in
 	\end{cases}
 \end{equation}
 The drawback of this approach is that the value of $\delta\ll1$ needs to be typically tuned for each specific application.
-
+\begin{jupyternote}
+	Check out the Sod's Shock-Tube Problem Jupyter notebook \href{\binderurl}{\underline{here}}. You can also download the files from the Gitlab repository \href{\repourl}{\underline{here}}.
+\end{jupyternote}
 \section{MUSCL Schemes}\label{sec:muscl}
 We have shown in previous sections that finite-volume schemes are typically written for a general conservation law in the form
 \begin{equation}
@@ -1403,7 +1418,7 @@ where $u_{i+1/2}$ is the solution at the interface between $\Omega_i$ and $\Omeg
 	u_{i+1/2}^L &= u_i,\\
 	u_{i+1/2}^R &= u_{i+1}.
 \end{align}
-For a better resolution of smooth solutions, we can derive methods with orders of accuracy higher than one, allowing the numerical error to significantly decrease. This can be done by replacing the constant interface values of the solution $\vec u_{i+1/2}$ for a reconstructed value, which is interpolated using information from neighbouring cells. This idea, developed by van Leer, is an extension of Godunov's method, and is known as the MUSCL (monotone upstream-centered schemes for conservation laws) reconstruction approach. A graphical representation of the method is shown in Figure~\ref{fig:muscl_scheme}.
+For a better resolution of smooth solutions, we can derive methods with orders of accuracy higher than one, allowing the numerical error to decrease significantly. This can be done by replacing the constant interface values of the solution $\vec u_{i+1/2}$ for a reconstructed value, which is interpolated using information from neighbouring cells. This idea, developed by van Leer, is an extension of Godunov's method, and is known as the MUSCL (monotone upstream-centered schemes for conservation laws) reconstruction approach. A graphical representation of the method is shown in Figure~\ref{fig:muscl_scheme}.
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=0.5\linewidth]{Pictures/muscl_scheme}
@@ -1415,17 +1430,17 @@ Hence, the solution is approximated by a Taylor series expansion around the cell
 	u(x) = u_i + (x-x_i)\frac{\partial u_i}{\partial x} + \frac{1}{4}(x-x_i)\frac{\partial^2 u_i}{\partial x^2} + \ldots,
 	\label{eq:3209423}
 \end{equation}
-where the derivatives are computed using cell solution differences with respect to neighbouring cells. Note that this reconstruction process can be done using additional terms in Equation~\ref{eq:3209423} to yield higher order schemes. Hence, on the left and right sides of the interface, the solution can be found by
+where the derivatives are computed using cell solution differences with respect to neighbouring cells. Note that this reconstruction process can be done using additional terms in Equation~\ref{eq:3209423} to yield higher-order schemes. Hence, on the left and right sides of the interface, the solution can be found by
 \begin{align}
 	\vec u_{i+1/2}^L &= \vec u_i + \frac{1}{2} \vec \delta_i,\\
 	\vec u_{i+1/2}^R &= \vec u_{i+1} - \frac{1}{2} \vec \delta_{i+1},
 \end{align}
 where the so-called slopes $\delta_i$ can be defined using a blended approach with upwinding parameter $b$
 \begin{equation}
-	\vec \delta_i = \frac{1}{2}(1+b)\delta \vec u_{i-1/2} + \frac{1}{2}(1-r)\delta \vec u_{i+1/2},
+	\vec \delta_i = \frac{1}{2}(1+b)\delta \vec u_{i-1/2} + \frac{1}{2}(1-b)\delta \vec u_{i+1/2},
 	\label{eq:48742938}
 \end{equation}
-such that $r=1$ results in an upwind-biased approximation. Considering a linear reconstruction, the solution slopes are given by
+such that $b=1$ results in an upwind-biased approximation. Considering a linear reconstruction, the solution slopes are given by
 \begin{align}
 	 \delta \vec u_{i+1/2} = \vec u_{i+1} - \vec u_i, \\
 	 \delta \vec u_{i-1/2} = \vec u_{i} - \vec u_{i-1}.
@@ -1435,7 +1450,7 @@ Finally, the common fluxes can be computed using an appropriate Riemann solver o
 	\vec F_{i+1/2} = F(\vec u^L_{i+1/2},\vec  u^R_{i+1/2}).
 \end{equation}
 \subsection{Second-Order Upwind Scheme for Linear Advection}
-For linear advection, acommon choice is the upwind Riemann flux given by
+For linear advection, a common choice is the upwind Riemann flux given by
 \begin{equation}
 	F^{upw}(u^L, u^R) = \alpha u^L,
 	\label{eq:120398}
@@ -1445,7 +1460,7 @@ where $\alpha$ is the advection velocity. At the $x_{i+1/2}$ and $x_{i-1/2}$ int
 	F^{upw}_{i+1/2} = \alpha u^L_{i+1/2} &= \alpha u_i + \frac{\alpha}{2}\delta_i, \label{eq:09809435}\\
 	F^{upw}_{i-1/2} = \alpha u^L_{i-1/2} &= \alpha u_{i-1} + \frac{\alpha}{2}\delta_{i-1},
 \end{align}
-where we choose upwind-biased slopes in Equation~\ref{eq:48742938} with $r=1$ such that
+where we choose upwind-biased slopes in Equation~\ref{eq:48742938} with $b=1$ such that
 \begin{align}
 	\delta_i &= \delta u_{i-1/2} = u_i - u_{i-1}, \\
 	\delta_{i-1} &= \delta u_{i-3/2} = u_{i-1} - u_{i-2}.
@@ -1477,11 +1492,11 @@ where $N$ is the number of finite volume cells. A numerical method is said to be
 \begin{equation}
 	TV(u^t+1)\leq TV(u^t).
 \end{equation}
-Harten proved that TVD schemes are monotonicity-preserving, meaning that in time,maxima does not increase, minima does not decrease, and no new extrema are generated in the solution. It turns out that this property can only be attributed to certain types of schemes. Godunov's theorem states
+Harten proved that TVD schemes are monotonicity-preserving, meaning that in time, maxima does not increase, minima does not decrease, and no new extrema are generated in the solution. It turns out that this property can only be attributed to certain types of schemes. Godunov's theorem states
 \begin{theorem}
 	Linear numerical schemes for solving partial differential equations (PDE's), having the property of not generating new extrema (monotone scheme), can be at most first-order accurate.
 \end{theorem}
-Hence, while higher-order schemes are more accurate for smooth solutions, they introduce spurious oscillations in the presence of discontinuities, shocks and large solution gradients and are thus not TVD. Different approaches can be used to ensure the TVD property for high-order numerical methods under these circumstances. In the next section, we discuss one of these techniques, known as flux/slope limiters.
+Hence, while higher-order schemes are more accurate for smooth solutions, they introduce spurious oscillations in the presence of discontinuities, shocks and large solution gradients and are thus not TVD. Hence, TVD schemes are at most first-order. Different approaches can be used to ensure the TVD property for high-order numerical methods under these circumstances. In the next section, we discuss one of these techniques, known as flux/slope limiters.
 
 
 \subsection{Limiters}
@@ -1518,7 +1533,7 @@ For the second-order upwind-biased scheme in Equation~\ref{eq:34290}, we can obt
 	F_{i+1/2} &= F(u_{i+1/2}) = \alpha u_i + \frac{\alpha}{2}\phi(r^+_{i-1/2})\left(u_i-u_{i-1}\right),\\
 	F_{i-1/2} &= F(u_{i-1/2}) = \alpha u_{i-1} + \frac{\alpha}{2}\phi(r^+_{i-3/2})\left(u_{i-1}-u_{i-2}\right).
 \end{align}
-Clearly, in the case $\phi(r) = 0$, the flux reduces to the first-order upwind scheme. Some slope limiting functions are shown in Table~\ref{table:limiters}. In the next section, we show applications of these limiters in the context of linear advection and the Euler equations.
+Clearly, in the case $\phi(r) = 0$, the flux reduces to the first-order upwind scheme. This occurs particularly when the limiter detects a change in the slope (negative $r$). Some slope limiting functions are shown in Table~\ref{table:limiters}. In the next section, we show applications of these limiters in the context of linear advection and the Euler equations.
 \begin{table}[tb]
 	\centering
 	\caption{Common forms of limiter functions $\phi(r)$}
@@ -1538,7 +1553,7 @@ Consider the following advection problem
 \begin{align}
 	\frac{\partial u}{\partial t} + \frac{\partial u}{\partial x} = 0,
 \end{align}
-on a grid with $x\in[0,2]$ with periodic boundary conditions. The solution at $t=0$ is given by
+on a grid with $x\in[0,2]$ with periodic boundary conditions. The initial conditions at $t=0$ are given by
 \begin{align}
 	u(x, 0) &= 
 	\begin{cases}
@@ -1558,7 +1573,7 @@ Implementation of the function in Table~\ref{table:limiters} shows the monotonic
 	\label{fig:advection_muscl}
 \end{figure}
 
-A comparison of the TVD properties of the scheme and other additional assessments can be made via the MUSCL Schemes Jupyter notebook. 
+A comparison of the TVD properties of the scheme and other additional assessments can be made using the MUSCL Schemes Jupyter notebook. 
 \begin{jupyternote}
 	Check out the MUSCL Schemes Jupyter notebook \href{\binderurl}{\underline{here}}. You can also download the files from the Gitlab repository \href{\repourl}{\underline{here}}.
 \end{jupyternote}
@@ -1586,12 +1601,12 @@ Consider Sod's shock-tube problem with initial conditions
 	\label{eq:39248243}
 \end{align}
 on a domain $x\in[0, 1]$ and $t\in(0,0.2]$. Figure~\ref{fig:euler_muscl} shows a comparison between Godunov's first-order scheme and a linear MUSCL-reconstructed method with different limiters. We note that this problem is unstable for the MUSCL scheme if no limiter function is added. 
-The analysis of these results is similar to the advection example and is left as an exercise to the student. The corresponding Jupyter notebook shows the implementation of these functions for the Euler equations.
+The analysis of these results is similar to the advection example and is left as an exercise to the student. The associated Jupyter notebook shows the implementation of these functions for the Euler equations.
 
 \begin{figure}[htb]
 	\centering
 	\includegraphics[width=\linewidth]{Pictures/euler_muscl}
-	\caption{Results of Sod's shock tube problem at $t=2$ with initial conditions in Equation~\ref{eq:39248243}}
+	\caption{Results of Sod's shock tube problem at $t=0.2$ with initial conditions in Equation~\ref{eq:39248243}}
 	\label{fig:euler_muscl}
 \end{figure}
 \begin{jupyternote}
@@ -1599,27 +1614,27 @@ The analysis of these results is similar to the advection example and is left as
 \end{jupyternote}
 
 \chapter{Consistency, Stability, Convergence}
-Now that we have derived a few different schemes for solving linear advection, Burgers equation, and linear diffusion, we should now ask ourselves whether they will give us accurate predictions, and are there any restrictions on when they can be used. We have already discussed the importance of order of accuracy, which governs the rate at which the error will converge to zero. Now we will introduce the concepts of consistency, stability, and convergence. If we can prove that our numerical scheme satisfies all three of these properties we can be confident that it is promising approach for the Euler or Navier-Stokes equations. In the current section we will explore these properties in the context of finite difference methods, but the exact same steps can be taken to check whether a finite volume method is suitable or not. Some additional references on these topics include~\cite{hirschNumericalComputationInternal2007a,andersonComputationalFluidMechanics2016}.
+Now that we have derived a few different schemes for solving linear advection, Burgers equation, and linear diffusion, we should now ask ourselves whether they will give us accurate predictions, and are there any restrictions on when they can be used. We have already discussed the importance of the order of accuracy, which governs the rate at which the error will converge to zero. Now we will introduce the concepts of consistency, stability, and convergence. If we can prove that our numerical scheme satisfies all three of these properties, we can be confident that it is a promising approach for the Euler or Navier-Stokes equations. In the current section, we will explore these properties in the context of finite difference methods, but the exact same steps can be taken to check whether a finite volume method is suitable or not. Some additional references on these topics include~\cite{hirschNumericalComputationInternal2007a,andersonComputationalFluidMechanics2016}.
 
 \section{Consistency}
 A numerical scheme is consistent if it recovers the exact initial partial differential equation as the grid spacing and time step size are reduced. In other words, the truncation error of the scheme must go to zero in the limit $\Delta x \rightarrow 0$ and $\Delta t \rightarrow 0$. This is usually the case, and it is left as an exercise for the reader to check that our previous finite difference schemes for linear advection, Burgers equation, and linear diffusion satisfy this property. 
 
-However, this is not always the case. To demonstrate this we consider the Dufort-Frankel scheme for linear diffusion
+However, this is not always the case. To demonstrate this, we consider the Dufort-Frankel scheme for linear diffusion
 \begin{equation}
 u_i^{t+1}  = u_{i}^{t-1} + \frac{2 \beta \Delta t}{\Delta x^2} \left(u_{i-1}^t - u_i^{t+1} - u_i^{t-1} + u_{i+1}^t\right) + \mathcal{O}(\Delta x^2,\Delta t^2,(\Delta t/\Delta x)^2).
 \end{equation}
 This differs from our example scheme for linear diffusion in that it uses central differences for the time-derivative, and when computing the second-derivative in space it uses the solution at the current grid point at the previous and current time steps. While this scheme may have some useful properties, we note that it has a peculiar term in the truncation error of $\mathcal{O}((\Delta t/\Delta x)^2)$. This can be obtained from a Taylor series expansion of the second derivative. This is concerning, as for any scheme to be consistent with the original partial differential equation we require the truncation error to go to zero. However, if we use a naive approach and simply refine $\Delta x$ and $\Delta t$ at the same rate, this term will not go to zero, and the scheme will not be consistent. For example, if we reduced both the grid spacing and time step size by a half this $\mathcal{O}((\Delta t/\Delta x)^2)$ will remain the same. Hence, in order for the Dufort-Frankel scheme to be consistent with our original partial differential equation we should refine the grid spacing {\it faster} than the time step size. For example, if we reduce $\Delta t$ by a half we should reduce $\Delta x$ by a factor of four. This does not mean the Dufort-Frankel scheme is bad, per-se, but it does mean that care needs to be taken when using it.
 
 \section{Stability}
-If we can demonstrate our schemes is consistent, then we know that in the limit $\Delta x \rightarrow 0$ and $\Delta t \rightarrow 0$ we recover the exact partial differential equation. However, this is impossible to achieve in practice as it would require an infinite number of grid points and time steps. When considering stability, we are concerned with whether our numerical scheme will provide {\it physical} solutions when both $\Delta x$ and $\Delta t$ are finite. Lets start by considering what we mean by a physical solution.
+If we can demonstrate our schemes are consistent, then we know that in the limit $\Delta x \rightarrow 0$ and $\Delta t \rightarrow 0$ we recover the exact partial differential equation. However, this is impossible to achieve in practice as it would require an infinite number of grid points and time steps. When considering stability, we are concerned with whether our numerical scheme will provide {\it physical} solutions when both $\Delta x$ and $\Delta t$ are finite. Let's start by considering what we mean by a physical solution.
 
-In order to advance our solution in time we start with some initial condition. Then, by inserting this initial condition into our scheme we approximate the solution at the next timestep $t+\Delta t$. Then, we insert this approximation back into our scheme to approximate the solution at time $t+2\Delta t$, and this process is repeated over an over again until we reach our final desired time. Hence, the way we advance our simulation in time is effectively a feedback loop, with the output of each time step being recycled back through the numerical scheme to get the solution at each consecutive time step. 
+In order to advance our solution in time, we start with some initial condition. Then, by inserting this initial condition into our scheme we approximate the solution at the next timestep $t+\Delta t$. Then, we insert this approximation back into our scheme to approximate the solution at time $t+2\Delta t$, and this process is repeated over and over again until we reach our final desired time. Hence, the way we advance our simulation in time is effectively a feedback loop, with the output of each time step being recycled back through the numerical scheme to get the solution at each consecutive time step. 
 
-As an analogy we can consider what happens in other simple feedback loops, such as a microphone and speaker. When a performer sings into a microphone their voice is amplified and played bach through the speaker. We expect that this produces a physical replication of their voice, just at a louder volume for the audience. However, if the sound from the speaker is louder than the singers voice at the microphone it will get amplified, played through the speaker at a louder volume, and this cycle then repeats. This results in feedback noise, usually a high-pitched ringing that sounds nothing like the original performer, and usually happens when the performer moves to close to the speaker.
+As an analogy, we can consider what happens in other simple feedback loops, such as a microphone and speaker. When a performer sings into a microphone, their voice is amplified and played back through the speaker. We expect that this produces a physical replication of their voice, just at a louder volume for the audience. However, if the sound from the speaker is louder than the singer's voice at the microphone it will get amplified, played through the speaker at a louder volume, and this cycle then repeats. This results in feedback noise, usually a high-pitched ringing that sounds nothing like the original performer, and usually happens when the performer moves to close to the speaker.
 
-Since our numerical scheme is applied as a feedback loop, the exact same kind of thing can happen. If it amplifies our solution each time step, then the solution will continue to grow, eventually leading to non-physical values such as near-infinite density or pressure. This is colloquially referred to as the solution {\it blowing up}. In contrast, if the scheme damps our solution at each time step it will tend towards physical values, such as the background density or pressure. While this is perhaps not desirable in terms of accuracy, which will be explored later, it is a desirable property in that the solution remains stable and bounded between the initial condition and background state.
+Since our numerical scheme is applied as a feedback loop, the exact same kind of thing can happen. If it amplifies our solution each time step, then the solution will continue to grow, eventually leading to non-physical values such as near-infinite density or pressure. This is colloquially referred to as the solution {\it blowing up}. In contrast, if the scheme damps our solution at each time step, it will tend towards physical values, such as the background density or pressure. While this is perhaps not desirable in terms of accuracy, which will be explored later, it is a desirable property in that the solution remains stable and bounded between the initial condition and background state.
 
-Proving stability for non-linear problems, such as Burgers equation, is a relatively daunting task. However, if we restrict ourselves to linear equations, such as linear advection or linear diffusion, then stability can be explored more readily. In order to do this we introduce {\it Von Neumann Analysis}, also commonly referred to as Fourier Analysis. We first assume that our solution $u(x,t)$ can be represented via a Fourier Series, such that
+Proving stability for non-linear problems, such as Burgers equation, is a relatively daunting task. However, if we restrict ourselves to linear equations, such as linear advection or linear diffusion, then stability can be explored more readily. In order to do this, we introduce {\it Von Neumann Analysis}, also commonly referred to as Fourier Analysis. We first assume that our solution $u(x,t)$ can be represented via a Fourier Series, such that
 \begin{equation}
 	u(x,t) = \sum_{m} b_m(t) e^{i \kappa_m x},
 \end{equation}
@@ -1643,7 +1658,7 @@ We will also assume that the time-dependence of the solution is also wavelike wi
 	u_m(x,t) = e^{at} e^{i \kappa_m x},
 \end{equation}
 \end{eqBox}
-where $a$ is a complex number, referred to as the numerical frequency, that describes how the solution evolves in time. In order to justify this assumption we can consider the linear advection equation applied to an arbitrary wavenumber $\kappa_m$. We note that this wave will propagate at velocity $\alpha$ from left to right. Now if we consider some fixed point in space, denoted by $u_1{t}$, we note that the value of the solution in time will alose behave like a sine wave. Hence, at a fixed point in time, the solution has a wavelike structure in space and, at a fixed point in space, the solution has a wavelike structure in time. Hence, the dual wavelike structure taken for $u_m(x,t)$.
+where $a$ is a complex number, referred to as the numerical frequency, that describes how the solution evolves in time. In order to justify this assumption we can consider the linear advection equation applied to an arbitrary wavenumber $\kappa_m$. We note that this wave will propagate at velocity $\alpha$ from left to right. Now, if we consider some fixed point in space, denoted by $u_1{t}$, we note that the value of the solution in time will alose behave like a sine wave. Hence, at a fixed point in time, the solution has a wavelike structure in space and, at a fixed point in space, the solution has a wavelike structure in time. Hence, the dual wavelike structure taken for $u_m(x,t)$.
 
 With the wavelike structure of the solution described, we can now explore how that wave will change with time. Of primary importance, at least in terms of stability, is to determine whether the wave will be amplified or damped as the solution evolves. Our objective in this section is to determine whether, and under what conditions, numerical schemes satisfy this stability condition. We note that the solution at time $t+\Delta t$ is simply
 \begin{equation}
@@ -1665,7 +1680,7 @@ which describes a unit circle in the complex plane. Referred to as the amplifica
 For a methodological approach, we will break von Neumann down into a number of steps.
 
 \subsubsection{Step 1: Choose the Discrete Scheme}
-The first step in von Neumann analysis is to determine what scheme we are interested in analyzing. In this case we will consider our simple first-order scheme for linear advection
+The first step in von Neumann analysis is to determine what scheme we are interested in analyzing. In this case, we will consider our simple first-order scheme for linear advection
 \begin{equation}
 	\frac{u_i^{t+1} - u_{i}^t}{\Delta t} +  \alpha \frac{u_i^t - u_{i-1}^t}{\Delta x} = 0.
 \end{equation}
@@ -1728,7 +1743,7 @@ That is, it is only stable for CFL numbers less than one. Hence, for a given gri
 In the last section we saw that our first-order finite difference scheme has a stability limit. In this section we will explore a slightly different first-order scheme for linear advection.
 
 \subsubsection{Step 1: Choose the Discrete Scheme}
-In this case we use the following finite difference approximation of the linear advection equation
+In this case, we use the following finite difference approximation of the linear advection equation
 \begin{equation}
 	\frac{u_i^{t+1} - u_{i}^t}{\Delta t} +  \alpha \frac{u_i^{t+1} - u_{i-1}^{t+1}}{\Delta x} = 0,
 \end{equation}
@@ -1776,7 +1791,7 @@ Based on these results, we can conclude that this finite difference scheme for t
 Hence, we are able to take arbitrarily large time steps and maintain stability using this approach. Schemes of this type are referred to as being {\it unconditionally stable}.
 
 \begin{remark}
-Although this scheme is unconditionally stable, making at appealing since it allows for arbitrarily large time-steps, it also becomes more difficult/expensive for each time-step. This will be explored in the forthcoming time stepping section.
+Although this scheme is unconditionally stable, making it appealing since it allows for arbitrarily large time-steps, it also becomes more difficult/expensive for each time-step. This will be explored in the forthcoming time stepping section.
 \end{remark}
 
 \begin{figure}[htbp]
@@ -1914,10 +1929,10 @@ Hence, this linear diffusion scheme is {\it unconditionally stable}.
 \end{figure}
 
 \section{Convergence}
-If a scheme is consistent, recovering the exact partial differential equation in the limit $\Delta x \rightarrow 0$ and $\Delta t \rightarrow 0$, and stable, in that the approximate solution does not grow unbounded with time, then Lax's equivalence theorem can be applied. In summary, the theorem states that when given a properly-posed initial value problem, and a numerical scheme that is consistent, stability is the necessary and sufficient condition for convergence. In other words, if we can show that our numerical schemes is consistent and stable, then we can be sure that it will {\it converge} to the true solution of the partial differential equation in the limit $\Delta x \rightarrow 0$ and $\Delta t \rightarrow 0$.
+If a scheme is consistent, recovering the exact partial differential equation in the limit $\Delta x \rightarrow 0$ and $\Delta t \rightarrow 0$, and stable, in that the approximate solution does not grow unbounded with time, then Lax's equivalence theorem can be applied. In summary, the theorem states that when given a properly-posed initial value problem, and a numerical scheme that is consistent, stability is the necessary and sufficient condition for convergence. In other words, if we can show that our numerical schemes are consistent and stable, then we can be sure that it will {\it converge} to the true solution of the partial differential equation in the limit $\Delta x \rightarrow 0$ and $\Delta t \rightarrow 0$.
 
 \chapter{Spectral Properties}\label{ch:spectralproperties}
-In CFD the numerical error introduced by a scheme is typically classified into two general types, dissipation error and dispersion error. In this section we will discuss how to quantify these two types of error, and how they effect different types of solutions.
+In CFD, the numerical error introduced by a scheme is typically classified into two general types, dissipation error and dispersion error. In this section, we will discuss how to quantify these two types of error, and how they effect different types of solutions.
 
 \begin{figure}[htbp]
 	\centering
@@ -1936,7 +1951,7 @@ In CFD the numerical error introduced by a scheme is typically classified into t
 
 
 \section{Dissipation Error}
-We have already discussed dissipation error in the context of stability, stating that in order for a scheme to be stable it must be dissipative or neutrally dissipative. That is, the amplitude of the solution must remain the same or be reduced after each time step. We have shown this via von Neumann analysis to be the amplification factor $|e^{a\Delta t}|$, which was a function of the scheme we are using, and the wavenumber in space $\kappa_m$. While a scheme being dissipative is inherently linked with stability, it also introduces number error. For example, for the linear advection equation we know that the exact solution should have no dissipation, it should be simply the advection of the initial condition with the prescribed advection velocity. However, with our initial finite difference scheme we found that this was not the case, and the amplitude of the waves is decreased as time goes on.
+We have already discussed dissipation error in the context of stability, stating that in order for a scheme to be stable, it must be dissipative or neutrally dissipative. That is, the amplitude of the solution must remain the same or be reduced after each time step. We have shown this via von Neumann analysis to be the amplification factor $|e^{a\Delta t}|$, which was a function of the scheme we are using, and the wavenumber in space $\kappa_m$. While a scheme being dissipative is inherently linked with stability, it also introduces number error. For example, for the linear advection equation we know that the exact solution should have no dissipation, it should be simply the advection of the initial condition with the prescribed advection velocity. However, with our initial finite difference scheme, we found that this was not the case, and the amplitude of the waves is decreased as time goes on.
 
 It turns out that all the information we need to understand the dissipation error of the linear advection equation is encoded in the amplification factors we found in the von Neumann analysis section, $|e^{a\Delta t}|$. For example, for the finite difference scheme
 \begin{equation}
@@ -1946,14 +1961,14 @@ we found that the amplification factor was
 \begin{equation}
 	|e^{a\Delta t}| = |1 - \sigma + \sigma e^{-i \kappa_m \Delta x}|.
 \end{equation} 
-Recall that, for a given wavenumber $\kappa_m$ and CFL number $\sigma$ this told us how much the solution will be damped over a time step. Hence, we can plot this for a range of permissible wavenumbers in the range $\kappa_m \Delta x \in [0,\pi]$ and CFL numbers within the stability limit $\sigma \in [0,1]$. A plot of this is shown in Figure \ref{fig:dissipation_advection_explicit}. We can observe a few interesting features that define the dissipation error of this particular scheme. First, we note that when the wave size is large relative to the grid spacing, the wave is well resolved regardless of the CFL number. However, as we move to larger wavenumbers there is significant numerical dissipation. Also, the amount of numerical in this region dissipation depends on the CFL number, with larger CFL numbers corresponding to less dissipation. Finally, when the CFL number approaches unity the numerical dissipation approaches zero for all wavenumbers. Hence, when this CFL number is used we recover the exact dissipation relation for linear advection, that the waves do not get damped. The dissipation error of this scheme becomes particularly important in the context of turbulent flows. In this case, large scale structures in the turbulent flow have small wavenumbers relative to the grid spacing. This means that our large scale features will be simulated with relative accuracy. However, small scale turbulent structures that are of a size proportional to the grid spacing have high relative wavenumbers. This means that these fine scale structures will be heavily dissipated by this first order scheme.
+Recall that, for a given wavenumber $\kappa_m$ and CFL number $\sigma$ this told us how much the solution will be damped over a time step. Hence, we can plot this for a range of permissible wavenumbers in the range $\kappa_m \Delta x \in [0,\pi]$ and CFL numbers within the stability limit $\sigma \in [0,1]$. A plot of this is shown in Figure \ref{fig:dissipation_advection_explicit}. We can observe a few interesting features that define the dissipation error of this particular scheme. First, we note that when the wave size is large relative to the grid spacing, the wave is well resolved regardless of the CFL number. However, as we move to larger wavenumbers there is significant numerical dissipation. Also, the amount of numerical in this region dissipation depends on the CFL number, with larger CFL numbers corresponding to less dissipation. Finally, when the CFL number approaches unity the numerical dissipation approaches zero for all wavenumbers. Hence, when this CFL number is used we recover the exact dissipation relation for linear advection, that the waves do not get damped. The dissipation error of this scheme becomes particularly important in the context of turbulent flows. In this case, large scale structures in the turbulent flow have small wavenumbers relative to the grid spacing. This means that our large scale features will be simulated with relative accuracy. However, small scale turbulent structures that are of a size proportional to the grid spacing have high relative wavenumbers. This means that these fine scale structures will be heavily dissipated by this first-order scheme.
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=0.6\linewidth]{Pictures/dissipation_adv_explct}
 	\caption{Amplification factor vs wavenumber for the explicit advection scheme}
 	\label{fig:dissipation_advection_explicit}
 \end{figure}
-Lets look at a second example, our implicit finite difference scheme
+Let's look at a second example, our implicit finite difference scheme
 \begin{equation}
 	\frac{u_i^{t+1} - u_{i}^t}{\Delta t} +  \alpha \frac{u_i^{t+1} - u_{i-1}^{t+1}}{\Delta x} = 0,
 \end{equation}
@@ -1961,7 +1976,7 @@ that had the amplification factor
 \begin{equation}
 	|e^{a\Delta t}| = \left| \frac{1}{1 + \sigma \left( 1 - e^{-i \kappa_m \Delta x} \right)} \right|.
 \end{equation}
-We can generate the exact same type of plot for permissible wave numbers $\kappa_m \Delta x \in [0,\pi]$ and, since this scheme is unconditionally stable, we will look at a few CFL numbers in the range $\sigma \in [0,10]$, as shown in Figure \ref{fig:dissipation_advection_implicit}. We note for this scheme, similar to the explicit scheme, that when the wave size is large relative to the grid spacing it is well resolved regardless of the CFL number. However, there is again a strong dependence of the numerical dissipation on the CFL number for high wavenumbers. As the wavenumber gets larger or as the CFL number gets larger the amount of numerical dissipation increases rapidly. Hence, while this scheme was found to be unconditionally stable, using large CFL numbers introduces significant numerical dissipation to all but the largest structures in the flow. Hence, this scheme is typically only used for solving steady-state problems that are not a function of time.
+We can generate the exact same type of plot for permissible wave numbers $\kappa_m \Delta x \in [0,\pi]$ and, since this scheme is unconditionally stable, we will look at a few CFL numbers in the range $\sigma \in [0,10]$, as shown in Figure \ref{fig:dissipation_advection_implicit}. We note for this scheme, similar to the explicit scheme, that when the wave size is large relative to the grid spacing it is well resolved regardless of the CFL number. However, there is again a strong dependence of the numerical dissipation on the CFL number for high wavenumbers. As the wavenumber gets larger or as the CFL number gets larger, the amount of numerical dissipation increases rapidly. Hence, while this scheme was found to be unconditionally stable, using large CFL numbers introduces significant numerical dissipation to all but the largest structures in the flow. Hence, this scheme is typically only used for solving steady-state problems that are not a function of time.
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=0.6\linewidth]{Pictures/dissipation_adv_implct}
@@ -1972,7 +1987,7 @@ We can generate the exact same type of plot for permissible wave numbers $\kappa
 	Check out the Von Neumann Jupyter notebook \href{\binderurl}{\underline{here}}. You can also download the files from the Gitlab repository \href{\repourl}{\underline{here}}.
 \end{jupyternote}
 \section{Dispersion Error}
-From the linear advection equation we know that the solution should translate at an exact wave speed $\alpha$. However, our numerical schemes will often introduce another error whereby the numerical wave does not move at the correct velocity. As a results, we often observe that the numerical solution is out of phase with the exact solution, which is referred to as dispersion error. Similar to the dissipation error, dispersion error can also be found from our results from von Neumann analysis. Recall that our assumed form of the solution for any isolated wave component of the full solution was
+From the linear advection equation we know that the solution should translate at an exact wave speed $\alpha$. However, our numerical schemes will often introduce another error whereby the numerical wave does not move at the correct velocity. As a result, we often observe that the numerical solution is out of phase with the exact solution, which is referred to as dispersion error. Similar to the dissipation error, dispersion error can also be found from our results from von Neumann analysis. Recall that our assumed form of the solution for any isolated wave component of the full solution was
 \begin{equation}
 	u_m(x,t) = e^{at} e^{i \kappa_m x},
 \end{equation}
@@ -1990,7 +2005,7 @@ We note that this will be solved exactly when
 	a = -i \alpha \kappa_m.
 \end{equation}
 \end{eqBox}
-which is called the exact dispersion relation. This tells us that the exact frequency in time, which is described by $a$, is proportional to the wave speed and the wavenumber. Intuitively this makes sense as the faster a wave moves the more the solution at a point should move up and down, and the higher the wavenumber the more quickly the wave will move up and down in time as well. However, our numerical scheme will usually not return a value of $a$ that matches this dispersion relation exactly. Hence, for a given wavenumber we will get back a frequency that has some error, implying that the wave is moving at the wrong speed, which is referred to as dispersion error. Over a finite amount of time $\Delta t$, based on the exact dispersion relation we would expect the wave to move a distance
+which is called the exact dispersion relation. This tells us that the exact frequency in time, which is described by $a$, is proportional to the wave speed and the wavenumber. Intuitively this makes sense as the faster a wave moves, the more the solution at a point should move up and down, and the higher the wavenumber, the more quickly the wave will move up and down in time as well. However, our numerical scheme will usually not return a value of $a$ that matches this dispersion relation exactly. Hence, for a given wavenumber we will get back a frequency that has some error, implying that the wave is moving at the wrong speed, which is referred to as dispersion error. Over a finite amount of time $\Delta t$, based on the exact dispersion relation we would expect the wave to move a distance
 \begin{equation}
 	a \Delta t = -i \alpha \kappa_m \Delta t.
 \end{equation}
@@ -2058,7 +2073,7 @@ which can then be rearranged to
 	\label{eqn:38fg93la}
 	\frac{\partial u}{\partial t} + \alpha \frac{\partial u}{\partial x} = -\frac{\Delta t}{2} \frac{\partial^2 u}{\partial t^2} + \alpha \frac{\Delta x}{2} \frac{\partial^2 u}{\partial x^2} + \mathcal{O}(\Delta x^2,\Delta t^2).
 \end{equation}
-We can recognize the right hand side of this equation as the truncation error of our scheme and we note that in the limit as $\Delta t$ and $\Delta x$ go to zero this will converge to the exact PDE. Furthermore, since the behaviour of the temporal derivative on the left hand size is somewhat unclear, we will convert it to a spatial derivative. Starting by differentiating the above expression in time we get
+We can recognize the right hand side of this equation as the truncation error of our scheme and we note that in the limit as $\Delta t$ and $\Delta x$ go to zero this will converge to the exact PDE. Furthermore, since the behaviour of the temporal derivative on the left hand side is somewhat unclear, we will convert it to a spatial derivative. Starting by differentiating the above expression in time we get
 \begin{equation}
 	\label{eqn:pelfhv72}
 	\frac{\partial^2 u}{\partial t^2} + \alpha \frac{\partial^2 u}{\partial x \partial t} = -\frac{\Delta t}{2} \frac{\partial^3 u}{\partial t^3} + \alpha \frac{\Delta x}{2} \frac{\partial^3 u}{\partial x^2 \partial t} + \mathcal{O}(\Delta x^2,\Delta t^2),
@@ -2092,7 +2107,7 @@ and rearranging finally yields
 If we look at the form of the Equation \ref{eqn:shrj986g} we see that when $\Delta x$ and $\Delta t$ are small the right hand side reduces to zero, and we are left with a general {\it advection-diffusion} equation. Hence, we have shown that our finite difference scheme is actually the exact solution to an advection-diffusion problem, rather than the linear advection equation we initially intended to solve. Furthermore, we note that the diffusion operator will only be valid for $0 \leq \sigma \leq 1$, after which point the sign of the term will change and it will become a non-physical {\it anti-diffusive} operator. This switch from a physical to non-physical PDE coincides with the stability limits we had originally derived for this scheme using von Neumann analysis. Also, as we would expect, our solutions using this method also behave exactly like an advection diffusion equation since the solution also move, but simultaneously dissipates. Also, for the value $\sigma=1$ this diffusion operator disappears, which is also consistent with our observations and predictions based on von Neumann analysis which showed that the amplification factor $| e^{a \Delta t} | = 1$ for this case.
 
 \section{General Observations}
-It is important note that the procedure followed here for the first order linear advection scheme can be repeated for any finite difference scheme of your choice. Starting with your numerical scheme you can replace each term with its Taylor Series expansion and rearrange this to try to get the PDE of interest on the left hand side and truncation error on the right hand side. The leading order terms will tell you the nature of the dominant error in the scheme. If the dominant error has an even-order derivative, such as the scheme above, then one would expect that the scheme is {\it dominantly dissipative}. In contrast, if the dominant error has an odd-order derivative then one would expect that the scheme is {\it dominantly dispersive}. Hence, similar to von Neumann analysis, modified equation analysis is a powerful tool to aid in understanding the general behaviour of a numerical scheme, to elucidate its dissipative and dispersive error properties, and to identify its stability limits.
+It is important note that the procedure followed here for the first order linear advection scheme can be repeated for any finite difference scheme of your choice. Starting with your numerical scheme, you can replace each term with its Taylor Series expansion and rearrange this to try to get the PDE of interest on the left hand side and truncation error on the right hand side. The leading order terms will tell you the nature of the dominant error in the scheme. If the dominant error has an even-order derivative, such as the scheme above, then one would expect that the scheme is {\it dominantly dissipative}. In contrast, if the dominant error has an odd-order derivative then one would expect that the scheme is {\it dominantly dispersive}. Hence, similar to von Neumann analysis, modified equation analysis is a powerful tool to aid in understanding the general behaviour of a numerical scheme, to elucidate its dissipative and dispersive error properties, and to identify its stability limits.
 
 \chapter{Time-Stepping}
 \label{ch:timestepping}
@@ -2134,7 +2149,7 @@ where $\tilde{u}$ is an initial guess for the solution. Then, we use an average 
 \begin{equation}
 	\tilde{u}^{t+1} = u^t + \Delta t \left[\frac{R(u) + R(\tilde{u})}{2} \right].
 \end{equation}
-This approach is called a two-stage scheme, since we had to compute our solution at one intermediate stage before the final solution is obtained. This requires us to evaluate two right hand sides, one for each stage, so is approximately twice as expensive as the explicit Euler method. However, it can be shown that it achieves $\mathcal{O}(\Delta t^2)$ in time. Hence, when the time step is small it is significantly more accurate.
+This approach is called a two-stage scheme, since we had to compute our solution at one intermediate stage before the final solution is obtained. This requires us to evaluate two right hand sides, one for each stage, so is approximately twice as expensive as the explicit Euler method. However, it can be shown that it achieves $\mathcal{O}(\Delta t^2)$ in time. Hence, when the time step is small, it is significantly more accurate.
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=0.6\linewidth]{Pictures/heuns_method}
@@ -2276,7 +2291,7 @@ where as usual $\sigma = \alpha \Delta t/ \Delta x$. Then, lumping the terms for
 \end{equation}
 Unlike the explicit schemes, where we could readily rearrange the expression to get $u_i^{t+1}$ alone on the left hand side, we now have one equation for each grid point that has two unknowns, $u_i^{t+1}$ and $u_{i-1}^{t+1}$, on the left hand side. This means that in order to get $u_i^{t+1}$ we need to already know $u_{i-1}^{t+1}$, and in order to get $u_{i-1}^{t+1}$ we need to already know $u_{i-2}^{t+1}$, and so on. Hence, it appears we are stuck in a situation where we need to already know the solution at every grid point to get the solution at every other grid point, which we don't yet have.
 
-To get around this we can recognize that we actually have a large system of linear equations. For each of the $N$ grid points there is an expresion of the form of Equation \ref{eqn:sh4k18g9}, and these involve some linear combination of the $N$ unknown solution values at $t+1$. Hence, we have $N$ equations and $N$ unknowns, yielding a linear system to be solved. This can be written as a linear system of the form
+To get around this we can recognize that we actually have a large system of linear equations. For each of the $N$ grid points there is an expression of the form of Equation \ref{eqn:sh4k18g9}, and these involve some linear combination of the $N$ unknown solution values at $t+1$. Hence, we have $N$ equations and $N$ unknowns, yielding a linear system to be solved. This can be written as a linear system of the form
 \begin{equation}
 	\label{eqn:4h28f95h}
 	A \vec{u}^{t+1} = \vec{u}^{t},
@@ -2370,7 +2385,7 @@ and has the following Jacobian matrix
 \end{equation}
 which is now a function of the unknown solution at the next time step. However, we do not yet know the solution at the next time step, so we cannot actually construct the Jacobian matrix and, therefore, we cannot solve directly for the solution at the next time step.
 
-To get around this problem we can use {\it Newton-Rhapson} iterations. First assume that the Jacobian matrix can be {\it approximated} using the current known solution as
+To get around this problem we can use {\it Newton-Raphson} iterations. First assume that the Jacobian matrix can be {\it approximated} using the current known solution as
 \begin{equation}
 	A_0 = 
 	\begin{bmatrix}
@@ -2401,7 +2416,7 @@ at which point the solution at the next time step is taken to be
 \begin{equation}
 	\vec{u}^{t+1} = \vec{u}^{t+1}_{k+1},
 \end{equation}
-and the entire procedure is then repeated for each subsequent time step. Hence, for non-linear equations we need to solve multiple linear systems for each time step, following Newton-Rhapson, which can significantly increase their computational cost relative to linear systems. Furthermore, convergence of Newton-Rhapson is not guaranteed. Hence, non-linear systems often require smaller time steps relative to linear systems to maintain stability of the iterative method.
+and the entire procedure is then repeated for each subsequent time step. Hence, for non-linear equations we need to solve multiple linear systems for each time step, following Newton-Raphson, which can significantly increase their computational cost relative to linear systems. Furthermore, convergence of Newton-Raphson is not guaranteed. Hence, non-linear systems often require smaller time steps relative to linear systems to maintain stability of the iterative method.
 
 \chapter{Iterative Methods}
 In this implicit time stepping section we reduced each time step to the solution of a linear system of $N$ equations of the form 
@@ -2478,7 +2493,7 @@ and by inverting $D$ we get
 	\vec{x} = D^{-1}\left[ \vec{b} - (L+U)\vec{x} \right].
 	\label{eqn:f928bs7g}
 \end{equation}
-At this point it is important to now that while inverting $A$ is very expensive, inverting just its diagonal values in $D$ is trivial.
+At this point it is important to know that while inverting $A$ is very expensive, inverting just its diagonal values in $D$ is trivial.
 
 We note that if $\vec{x}$ is a solution to the linear system of equations, then Equation \ref{eqn:f928bs7g} will be satisfied exactly, but if we already had the exact solution there would be no point in this exercise. However, if we look again at Equation \ref{eqn:f928bs7g} it has an interesting form. We note that if we insert some guess for $\vec{x}$ into the right hand side, we get out a modified $\vec{x}$ on the left hand side. This allows us to define Jacobi iteration as
 \begin{eqBox}
@@ -2696,18 +2711,18 @@ However, since our solution at any given iteration is only an approximate soluti
 \begin{equation}
 	A \vec{x}_n - \vec{b} = \vec{r},
 \end{equation}
-where $\vec{r}$ is referred to as the residual and measures how well our current approximate solution satisfies the system of equations being solved. While $\vec{r}$ gives detailed information about how well each equation in the entire system is being solved, it is typically more useful to provide the user with a norm, such as $\| \vec{r} \|_2$ or $\| \vec{r} \|_\infty$, giving a single measure of convergence. Then, iterations are continued until this residual norm converges to within the desired tolerance. It is also important to note that if the convergence tolerance is too high it can results in a loss of accuracy or stability in the CFD simulation. Hence, particular care must be chosen in how to select the desired convergence tolerance.
+where $\vec{r}$ is referred to as the residual and measures how well our current approximate solution satisfies the system of equations being solved. While $\vec{r}$ gives detailed information about how well each equation in the entire system is being solved, it is typically more useful to provide the user with a norm, such as $\| \vec{r} \|_2$ or $\| \vec{r} \|_\infty$, giving a single measure of convergence. Then, iterations are continued until this residual norm converges to within the desired tolerance. It is also important to note that if the convergence tolerance is too high it can result in a loss of accuracy or stability in the CFD simulation. Hence, particular care must be chosen in how to select the desired convergence tolerance.
 
 \section{Multigrid}
 It is important to note that both Jacobi and Gauss-Seidel iterations require $\mathcal{O}(N^2)$ operations per iteration they will typically be much faster that Gaussian elimination, provided the number of iterations is relatively small. However, the computational cost will still increase rapidly with the number of grid points. Ideally, we would like an iterative method that will converge with $\mathcal{O}(N)$ operations, resulting in a computational cost that varies linearly with the number of grid points.
 
-An important observation regarding the aforementioned iterative methods, such as Jacobi and Gauss-Seidel, is that they tend to converge {\it high-wavenumber} features, those that span only a few grid points, very quickly. In contrast, {\it low-wavenumber} features, those that span a large number of grid points, converge relatively slowly. The general idea behind the multigrid method is to use an additional coarse grid to converge these large scale structures. Since this additional grid is coarse it is relatively cheap per iteration, since it contains significantly fewer grid points and unknowns. Also, the low-wavenumber features on the find grid appear as higher-wavenumber features on the coarse grid and, hence, they converge quickly there. This procedure can then be extended to a large number of grid levels, resulting in the {\it multigrid} method.
+An important observation regarding the aforementioned iterative methods, such as Jacobi and Gauss-Seidel, is that they tend to converge {\it high-wavenumber} features, those that span only a few grid points, very quickly. In contrast, {\it low-wavenumber} features, those that span a large number of grid points, converge relatively slowly. The general idea behind the multigrid method is to use an additional coarse grid to converge these large scale structures. Since this additional grid is coarse it is relatively cheap per iteration, since it contains significantly fewer grid points and unknowns. Also, the low-wavenumber features on the fine grid appear as higher-wavenumber features on the coarse grid and, hence, they converge quickly there. This procedure can then be extended to a large number of grid levels, resulting in the {\it multigrid} method.
 
 As an example, we will describe a two-level multigrid method for solving the linear system of equations
 \begin{equation}
 	A_h \vec{x}_h = \vec{b}_h,
 \end{equation}
-where the subscript $h$ denotes that this is the initial system of equations on fine grid, denoted by $\Omega_h$. Ultimately, we want to obtain the final solution to this linear system, $\vec{x}_h$, with as little computational cost as possible. From here we will recall that the residual on the fine grid can be defined as
+where the subscript $h$ denotes that this is the initial system of equations the on fine grid, denoted by $\Omega_h$. Ultimately, we want to obtain the final solution to this linear system, $\vec{x}_h$, with as little computational cost as possible. From here we will recall that the residual on the fine grid can be defined as
 \begin{equation}
 	\vec{r}_h = \vec{b}_h - A_h \vec{x}_{h,n},
 \end{equation}
@@ -2737,7 +2752,7 @@ Hence, similar to the solution, the error between the exact and current iterated
 	\item {\it Correct} the solution on the fine grid using $\vec{x}_{h,n} = \vec{x}_{h,n} + \vec{e}_{h}$
 	\item {\it Repeat} from the first step until the system of equations on the fine grid converges
 \end{itemize}
-In the above approach we have introduce two new operators, specifically the restriction operator $I_{h}^{2h}$ and the prolongation operator $I_{2h}^{h}$ that are responsible for transferring data from the fine to coarse grid, and vice-versa. If we look at their required shapes we find that $I_{h}^{2h} \in N_{2h} \times N_h$, where $N_{2h}$ is the number of degrees of freedom on the coarse grid and $N_h$ is the number of degrees of freedom on the fine grid. In contrast, the prolongation operator is of dimension $I_{2h}^{h} \in N_{h} \times N_{2h}$. Consider the one-dimensional example case shown in Figure \ref{}, where $\Omega_{2h}$ is coarser than $\Omega_h$ in the sense that every other grid point is omitted. One simple option is to simply {\it linearly} interpolate the error from the coarse grid to the fine grid. This would give the following prolongation operator matrix
+In the above approach we have introduced two new operators, specifically the restriction operator $I_{h}^{2h}$ and the prolongation operator $I_{2h}^{h}$ that are responsible for transferring data from the fine to coarse grid, and vice-versa. If we look at their required shapes we find that $I_{h}^{2h} \in N_{2h} \times N_h$, where $N_{2h}$ is the number of degrees of freedom on the coarse grid and $N_h$ is the number of degrees of freedom on the fine grid. In contrast, the prolongation operator is of dimension $I_{2h}^{h} \in N_{h} \times N_{2h}$. Consider the one-dimensional example case shown in Figure \ref{}, where $\Omega_{2h}$ is coarser than $\Omega_h$ in the sense that every other grid point is omitted. One simple option is to simply {\it linearly} interpolate the error from the coarse grid to the fine grid. This would give the following prolongation operator matrix
 \begin{equation}
 	I_{2h}^{h} = 
 	\begin{bmatrix}
@@ -2779,7 +2794,13 @@ satisfying the condition of having row sums of unity. Now that we have the restr
 \begin{equation}
 	A_{2h} = I_{h}^{2h} A_h I_{2h}^{h}.
 \end{equation}
-Hence, starting from the linear system of equations and the node locations on the coarse and fine grids, the first step for constructing the system on the coarse grid level is to provide a suitable prolongation operator to take data from this coarse to the fine grid. From this, one obtains the corresponding restriction operator, and finally the operator matrix on the coarse grid. Now, all of the required data is available to complete the multigrid procedure. We note that the above procedure describes a two-level multigrid method. However, this can be readily extended to any number of multigrid stages, and the smallest grid levels are typically coarse enough to be solved directly using Gaussian elimination. Furthermore, these grid levels can be traversed in difference orders. For example, the V-cycle, W-cycle, and Full Multigrid cycle shown in Figure \ref{}. Typically, each cycle spends the majority of its iterations on the coarsest grid levels, since iterations are relatively inexpensive here. Iterations are only performed on the finest grid level sparingly, and to converge the highest-wavenumber features in the flow.
+Hence, starting from the linear system of equations and the node locations on the coarse and fine grids, the first step for constructing the system on the coarse grid level is to provide a suitable prolongation operator to take data from this coarse to the fine grid. From this, one obtains the corresponding restriction operator, and finally the operator matrix on the coarse grid. Now, all of the required data is available to complete the multigrid procedure. We note that the above procedure describes a two-level multigrid method. However, this can be readily extended to any number of multigrid stages, and the smallest grid levels are typically coarse enough to be solved directly using Gaussian elimination. Furthermore, these grid levels can be traversed in different orders. For example, the V-cycle, W-cycle, and Full Multigrid cycle shown in Figure \ref{fig:multigrid}. Typically, each cycle spends the majority of its iterations on the coarsest grid levels, since iterations are relatively inexpensive here. Iterations are only performed on the finest grid level sparingly, and to converge the highest-wavenumber features in the flow.
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.8\linewidth]{Pictures/multigrid}
+	\caption{Common multigrid methods using three refinement levels}
+	\label{fig:multigrid}
+\end{figure}
 
 \chapter{Applications}
 \section{An Euler Solver}
@@ -2813,11 +2834,11 @@ is the ideal gas law where $R$ is the gas constant and $T$ is temperature. Throu
 \begin{equation} 
 	p = (\gamma -1) \rho \left(E - \frac{1}{2}\left(u^2 + v^2 \right) \right),
 \end{equation}
-that no longer requires the gast constant, and where $\gamma$ is the ratio of specific heats. Hence, given the value of the solution at any point in the domain, and the ideal gas law, we can determine both of the flux components.
+that no longer requires the gas constant, and where $\gamma$ is the ratio of specific heats. Hence, given the value of the solution at any point in the domain, and the ideal gas law, we can determine both of the flux components.
 
-It is worth taking a moment to consider this set of equations. Using the finite difference approach, we will store the conserved variables, specifically mass, momentum, and energy, at each grid point. From Equation \ref{eqn:5js81pgl} it is then possible to then get the time derivative of the solution at all of these grid points, provided we can compute the fluxes and their derivatives in space. This simply requires the specification of a suitable finite difference methods for approximating the derivatives in space.
+It is worth taking a moment to consider this set of equations. Using the finite difference approach, we will store the conserved variables, specifically mass, momentum, and energy, at each grid point. From Equation \ref{eqn:5js81pgl} it is then possible to then get the time derivative of the solution at all of these grid points, provided we can compute the fluxes and their derivatives in space. This simply requires the specification of suitable finite difference methods for approximating the derivatives in space.
 
-Now consider a two dimensional domain of length $L_x$ and $L_y$ in each direction that is discretized using a grid of $N_x$ and $N_y$ equidistant points. Using periodic boundary conditions, the grid spacing between adjacent points is
+Now consider a two-dimensional domain of length $L_x$ and $L_y$ in each direction that is discretized using a grid of $N_x$ and $N_y$ equidistant points. Using periodic boundary conditions, the grid spacing between adjacent points is
 \begin{equation}
 	\Delta x = \frac{L_x}{N_x},
 \end{equation}
@@ -2851,7 +2872,13 @@ where $f = (1-(x-x_c)^2-(y-y_c)^2)/2R^2$, $S = 13.5$ is the strength of the vort
 where $\rho_{e,i,j}$ is the exact solution at a grid point, which is equal to the initial condition at time $t = L_y/1$ since the vertical velocity is unity.
 
 \section{A Navier-Stokes Solver}
-In order to solve the Navier-Stokes equations, we can readily extend the two-dimensional Euler solver outlined in the previous section. He we will demonstrate how to solve the Navier-Stokes equations for a classical lid-driven cavity flow problem, as shown in Figure \ref{}. Again, this will be discretized using the finite difference method in space, with grid spacings
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.6\linewidth]{Pictures/cavity_flow}
+	\caption{Lid-driven cavity flow problem}
+	\label{fig:lidcavity}
+\end{figure}
+In order to solve the Navier-Stokes equations, we can readily extend the two-dimensional Euler solver outlined in the previous section. Here we will demonstrate how to solve the Navier-Stokes equations for a classical lid-driven cavity flow problem, as shown in Figure \ref{fig:lidcavity}. Again, this will be discretized using the finite difference method in space, with grid spacings
 \begin{equation}
 	\Delta x = \frac{L_x}{(N_x-1)},
 \end{equation}
@@ -2870,10 +2897,10 @@ where again
 \begin{equation}
 	\vec{w} = [\rho,\rho u, \rho v, \rho E]^T,
 \end{equation}
-is a vector of the conserved variables. In addition, unlike the isentropic vortex test case, the lid driven cavity flow problem requires boundary conditions to be applied at the edges of the domain. In this case, we need to enforce the no-slip boundary conditions on all four walls. In additional we will enforce that the walls are isothermal. This is achieved by setting
+is a vector of the conserved variables. In addition, unlike the isentropic vortex test case, the lid-driven cavity flow problem requires boundary conditions to be applied at the edges of the domain. In this case, we need to enforce the no-slip boundary conditions on all four walls. In addition, we will enforce that the walls are isothermal. This is achieved by setting
 \begin{equation}
 	u_b = u_w, \: \:
-	v_b = v_w
+	v_b = v_w,
 \end{equation}
 where $u_w = v_w = 0$ on all boundaries, except for the top plate where $u_w$ is specified to be consistent with the chosen Reynolds number. Then, the temperature at the boundary is fixed at
 \begin{equation}
@@ -2925,7 +2952,7 @@ We note that, unlike the Euler equations, we cannot obtain the viscous fluxes di
 \begin{equation}
 	\frac{\partial u}{\partial y} = \frac{u_{i,j-1}^t - 2 u_{i,j}^t + u_{i,j+1}^t}{\Delta y^2}.
 \end{equation}
-However, these finite difference methods will not work for computing the velocity and temperature gradients of the solution at the boundaries of the domain, since they would require points outside of the computational domain. Instead, one-sided stenciles can be used at the wall. For example, the following stencil can be used on the left hand side boundary of the domain
+However, these finite difference methods will not work for computing the velocity and temperature gradients of the solution at the boundaries of the domain, since they would require points outside of the computational domain. Instead, one-sided stencils can be used at the wall. For example, the following stencil can be used on the left hand side boundary of the domain
 \begin{equation}
 	\frac{\partial u}{\partial x} = \frac{-u_{i,3} + 4u_{i,2} - 3u_{i,1}}{2\Delta x},
 \end{equation}

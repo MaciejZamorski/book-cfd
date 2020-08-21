@@ -2225,6 +2225,57 @@ def euler_characteristics():
         counter += 1
     plt.show()
 
+def muscl_scheme():
+    um2 = 0.4
+    um1 = 0.5
+    ui = 0.75
+    up1 = 0.6
+
+    di = ui - um1
+    dip1 = up1 - ui
+    dim1 = um1 - um2
+
+    url = ui + 0.5*di
+    urr = up1 - 0.5*dip1
+
+    ulr = ui - 0.5*di
+    ull = um1 + 0.5*dim1
+
+    u0l = um1 - 0.5*dim1 
+    u0r = up1 + 0.5*dip1
+    fig, ax = plt.subplots(figsize=(5.4, 3.5))
+
+    x = [0, 1/3, 2/3, 1]
+    ax.hlines([um1, ui, up1], x[:-1], x[1:], lw=1.4)
+    ax.plot(np.array([[0, 1/3], [1/3, 2/3], [2/3, 1]]).T, 
+            np.array([[u0l, ull], [ulr, url], [urr, u0r]]).T, '_--k', lw=1)
+
+    ax.plot([x[2], x[2]], [0, url], 'k--', lw=0.75)
+    ax.vlines(x, 0, [um1, ui, ui, up1], lw=1)
+    xc = np.array(x[:-1]) + 1/6
+    ax.plot(xc, [um1, ui, up1], 'ok', lw=1)
+
+    ax.text(x[1]-0.01, ull, r'$u_{i-1/2}^L$', va='bottom', ha='right')
+    ax.text(x[1]+0.015, ulr-0.02, r'$u_{i-1/2}^R$', va='center', ha='left')
+
+    ax.text(x[2]-0.01, url, r'$u_{i+1/2}^L$', va='bottom', ha='right')
+    ax.text(x[2]+0.01, urr, r'$u_{i+1/2}^R$', va='bottom', ha='left')
+
+    ax.text(xc[0], um1+0.01, r'$u_{i-1}$', va='bottom', ha='center')
+    ax.text(xc[1], ui+0.01, r'$u_i$', va='bottom', ha='center')
+    ax.text(xc[2], up1+0.01, r'$u_{i+1}$', va='bottom', ha='center')
+
+    
+
+
+    ax.set_ylim(0, 1)
+    ax.set_xlim(-0.1, 1.1)
+    fig, ax = convert_to_graph(fig, ax, use_min_yaxis=True)
+    plt.xticks(x[1:3],[r'$x_{i-1/2}$', r'$x_{i+1/2}$'])
+    fig.savefig('muscl_scheme.pdf')
+
+
+
 def main():
 
     # Conservation laws derivation
@@ -2298,8 +2349,9 @@ def main():
     # nlsc_example_u1()
     # sod_shock_tube()
     # sod_shock_tube_solution()
-    euler_characteristics()
+    # euler_characteristics()
 
+    muscl_scheme()
 
 if __name__ == '__main__':
     plt.style.use('style.mplstyle')

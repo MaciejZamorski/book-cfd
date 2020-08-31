@@ -807,7 +807,7 @@ Consider the propagation of sound waves in a motionless gas. Small changes in pr
 	= 0.
 	\label{eq:massmomentum_acoustics}
 \end{equation}
-These are the Euler equations, one of which is the nonlinear PDE for the conservation of momentum. This system can be written in \textit{quasilinear} form
+These are the Euler equations, one of which is the nonlinear PDE for the conservation of momentum. This system can be written in \textit{quasilinear} form~\cite{toroRiemannSolversEvolved2006}
 \begin{equation}
 	\frac{\partial \vec u}{\partial t} + \vec {f^\prime}(\vec u) \frac{\partial \vec u}{\partial x} = 0,
 \end{equation}
@@ -1248,7 +1248,7 @@ where $H$ is the total enthalpy defined as
 \end{equation} 
 The eigenvalues of the Euler system are distinct, and a complete set of eigenvectors can be found, proving that the Euler equations are strictly hyperbolic. The eigenvalues represent the characteristic speeds of the problem,  showing that the Euler equations can be interpreted as a superposition of a left-travelling sound wave, a momentum wave and a right-going sound wave, consistent with the propagation of sound. The nonlinearity of these equations makes the study of the Riemann problem much more challenging compared to the linear systems. In the next section, we briefly discuss some important considerations when analyzing the Riemann problem for the Euler equations.
 \subsection{The Riemann Problem for the Euler equations}
-Consider a tube with a thin membrane at $x=0$ separating two different gases, each with a given density $\rho$ velocity $v$, and pressure $p$ as shown in Figure~\ref{fig:shocktube}.  Initially, both gases are considered at rest ($v_L=v_R=0$). Note it can also be the same gas at different pressures. At time $t$, the thin membrane is ruptured, causing the fluid in the region of high pressure to move towards the low-pressure side to reach thermodynamic equilibrium. This configuration is known as \textit{Sod's shock tube} and is the physical equivalent to the Riemann problem in gas dynamics.
+Consider a tube with a thin membrane at $x=0$ separating two different gases, each with a given density $\rho$ velocity $v$, and pressure $p$ as shown in Figure~\ref{fig:shocktube}.  Initially, both gases are considered at rest ($v_L=v_R=0$). Note it can also be the same gas at different pressures. At time $t$, the thin membrane is ruptured, causing the fluid in the region of high pressure to move towards the low-pressure side to reach thermodynamic equilibrium. This configuration is known as \textit{Sod's shock tube} and is the physical equivalent to the Riemann problem in gas dynamics~\cite{toroRiemannSolversEvolved2006}.
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=0.6\linewidth]{Pictures/sod_shock_tube}
@@ -1256,7 +1256,7 @@ Consider a tube with a thin membrane at $x=0$ separating two different gases, ea
 	\label{fig:shocktube}
 \end{figure}
 
-It can be shown that the solution to this problem consists of a contact discontinuity associated with $\lambda_2$, and a shock or a rarefaction wave associated with $\lambda_1$ and $~\lambda_3$. Four different configurations are then possible solutions for the Riemann problem, all of which need to be considered when deriving an exact solution. These are shown in Figure~\ref{fig:euler_characteristics}.
+It can be shown that the solution to this problem consists of a contact discontinuity associated with $\lambda_2$, and a shock or a rarefaction wave associated with $\lambda_1$ and $~\lambda_3$. Four different configurations are then possible solutions for the Riemann problem~\cite{toroRiemannSolversEvolved2006}, all of which need to be considered when deriving an exact solution. These are shown in Figure~\ref{fig:euler_characteristics}.
 \begin{figure}[htb]
 	\centering
 	\begin{subfigure}[b]{0.35\linewidth}
@@ -1339,7 +1339,7 @@ Hence, at the interfaces, we need to solve a Riemann problem of the form
 		\vec u_R & \text{if } x>0.
 	\end{cases}
 \end{align}
-Roe proposed considering instead a constant Jacobian matrix $\tilde A$ with the following properties
+Roe proposed considering instead a constant Jacobian matrix $\tilde A$ with the following properties~\cite{toroRiemannSolversEvolved2006}
 \begin{itemize}
 	\item $\tilde A$ must have real eigenvalues and a complete set of eigenvectors such that the problem in Equation~\ref{eq:09707} is hyperbolic.
 	\item $\tilde A$ must be consistent with the exact problem, i.e. $\tilde A (\vec u, \vec u) = A(\vec u)$.
@@ -1392,7 +1392,7 @@ Finally, the numerical flux can then be computed using
 \begin{equation}
 	\vec F_{i\pm1/2}(\vec u_L, \vec u_R) = \frac{1}{2} \left[\vec F(\vec u_L) + \vec F(\vec u_R)\right] - \frac{1}{2} \sum_{i=1}^3 \tilde \alpha_i |\tilde \lambda_i| \Delta u_i.
 \end{equation}
-A disadvantage of the Roe solver is that it may violate the entropy condition in the presence of sonic rarefaction waves, where $\tilde v\approx \tilde c$ (or $\tilde \lambda_{1/3}\approx 0$). This occurs since the solver treats both rarefaction and shock waves as discontinuous solutions. Hence, an entropy fix needs to be added. A common approach consists of replacing the $\tilde\lambda_1$ or $\tilde\lambda_3$ eigenvalues if their absolute value is smaller than a given tolerance $\delta$. This is known as Harten's entropy fix, which can be written 
+A disadvantage of the Roe solver is that it may violate the entropy condition in the presence of sonic rarefaction waves, where $\tilde v\approx \tilde c$ (or $\tilde \lambda_{1/3}\approx 0$). This occurs since the solver treats both rarefaction and shock waves as discontinuous solutions. Hence, an entropy fix needs to be added. A common approach consists of replacing the $\tilde\lambda_1$ or $\tilde\lambda_3$ eigenvalues if their absolute value is smaller than a given tolerance $\delta$. This is known as Harten's entropy fix, which can be written~\cite{levequeFiniteVolumeMethods2002}
 \begin{equation}
 	\tilde\lambda_i = 
 	\begin{cases}
@@ -1418,7 +1418,7 @@ where $u_{i+1/2}$ is the solution at the interface between $\Omega_i$ and $\Omeg
 	u_{i+1/2}^L &= u_i,\\
 	u_{i+1/2}^R &= u_{i+1}.
 \end{align}
-For a better resolution of smooth solutions, we can derive methods with orders of accuracy higher than one, allowing the numerical error to decrease significantly. This can be done by replacing the constant interface values of the solution $\vec u_{i+1/2}$ for a reconstructed value, which is interpolated using information from neighbouring cells. This idea, developed by van Leer, is an extension of Godunov's method, and is known as the MUSCL (monotone upstream-centered schemes for conservation laws) reconstruction approach. A graphical representation of the method is shown in Figure~\ref{fig:muscl_scheme}.
+For a better resolution of smooth solutions, we can derive methods with orders of accuracy higher than one, allowing the numerical error to decrease significantly. This can be done by replacing the constant interface values of the solution $\vec u_{i+1/2}$ for a reconstructed value, which is interpolated using information from neighbouring cells. This idea, developed by van Leer~\cite{van1974towards}, is an extension of Godunov's method, and is known as the MUSCL (monotone upstream-centered schemes for conservation laws) reconstruction approach. A graphical representation of the method is shown in Figure~\ref{fig:muscl_scheme}.
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=0.5\linewidth]{Pictures/muscl_scheme}
@@ -1480,7 +1480,7 @@ which yields the following second-order upwind-biased scheme
 \end{eqBox}
 Later in this chapter, we show results of a numerical experiment using this scheme.
 \subsection{Total Variation Diminishing}
-The total variation (TV) of a scalar conservation law such as the linear advection equation is given by 
+The total variation (TV) of a scalar conservation law such as the linear advection equation is given by~\cite{hirschNumericalComputationInternal2007a}
 \begin{equation}
 	TV(u) = \int \left|\frac{\partial u }{\partial x}\right|dx,
 \end{equation}
@@ -1492,7 +1492,7 @@ where $N$ is the number of finite volume cells. A numerical method is said to be
 \begin{equation}
 	TV(u^t+1)\leq TV(u^t).
 \end{equation}
-Harten proved that TVD schemes are monotonicity-preserving, meaning that in time, maxima does not increase, minima does not decrease, and no new extrema are generated in the solution. It turns out that this property can only be attributed to certain types of schemes. Godunov's theorem states
+Harten~\cite{harten1997high} proved that TVD schemes are monotonicity-preserving, meaning that in time, maxima does not increase, minima does not decrease, and no new extrema are generated in the solution. It turns out that this property can only be attributed to certain types of schemes. Godunov's theorem states~\cite{godunov1954different}
 \begin{theorem}
 	Linear numerical schemes for solving partial differential equations (PDE's), having the property of not generating new extrema (monotone scheme), can be at most first-order accurate.
 \end{theorem}
@@ -2611,7 +2611,9 @@ which is very close to the exact solution
 	\end{bmatrix}.
 \end{equation}
 Hence, after only 15 iterations Jacobi was able to converge to approximately four digits, without having to ever directly invert the $A$ matrix.
-
+\begin{jupyternote}
+	Check out the Iterative Methods Jupyter notebook \href{\binderurl}{\underline{here}}. You can also download the files from the Gitlab repository \href{\repourl}{\underline{here}}.
+\end{jupyternote}
 \section{Gauss Seidel Iteration}
 With the idea of Jacobi iteration outlined above, we may wonder whether similar more efficient approaches exist. The first of these, with a very similar derivation to Jacobi, is the Gauss-Seidel method. Starting from our split $A$ matrix in the Jacobi section
 \begin{equation}
@@ -2680,7 +2682,9 @@ which is very close to the exact solution
 	\end{bmatrix}.
 \end{equation}
 Hence, after only 5 iterations, or three times as fast as Jacobi in this case, Gauss Seidel was able to converge to approximately four digits.
-
+\begin{jupyternote}
+	Check out the Iterative Methods Jupyter notebook \href{\binderurl}{\underline{here}}. You can also download the files from the Gitlab repository \href{\repourl}{\underline{here}}.
+\end{jupyternote}
 \section{Successive Over-Relaxation}
 When using the Gauss-Seidel approach, we often observe that the iterated solutions converge gradually to the exact solution for $\vec{x}$. That is, each iteration takes a step towards the exact solution in a somewhat uniform manner. We can exploit this by simply extrapolating each iteration to move a bit further towards the exact solution, which is known as Successive Over-Relaxation (SOR). This is usually done to accelerate convergence, but as will be discussed later, it can be used to also stabilize convergence.
 \begin{figure}[htbp]

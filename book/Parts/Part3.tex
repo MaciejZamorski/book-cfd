@@ -3,22 +3,18 @@
 \chapterimage{chapter_head_2.pdf} % Chapter heading image
 
 \chapter{Taylor-Series}
-In the previous sections we introduced the governing conservation laws that need to be solved to accurately predict the behaviour of fluids. These included the Navier-Stokes equations and the time-averaged RANS equations, with their associated turbulence models. However, to start we will consider the simplified conservation laws we derived earlier, which were the linear advection, Burgers, and linear diffusion equations, and move on from there to the full Navier-Stokes equations. Starting with the simplified systems of equations
+In the previous sections, we introduced the governing conservation laws that need to be solved to accurately predict the behaviour of fluids. These included the Navier-Stokes equations and the time-averaged RANS equations, with their associated turbulence models. However, to start, we will consider the simplified conservation laws we derived earlier, which were the linear advection, Burgers, and linear diffusion equations, and move on from there to the full Navier-Stokes equations. Starting with the simplified systems of equations
 \begin{eqBox}
-\begin{equation}
-	\frac{\partial u}{\partial t} +  \alpha \frac{\partial u}{\partial x} = 0,
-\end{equation}
-\begin{equation}
-	\frac{\partial u}{\partial t} +  \frac{1}{2} \frac{\partial u^2}{\partial x} = 0,
-\end{equation}
-\begin{equation}
-	\frac{\partial u}{\partial t} - \beta \frac{\partial^2 u}{\partial x^2} = 0.
-\end{equation}
+\begin{align}
+	&\frac{\partial u}{\partial t} +  \alpha \frac{\partial u}{\partial x} = 0,\\
+	&\frac{\partial u}{\partial t} +  \frac{1}{2} \frac{\partial u^2}{\partial x} = 0,\\
+	&\frac{\partial u}{\partial t} - \beta \frac{\partial^2 u}{\partial x^2} = 0.
+\end{align}
 \end{eqBox}
-We notice that the form of all of these equations is very similar. All three involve a time derivative combined with a coefficient multiplied by a spatial derivative. The Finite Difference Method (FDM) uses well-known concepts from applied mathematics, specifically Taylor-Series. Hence, before deriving the Finite Difference Method we will start by reviewing some concepts from Taylor-Series.
+We notice that the form of all of these equations is very similar. All three involve a time derivative combined with a coefficient multiplied by a spatial derivative. The Finite Difference Method (FDM) uses well-known concepts from applied mathematics, specifically Taylor-Series. Hence, before deriving the Finite Difference Method, we will start by reviewing some concepts from Taylor-Series.
 
 
-Arising from Taylors theorem, Taylor Series allows the value of a sufficiently smooth function at some point $x + \Delta x$ to be predicted by using the value of the solution at the point $x$ along with knowledge of all derivatives at the point $x$.
+Arising from Taylors' theorem, Taylor Series allows the value of a sufficiently smooth function at some point $x + \Delta x$ to be predicted by using the value of the solution at the point $x$ along with knowledge of all derivatives at the point $x$.
 \begin{theorem}[Taylor's Theorem]
 Let $k \geq 1$ and letting $f(x)$ be smooth and differentiable $k$ times then
 \begin{align}
@@ -35,27 +31,19 @@ We will demonstrate the utility of Taylor series via example. Consider a simple 
 \begin{equation}
 	f(x) = \sin(x),
 \end{equation}
-which is periodic on the interval $[- \pi, \pi]$. We first note that sine functions are sufficiently smooth for Taylor series to be applied up to an infinite number of derivatives. Now we will explore the behaviour of the Taylor series as we add more terms. When we use a finite number of terms in the expansion we are {\it truncating} all of the higher-order terms. We will form our expansion about the point $x = 0$. If we include just the first term and truncate all others we obtain
+which is periodic on the interval $[- \pi, \pi]$. We first note that sine functions are sufficiently smooth for Taylor series to be applied up to an infinite number of derivatives. Now, we will explore the behaviour of the Taylor series as we add more terms. When we use a finite number of terms in the expansion, we are {\it truncating} all of the higher-order terms. We will form our expansion about the point $x = 0$. If we include just the first term and truncate all others, we obtain
 \begin{equation}
 	f_0(\Delta x) = 0,
 \end{equation}
 which is not a particularly accurate approximation of a sine wave except very close to the origin. However, as we start to add more terms we obtain the following expressions,
-\begin{equation}
-	f_1(\Delta x) = \Delta x,
-\end{equation}
-\begin{equation}
-	f_3(\Delta x) = \Delta x - \frac{\Delta x^3}{6},
-\end{equation}
-\begin{equation}
-	f_5(\Delta x) = \Delta x - \frac{\Delta x^3}{6} + \frac{\Delta x^5}{120},
-\end{equation}
-\begin{equation}
-	f_7(\Delta x) = \Delta x - \frac{\Delta x^3}{6} + \frac{\Delta x^5}{120} - \frac{\Delta x^7}{5040},
-\end{equation}
-\begin{equation}
-	f_{9}(\Delta x) = \Delta x - \frac{\Delta x^3}{6} + \frac{\Delta x^5}{120} - \frac{\Delta x^7}{5040} + \frac{\Delta x^9}{362880},
-\end{equation}
-where the subscript denotes the power of the highest degree expansion term included in the approximation. Each of these is a polynomial approximation of a sine wave about the point $x=0$, and are plotted in Figure \ref{fig:taylor_series}. We can make a few observations about the behaviour of Taylor series in general. First, when we are close to the expansion point $x=0$, even approximations with a small number of terms are close to the true function. For example, the $f_1$ expansion is the well-known small angle approximation of a sine wave. Then, as we add more terms the accuracy of the expansion improves rapidly. For example, by ten terms the approximation is nearly indistinguishable from the true function on the entire interval. Hence, we note that Taylor series becomes more accurate as we get closer to the expansion point and/or as we increase the number of terms.
+\begin{align}
+	f_1(\Delta x) &= \Delta x,\\
+	f_3(\Delta x) &= \Delta x - \frac{\Delta x^3}{6},\\
+	f_5(\Delta x) &= \Delta x - \frac{\Delta x^3}{6} + \frac{\Delta x^5}{120},\\
+	f_7(\Delta x) &= \Delta x - \frac{\Delta x^3}{6} + \frac{\Delta x^5}{120} - \frac{\Delta x^7}{5040},\\
+	f_{9}(\Delta x) &= \Delta x - \frac{\Delta x^3}{6} + \frac{\Delta x^5}{120} - \frac{\Delta x^7}{5040} + \frac{\Delta x^9}{362880},
+\end{align}
+where the subscript denotes the power of the highest degree expansion term included in the approximation. Each of these is a polynomial approximation of a sine wave about the point $x=0$, and are plotted in Figure \ref{fig:taylor_series}. We can make a few observations about the behaviour of Taylor series in general. First, when we are close to the expansion point $x=0$, even approximations with a small number of terms are close to the true function. For example, the $f_1$ expansion is the well-known small-angle approximation of a sine wave. Then, as we add more terms, the accuracy of the expansion improves rapidly. For example, by ten terms, the approximation is nearly indistinguishable from the true function on the entire interval. Hence, we note that Taylor series becomes more accurate as we get closer to the expansion point and/or as we increase the number of terms.
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=0.6\linewidth]{Pictures/taylor_series_sin}
@@ -63,11 +51,11 @@ where the subscript denotes the power of the highest degree expansion term inclu
 	\label{fig:taylor_series}
 \end{figure}
 
-To understand the behaviour of these truncated expansions, we note that their error arises from truncating the higher-order terms of the expansion. Furthermore, when $\Delta x$ is relatively small the error is dominated by the first truncated term, since the higher-order terms rapidly approximate zero as $\Delta x$ decreases. Hence, if we consider an infinite expansion
+To understand the behaviour of these truncated expansions, we note that their error arises from truncating the higher-order terms of the expansion. Furthermore, when $\Delta x$ is relatively small, the error is dominated by the first truncated term since the higher-order terms rapidly approximate zero as $\Delta x$ decreases. Hence, if we consider an infinite expansion
 \begin{equation}
 	f(\Delta x) = \Delta x - \frac{\Delta x^3}{6} + \frac{\Delta x^5}{120} - \frac{\Delta x^7}{5040} + \frac{\Delta x^9}{362880} - \frac{\Delta x^{11}}{39916800} + \hdots,
 \end{equation}
-we note that the leading term omitted from the $f_1(\Delta x)$ approximation behaves like $\Delta x^3$, the leading error term of the $f_1(\Delta x)$ approximation behaves like $\Delta x^5$, and so on. Hence, as we get closer to the expansion point $x=0$ we expect that the error shrinks, and that the rate at which the error shrinks will be proportional to the exponent of the leading truncated term of the expansion.
+we note that the leading term omitted from the $f_1(\Delta x)$ approximation behaves like $\Delta x^3$, the leading error term of the $f_1(\Delta x)$ approximation behaves like $\Delta x^5$, and so on. Hence, as we get closer to the expansion point $x=0$, we expect that the error shrinks, and that the rate at which the error shrinks will be proportional to the exponent of the leading truncated term of the expansion.
 \begin{jupyternote}
 	Check out the Burgers Jupyter notebook \href{\binderurl}{\underline{here}}. You can also download the files from the Gitlab repository \href{\repourl}{\underline{here}}.
 \end{jupyternote}
@@ -81,7 +69,7 @@ we note that the leading term omitted from the $f_1(\Delta x)$ approximation beh
 	\label{fig:fd_scheme}
 \end{figure}
 	
-To introduce the finite difference method we start with a general function $u(x)$. In general this function can be in any number of dimensions, but for simplicity we will first consider the one-dimensional case. We note that a function can generally be {\it approximated} by its values at a {\it discrete} set of points. An example of this is shown in Figure \ref{fig:fd_scheme} where $\Delta x$ is the grid spacing between the points. We now imagine that we are at some point $i$ whose solution is $u_i = u(x_i)$ where $x_i$ is the physical location of the point. Using Taylor series we can approximate the value of the solution one grid point to the left from the expansion
+To introduce the finite difference method, we start with a general function $u(x)$. In general, this function can be in any number of dimensions, but for simplicity we will first consider the one-dimensional case. We note that a function can generally be {\it approximated} by its values at a {\it discrete} set of points. An example of this is shown in Figure \ref{fig:fd_scheme} where $\Delta x$ is the grid spacing between the points. We now imagine that we are at some point $i$ whose solution is $u_i = u(x_i)$ where $x_i$ is the physical location of the point. Using Taylor series, we can approximate the value of the solution one grid point to the left from the expansion
 \begin{equation}
 	u_{i-1} = u_i - \Delta x \Eval{\frac{\partial u}{\partial x}}{x_i}{} + \frac{\Delta x^2}{2} \Eval{\frac{\partial^2 u}{\partial x^2}}{x_i}{} - \frac{\Delta x^3}{6} \Eval{\frac{\partial^3 u}{\partial x^3}}{x_i}{} + \mathcal{O}(\Delta x^4),
 	\label{eqn:fdmup}
@@ -97,26 +85,26 @@ So far, we have just applied Taylor series to try to determine the solution at p
 	\Eval{\frac{\partial u}{\partial x}}{x_i}{} = \frac{u_i - u_{i-1}}{\Delta x} + \frac{\Delta x}{2} \Eval{\frac{\partial^2 u}{\partial x^2}}{x_i}{} - \frac{\Delta x^2}{6} \Eval{\frac{\partial^3 u}{\partial x^3}}{x_i}{} + \mathcal{O}(\Delta x^3).
 	\label{eqn:fdmup1}
 \end{equation}
-We note that as the grid spacing gets smaller the terms with leading $\Delta x$, $\Delta x^2$, and so on will tend to zero and the approximation
+We note that as the grid spacing gets smaller, the terms with leading $\Delta x$, $\Delta x^2$, and so on will tend to zero and the approximation
 \begin{eqBox}
 \begin{equation}
 	\Eval{\frac{\partial u}{\partial x}}{x_i}{} = \frac{u_i - u_{i-1}}{\Delta x} + \mathcal{O}(\Delta x),
 \end{equation}
 \end{eqBox}
-will converge to the true value of the derivative at the point $x_i$ as $\Delta x$ tends to zero. We can also do the same trick with Equation \ref{eqn:fdmdwn}. Rearranging we get
+will converge to the true value of the derivative at the point $x_i$ as $\Delta x$ tends to zero. We can also do the same trick with Equation \ref{eqn:fdmdwn}. Rearranging, we get
 \begin{equation}
 	\Eval{\frac{\partial u}{\partial x}}{x_i}{} = \frac{u_{i+1} - u_{i}}{\Delta x} - \frac{\Delta x}{2} \Eval{\frac{\partial^2 u}{\partial x^2}}{x_i}{} - \frac{\Delta x^2}{6} \Eval{\frac{\partial^3 u}{\partial x^3}}{x_i}{} + \mathcal{O}(\Delta x^3),
 	\label{eqn:fdmdwn1}
 \end{equation}
-and again if the grid spacing is small then the higher-order terms tend to zero and we are left with
+and again if the grid spacing is small, then the higher-order terms tend to zero and we are left with
 \begin{eqBox}
 \begin{equation}
 	\Eval{\frac{\partial u}{\partial x}}{x_i}{} = \frac{u_{i+1} - u_{i}}{\Delta x} + \mathcal{O}(\Delta x),
 \end{equation}
 \end{eqBox}
-which also allows us to approximate the derivative at $x_i$. Hence, if we know that value of the solution at $x_i$ and either $x_{i-1}$ or $x_{i+1}$ we can approximate the derivative at $x_i$. We note that for both of these approximations the error in the derivative approximation will decrease proportional to the grid spacing, since the leading term in the truncation error is of $\mathcal{O}(\Delta x)$. We refer to a scheme of this form as a {\it first-order} finite difference method.
+which also allows us to approximate the derivative at $x_i$. Hence, if we know that value of the solution at $x_i$ and either $x_{i-1}$ or $x_{i+1}$ we can approximate the derivative at $x_i$. We note that for both of these approximations, the error in the derivative approximation will decrease proportional to the grid spacing since the leading term in the truncation error is of $\mathcal{O}(\Delta x)$. We refer to a scheme of this form as a {\it first-order} finite difference method.
 
-While the above examples are often useful, they converge rather slowly to the exact value of the derivative at the point $x_i$. However, if we take an average of Equation \ref{eqn:fdmup1} and Equation \ref{eqn:fdmdwn1} we obtain
+While the above examples are often useful, they converge rather slowly to the exact value of the derivative at the point $x_i$. However, if we take an average of Equation \ref{eqn:fdmup1} and Equation \ref{eqn:fdmdwn1}, we obtain
 \begin{equation}
 	\begin{aligned}
 	\Eval{\frac{\partial u}{\partial x}}{x_i}{} = &\frac{1}{2}\left(\frac{u_i - u_{i-1}}{\Delta x} + \frac{\Delta x}{2} \Eval{\frac{\partial^2 u}{\partial x^2}}{x_i}{} - \frac{\Delta x^2}{6} \Eval{\frac{\partial^3 u}{\partial x^3}}{x_i}{} \right) + \\
@@ -127,18 +115,18 @@ which simplifies to
 \begin{equation}
 	\Eval{\frac{\partial u}{\partial x}}{x_i}{} = \frac{u_{i+1} - u_{i-1}}{2 \Delta x} - \frac{\Delta x^2}{6} \Eval{\frac{\partial^3 u}{\partial x^3}}{x_i}{} + \mathcal{O}(\Delta x^3),
 \end{equation}
-noting that the leading truncation error terms conveniently cancelled each other out. Hence, if we assume that $\Delta x$ is relatively small we obtain
+noting that the leading truncation error terms conveniently cancelled each other out. Hence, if we assume that $\Delta x$ is relatively small, we obtain
 \begin{eqBox}
 \begin{equation}
 	\Eval{\frac{\partial u}{\partial x}}{x_i}{} = \frac{u_{i+1} - u_{i-1}}{2 \Delta x} + \mathcal{O}(\Delta x^2).
 \end{equation}
 \end{eqBox}
-Using this equation we can approximate the value of the derivative of the function at $x_i$ using the values of the solution at two neighbouring points $x_{i-1}$ and $x_{i+1}$. However, unlike the previous finite difference methods, the truncation error of this approximation is $\mathcal{O}(\Delta x^2)$, meaning that as the grid spacing is reduced the error will converge like the grid spacing squared. We refer to a scheme of this form as a {\it second-order} finite difference method.
+Using this equation, we can approximate the value of the derivative of the function at $x_i$ using the values of the solution at two neighbouring points $x_{i-1}$ and $x_{i+1}$. However, unlike the previous finite difference methods, the truncation error of this approximation is $\mathcal{O}(\Delta x^2)$, meaning that as the grid spacing is reduced, the error will converge like the grid spacing squared. We refer to a scheme of this form as a {\it second-order} finite difference method.
 
 \section{A General Approach}
-In the previous section we derived three different finite difference methods for computing the derivative at a point $x_i$ using the values of the solution at that point and neighbouring points. We have shown that we can create at least two first-order schemes and one second-order scheme. In the current section we will demonstrate how to generalize this approach to allow us to obtain schemes of any order and for higher-order derivatives.
+In the previous section, we derived three different finite difference methods for computing the derivative at a point $x_i$ using the values of the solution at that point and neighbouring points. We have shown that we can create at least two first-order schemes and one second-order scheme. In the current section, we will demonstrate how to generalize this approach to allow us to obtain schemes of any order and for higher-order derivatives.
 
-To start with, we will derive a second-order finite difference method to approximate the first derivative using $u_i$, $u_{i-1}$, and $u_{i-2}$. This procedure can be broken down into four basic steps.
+To start, we will derive a second-order finite difference method to approximate the first derivative using $u_i$, $u_{i-1}$, and $u_{i-2}$. This procedure can be broken down into four basic steps.
 
 \subsection{Step 1: Generate the Taylor Series}
 The first step is to expand a Taylor series about each of the points that will be used to approximate the derivative. The Taylor series for $u_{i-1}$ was given before and is
@@ -153,7 +141,7 @@ Similarly, since the distance between $u_i$ and $u_{i-2}$ is $2 \Delta x$ we get
 \end{equation}
 
 \subsection{Step 2: Rearrange the Taylor Series}
-The second step is to rearrange each of the Taylor series generated in Step 1 to obtain the derivative of interest on the LHS with everything else on the RHS. Since we are interested in finding an approximation for the first derivative we rearrange Equation \ref{fdm:general1}
+The second step is to rearrange each of the Taylor series generated in Step 1 to obtain the derivative of interest on the LHS with everything else on the RHS. Since we are interested in finding an approximation for the first derivative, we rearrange Equation \ref{fdm:general1}
 \begin{equation}
 	\Eval{\frac{\partial u}{\partial x}}{x_i}{} = \frac{u_i - u_{i-1}}{\Delta x} + \frac{\Delta x}{2}\Eval{\frac{\partial^2 u}{\partial x^2}}{x_i}{} - \frac{\Delta x^2}{6}\Eval{\frac{\partial^3 u}{\partial x^3}}{x_i}{} + \mathcal{O}(\Delta x^3),
 	\label{eqn:aHK8G4M7}
@@ -166,27 +154,27 @@ and rearrange Equation \ref{fdm:general1}
 which gives two expressions for the first derivative.
 
 \subsection{Step 3: Determine a Suitable Combination}
-If we look at the previous two expressions for the first derivative we will notice that they are both first-order accurate, since the leading term that will get truncated is $\mathcal{O}(\Delta x)$. However, we were tasked with finding a second-order accurate scheme. In order to achieve this we will try to combine Equation \ref{eqn:aHK8G4M7} and Equation \ref{eqn:6sbrhgAM} in such a way the this first-order error term cancels out.
+If we look at the previous two expressions for the first derivative, we will notice that they are both first-order accurate since the leading term that will get truncated is $\mathcal{O}(\Delta x)$. However, we were tasked with finding a second-order accurate scheme. In order to achieve this, we will try to combine Equation \ref{eqn:aHK8G4M7} and Equation \ref{eqn:6sbrhgAM} in such a way the first-order error term cancels out.
 
 We want to combine them is such a way that
 \begin{equation}
-	\Eval{\frac{\partial u}{\partial x}}{x_i}{} = a(\ref{eqn:aHK8G4M7}) + b(\ref{eqn:6sbrhgAM})
+	\Eval{\frac{\partial u}{\partial x}}{x_i}{} = a(\ref{eqn:aHK8G4M7}) + b(\ref{eqn:6sbrhgAM}),
 	\label{eqn:2KGWrZa5}
 \end{equation}
-gives a second-order approximating for the first derivative, and we need to find the coefficients $a$ and $b$ to achieve this. If we look at the left hand side, we want to keep the first derivative there. This can be achieved if we ensure that
+gives a second-order approximating for the first derivative, and we need to find the coefficients $a$ and $b$ to achieve this. If we look at the left-hand side, we want to keep the first derivative there. This can be achieved if we ensure that
 \begin{equation}
 	a + b = 1.
 	\label{eqn:3Wxy2aCD}
 \end{equation}
-The second thing we need to do is cancel out the $\mathcal{O}(\Delta x)$ term to ensure that the leading truncation error term is $\mathcal{O}(\Delta x^2)$. Looking at the $\mathcal{O}(\Delta x)$ terms, in order for them to cancel out we require
+The second thing we need to do is cancel out the $\mathcal{O}(\Delta x)$ term to ensure that the leading truncation error term is $\mathcal{O}(\Delta x^2)$. Looking at the $\mathcal{O}(\Delta x)$ terms, in order for them to cancel out, we require
 \begin{equation}
-	\frac{a}{2} + b = 0,
+	\frac{a}{2} + b = 0.
 	\label{eqn:rWD4Hs8v}
 \end{equation}
-to cancel them out. Equations \ref{eqn:3Wxy2aCD} and \ref{eqn:rWD4Hs8v} are recognizable as a linear system of equations with two equations and two unknowns. This can be readily solved using substitution yielding $a=2$ and $b=-1$.
+Equations \ref{eqn:3Wxy2aCD} and \ref{eqn:rWD4Hs8v} are recognizable as a linear system of equations with two equations and two unknowns. This can be readily solved using substitution yielding $a=2$ and $b=-1$.
 
 \subsection{Step 3: Combine the Schemes}
-Now that we have determine the constants in Equation \ref{eqn:2KGWrZa5}, the last step is to just go ahead and add things together. Doing this will yield that following finite difference approximation
+Now that we have determined the constants in Equation \ref{eqn:2KGWrZa5}, the last step is to just go ahead and add things together. Doing this will yield that following finite difference approximation
 \begin{eqBox}
 \begin{equation}
 	\Eval{\frac{\partial u}{\partial x}}{x_i}{} = \frac{3u_i - 4u_{i-1} + u_{i-2}}{2 \Delta x} + \mathcal{O}(\Delta x^2),
@@ -196,7 +184,7 @@ Now that we have determine the constants in Equation \ref{eqn:2KGWrZa5}, the las
 which is a second-order approximation of the first derivative use three points. Hence, we have accomplished our task.
 
 \section{The Second Derivative}
-In the previous sections we derived four different schemes for the first derivative, two that were first-order accurate, and two that were second-order accurate. However, if we go back and look at the Navier-Stokes equations, we will note that we also need to approximate second-derivatives for the diffusive terms. We will derive an example scheme here, which also demonstrates another application of the four basic steps of creating a finite difference scheme. Our objective will be to derive a second-order finite difference method to approximate the second derivative using $u_i$, $u_{i-1}$, and $u_{i+1}$.
+In the previous sections, we derived four different schemes for the first derivative, two that were first-order accurate, and two that were second-order accurate. However, if we go back and look at the Navier-Stokes equations, we will note that we also need to approximate second-derivatives for the diffusive terms. We will derive an example scheme here, which also demonstrates another application of the four basic steps of creating a finite difference scheme. Our objective will be to derive a second-order finite difference method to approximate the second derivative using $u_i$, $u_{i-1}$, and $u_{i+1}$.
 
 We now recall that the first step was to simply expand a Taylor series about all of the points that are not $u_i$. We have already derived these expansions for $u_{i-1}$ and $u_{i+1}$, which are
 \begin{equation}
@@ -210,7 +198,7 @@ and
 \end{equation}
 So that is step one done.
 
-In step two we needed to rearrange these equations such that the derivative of interest is on the LHS. This yields two possible expressions for the second derivative by rearranging Equation \ref{eqn:Bm6Tq8Ah}
+In step two, we needed to rearrange these equations such that the derivative of interest is on the LHS. This yields two possible expressions for the second derivative by rearranging Equation \ref{eqn:Bm6Tq8Ah}
 \begin{equation}
 	\Eval{\frac{\partial^2 u}{\partial x^2}}{x_i}{} = \frac{2(u_{i-1} - u_i)}{\Delta x^2} + \frac{2}{\Delta x} \Eval{\frac{\partial u}{\partial x}}{x_i}{} + \frac{\Delta x}{3} \Eval{\frac{\partial^3 u}{\partial x^3}}{x_i}{} + \mathcal{O}(\Delta x^2),
 \end{equation}
@@ -220,17 +208,17 @@ and Equation \ref{eqn:93Nxbhtu}
 \end{equation}
 noting that the $\mathcal{O}(\Delta x^4)$ terms are now $\mathcal{O}(\Delta x^2)$ since we had to divide the RHS by $\Delta x^2$. That marks the end of step two.
 
-In the third step we have to determine a linear combination of these two equations that will give us an expression for the second derivative with a truncation error of $\mathcal{O}(\Delta x^2)$. Since we want to keep the second derivative on the LHS we require
+In the third step, we have to determine a linear combination of these two equations that will give us an expression for the second derivative with a truncation error of $\mathcal{O}(\Delta x^2)$. Since we want to keep the second derivative on the LHS, we require
 \begin{equation}
 	a + b = 1.
 \end{equation}
-And, in order for the truncation error to be of $\mathcal{O}(\Delta x^2)$ we need to cancel the second and third terms on the RHS of the equations, which are $\mathcal{O}(\Delta x^{-1})$ and $\mathcal{O}(\Delta x)$, respectively. Interestingly, cancelling out both of these terms requires
+And, in order for the truncation error to be of $\mathcal{O}(\Delta x^2)$, we need to cancel the second and third terms on the RHS of the equations, which are $\mathcal{O}(\Delta x^{-1})$ and $\mathcal{O}(\Delta x)$, respectively. Interestingly, cancelling out both of these terms requires
 \begin{equation}
 	a - b = 0.
 \end{equation}
 Once again, we have a linear system with two equations and two unknowns. Solving this system yields $a=b=1/2$, which finishes part three.
 
-Finally, in part four we simply combine the two equations multiplied by their respective $a$ and $b$ coefficients. This yields our second-order accurate expression for the second-derivative as
+Finally, in part four, we simply combine the two equations multiplied by their respective $a$ and $b$ coefficients. This yields our second-order accurate expression for the second-derivative as
 \begin{eqBox}
 \begin{equation}
 	\Eval{\frac{\partial^2 u}{\partial x^2}}{x_i}{} = \frac{u_{i-1} - 2u_i + u_{i+1}}{\Delta x^2} + \mathcal{O}(\Delta x^2).
@@ -244,7 +232,7 @@ We recall that the one-dimensional linear advection equation in differential for
 \begin{equation}
 	\frac{\partial u}{\partial t} +  \alpha \frac{\partial u}{\partial x} = 0.
 \end{equation}
-In the previous sections we derived a few options for this, but to start we will use the simple first-order upwind scheme to approximate the spatial derivative at each grid point, such that
+In the previous sections, we derived a few options for this, but to start we will use the simple first-order upwind scheme to approximate the spatial derivative at each grid point, such that
 \begin{equation}
 	\Eval{\frac{\partial u}{\partial x}}{x_i}{} = \frac{u_i^t - u_{i-1}^t}{\Delta x} + \mathcal{O}(\Delta x),
 \end{equation}
@@ -266,7 +254,7 @@ By inspecting this equation, and assuming that we know the solution at each grid
 \end{equation}
 \end{eqBox}
 
-Looking at Equation \ref{eqn:7hH8UBeG} we note that, provided we know the current solution at all grid points at time $t$, we can predict the solution at time $t+\Delta t$ with an error term of $\mathcal{O}(\Delta x, \Delta t)$. Then we will have an approximation of the solution at all grid points at time $t+\Delta t$, and we can use this to find an approximation of the solution at time $t+2\Delta t$ by applying the same equation, and so on. Hence, we are able to advance the linear advection equation to any final time we desire, noting that each time step we take will introduce some numerical error. A series of example solutions using different numbers of grid points is shown in Figure \ref{fig:advection_upwind} with an advection velocity of $\alpha = 1$, and a final solution time of $t=1$, which allows the Gaussian bump to travel once through the domain. If the error is measured in terms of the height of the peak of the Gaussian bump, it is apparent that it converges linearly as the grid spacing is refined.
+Looking at Equation \ref{eqn:7hH8UBeG}, we note that, provided we know the current solution at all grid points at time $t$, we can predict the solution at time $t+\Delta t$ with an error term of $\mathcal{O}(\Delta x, \Delta t)$. Then we will have an approximation of the solution at all grid points at time $t+\Delta t$, and we can use this to find an approximation of the solution at time $t+2\Delta t$ by applying the same equation, and so on. Hence, we are able to advance the linear advection equation to any final time we desire, noting that each time step we take will introduce some numerical error. A series of example solutions using different numbers of grid points is shown in Figure \ref{fig:advection_upwind} with an advection velocity of $\alpha = 1$, and a final solution time of $t=1$, which allows the Gaussian bump to travel once through the domain. If the error is measured in terms of the height of the peak of the Gaussian bump, it is apparent that it converges linearly as the grid spacing is refined.
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=0.65\linewidth]{Pictures/advection_upwind}
@@ -290,7 +278,7 @@ where again the superscript $t$ denotes that we are using the solution at the cu
 	\Eval{\frac{\partial u}{\partial t}}{x_i}{} = \frac{u_i^{t+1} - u_{i}^t}{\Delta t} + \mathcal{O}(\Delta t).
 \end{equation}
 
-Now we simply insert our finite difference approximations of these two derivatives into the Burgers equation
+Now, we simply insert our finite difference approximations of these two derivatives into the Burgers equation
 \begin{equation}
 	\frac{u_i^{t+1} - u_{i}^t}{\Delta t} +  \frac{1}{2}\frac{(u_i^t)^2 - (u_{i-1}^t)^2}{\Delta x} + \mathcal{O}(\Delta x, \Delta t) = 0,
 \end{equation}
@@ -301,7 +289,7 @@ and, just like for linear advection, we can now find an expression for the solut
 	\label{eq:fd_burgers}
 \end{equation}
 \end{eqBox}
-Looking at this expression we note it is remarkably similar to the expression for linear advection, which is not particularly surprising as the two initial partial differential equations are also quite similar. Again, if we know the solution at each grid point at some time $t$, we can approximate the solution at some time $t+\Delta t$ using this expression. Then, to approximate the solution at the time $t+2\Delta t$ we simply re-apply the expression. This allows us to approximate the behaviour of Burgers equation up to any desired final time, and the error of the approximation is expected to be first-order accurate in both space and time, with errors on the order of $\mathcal{O}(\Delta x, \Delta t)$. An series of example solutions using different numbers of grid points is shown in Figure \ref{fig:burgers_upwind}.
+Looking at this expression, we note it is remarkably similar to the expression for linear advection, which is not particularly surprising as the two initial partial differential equations are also quite similar. Again, if we know the solution at each grid point at some time $t$, we can approximate the solution at some time $t+\Delta t$ using this expression. Then, to approximate the solution at the time $t+2\Delta t$ we simply re-apply the expression. This allows us to approximate the behaviour of Burgers equation up to any desired final time, and the error of the approximation is expected to be first-order accurate in both space and time, with errors on the order of $\mathcal{O}(\Delta x, \Delta t)$. A series of example solutions using different numbers of grid points is shown in Figure \ref{fig:burgers_upwind}.
 
 \begin{figure}[htbp]
 	\centering
@@ -318,7 +306,7 @@ We recall that our third and final simplified system of equations was the linear
 \begin{equation}
 \frac{\partial u}{\partial t} - \beta \frac{\partial^2 u}{\partial x^2} = 0,
 \end{equation}
-which described how some conserved quantity, such as heat, diffuses into the surrounding fluid. To approximate this using the finite difference method we follow the exact same steps as for linear advection and Burgers equation. First, we will use our second-order accurate finite difference approximation for the second derivative as
+which described how some conserved quantity, such as heat, diffuses into the surrounding fluid. To approximate this using the finite difference method, we follow the exact same steps as for linear advection and Burgers equation. First, we will use our second-order accurate finite difference approximation for the second derivative as
 \begin{equation}
 	\Eval{\frac{\partial^2 u}{\partial x^2}}{x_i}{} = \frac{u_{i-1} - 2u_i + u_{i+1}}{\Delta x^2} + \mathcal{O}(\Delta x^2).
 \end{equation}
@@ -1205,7 +1193,7 @@ Hence, the Jacobian matrix for the Euler equations is given by
 	\begin{bmatrix}
 		0 & 1 & 0 \\
 		\frac{1}{2}(3-\gamma)\left(\frac{u_2}{u_1}\right)^2 & (3-\gamma)\left(\frac{u_2}{u_1}\right) & \gamma-1 \\
-		(\gamma-1) \left(\frac{u_2}{u_1}\right)^2 - \gamma \frac{u_2 u_3}{u_1^2} & \gamma \frac{u_3}{u_1}-\frac{3}{2}(\gamma-1)\left(\frac{u_2}{u_1}\right)^2 & \gamma \frac{u_2}{u_1}
+		(\gamma-1) \left(\frac{u_2}{u_1}\right)^3 - \gamma \frac{u_2 u_3}{u_1^2} & \gamma \frac{u_3}{u_1}-\frac{3}{2}(\gamma-1)\left(\frac{u_2}{u_1}\right)^2 & \gamma \frac{u_2}{u_1}
 	\end{bmatrix},
 \end{align}
 or using the conserved variables
@@ -1623,14 +1611,14 @@ However, this is not always the case. To demonstrate this, we consider the Dufor
 \begin{equation}
 u_i^{t+1}  = u_{i}^{t-1} + \frac{2 \beta \Delta t}{\Delta x^2} \left(u_{i-1}^t - u_i^{t+1} - u_i^{t-1} + u_{i+1}^t\right) + \mathcal{O}(\Delta x^2,\Delta t^2,(\Delta t/\Delta x)^2).
 \end{equation}
-This differs from our example scheme for linear diffusion in that it uses central differences for the time-derivative, and when computing the second-derivative in space it uses the solution at the current grid point at the previous and current time steps. While this scheme may have some useful properties, we note that it has a peculiar term in the truncation error of $\mathcal{O}((\Delta t/\Delta x)^2)$. This can be obtained from a Taylor series expansion of the second derivative. This is concerning, as for any scheme to be consistent with the original partial differential equation we require the truncation error to go to zero. However, if we use a naive approach and simply refine $\Delta x$ and $\Delta t$ at the same rate, this term will not go to zero, and the scheme will not be consistent. For example, if we reduced both the grid spacing and time step size by a half this $\mathcal{O}((\Delta t/\Delta x)^2)$ will remain the same. Hence, in order for the Dufort-Frankel scheme to be consistent with our original partial differential equation we should refine the grid spacing {\it faster} than the time step size. For example, if we reduce $\Delta t$ by a half we should reduce $\Delta x$ by a factor of four. This does not mean the Dufort-Frankel scheme is bad, per-se, but it does mean that care needs to be taken when using it.
+This differs from our example scheme for linear diffusion in that it uses central differences for the time-derivative, and when computing the second-derivative in space, it uses the solution at the current grid point at the previous and current time steps. While this scheme may have some useful properties, we note that it has a peculiar term in the truncation error of $\mathcal{O}((\Delta t/\Delta x)^2)$. This can be obtained from a Taylor series expansion of the second derivative. This is concerning, as for any scheme to be consistent with the original partial differential equation we require the truncation error to go to zero. However, if we use a naive approach and simply refine $\Delta x$ and $\Delta t$ at the same rate, this term will not go to zero, and the scheme will not be consistent. For example, if we reduced both the grid spacing and time step size by a half, this $\mathcal{O}((\Delta t/\Delta x)^2)$ will remain the same. Hence, in order for the Dufort-Frankel scheme to be consistent with our original partial differential equation, we should refine the grid spacing {\it faster} than the time step size. For example, if we reduce $\Delta t$ by a half we should reduce $\Delta x$ by a factor of four. This does not mean the Dufort-Frankel scheme is bad, per-se, but it does mean that care needs to be taken when using it.
 
 \section{Stability}
 If we can demonstrate our schemes are consistent, then we know that in the limit $\Delta x \rightarrow 0$ and $\Delta t \rightarrow 0$ we recover the exact partial differential equation. However, this is impossible to achieve in practice as it would require an infinite number of grid points and time steps. When considering stability, we are concerned with whether our numerical scheme will provide {\it physical} solutions when both $\Delta x$ and $\Delta t$ are finite. Let's start by considering what we mean by a physical solution.
 
-In order to advance our solution in time, we start with some initial condition. Then, by inserting this initial condition into our scheme we approximate the solution at the next timestep $t+\Delta t$. Then, we insert this approximation back into our scheme to approximate the solution at time $t+2\Delta t$, and this process is repeated over and over again until we reach our final desired time. Hence, the way we advance our simulation in time is effectively a feedback loop, with the output of each time step being recycled back through the numerical scheme to get the solution at each consecutive time step. 
+In order to advance our solution in time, we start with some initial condition. Then, by inserting this initial condition into our scheme, we approximate the solution at the next timestep $t+\Delta t$. Then, we insert this approximation back into our scheme to approximate the solution at time $t+2\Delta t$, and this process is repeated over and over again until we reach our final desired time. Hence, the way we advance our simulation in time is effectively a feedback loop, with the output of each time step being recycled back through the numerical scheme to get the solution at each consecutive time step. 
 
-As an analogy, we can consider what happens in other simple feedback loops, such as a microphone and speaker. When a performer sings into a microphone, their voice is amplified and played back through the speaker. We expect that this produces a physical replication of their voice, just at a louder volume for the audience. However, if the sound from the speaker is louder than the singer's voice at the microphone it will get amplified, played through the speaker at a louder volume, and this cycle then repeats. This results in feedback noise, usually a high-pitched ringing that sounds nothing like the original performer, and usually happens when the performer moves to close to the speaker.
+As an analogy, we can consider what happens in other simple feedback loops, such as a microphone and speaker. When a performer sings into a microphone, their voice is amplified and played back through the speaker. We expect that this produces a physical replication of their voice, just at a louder volume for the audience. However, if the sound from the speaker is louder than the singer's voice at the microphone, it will get amplified, played through the speaker at a louder volume, and this cycle then repeats. This results in feedback noise, usually a high-pitched ringing that sounds nothing like the original performer, and usually happens when the performer moves to close to the speaker.
 
 Since our numerical scheme is applied as a feedback loop, the exact same kind of thing can happen. If it amplifies our solution each time step, then the solution will continue to grow, eventually leading to non-physical values such as near-infinite density or pressure. This is colloquially referred to as the solution {\it blowing up}. In contrast, if the scheme damps our solution at each time step, it will tend towards physical values, such as the background density or pressure. While this is perhaps not desirable in terms of accuracy, which will be explored later, it is a desirable property in that the solution remains stable and bounded between the initial condition and background state.
 
@@ -1729,7 +1717,7 @@ Based on these results, we can conclude that the first-order finite difference s
 	0 \leq \sigma \leq 1.
 \end{equation}
 \end{eqBox}
-That is, it is only stable for CFL numbers less than one. Hence, for a given grid spacing and advection velocity, there is a limit on how large the time step can be. This clearly has implications in terms of computational cost, as the smaller the time step is the more steps must be taken to reach a desired final solution time. Schemes of this type are referred to as being {\it conditionally stable}.
+That is, it is only stable for CFL numbers less than one. Hence, for a given grid spacing and advection velocity, there is a limit on how large the time step can be. This clearly has implications in terms of computational cost, as the smaller the time step is, the more steps must be taken to reach a desired final solution time. Schemes of this type are referred to as being {\it conditionally stable}.
 
 
 \begin{figure}[htbp]
@@ -1740,7 +1728,7 @@ That is, it is only stable for CFL numbers less than one. Hence, for a given gri
 \end{figure}
 
 \subsection{Implicit Linear Advection}
-In the last section we saw that our first-order finite difference scheme has a stability limit. In this section we will explore a slightly different first-order scheme for linear advection.
+In the last section, we saw that our first-order finite difference scheme has a stability limit. In this section, we will explore a slightly different first-order scheme for linear advection.
 
 \subsubsection{Step 1: Choose the Discrete Scheme}
 In this case, we use the following finite difference approximation of the linear advection equation
@@ -1766,7 +1754,7 @@ Substituting these into our discrete scheme yields
 \end{equation}
 
 \subsubsection{Step 3: Solve for the Amplification Factor}
-Again we note a common factor of $e^{at} e^{i \kappa_m x}$ in all terms, allowing us to divide through yielding
+Again, we note a common factor of $e^{at} e^{i \kappa_m x}$ in all terms, allowing us to divide through yielding
 \begin{equation}
 	\frac{e^{a\Delta t} - 1}{\Delta t} +  \alpha \frac{e^{a\Delta t} - e^{a\Delta t} e^{-i \kappa_m \Delta x}}{\Delta x} = 0.
 \end{equation}
@@ -1951,7 +1939,7 @@ In CFD, the numerical error introduced by a scheme is typically classified into 
 
 
 \section{Dissipation Error}
-We have already discussed dissipation error in the context of stability, stating that in order for a scheme to be stable, it must be dissipative or neutrally dissipative. That is, the amplitude of the solution must remain the same or be reduced after each time step. We have shown this via von Neumann analysis to be the amplification factor $|e^{a\Delta t}|$, which was a function of the scheme we are using, and the wavenumber in space $\kappa_m$. While a scheme being dissipative is inherently linked with stability, it also introduces number error. For example, for the linear advection equation we know that the exact solution should have no dissipation, it should be simply the advection of the initial condition with the prescribed advection velocity. However, with our initial finite difference scheme, we found that this was not the case, and the amplitude of the waves is decreased as time goes on.
+We have already discussed dissipation error in the context of stability, stating that in order for a scheme to be stable, it must be dissipative or neutrally dissipative. That is, the amplitude of the solution must remain the same or be reduced after each time step. We have shown this via von Neumann analysis to be the amplification factor $|e^{a\Delta t}|$, which was a function of the scheme we are using, and the wavenumber in space $\kappa_m$. While a scheme being dissipative is inherently linked with stability, it also introduces number error. For example, for the linear advection equation, we know that the exact solution should have no dissipation, it should be simply the advection of the initial condition with the prescribed advection velocity. However, with our initial finite difference scheme, we found that this was not the case, and the amplitude of the waves is decreased as time goes on.
 
 It turns out that all the information we need to understand the dissipation error of the linear advection equation is encoded in the amplification factors we found in the von Neumann analysis section, $|e^{a\Delta t}|$. For example, for the finite difference scheme
 \begin{equation}
@@ -1961,7 +1949,7 @@ we found that the amplification factor was
 \begin{equation}
 	|e^{a\Delta t}| = |1 - \sigma + \sigma e^{-i \kappa_m \Delta x}|.
 \end{equation} 
-Recall that, for a given wavenumber $\kappa_m$ and CFL number $\sigma$ this told us how much the solution will be damped over a time step. Hence, we can plot this for a range of permissible wavenumbers in the range $\kappa_m \Delta x \in [0,\pi]$ and CFL numbers within the stability limit $\sigma \in [0,1]$. A plot of this is shown in Figure \ref{fig:dissipation_advection_explicit}. We can observe a few interesting features that define the dissipation error of this particular scheme. First, we note that when the wave size is large relative to the grid spacing, the wave is well resolved regardless of the CFL number. However, as we move to larger wavenumbers there is significant numerical dissipation. Also, the amount of numerical in this region dissipation depends on the CFL number, with larger CFL numbers corresponding to less dissipation. Finally, when the CFL number approaches unity the numerical dissipation approaches zero for all wavenumbers. Hence, when this CFL number is used we recover the exact dissipation relation for linear advection, that the waves do not get damped. The dissipation error of this scheme becomes particularly important in the context of turbulent flows. In this case, large scale structures in the turbulent flow have small wavenumbers relative to the grid spacing. This means that our large scale features will be simulated with relative accuracy. However, small scale turbulent structures that are of a size proportional to the grid spacing have high relative wavenumbers. This means that these fine scale structures will be heavily dissipated by this first-order scheme.
+Recall that, for a given wavenumber $\kappa_m$ and CFL number $\sigma$, this told us how much the solution will be damped over a time step. Hence, we can plot this for a range of permissible wavenumbers in the range $\kappa_m \Delta x \in [0,\pi]$ and CFL numbers within the stability limit $\sigma \in [0,1]$. A plot of this is shown in Figure \ref{fig:dissipation_advection_explicit}. We can observe a few interesting features that define the dissipation error of this particular scheme. First, we note that when the wave size is large relative to the grid spacing, the wave is well resolved regardless of the CFL number. However, as we move to larger wavenumbers, there is significant numerical dissipation. Also, the amount of numerical in this region dissipation depends on the CFL number, with larger CFL numbers corresponding to less dissipation. Finally, when the CFL number approaches unity, the numerical dissipation approaches zero for all wavenumbers. Hence, when this CFL number is used, we recover the exact dissipation relation for linear advection, that the waves do not get damped. The dissipation error of this scheme becomes particularly important in the context of turbulent flows. In this case, large scale structures in the turbulent flow have small wavenumbers relative to the grid spacing. This means that our large scale features will be simulated with relative accuracy. However, small scale turbulent structures that are of a size proportional to the grid spacing have high relative wavenumbers. This means that these fine-scale structures will be heavily dissipated by this first-order scheme.
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=0.6\linewidth]{Pictures/dissipation_adv_explct}
@@ -1976,7 +1964,7 @@ that had the amplification factor
 \begin{equation}
 	|e^{a\Delta t}| = \left| \frac{1}{1 + \sigma \left( 1 - e^{-i \kappa_m \Delta x} \right)} \right|.
 \end{equation}
-We can generate the exact same type of plot for permissible wave numbers $\kappa_m \Delta x \in [0,\pi]$ and, since this scheme is unconditionally stable, we will look at a few CFL numbers in the range $\sigma \in [0,10]$, as shown in Figure \ref{fig:dissipation_advection_implicit}. We note for this scheme, similar to the explicit scheme, that when the wave size is large relative to the grid spacing it is well resolved regardless of the CFL number. However, there is again a strong dependence of the numerical dissipation on the CFL number for high wavenumbers. As the wavenumber gets larger or as the CFL number gets larger, the amount of numerical dissipation increases rapidly. Hence, while this scheme was found to be unconditionally stable, using large CFL numbers introduces significant numerical dissipation to all but the largest structures in the flow. Hence, this scheme is typically only used for solving steady-state problems that are not a function of time.
+We can generate the exact same type of plot for permissible wave numbers $\kappa_m \Delta x \in [0,\pi]$ and, since this scheme is unconditionally stable, we will look at a few CFL numbers in the range $\sigma \in [0,10]$, as shown in Figure \ref{fig:dissipation_advection_implicit}. We note for this scheme, similar to the explicit scheme, that when the wave size is large relative to the grid spacing, it is well resolved regardless of the CFL number. However, there is again a strong dependence of the numerical dissipation on the CFL number for high wavenumbers. As the wavenumber gets larger or as the CFL number gets larger, the amount of numerical dissipation increases rapidly. Hence, while this scheme was found to be unconditionally stable, using large CFL numbers introduces significant numerical dissipation to all but the largest structures in the flow. Hence, this scheme is typically only used for solving steady-state problems that are not a function of time.
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=0.6\linewidth]{Pictures/dissipation_adv_implct}
@@ -1987,7 +1975,7 @@ We can generate the exact same type of plot for permissible wave numbers $\kappa
 	Check out the Von Neumann Jupyter notebook \href{\binderurl}{\underline{here}}. You can also download the files from the Gitlab repository \href{\repourl}{\underline{here}}.
 \end{jupyternote}
 \section{Dispersion Error}
-From the linear advection equation we know that the solution should translate at an exact wave speed $\alpha$. However, our numerical schemes will often introduce another error whereby the numerical wave does not move at the correct velocity. As a result, we often observe that the numerical solution is out of phase with the exact solution, which is referred to as dispersion error. Similar to the dissipation error, dispersion error can also be found from our results from von Neumann analysis. Recall that our assumed form of the solution for any isolated wave component of the full solution was
+From the linear advection equation, we know that the solution should translate at an exact wave speed $\alpha$. However, our numerical schemes will often introduce another error whereby the numerical wave does not move at the correct velocity. As a result, we often observe that the numerical solution is out of phase with the exact solution, which is referred to as dispersion error. Similar to the dissipation error, dispersion error can also be found from our results from von Neumann analysis. Recall that our assumed form of the solution for any isolated wave component of the full solution was
 \begin{equation}
 	u_m(x,t) = e^{at} e^{i \kappa_m x},
 \end{equation}
@@ -2005,7 +1993,7 @@ We note that this will be solved exactly when
 	a = -i \alpha \kappa_m.
 \end{equation}
 \end{eqBox}
-which is called the exact dispersion relation. This tells us that the exact frequency in time, which is described by $a$, is proportional to the wave speed and the wavenumber. Intuitively this makes sense as the faster a wave moves, the more the solution at a point should move up and down, and the higher the wavenumber, the more quickly the wave will move up and down in time as well. However, our numerical scheme will usually not return a value of $a$ that matches this dispersion relation exactly. Hence, for a given wavenumber we will get back a frequency that has some error, implying that the wave is moving at the wrong speed, which is referred to as dispersion error. Over a finite amount of time $\Delta t$, based on the exact dispersion relation we would expect the wave to move a distance
+which is called the exact dispersion relation. This tells us that the exact frequency in time, which is described by $a$, is proportional to the wave speed and the wavenumber. Intuitively this makes sense as the faster a wave moves, the more the solution at a point should move up and down, and the higher the wavenumber, the more quickly the wave will move up and down in time as well. However, our numerical scheme will usually not return a value of $a$ that matches this dispersion relation exactly. Hence, for a given wavenumber, we will get back a frequency that has some error, implying that the wave is moving at the wrong speed, which is referred to as dispersion error. Over a finite amount of time $\Delta t$, based on the exact dispersion relation, we would expect the wave to move a distance
 \begin{equation}
 	a \Delta t = -i \alpha \kappa_m \Delta t.
 \end{equation}
@@ -2030,7 +2018,7 @@ and then extract the imaginary components
 \begin{equation}
 	\Im(a\Delta t) = \Im{ \left[ \ln \left(1 - \sigma + \sigma e^{-i \kappa_m \Delta x} \right) \right]}.
 \end{equation}
-In the ideal case this should be identical to the exact dispersion relation, but in practical applications it is typically either slower or faster, resulting in some phase error from the wave moving at an approximate speed. We can extract the relative speed from
+In the ideal case, this should be identical to the exact dispersion relation, but in practical applications, it is typically either slower or faster, resulting in some phase error from the wave moving at an approximate speed. We can extract the relative speed from
 \begin{equation}
 	\frac{\Im(a\Delta t)}{-i \alpha \kappa_m \Delta t} = \frac{\Im{ \left[ \ln \left(1 - \sigma + \sigma e^{-i \kappa_m \Delta x} \right) \right]}}{-i \alpha \kappa_m \Delta t},
 \end{equation}
@@ -2045,14 +2033,14 @@ which tells us the speed of the numerical wave relative to the exact wave speed.
 	Check out the Von Neumann Jupyter notebook \href{\binderurl}{\underline{here}}. You can also download the files from the Gitlab repository \href{\repourl}{\underline{here}}.
 \end{jupyternote}
 \chapter{Modified Equation Analysis}
-In the previous sections we have demonstrated that our numerical schemes only approximate the exact PDE we are trying to solve. Furthermore, via von Neumann analysis that we can quantify the type of error we will observe as either dissipation or dispersion. Modified equation analysis is another powerful technique that allows us to better understand how and why a particular numerical scheme behaves the way it does. Using modified equation analysis we can show that, while our numerical scheme does not exactly satisfy the PDE we are trying to solve, it does provide an exact solution to a similar PDE. By determining what this similar PDE is, we can gain further insight into the behaviour of our scheme. In this section we will demonstrate by example how to perform modified equation analysis in the context of linear advection.
+In the previous sections, we have demonstrated that our numerical schemes only approximate the exact PDE we are trying to solve. Furthermore, via von Neumann analysis, we can quantify the type of error we will observe as either dissipation or dispersion. Modified equation analysis is another powerful technique that allows us to better understand how and why a particular numerical scheme behaves the way it does. Using modified equation analysis, we can show that, while our numerical scheme does not exactly satisfy the PDE we are trying to solve, it does provide an exact solution to a similar PDE. By determining what this similar PDE is, we can gain further insight into the behaviour of our scheme. In this section, we will demonstrate by example how to perform modified equation analysis in the context of linear advection.
 
 \section{Linear Advection}
-He we will derive the modified equation for our first order linear advection scheme
+Here, we will derive the modified equation for our first order linear advection scheme
 \begin{equation}
 	\frac{u_i^{t+1} - u_{i}^t}{\Delta t} +  \alpha \frac{u_i^{t} - u_{i-1}^{t}}{\Delta x} = 0.
 \end{equation}
-In order to derive the modified equation we will start by re-stating our Taylor-Series expansions for the solution at each grid point and time level, dropping the evaluated at notation for compactness and expanding up to the second-order terms, as
+In order to derive the modified equation, we will start by re-stating our Taylor-Series expansions for the solution at each grid point and time level, dropping the evaluated at notation for compactness and expanding up to the second-order terms, as
 \begin{equation}
 	u_{i-1}^t = u_i^t - \Delta x \frac{\partial u}{\partial x} + \frac{\Delta x^2}{2} \frac{\partial^2 u}{\partial x^2} + \mathcal{O}(\Delta x^3),
 \end{equation}
@@ -2073,12 +2061,12 @@ which can then be rearranged to
 	\label{eqn:38fg93la}
 	\frac{\partial u}{\partial t} + \alpha \frac{\partial u}{\partial x} = -\frac{\Delta t}{2} \frac{\partial^2 u}{\partial t^2} + \alpha \frac{\Delta x}{2} \frac{\partial^2 u}{\partial x^2} + \mathcal{O}(\Delta x^2,\Delta t^2).
 \end{equation}
-We can recognize the right hand side of this equation as the truncation error of our scheme and we note that in the limit as $\Delta t$ and $\Delta x$ go to zero this will converge to the exact PDE. Furthermore, since the behaviour of the temporal derivative on the left hand side is somewhat unclear, we will convert it to a spatial derivative. Starting by differentiating the above expression in time we get
+We can recognize the right-hand side of this equation as the truncation error of our scheme and we note that in the limit as $\Delta t$ and $\Delta x$ go to zero this will converge to the exact PDE. Furthermore, since the behaviour of the temporal derivative on the left-hand side is somewhat unclear, we will convert it to a spatial derivative. Starting by differentiating the above expression in time, we get
 \begin{equation}
 	\label{eqn:pelfhv72}
 	\frac{\partial^2 u}{\partial t^2} + \alpha \frac{\partial^2 u}{\partial x \partial t} = -\frac{\Delta t}{2} \frac{\partial^3 u}{\partial t^3} + \alpha \frac{\Delta x}{2} \frac{\partial^3 u}{\partial x^2 \partial t} + \mathcal{O}(\Delta x^2,\Delta t^2),
 \end{equation}
-and in space we get
+and in space, we get
 \begin{equation}
 	\label{eqn:dhwis937}
 	\frac{\partial^2 u}{\partial t \partial x} + \alpha \frac{\partial^2 u}{\partial x^2} = -\frac{\Delta t}{2} \frac{\partial^3 u}{\partial t^2 \partial x} + \alpha \frac{\Delta x}{2} \frac{\partial^3 u}{\partial x^3} + \mathcal{O}(\Delta x^2,\Delta t^2).
@@ -2104,29 +2092,29 @@ and rearranging finally yields
 \end{equation}
 \end{eqBox}
 
-If we look at the form of the Equation \ref{eqn:shrj986g} we see that when $\Delta x$ and $\Delta t$ are small the right hand side reduces to zero, and we are left with a general {\it advection-diffusion} equation. Hence, we have shown that our finite difference scheme is actually the exact solution to an advection-diffusion problem, rather than the linear advection equation we initially intended to solve. Furthermore, we note that the diffusion operator will only be valid for $0 \leq \sigma \leq 1$, after which point the sign of the term will change and it will become a non-physical {\it anti-diffusive} operator. This switch from a physical to non-physical PDE coincides with the stability limits we had originally derived for this scheme using von Neumann analysis. Also, as we would expect, our solutions using this method also behave exactly like an advection diffusion equation since the solution also move, but simultaneously dissipates. Also, for the value $\sigma=1$ this diffusion operator disappears, which is also consistent with our observations and predictions based on von Neumann analysis which showed that the amplification factor $| e^{a \Delta t} | = 1$ for this case.
+If we look at the form of the Equation \ref{eqn:shrj986g}, we see that when $\Delta x$ and $\Delta t$ are small the right-hand side reduces to zero, and we are left with a general {\it advection-diffusion} equation. Hence, we have shown that our finite difference scheme is actually the exact solution to an advection-diffusion problem, rather than the linear advection equation we initially intended to solve. Furthermore, we note that the diffusion operator will only be valid for $0 \leq \sigma \leq 1$, after which point the sign of the term will change and it will become a non-physical {\it anti-diffusive} operator. This switch from a physical to non-physical PDE coincides with the stability limits we had originally derived for this scheme using von Neumann analysis. Also, as we would expect, our solutions using this method also behave exactly like an advection-diffusion equation since the solution also move, but simultaneously dissipates. Also, for the value $\sigma=1$, this diffusion operator disappears, which is also consistent with our observations and predictions based on von Neumann analysis, which showed that the amplification factor $| e^{a \Delta t} | = 1$ for this case.
 
 \section{General Observations}
-It is important note that the procedure followed here for the first order linear advection scheme can be repeated for any finite difference scheme of your choice. Starting with your numerical scheme, you can replace each term with its Taylor Series expansion and rearrange this to try to get the PDE of interest on the left hand side and truncation error on the right hand side. The leading order terms will tell you the nature of the dominant error in the scheme. If the dominant error has an even-order derivative, such as the scheme above, then one would expect that the scheme is {\it dominantly dissipative}. In contrast, if the dominant error has an odd-order derivative then one would expect that the scheme is {\it dominantly dispersive}. Hence, similar to von Neumann analysis, modified equation analysis is a powerful tool to aid in understanding the general behaviour of a numerical scheme, to elucidate its dissipative and dispersive error properties, and to identify its stability limits.
+It is important to note that the procedure followed here for the first order linear advection scheme can be repeated for any finite difference scheme of your choice. Starting with your numerical scheme, you can replace each term with its Taylor Series expansion and rearrange this to try to get the PDE of interest on the left-hand side and truncation error on the right-hand side. The leading order terms will tell you the nature of the dominant error in the scheme. If the dominant error has an even-order derivative, such as the scheme above, then one would expect that the scheme is {\it dominantly dissipative}. In contrast, if the dominant error has an odd-order derivative, then one would expect that the scheme is {\it dominantly dispersive}. Hence, similar to von Neumann analysis, modified equation analysis is a powerful tool to aid in understanding the general behaviour of a numerical scheme, to elucidate its dissipative and dispersive error properties, and to identify its stability limits.
 
 \chapter{Time-Stepping}
 \label{ch:timestepping}
-In the previous sections we have always approximated the time derivative using first-order finite differences, assuming
+In the previous sections, we have always approximated the time derivative using first-order finite differences, assuming
 \begin{equation}
 	\frac{\partial u}{\partial t} = \frac{u_i^{t+1} - u_{i}^t}{\Delta t} + \mathcal{O}(\Delta t).
 \end{equation}
-In the von Neumann analysis section we demonstrated that two linear advection schemes and two linear diffusion schemes are either conditionally or unconditionally stable using this approach. However, if we try to use this finite difference approach to get higher-order accurate schemes in time, such as a central in time approach
+In the von Neumann analysis section, we demonstrated that two linear advection schemes and two linear diffusion schemes are either conditionally or unconditionally stable using this approach. However, if we try to use this finite difference approach to get higher-order accurate schemes in time, such as a central in time approach
 \begin{equation}
 	\frac{\partial u}{\partial t} = \frac{u_i^{t+1} - u_{i}^{t-1}}{2 \Delta t} + \mathcal{O}(\Delta t^2),
 \end{equation}
-we find it is almost always {\it unstable}. Hence, getting higher than first-order accurate solutions in time requires something other than finite differences. Furthermore, for both of the unconditionally stable schemes in the von Neumann section, we have not yet discussed how to actually advance them in time, and how to get higher-order accuracy in time, while maintaining this unconditional stability. Hence, in this section we will discuss more appropriate discretizations for the time derivative.
+we find it is almost always {\it unstable}. Hence, getting higher than first-order accurate solutions in time requires something other than finite differences. Furthermore, for both of the unconditionally stable schemes in the von Neumann section, we have not yet discussed how to actually advance them in time, and how to get higher-order accuracy in time, while maintaining this unconditional stability. Hence, in this section, we will discuss more appropriate discretizations for the time derivative.
 
 \section{Explicit}
-Our previous approach for discretizing the time derivative is called a {\it multi-step} scheme, since we are using information from multiple time steps to try to estimate the solution at the next time-step. In this section we will introduce {\it multi-stage} time stepping, specifically the well-known classical Runge-Kutta methods. Rather than use the value of the solution at previous time steps, Runge-Kutta methods compute the solution at intermediate stages between time level $t$ and $t+1$. Then, these intermediate solutions are cleverly combined to achieve a more stable and potentially higher-order accurate solution in time. In all of these cases we will re-arrange our system into a general form
+Our previous approach for discretizing the time derivative is called a {\it multi-step} scheme since we are using information from multiple time steps to try to estimate the solution at the next time-step. In this section we will introduce {\it multi-stage} time stepping, specifically the well-known classical Runge-Kutta methods. Rather than use the value of the solution at previous time steps, Runge-Kutta methods compute the solution at intermediate stages between time level $t$ and $t+1$. Then, these intermediate solutions are cleverly combined to achieve a more stable and potentially higher-order accurate solution in time. In all of these cases, we will re-arrange our system into a general form
 \begin{equation}
 	\frac{\partial u}{\partial t} = R(u),
 \end{equation}
-where $R(u)$ is typically referred to as the {\it residual} or the {\it right hand side}. Note that the term residual is used in several different contexts in CFD.
+where $R(u)$ is typically referred to as the {\it residual} or the {\it right-hand side}. Note that the term residual is used in several different contexts in CFD.
 
 \subsection{Forward Euler}
 The forward Euler, or explicit Euler, scheme uses just one stage to predict the solution at the next time step. In fact, it is equivalent to our previous finite difference approach. In this scheme we get
@@ -2145,11 +2133,11 @@ Heun's method is a fairly simple but clever improvement on the explicit Euler sc
 \begin{equation}
 	\tilde{u} = u^t + \Delta t R(u),
 \end{equation}
-where $\tilde{u}$ is an initial guess for the solution. Then, we use an average of the following right hand sides to compute the solution at the next time step
+where $\tilde{u}$ is an initial guess for the solution. Then, we use an average of the following right-hand sides to compute the solution at the next time step
 \begin{equation}
 	\tilde{u}^{t+1} = u^t + \Delta t \left[\frac{R(u) + R(\tilde{u})}{2} \right].
 \end{equation}
-This approach is called a two-stage scheme, since we had to compute our solution at one intermediate stage before the final solution is obtained. This requires us to evaluate two right hand sides, one for each stage, so is approximately twice as expensive as the explicit Euler method. However, it can be shown that it achieves $\mathcal{O}(\Delta t^2)$ in time. Hence, when the time step is small, it is significantly more accurate.
+This approach is called a two-stage scheme, since we had to compute our solution at one intermediate stage before the final solution is obtained. This requires us to evaluate two right-hand sides, one for each stage, so is approximately twice as expensive as the explicit Euler method. However, it can be shown that it achieves $\mathcal{O}(\Delta t^2)$ in time. Hence, when the time step is small, it is significantly more accurate.
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=0.6\linewidth]{Pictures/heuns_method}
@@ -2175,11 +2163,11 @@ Similar to Heun's method, this is also a two stage scheme and has a temporal err
 \end{figure}
 
 \subsection{Runge-Kutta Methods}
-If we look at Heun's method and the midpoint method we note that their structure is very similar. We start by computing some intermediate solution, then evaluating the residual of that intermediate solution, and then linearly combining it with the residual of the initial solution. This can be generalized from two stages up to as many stages as we may like, with multiple intermediate solutions being obtained to improve the order of accuracy. Starting from our current solution $u^t$, we will compute $s$ intermediate stage solutions
+If we look at Heun's method and the midpoint method, we note that their structure is very similar. We start by computing some intermediate solution, then evaluating the residual of that intermediate solution, and then linearly combining it with the residual of the initial solution. This can be generalized from two stages up to as many stages as we may like, with multiple intermediate solutions being obtained to improve the order of accuracy. Starting from our current solution $u^t$, we will compute $s$ intermediate stage solutions
 \begin{equation}
 	u_1, u_2, \hdots, u_s,
 \end{equation}
-where the subscript of $u_i$ denotes the stage number and $s$ is the total number of stages. From these we can also get the residuals of these intermediate solutions from $R(u_i)$. We compute the intermediate stage solutions from
+where the subscript of $u_i$ denotes the stage number and $s$ is the total number of stages. From these, we can also get the residuals of these intermediate solutions from $R(u_i)$. We compute the intermediate stage solutions from
 \begin{equation}
 	u_i = u^t + \Delta t \sum_{j=1}^s a_{i,j} R(u_j),
 \end{equation}
@@ -2269,7 +2257,7 @@ The explicit four-stage fourth-order Runge-Kutta method is $\mathcal{O}(\Delta t
 \end{equation}
 
 \section{Implicit}
-Going back to the von Neumann analysis section we note that implicit schemes, those where we evaluated the spatial derivative using the solution at the as-yet-unknown next time step, were unconditionally stable for both linear advection and diffusion. For example, the following scheme was introduced for the linear advection equation
+Going back to the von Neumann analysis section, we note that implicit schemes, those where we evaluated the spatial derivative using the solution at the as-yet-unknown next time step, were unconditionally stable for both linear advection and diffusion. For example, the following scheme was introduced for the linear advection equation
 \begin{equation}
 	\frac{u_i^{t+1} - u_{i}^t}{\Delta t} +  \alpha \frac{u_i^{t+1} - u_{i-1}^{t+1}}{\Delta x} = 0,
 \end{equation}
@@ -2280,18 +2268,18 @@ and the following for the linear diffusion equation
 These are very similar to our initial schemes, except the spatial operators are evaluated at $t+1$ rather than $t$.
 
 \subsection{Implicit Linear Advection}
-We will start our exploration of implicit schemes with the linear advection equation, and rearrange it so all of the terms involving the unknown solution at $t+1$ are of the left hand side and all of the terms involving the current solution at time $t$ are on the right hand side
+We will start our exploration of implicit schemes with the linear advection equation, and rearrange it so all of the terms involving the unknown solution at $t+1$ are of the left-hand side and all of the terms involving the current solution at time $t$ are on the right-hand side
 \begin{equation}
 	u_i^{t+1} + \sigma \left(u_i^{t+1} - u_{i-1}^{t+1} \right) = u_i^{t},
 \end{equation}
-where as usual $\sigma = \alpha \Delta t/ \Delta x$. Then, lumping the terms for each grid point on the left hand side yields
+where as usual $\sigma = \alpha \Delta t/ \Delta x$. Then, lumping the terms for each grid point on the left-hand side yields
 \begin{equation}
 	\label{eqn:sh4k18g9}
 	(1+\sigma) u_i^{t+1} - \sigma u_{i-1}^{t+1} = u_i^{t}.
 \end{equation}
-Unlike the explicit schemes, where we could readily rearrange the expression to get $u_i^{t+1}$ alone on the left hand side, we now have one equation for each grid point that has two unknowns, $u_i^{t+1}$ and $u_{i-1}^{t+1}$, on the left hand side. This means that in order to get $u_i^{t+1}$ we need to already know $u_{i-1}^{t+1}$, and in order to get $u_{i-1}^{t+1}$ we need to already know $u_{i-2}^{t+1}$, and so on. Hence, it appears we are stuck in a situation where we need to already know the solution at every grid point to get the solution at every other grid point, which we don't yet have.
+Unlike the explicit schemes, where we could readily rearrange the expression to get $u_i^{t+1}$ alone on the left-hand side, we now have one equation for each grid point that has two unknowns, $u_i^{t+1}$ and $u_{i-1}^{t+1}$, on the left-hand side. This means that in order to get $u_i^{t+1}$ we need to already know $u_{i-1}^{t+1}$, and in order to get $u_{i-1}^{t+1}$ we need to already know $u_{i-2}^{t+1}$, and so on. Hence, it appears we are stuck in a situation where we need to already know the solution at every grid point to get the solution at every other grid point, which we don't yet have.
 
-To get around this we can recognize that we actually have a large system of linear equations. For each of the $N$ grid points there is an expression of the form of Equation \ref{eqn:sh4k18g9}, and these involve some linear combination of the $N$ unknown solution values at $t+1$. Hence, we have $N$ equations and $N$ unknowns, yielding a linear system to be solved. This can be written as a linear system of the form
+To get around this, we can recognize that we actually have a large system of linear equations. For each of the $N$ grid points, there is an expression of the form of Equation \ref{eqn:sh4k18g9}, and these involve some linear combination of the $N$ unknown solution values at $t+1$. Hence, we have $N$ equations and $N$ unknowns, yielding a linear system to be solved. This can be written as a linear system of the form
 \begin{equation}
 	\label{eqn:4h28f95h}
 	A \vec{u}^{t+1} = \vec{u}^{t},
@@ -2330,11 +2318,11 @@ is a vector of the solution at all grid points at the current time step, and
 is a vector of the unknown solution values at the next time step, which is what we are trying to find. Note that the structure of the Jacobian matrix arises directly from writing out the equation for each grid point, and then assembling that as a linear system of equations. It is clear from Equation \ref{eqn:4h28f95h} that we can now solve for all of the solution values in $\vec{u}^{t+1}$ by simply solving a linear system of equations. Hence, we obtain unconditional stability, as discussed in the von Neumann analysis section, at the added cost of having to solve a linear system of equations at each time step. This cost is usually substantial and, hence, implicit schemes are typically used when sufficiently large time steps that are larger than the stability limits of explicit schemes are desired.
 
 \subsection{Implicit Linear Diffusion}
-As a second demonstration of an implicit solver we consider the implicit linear diffusion equation, derived previously as
+As a second demonstration of an implicit solver, we consider the implicit linear diffusion equation, derived previously as
 \begin{equation}
   \frac{u_i^{t+1} - u_{i}^t}{\Delta t} - \beta \frac{u_{i-1}^{t+1} - 2u_i^{t+1} + u_{i+1}^{t+1}}{\Delta x^2} = 0.
 \end{equation}
-Rearranging this so that all of the known solution values are on the right hand side and all values at the as yet unknown next time step are on the left hand side yields
+Rearranging this so that all of the known solution values are on the right-hand side and all values at the as yet unknown next time step are on the left-hand side yields
 \begin{equation}
   u_i^{t+1} - r (u_{i-1}^{t+1} - 2u_i^{t+1} + u_{i+1}^{t+1}) = u_{i}^t,
 \end{equation}
@@ -2360,11 +2348,11 @@ where the Jacobian matrix for periodic boundary conditions can be written as
 taking note of the locations of the $-r$ terms in the first and last rows that arise from the periodic boundary conditions. Hence, similar to the implicit linear advection scheme, implicit linear diffusion requires the solution of a linear system of equations at each time step. Therefore, it is typically used when the desired time step exceeds the stability limit of available explicit methods. Due to the $\Delta x^2$ scaling of the time step size for diffusion equations, as discussed in the von Neumann analysis section, diffusion operators are often solved using implicit approaches.
 
 \subsection{Implicit Burgers Equation}
-In both of the previous sections we looked at implicit solvers for {\it linear} systems of equations, specifically the linear advection and linear diffusion equations. In this section we will consider an implicit solver for the {\it non-linear} Burgers equation with a numerical scheme of the form
+In both of the previous sections, we looked at implicit solvers for {\it linear} systems of equations, specifically the linear advection and linear diffusion equations. In this section, we will consider an implicit solver for the {\it non-linear} Burgers equation with a numerical scheme of the form
 \begin{equation}
 	\frac{u_i^{t+1} - u_{i}^t}{\Delta t} + \frac{1}{2\Delta x}\left( \left(u_i^{t+1} \right)^2 - \left( u_{i-1}^{t+1} \right)^2 \right) =  0.
 \end{equation}
-Putting all of the known solution values on the right hand side and unknown solution values at the next time step on the left hand side yields
+Putting all of the known solution values on the right-hand side and unknown solution values at the next time step on the left-hand side yields
 \begin{equation}
 	u_i^{t+1} + \frac{\Delta t}{2\Delta x}\left( \left(u_i^{t+1} \right)^2 - \left( u_{i-1}^{t+1} \right)^2 \right) =  u_{i}^t,
 \end{equation}
@@ -2385,7 +2373,7 @@ and has the following Jacobian matrix
 \end{equation}
 which is now a function of the unknown solution at the next time step. However, we do not yet know the solution at the next time step, so we cannot actually construct the Jacobian matrix and, therefore, we cannot solve directly for the solution at the next time step.
 
-To get around this problem we can use {\it Newton-Raphson} iterations. First assume that the Jacobian matrix can be {\it approximated} using the current known solution as
+To get around this problem, we can use {\it Newton-Raphson} iterations. First assume that the Jacobian matrix can be {\it approximated} using the current known solution as
 \begin{equation}
 	A_0 = 
 	\begin{bmatrix}
@@ -2396,7 +2384,7 @@ To get around this problem we can use {\it Newton-Raphson} iterations. First ass
 	    0 & 0 & \dots & - \left(\frac{\Delta t}{2\Delta x} u_{i-1}^{t}\right)  & 1 + \frac{\Delta t}{2\Delta x}u_i^{t}
 	\end{bmatrix},
 \end{equation}
-where the subscript on $A_0$ denotes that this Jacobian is approximated using the current known solution at time $t$. This is referred to as a {\it linearization} of the system of equations, and we say that the Jacobian matrix has been linearized about the current solution $\vec{u}^t$. From this linearization the solution at $t+1$ can be estimated by solving the linear system
+where the subscript on $A_0$ denotes that this Jacobian is approximated using the current known solution at time $t$. This is referred to as a {\it linearization} of the system of equations, and we say that the Jacobian matrix has been linearized about the current solution $\vec{u}^t$. From this linearization, the solution at $t+1$ can be estimated by solving the linear system
 \begin{equation}
 	A_0 \vec{u}^{t+1}_1 = \vec{u}^t,
 \end{equation}
@@ -2416,7 +2404,7 @@ at which point the solution at the next time step is taken to be
 \begin{equation}
 	\vec{u}^{t+1} = \vec{u}^{t+1}_{k+1},
 \end{equation}
-and the entire procedure is then repeated for each subsequent time step. Hence, for non-linear equations we need to solve multiple linear systems for each time step, following Newton-Raphson, which can significantly increase their computational cost relative to linear systems. Furthermore, convergence of Newton-Raphson is not guaranteed. Hence, non-linear systems often require smaller time steps relative to linear systems to maintain stability of the iterative method.
+and the entire procedure is then repeated for each subsequent time step. Hence, for non-linear equations, we need to solve multiple linear systems for each time step, following Newton-Raphson, which can significantly increase their computational cost relative to linear systems. Furthermore, convergence of Newton-Raphson is not guaranteed. Hence, non-linear systems often require smaller time steps relative to linear systems to maintain stability of the iterative method.
 
 \chapter{Iterative Methods}
 In this implicit time stepping section we reduced each time step to the solution of a linear system of $N$ equations of the form 
@@ -2430,12 +2418,12 @@ Perhaps the most straightforward method for solving a linear system of equations
 \begin{equation}
 	 \vec{x} = A^{-1} \vec{b}.
 \end{equation}
-Gaussian elimination is the workhorse of most undergraduate linear algebra courses, and is a straightforward extension of the substitution approach for solving systems of equations taught in highschool. This requires inverting $A$ or an LU decomposition of $A$ and $\vec{b}$ to be formed, and then backsubstitution to solve for the unknown components of $\vec{x}$.
+Gaussian elimination is the workhorse of most undergraduate linear algebra courses, and is a straightforward extension of the substitution approach for solving systems of equations taught in highschool. This requires inverting $A$ or an LU decomposition of $A$ and $\vec{b}$ to be formed, and then back substitution to solve for the unknown components of $\vec{x}$.
 
-While Gaussian elimination is well known, its computational cost scales like $\mathcal{O}(N^3)$ where $N$ is the number of unknowns. Hence, as the system of equations, and in our case number of grid points, grows, the computational cost of Gaussian elimination grows cubicly. Any undergraduate student should be familiar with trying to solve even $3 \times 3$ linear systems in an exam, let alone $4 \times 4$, or $5 \times 5$. With each additional equation, doing this by hand takes significantly more time. Hence, in the context of CFD, where thousands or millions of equations is common practice, Gaussian elimination is rarely used.
+While Gaussian elimination is well known, its computational cost scales like $\mathcal{O}(N^3)$ where $N$ is the number of unknowns. Hence, as the system of equations, and in our case number of grid points, grows, the computational cost of Gaussian elimination grows cubically. Any undergraduate student should be familiar with trying to solve even $3 \times 3$ linear systems in an exam, let alone $4 \times 4$, or $5 \times 5$. With each additional equation, doing this by hand takes significantly more time. Hence, in the context of CFD, where thousands or millions of equations is common practice, Gaussian elimination is rarely used.
 
 \section{Jacobi Iteration}
-Since the formation of $A^{-1}$ is prohibitively expensive for large systems of equations, we will try to find an approximate solution $\vec{x}$, without actually forming $A^{-1}$. This can be done iteratively, and the first approach we will introduce is Jacobi iteration. In Jacobi iteration we start by splitting $A$ into $L$, $D$, and $U$, and are its strictly lower-triangular, diagonal, and strictly upper-triangular components. This allows us to write our linear system as
+Since the formation of $A^{-1}$ is prohibitively expensive for large systems of equations, we will try to find an approximate solution $\vec{x}$, without actually forming $A^{-1}$. This can be done iteratively, and the first approach we will introduce is Jacobi iteration. In Jacobi iteration, we start by splitting $A$ into $L$, $D$, and $U$, and are its strictly lower-triangular, diagonal, and strictly upper-triangular components. This allows us to write our linear system as
 \begin{equation}
 	(L+D+U) \vec{x} = \vec{b},
 \end{equation}
@@ -2493,9 +2481,9 @@ and by inverting $D$ we get
 	\vec{x} = D^{-1}\left[ \vec{b} - (L+U)\vec{x} \right].
 	\label{eqn:f928bs7g}
 \end{equation}
-At this point it is important to know that while inverting $A$ is very expensive, inverting just its diagonal values in $D$ is trivial.
+At this point, it is important to know that while inverting $A$ is very expensive, inverting just its diagonal values in $D$ is trivial.
 
-We note that if $\vec{x}$ is a solution to the linear system of equations, then Equation \ref{eqn:f928bs7g} will be satisfied exactly, but if we already had the exact solution there would be no point in this exercise. However, if we look again at Equation \ref{eqn:f928bs7g} it has an interesting form. We note that if we insert some guess for $\vec{x}$ into the right hand side, we get out a modified $\vec{x}$ on the left hand side. This allows us to define Jacobi iteration as
+We note that if $\vec{x}$ is a solution to the linear system of equations, then Equation \ref{eqn:f928bs7g} will be satisfied exactly, but if we already had the exact solution there would be no point in this exercise. However, if we look again at Equation \ref{eqn:f928bs7g} it has an interesting form. We note that if we insert some guess for $\vec{x}$ into the right-hand side, we get out a modified $\vec{x}$ on the left-hand side. This allows us to define Jacobi iteration as
 \begin{eqBox}
 \begin{equation}
 	\vec{x}_{n+1} = D^{-1}\left[ \vec{b} - (L+U)\vec{x}_n \right],
@@ -2571,7 +2559,7 @@ Now we can start with some initial guess, lets say
 \end{equation}
 Convergence can usually be accelerated by using a good initial guess, for example, that the solution at the next time step in our CFD simulation is the same as the current solution.
 
-Now with our initial Guess and all terms from the right hand side of Equation \ref{eqn:3jc810fg} defined, we can compute
+Now with our initial Guess and all terms from the right-hand side of Equation \ref{eqn:3jc810fg} defined, we can compute
 \begin{equation}
 	\vec{x}_{1} = D^{-1}\left[ \vec{b} - (L+U)\vec{x}_0 \right] = \begin{bmatrix}
 	    0.1000 \\
@@ -2627,7 +2615,7 @@ If we consider the $(L+D)$ matrix we note that it is lower-triangular. While not
 \begin{equation}
 	\vec{x} = (L + D)^{-1}\left[ \vec{b} - U\vec{x} \right].
 \end{equation}
-Similar to Jacobi, we notice that if we insert an estimate for $\vec{x}$ on the right hand side, we obtain an updated estimate on the left hand side. Hence, we define Gauss-Seidel iteration as
+Similar to Jacobi, we notice that if we insert an estimate for $\vec{x}$ on the right-hand side, we obtain an updated estimate on the left-hand side. Hence, we define Gauss-Seidel iteration as
 \begin{eqBox}
 \begin{equation}
 	\vec{x}_{n+1} = (L + D)^{-1}\left[ \vec{b} - U\vec{x}_n \right].
@@ -2639,10 +2627,10 @@ Also, similar to Jacobi this can be performed in a element-wise manner for each 
 	x_i^{n+1} = \frac{1}{a_{i,i}}\left(b_i - \sum_{j=1}^{i-1} a_{i,j}x_j^{n+1} - \sum_{j=i+1} a_{i,j}x_j^n \right), \: \: i = 1,2,\hdots,n.
 \end{equation}
 \end{eqBox}
-It is clear from this that Gauss-Seidel amounts to simply a Jacobi iteration but using the most up to date entries $a_{i,j}x_j^n$ or $a_{i,j}x_j^{n+1}$ as they are available. Usually the additional cost of computing $(L + D)^{-1}$, relative to simply computing $D^{-1}$ with Jacobi, significantly reduces the number of iterations and total computational cost.
+It is clear from this that Gauss-Seidel amounts to simply a Jacobi iteration but using the most up to date entries $a_{i,j}x_j^n$ or $a_{i,j}x_j^{n+1}$ as they are available. Usually, the additional cost of computing $(L + D)^{-1}$, relative to simply computing $D^{-1}$ with Jacobi, significantly reduces the number of iterations and total computational cost.
 
-Going back to our example from Jacobi iteration we have
-Now with our initial Guess and all terms from the right hand side of Equation \ref{eqn:3jc810fg} defined, we can compute
+Going back to our example from Jacobi iteration, we have
+Now with our initial Guess and all terms from the right-hand side of Equation \ref{eqn:3jc810fg} defined, we can compute
 \begin{equation}
 	\vec{x}_{1} = (L + D)^{-1}\left[ \vec{b} - U\vec{x}_0 \right] = \begin{bmatrix}
 	    0.1000 \\
@@ -2700,14 +2688,14 @@ With SOR we simply apply a Gauss Seidel iteration to our current approximation o
 	\vec{x}_{n+1} = \omega \tilde{\vec{x}}_{n+1} + (1-\omega) \vec{x}_n.
 \end{equation}
 \end{eqBox}
-where $\omega$ is referred to as the the relaxation factor. We note that when $\omega=1$ we recover the original Gauss Seidel approach. When $\omega>1$ we say it is over-relaxed, usually accelerating convergence but also potentially causing the iterations to diverge. When $\omega<1$ we say it is under-relaxed, which usually improves stability, but reduces the rate of convergence. In general, a suitable value for the relaxation factor is within the range
+where $\omega$ is referred to as therelaxation factor. We note that when $\omega=1$ we recover the original Gauss Seidel approach. When $\omega>1$ we say it is over-relaxed, usually accelerating convergence but also potentially causing the iterations to diverge. When $\omega<1$ we say it is under-relaxed, which usually improves stability, but reduces the rate of convergence. In general, a suitable value for the relaxation factor is within the range
 \begin{equation}
 	0 \leq \omega \leq 2,
 \end{equation}
 and values of $\omega > 2$ will diverge. Typically, $\omega$ is chosen to be as large as possible, without causing the iterations to diverge.
 
 \section{Assessing Convergence}
-In typical CFD applications, the user provides a desired convergence tolerance for solving the linear system of equations. To assess this, we introduce the concept of a residual. In the case of an exact solution to a linear system we would expect
+In typical CFD applications, the user provides a desired convergence tolerance for solving the linear system of equations. To assess this, we introduce the concept of a residual. In the case of an exact solution to a linear system, we would expect
 \begin{equation}
 	A \vec{x} - \vec{b} = 0.
 \end{equation}
@@ -2715,18 +2703,18 @@ However, since our solution at any given iteration is only an approximate soluti
 \begin{equation}
 	A \vec{x}_n - \vec{b} = \vec{r},
 \end{equation}
-where $\vec{r}$ is referred to as the residual and measures how well our current approximate solution satisfies the system of equations being solved. While $\vec{r}$ gives detailed information about how well each equation in the entire system is being solved, it is typically more useful to provide the user with a norm, such as $\| \vec{r} \|_2$ or $\| \vec{r} \|_\infty$, giving a single measure of convergence. Then, iterations are continued until this residual norm converges to within the desired tolerance. It is also important to note that if the convergence tolerance is too high it can result in a loss of accuracy or stability in the CFD simulation. Hence, particular care must be chosen in how to select the desired convergence tolerance.
+where $\vec{r}$ is referred to as the residual and measures how well our current approximate solution satisfies the system of equations being solved. While $\vec{r}$ gives detailed information about how well each equation in the entire system is being solved, it is typically more useful to provide the user with a norm, such as $\| \vec{r} \|_2$ or $\| \vec{r} \|_\infty$, giving a single measure of convergence. Then, iterations are continued until this residual norm converges to within the desired tolerance. It is also important to note that if the convergence tolerance is too high, it can result in a loss of accuracy or stability in the CFD simulation. Hence, particular care must be chosen in how to select the desired convergence tolerance.
 
 \section{Multigrid}
-It is important to note that both Jacobi and Gauss-Seidel iterations require $\mathcal{O}(N^2)$ operations per iteration they will typically be much faster that Gaussian elimination, provided the number of iterations is relatively small. However, the computational cost will still increase rapidly with the number of grid points. Ideally, we would like an iterative method that will converge with $\mathcal{O}(N)$ operations, resulting in a computational cost that varies linearly with the number of grid points.
+It is important to note that both Jacobi and Gauss-Seidel iterations require $\mathcal{O}(N^2)$ operations per iteration, they will typically be much faster than Gaussian elimination, provided the number of iterations is relatively small. However, the computational cost will still increase rapidly with the number of grid points. Ideally, we would like an iterative method that will converge with $\mathcal{O}(N)$ operations, resulting in a computational cost that varies linearly with the number of grid points.
 
-An important observation regarding the aforementioned iterative methods, such as Jacobi and Gauss-Seidel, is that they tend to converge {\it high-wavenumber} features, those that span only a few grid points, very quickly. In contrast, {\it low-wavenumber} features, those that span a large number of grid points, converge relatively slowly. The general idea behind the multigrid method is to use an additional coarse grid to converge these large scale structures. Since this additional grid is coarse it is relatively cheap per iteration, since it contains significantly fewer grid points and unknowns. Also, the low-wavenumber features on the fine grid appear as higher-wavenumber features on the coarse grid and, hence, they converge quickly there. This procedure can then be extended to a large number of grid levels, resulting in the {\it multigrid} method.
+An important observation regarding the aforementioned iterative methods, such as Jacobi and Gauss-Seidel, is that they tend to converge {\it high-wavenumber} features, those that span only a few grid points, very quickly. In contrast, {\it low-wavenumber} features, those that span a large number of grid points, converge relatively slowly. The general idea behind the multigrid method is to use an additional coarse grid to converge these large scale structures. Since this additional grid is coarse, it is relatively cheap per iteration, since it contains significantly fewer grid points and unknowns. Also, the low-wavenumber features on the fine grid appear as higher-wavenumber features on the coarse grid and, hence, they converge quickly there. This procedure can then be extended to a large number of grid levels, resulting in the {\it multigrid} method.
 
 As an example, we will describe a two-level multigrid method for solving the linear system of equations
 \begin{equation}
 	A_h \vec{x}_h = \vec{b}_h,
 \end{equation}
-where the subscript $h$ denotes that this is the initial system of equations the on fine grid, denoted by $\Omega_h$. Ultimately, we want to obtain the final solution to this linear system, $\vec{x}_h$, with as little computational cost as possible. From here we will recall that the residual on the fine grid can be defined as
+where the subscript $h$ denotes that this is the initial system of equations the on fine grid, denoted by $\Omega_h$. Ultimately, we want to obtain the final solution to this linear system, $\vec{x}_h$, with as little computational cost as possible. From here, we will recall that the residual on the fine grid can be defined as
 \begin{equation}
 	\vec{r}_h = \vec{b}_h - A_h \vec{x}_{h,n},
 \end{equation}
@@ -2746,7 +2734,7 @@ and finally
 \begin{equation}
 	A_h \vec{e}_{h,n} = \vec{r}_h.
 \end{equation}
-Hence, similar to the solution, the error between the exact and current iterated solution also obeys a linear system of equations. In the multigrid method it is this error on the fine grid that gets projected to the coarse grid, and that is what is solved. The general multigrid process is as follows:
+Hence, similar to the solution, the error between the exact and current iterated solution also obeys a linear system of equations. In the multigrid method, it is this error on the fine grid that gets projected to the coarse grid, and that is what is solved. The general multigrid process is as follows:
 \begin{itemize}
 	\item {\it Relax} $A_h \vec{x}_h = \vec{b}_h$ using $n$ iterations of Jacobi or Gauss-Seidel to obtain $\vec{x}_{h,n}$
 	\item {\it Compute} the residual on the fine grid level using $\vec{r}_h = \vec{b}_h - A_h \vec{x}_{h,n}$
@@ -2756,7 +2744,7 @@ Hence, similar to the solution, the error between the exact and current iterated
 	\item {\it Correct} the solution on the fine grid using $\vec{x}_{h,n} = \vec{x}_{h,n} + \vec{e}_{h}$
 	\item {\it Repeat} from the first step until the system of equations on the fine grid converges
 \end{itemize}
-In the above approach we have introduced two new operators, specifically the restriction operator $I_{h}^{2h}$ and the prolongation operator $I_{2h}^{h}$ that are responsible for transferring data from the fine to coarse grid, and vice-versa. If we look at their required shapes we find that $I_{h}^{2h} \in N_{2h} \times N_h$, where $N_{2h}$ is the number of degrees of freedom on the coarse grid and $N_h$ is the number of degrees of freedom on the fine grid. In contrast, the prolongation operator is of dimension $I_{2h}^{h} \in N_{h} \times N_{2h}$. Consider the one-dimensional example case shown in Figure \ref{}, where $\Omega_{2h}$ is coarser than $\Omega_h$ in the sense that every other grid point is omitted. One simple option is to simply {\it linearly} interpolate the error from the coarse grid to the fine grid. This would give the following prolongation operator matrix
+In the above approach, we have introduced two new operators, specifically the restriction operator $I_{h}^{2h}$ and the prolongation operator $I_{2h}^{h}$ that are responsible for transferring data from the fine to coarse grid, and vice-versa. If we look at their required shapes, we find that $I_{h}^{2h} \in N_{2h} \times N_h$, where $N_{2h}$ is the number of degrees of freedom on the coarse grid and $N_h$ is the number of degrees of freedom on the fine grid. In contrast, the prolongation operator is of dimension $I_{2h}^{h} \in N_{h} \times N_{2h}$. Consider the one-dimensional example case shown in Figure \ref{}, where $\Omega_{2h}$ is coarser than $\Omega_h$ in the sense that every other grid point is omitted. One simple option is to simply {\it linearly} interpolate the error from the coarse grid to the fine grid. This would give the following prolongation operator matrix
 \begin{equation}
 	I_{2h}^{h} = 
 	\begin{bmatrix}
@@ -2770,7 +2758,7 @@ In the above approach we have introduced two new operators, specifically the res
 			\frac{1}{2} & 0 & 0 & \frac{1}{2}
 	\end{bmatrix},
 \end{equation}
-assuming periodic boundary conditions and a linear interpolation between the intermediate points. Now to get the restriction operator, which transfers data from the fine grid to the coarse grid we use
+assuming periodic boundary conditions and a linear interpolation between the intermediate points. Now, to get the restriction operator, which transfers data from the fine grid to the coarse grid, we use
 \begin{equation}
 	I_{h}^{2h} = c (I_{2h}^{h})^T,
 \end{equation}
@@ -2808,7 +2796,7 @@ Hence, starting from the linear system of equations and the node locations on th
 
 \chapter{Applications}
 \section{An Euler Solver}
-In this section we will describe how to develop a two-dimensional solver for the Euler equations on a periodic domain. This will be approximated using finite difference methods in space and advanced in time using an explicit Runge-Kutta method. 
+In this section, we will describe how to develop a two-dimensional solver for the Euler equations on a periodic domain. This will be approximated using finite difference methods in space and advanced in time using an explicit Runge-Kutta method. 
 
 Note that the Euler equations in two dimensions can be expanded as
 \begin{equation}
@@ -2840,7 +2828,7 @@ is the ideal gas law where $R$ is the gas constant and $T$ is temperature. Throu
 \end{equation}
 that no longer requires the gas constant, and where $\gamma$ is the ratio of specific heats. Hence, given the value of the solution at any point in the domain, and the ideal gas law, we can determine both of the flux components.
 
-It is worth taking a moment to consider this set of equations. Using the finite difference approach, we will store the conserved variables, specifically mass, momentum, and energy, at each grid point. From Equation \ref{eqn:5js81pgl} it is then possible to then get the time derivative of the solution at all of these grid points, provided we can compute the fluxes and their derivatives in space. This simply requires the specification of suitable finite difference methods for approximating the derivatives in space.
+It is worth taking a moment to consider this set of equations. Using the finite difference approach, we will store the conserved variables, specifically mass, momentum, and energy, at each grid point. From Equation \ref{eqn:5js81pgl}, it is then possible to then get the time derivative of the solution at all of these grid points, provided we can compute the fluxes and their derivatives in space. This simply requires the specification of suitable finite difference methods for approximating the derivatives in space.
 
 Now consider a two-dimensional domain of length $L_x$ and $L_y$ in each direction that is discretized using a grid of $N_x$ and $N_y$ equidistant points. Using periodic boundary conditions, the grid spacing between adjacent points is
 \begin{equation}
@@ -2854,7 +2842,7 @@ in the y-direction. The current value of the solution is stored at all grid poin
 \begin{equation}
 	\vec{x}_{i,j} = [x_{i,j},y_{i,j}]^T.
 \end{equation}
-Provided an initial condition, the value of the solution is known at each grid point at the start of the simulation. Then the fluxes at each grid point can be calculated according to Equation \ref{eqn:sm5j29dj} and Equation \ref{eqn:029as5ns}. Hence, at every grid point we will now have $\vec{w}_{i,j}^t$, $\vec{F}_{i,j}^t$, and $\vec{G}_{i,j}^t$. Now using, for example, second-order central differences in space we can write
+Provided an initial condition, the value of the solution is known at each grid point at the start of the simulation. Then the fluxes at each grid point can be calculated according to Equation \ref{eqn:sm5j29dj} and Equation \ref{eqn:029as5ns}. Hence, at every grid point we will now have $\vec{w}_{i,j}^t$, $\vec{F}_{i,j}^t$, and $\vec{G}_{i,j}^t$. Now using, for example, second-order central differences in space, we can write
 \begin{equation}
 	\frac{d \vec{w}_{i,j}^t}{d t} + \frac{\vec{F}_{i+1,j}^t-\vec{F}_{i-1,j}^t}{2\Delta x} + \frac{\vec{G}_{i,j+1}^t-\vec{G}_{i,j-1}^t}{2\Delta y} + \mathcal{O}(\Delta x^2,\Delta y^2) = 0.
 \end{equation}
@@ -2869,7 +2857,7 @@ v& = 1-\frac{S(x-x_c)e^f}{2\pi R},\\
 p& = \frac{\rho^\gamma}{\gamma Ma^2},
 \end{split}
 \end{eqnarray}
-where $f = (1-(x-x_c)^2-(y-y_c)^2)/2R^2$, $S = 13.5$ is the strength of the vortex, $R=1.5$ is the characteristic vortex radius, $\gamma = 1.4$, the Mach number is $Ma = 0.4$, and $x_c$ and $y_c$ are the initial location of the vortex center. This initial condition is isentropic and, hence, without any viscous effects the exact solution consists of the vortex maintaining its initial shape and simply advecting with the mean flow at a vertical velocity of unity. Since the domain is periodic, the vortex will eventually return to its initial condition, and at this point we can evaluate an error norm of the density field of the form
+where $f = (1-(x-x_c)^2-(y-y_c)^2)/2R^2$, $S = 13.5$ is the strength of the vortex, $R=1.5$ is the characteristic vortex radius, $\gamma = 1.4$, the Mach number is $Ma = 0.4$, and $x_c$ and $y_c$ are the initial location of the vortex center. This initial condition is isentropic and, hence, without any viscous effects, the exact solution consists of the vortex maintaining its initial shape and simply advecting with the mean flow at a vertical velocity of unity. Since the domain is periodic, the vortex will eventually return to its initial condition, and at this point, we can evaluate an error norm of the density field of the form
 \begin{equation}
 	\| \rho \|_2 = \sqrt{\frac{\sum_{i=1}^{N_x} \sum_{j=1}^{N_y} \left(\rho_{i,j} - \rho_{e,i,j}\right)^2}{N_x N_y}},
 \end{equation}
@@ -2949,18 +2937,18 @@ are the heat fluxes, $k$ is the thermal conductivity and
 \begin{equation}
 	\tau_{xy} = \mu \left(\frac{\partial u}{\partial y} + \frac{\partial v}{\partial x}\right).
 \end{equation}
-We note that, unlike the Euler equations, we cannot obtain the viscous fluxes directly from the solution, since they also require the gradients of the velocity components and temperature. To obtain these gradients we will simply use central differences in the middle of the domain. For example, for the gradient of $u$ the following finite difference methods can be used
+We note that, unlike the Euler equations, we cannot obtain the viscous fluxes directly from the solution, since they also require the gradients of the velocity components and temperature. To obtain these gradients, we will simply use central differences in the middle of the domain. For example, for the gradient of $u$ the following finite difference methods can be used
 \begin{equation}
 	\frac{\partial u}{\partial x} = \frac{u_{i-1,j}^t - 2 u_{i,j}^t + u_{i+1,j}^t}{\Delta x^2},
 \end{equation}
 \begin{equation}
 	\frac{\partial u}{\partial y} = \frac{u_{i,j-1}^t - 2 u_{i,j}^t + u_{i,j+1}^t}{\Delta y^2}.
 \end{equation}
-However, these finite difference methods will not work for computing the velocity and temperature gradients of the solution at the boundaries of the domain, since they would require points outside of the computational domain. Instead, one-sided stencils can be used at the wall. For example, the following stencil can be used on the left hand side boundary of the domain
+However, these finite difference methods will not work for computing the velocity and temperature gradients of the solution at the boundaries of the domain, since they would require points outside of the computational domain. Instead, one-sided stencils can be used at the wall. For example, the following stencil can be used on the left-hand side boundary of the domain
 \begin{equation}
 	\frac{\partial u}{\partial x} = \frac{-u_{i,3} + 4u_{i,2} - 3u_{i,1}}{2\Delta x},
 \end{equation}
-and along the length of each wall we will take the derivative to be zero. For example, on the left and right hand side boundaries this will yield
+and along the length of each wall, we will take the derivative to be zero. For example, on the left and right-hand side boundaries this will yield
 \begin{equation}
 	\frac{\partial u}{\partial y} = 0.
 \end{equation}

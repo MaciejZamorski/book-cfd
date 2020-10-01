@@ -92,7 +92,7 @@ The next step is to copy these two files in the directory you have save the SU2 
     \end{tabular}
 \end{table}
 
-The SU2 solver will commence solving the problem and will print out the residuals at every iteration, until the specified convergence criteria is achieved. After the calculations are complete the following output files should have been generated within in the SU2 folder:
+The SU2 solver will commence solving the problem and will print out the residuals at every iteration, until the specified convergence criteria is achieved. The computational time for this case is highly dependant on the computer's performance. However, the run time is supposed to be about 15 minutes on average. After the calculations are complete the following output files should have been generated within in the SU2 folder:
 \begin{itemize}
     \item \texttt{flow.vtk}: The flow solution on the entire domain.
     \item \texttt{force\_breakdown.dat}: Forces and moment on the airfoil.
@@ -384,7 +384,7 @@ The next step is to copy these two files into the same directory as the SU2 exec
     \end{tabular}
 \end{table}
 
-The SU2 solver will commence solving the problem and will print out the residuals at every iteration, until the specified convergence criteria is achieved. After the calculations are complete the following output files should have been generated within in the SU2 folder:
+The SU2 solver will commence solving the problem and will print out the residuals at every iteration, until the specified convergence criteria is achieved. The computational time for this case is highly dependant on the computer's performance. However, the run time is supposed to be about 15 minutes on average. After the calculations are complete the following output files should have been generated within in the SU2 folder:
 \begin{itemize}
     \item \texttt{flow.vtk}: The flow solution on the entire domain.
     \item \texttt{history.vtk}: Convergence history.
@@ -700,7 +700,7 @@ The next step is to copy these two files into the same directory as your SU2 exe
     \end{tabular}
 \end{table}
 
-The solver will begin solving the problem and will print out the residuals at every iteration, until the specified convergence criteria is achieved. After the calculations are complete the following output files will be generated within in the SU2 folder:
+The solver will begin solving the problem and will print out the residuals at every iteration, until the specified convergence criteria is achieved. The computational time for this case is highly dependant on the computer's performance. However, the run time is supposed to be about 5 hours on average. After the calculations are complete the following output files will be generated within in the SU2 folder:
 \begin{itemize}
     \item \texttt{flow.vtk}: The flow solution on the entire domain.
     \item \texttt{force\_breakdown.dat}: Forces and moment on the airfoil.
@@ -957,7 +957,7 @@ The next step is to copy these two files into the same directory as the SU2 exec
     \end{tabular}
 \end{table}
 
-SU2 will begin solving the problem, and will print out the residuals at every iteration until the specified convergence criteria is reached. After converging, the following output files will be generated and saved in the SU2 folder:
+SU2 will begin solving the problem, and will print out the residuals at every iteration until the specified convergence criteria is reached. The computational time for this case is highly dependant on the computer's performance. However, the run time is supposed to be about 15 minutes on average. After converging, the following output files will be generated and saved in the SU2 folder:
 \begin{itemize}
  \item \texttt{flow.vtk}: The flow solution on the entire domain.
  \item \texttt{force\_breakdown.dat}: Forces and moment on the cylinder.
@@ -1312,7 +1312,7 @@ The next step is to copy these two files into the same directory as the SU2 exec
     \end{tabular}
 \end{table}
 
-SU2 will begin solving the problem and will print out the residuals at every iteration until the specified convergence criteria is reached. After this, the following output files should be generated and saved in the SU2 folder:
+SU2 will begin solving the problem and will print out the residuals at every iteration until the specified convergence criteria is reached. The computational time for this case is highly dependant on the computer's performance. However, the run time is supposed to be about 4 hours on average. After this, the following output files should be generated and saved in the SU2 folder:
 \begin{itemize}
  \item \texttt{flow.vtk}: The flow solution on the entire domain.
  \item \texttt{force\_breakdown.dat}: Forces and moment on the wing.
@@ -1902,41 +1902,42 @@ Additionally, if you would like to pick different name for the physical boundari
 \section{Required Files}
 \begin{su2note}
 	Use the following links to download the same version of SU2 for Windows (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/windows/SU2_Windows.zip}{\underline{click here}}) or Mac (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/osx/SU2_Mac.zip}{\underline{click here}}).
-	The required configuration and mesh files for normal shock detection (\href{https://gitlab.com/bvermeir/book-cfd/blob/master/tutorial/tut7_normal_shock/shock.zip}{\underline{click here}}).
-	The required configuration and mesh files for oblique shock detection (\href{https://gitlab.com/bvermeir/book-cfd/blob/master/tutorial/tut7_oblique_shock/shock.zip}{\underline{click here}}).	
+	The required configuration and mesh files for normal shock detection (\href{https://gitlab.com/bvermeir/book-cfd/blob/master/tutorial/tut7_shock_wave/normal_shock.zip}{\underline{click here}}).
+	The required configuration and mesh files for oblique shock detection (\href{https://gitlab.com/bvermeir/book-cfd/blob/master/tutorial/tut7_shock_wave/oblique_shock.zip}{\underline{click here}}).	
 \end{su2note}
 \begin{paraviewnote}
 	Use the following links to download the same version of Paraview for Windows (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/windows/ParaView-5.4.0-Qt5-OpenGL2-Windows-64bit.exe}{\underline{click here}}) or Mac (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/osx/ParaView-5.4.0-Qt5-OpenGL2-MPI-OSX10.8-64bit.dmg}{\underline{click here}}).
 \end{paraviewnote}
 
-\section{Problem Description}
-When the speed of folw is much less than the speed of sound ($Mach<0.3$), the density of flow remains constant. However, when the speed of flow is higher ($0.3<Mach<1$), then the compressibility effect becomes important matter. For compressible fows, the entropy remians constant and the flow process is reversible. On the other hand, when the speed of flow exceeds the speed of sound ($Ma>1$), the flow experience abrubt chanes in volume, and hence harsh changes in density . In this case, the flow process turns into irreversible and entropy increases. This significant and fast changes in density of gas is the main reason fo shock formation. Shocks are small region in gas where the flow properties changes significantly. When shock happens, the static pressure and temperature increases, while the Mach number decreases. It is worth mentioning that if the shock waves are normal to flow direction, this type of shock is called normal shock.
 
-In this tutorial we are going to demonstrate how to simulate supersonic inviscid flow inside of a Converging-Diverging (CD) nozzle. This nozzle is assumed to have a rectangular cross-secitonal area with depth of 1m. Other geometry specificaitons are set as follows: 
+\section{Problem Description}
+When the speed of flow is much less than the speed of sound ($Ma<0.3$), the density of flow remains constant. However, when the speed of flow is higher ($0.3<Ma<1$), then the compressibility effect becomes an important matter. For compressible flows, the entropy remains constant and the flow process is reversible. On the other hand, when the speed of flow exceeds the speed of sound ($Ma>1$), the flow experiences abrupt changes in volume, and hence notable changes in density. In this case, the flow process turns into irreversible,  and hence, the entropy increases. This significant and fast change in the density of gas flow is the main reason for the shock formation. Shocks are a small region in the gas where the flow properties change significantly. When shock happens, the static pressure and temperature increases, while the Mach number decreases. It is worth mentioning that if the shock waves are perpendicular to the flow direction, then this shock is called as normal shock. Also, there is another type of shock that is not perpendicular to the flow direction, and this shock is called oblique shock, which usually is formed in supersonic jet flows.
+
+In this tutorial, we are going to demonstrate how to simulate a supersonic inviscid flow inside of a Converging-Diverging (CD) nozzle. For simplicity, this nozzle is assumed to have a rectangular cross-sectional area with a depth of 1m. Other geometry specifications are set as follows: 
 \begin{itemize}
 	\item Inlet height = 280mm
-	\item Throut height = 210mm 
+	\item Throat height = 210mm 
 	\item Exit height = 336mm
 \end{itemize}
-But first of all, let us consider different flow regimes inside of CD nozzle. Figure \ref{fig7:cdnozzle} shows schematic of a plot for pressure ratio ($\frac{p_{b}}{p_{0}}$) versus centerline location of CD nozzle ($x$). The pressure ratio shows the relation between the pressure at the inlet of nozzle ($p_{0}$) and exit of nozzle ($p_{b}$). As it is shown in Figure \ref{fig7:cdnozzle}, there are four different flow regims that usucally can happen in nozzle. In the first regime noticed by curve $\textbf{(a)}$, when the back pressure of the nozzle is less than pressure of the inlet flow($\frac{p_{b}}{p_{0}}<1$), then the flow is subsonic. In this case, the gas flow accelerates during the converging part fo nozzle, while it decelerates in divergning part and exhaust form the exist of nozzle as a subsonic flow. In the curve $\textbf{(b)}$, the flow regime is called sonic flow. In this regime the gas velocity increases in convering part and it reaches $Mach=1$ at throut. However, the gas velocity decreases in divering part and it becomes subsonic at the exit of nozzle. This flow regime is referred to as checked. It means any further reduction in back pressure of the nozzle, does not change mass flow in the nozzle. Furthermore, curve $\textbf{(c)}$ shows the regime where the flow accelerates in the converging part of nozzle and it reaches $Mach=1$ at the throut. Also, the gas velocity keeps increasing as the corss-sectional area gets bigger in the diverging part ($Mach >1$). However, normal shock happen in downsteam of throut in diveregin part. In this case, it is expected to have subsonic flow at the exit of nozzle.
-With further reduciton in back pressure, when the pressure difference between inlet and exit of nozzle is large enough, the flow becomes supersonic in the diverging part of nozzle and exhaust as a supersonic flow without any normal shock inside of the nozzle. However, the oblique shock is expected at the exit of nozzle. This type of shoch is not prependicular to the flow direction and it usually happens when a supersonic jet discharges in ambient.
+But first of all, let us consider different flow regimes inside of the CD nozzle. Figure \ref{fig7:cdnozzle} shows schematic of a plot for pressure ratio ($\frac{p_{b}}{p_{0}}$) versus centerline location, $x$. The pressure ratio shows the relation between the pressure at the inlet of the nozzle ($p_{0}$) and the exit of the nozzle ($p_{b}$). As it is shown in Figure \ref{fig7:cdnozzle}, four different flow regimes usually can happen in nozzle upon different circumstances. In the first regime noticed by curve $\textbf{(a)}$, when the back pressure of the nozzle is less than the pressure of the inlet flow ($\frac{p_{b}}{p_{0}}<1$), then the flow is subsonic since it does not reach $Ma=1$ at all. In this case, the gas flow accelerates during the converging part fo nozzle, while it decelerates in the diverging part and exhaust form the exist of the nozzle as a subsonic flow. In the curve $\textbf{(b)}$, the flow regime is called sonic flow. In this regime, the gas velocity increases in the converging part and it reaches $Ma=1$ at the throat. However, the gas velocity decreases in the diverging part and it becomes subsonic at the exit of the nozzle. This flow regime is referred to as chocked. It means any further reduction in the back pressure of the nozzle, does not change the mass flow in the nozzle. Furthermore, curve $\textbf{(c)}$ shows the flow accelerates in the converging part of the nozzle and it reaches $Ma=1$ at the throat. Also, the gas flow velocity increases continually as the cross-sectional area gets bigger in the diverging part ($Ma>1$). However, normal shock happens in the downstream of the throat in the diverging part. In this case, it is expected to have a subsonic flow at the exit of the nozzle.
+With further reduction in back pressure, when the pressure difference between the inlet and exit of the nozzle is large enough, the flow becomes supersonic in the diverging part of the nozzle and exhaust as a supersonic flow without any normal shock occurred inside of the nozzle. However, the oblique shock is expected at the exit of the nozzle. As mentioned before, this type of shock is not perpendicular to the flow direction and it usually happens when a supersonic jet discharges in ambient.
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.7\textwidth]{tut07/cdnozzle.pdf}
 	\caption{Schematic of the pressure changes inside of the nozzle for different flow regimes.}
 	\label{fig7:cdnozzle}
 \end{figure}
-Usually the static pressure and temperature at the inlet of nozzle is given and base don the operating mach number, the stagnation pressure and temperatures are calculated. We ignore providing mathematicla formulations to compute flow variables, which is beyond the concept of this tutorial. The flow properties for this tutorial can be represented as follows:
+Usually, the static pressure and temperature at the inlet of the nozzle are given, and based on the operating Mach number, the stagnation pressure and temperature at the inlet of the nozzle are calculated. Considering mathematical formulations is beyond the concept of this tutorial and we avoid providing them here. The flow properties for the simulation can be represented as follows:
 \begin{itemize}
 	\item Inlet Mach number = 0.5
 	\item Inlet static pressure = 200,000 Pa
 	\item Inlet static temperature = 288 K
-	\item Inlet stagnaiton pressure = 238,828 Pa
+	\item Inlet stagnation pressure = 238,828 Pa
 	\item Inlet stagnation temperature = 308.4 K
 	\item Back (Exit) static pressure = 190,000 Pa
 \end{itemize}
-This tutorial has two parts: Flow Solution and Post-processing. In the first part, we will explain how to manage the prerequisite files and settings, and how to run the CFD simulation using SU2. In the second part we explain how to use Paraview to visualize the data obtained from SU2.
-%++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+This tutorial has two parts: Flow Solution and Post-processing. In the first part, we will explain how to manage the prerequisite files and settings, and how to run the CFD simulation using SU2. In the second part, we explain how to use Paraview to visualize the data obtained from SU2.
+%+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 \section{Flow solution}
 To run this simulation SU2 needs two files: a configuration file (\texttt{.cfg}) and a mesh file (\texttt{.su2}). Links to the required files and executables are provided at the start of this tutorial. The files include:
 \begin{enumerate}
@@ -1957,7 +1958,7 @@ The next step is to copy these two files into the same directory as the SU2 exec
 	\end{tabular}
 \end{table}
 
-The SU2 solver will commence solving the problem and will print out the residuals at every iteration, until the specified convergence criteria is achieved. After the calculations are complete the following output files should have been generated within in the SU2 folder:
+The SU2 solver will commence solving the problem and will print out the residuals at every iteration until the specified convergence criteria is achieved. The computational time for this case is highly dependant on the computer's performance. However, the run time is supposed to be about 15 minutes on average. After the calculations are complete the following output files should have been generated within in the SU2 folder:
 \begin{itemize}
 	\item \texttt{flow.vtk}: The flow solution on the entire domain.
 	\item \texttt{history.vtk}: Convergence history.
@@ -2029,10 +2030,10 @@ To display pressure contours, you can take the following steps:
 	\label{fig7:plot mach cont1}
 \end{figure}
 
-As seen form Figure \ref{fig7:plot pressure cont1}, The static pressure continues to decrease even in diverging part and after shock, the pressure increases abruptly. Since the flow process is irreversible, it would not be isentropic anymore. Hence, the total pressure at downstream of shock is always less than total pressure in upstream. This pressure loss is due to shock wave. As menitoned before, according to Fig(\ref{fig7:plot temp cont1}), the static temperature also increases in downstream of shock wave. But keep in mind that there is not work done in shocke and no heat is producted. Therefore the total temperature and total entalphy remains constant. According to Fig(\ref{fig7:plot mach cont1}), the mach number, which representative of the gas velocity, also experience a huge reduction due to chock. Roughly speaking, this phenomenon is unfavorable and to avoid normal shock in CD nozzle, the pressure difference between inlet and exit of nozzle should be increased adequately if supersonic flow is demanded at the enxit of nozzle.
+As seen from Figure \ref{fig7:plot pressure cont1}, The static pressure decreases even in the diverging part, while after shock, the pressure increases abruptly. Since the flow process is irreversible, it would not be isentropic anymore. Hence, the total pressure at downstream of shock is always less than the total pressure in upstream. This pressure loss is due to the shock wave. As mentioned before, according to Fig(\ref{fig7:plot temp cont1}), the static temperature also increases in downstream of the shock wave. But keep in mind that there is no work done in shock and no heat is produced then. Therefore the total temperature and total enthalpy remain constant. According to Fig(\ref{fig7:plot mach cont1}), the Mach number decreases abruptly due to chock. Roughly speaking, this phenomenon is unfavorable, and to avoid the normal shock in CD nozzle, the pressure difference between the inlet and exit of the nozzle should be increased adequately if the supersonic flow is demanded at the exit of the nozzle.
 %--------------------------------------------------------------
 \subsection{Plotting non-dimensional variables along the centerline}
-Since static temperature and pressure as well as speed of gas flow have differnet dimensions, then ploting all of these three variables in one plot does not fit well. Therefore, they shoudl be non-dimensionalized to have the same scale in plot. In order to non-dimensionalize these variables, we can divide the presure and temperature by their constant values at the inlet of nozzle. Additionally, for gas velocity, we can use Mahc number since it is already non-dimensional value. To plot a multi non-dimentional variables along the centerline you can take the following steps:
+Since static temperature and pressure as well as the speed of gas flow have different dimensions, then plotting all of these three variables in one plot does not fit well. Therefore, they should be non-dimensionalized to have the same scale in the plot. To non-dimensionalize these variables, we can divide the pressure and temperature by their constant values at the inlet of the nozzle. Additionally, for gas velocity, we can use Mach number since it is already a non-dimensional value. To plot multi non-dimensional variables along the centerline you can take the following steps:
 \begin{enumerate}[label=\arabic*)]
 	\setcounter{enumi}{0}
 	\item Select \texttt{flow.vtk} by clicking on it in the \textbf{Pipeline Browser}.
@@ -2108,18 +2109,18 @@ Since static temperature and pressure as well as speed of gas flow have differne
 \section{Questions}
 1. Run the default case as provided which uses JST Riemann solver and detect flow regime noticed by curve \textbf{(c)} in Figure \ref{fig7:cdnozzle}.
 \begin{enumerate}[label=(\alph*)]
-	\item Create coloured contours of Pressure, Temperature and Mach number.
-	\item Plot non-dimensionalized Pressure, Temperature and Mach number along the nozzle centerline using \textbf{Plot Over Line}.
+	\item Create colored contours of Pressure, Temperature, and Mach number.
+	\item Plot non-dimensionalized Pressure, Temperature, and Mach number along the nozzle centerline using \textbf{Plot Over Line}.
 \end{enumerate}
-2. Repeat Q.1 but change the static pressure at the exit of nozzle to detect flow regime noticed by curve \textbf{(a)} in Figure \ref{fig7:cdnozzle}.\\
-3. Repeat Q.1 but change the static pressure at the exit of nozzle to detect flow regime noticed by curve \textbf{(b)} in Figure \ref{fig7:cdnozzle}.\\
-4. Repeat Q.1 but change the static pressure at the exit of nozzle to detect flow regime noticed by curve \textbf{(d)} in Figure \ref{fig7:cdnozzle}.\\
-5. Compare and comment on the results of different flow regiems.\\
-6. Download the oblique shock mesh and configuration files provided at the start of this tutorial. Run the case for oblique shock problem.
-(\textit{Hint: Yuou need to stablize the solution with tuning CFL number or Finding the proper Riemann solver.})
+2. Repeat Q.1 but change the static pressure at the exit of the nozzle to detect flow regime noticed by curve \textbf{(a)} in Figure \ref{fig7:cdnozzle}.\\
+3. Repeat Q.1 but change the static pressure at the exit of the nozzle to detect flow regime noticed by curve \textbf{(b)} in Figure \ref{fig7:cdnozzle}.\\
+4. Repeat Q.1 but change the static pressure at the exit of the nozzle to detect flow regime noticed by curve \textbf{(d)} in Figure \ref{fig7:cdnozzle}.\\
+5. Compare and comment on the results of different flow regimes.\\
+6. Download the oblique shock mesh and configuration files provided at the start of this tutorial. Run the case for the oblique shock problem.
+(\textit{Hint: You need to stabilize the solution by tuning CFL number or Finding the proper Riemann solver.})
 \begin{enumerate}[label=(\alph*)]
-	\item Create coloured contours of Pressure, Temperature and Mach number.
-	\item Plot non-dimensionalized Pressure, Temperature and Mach number along the centerline of domain using \textbf{Plot Over Line}.
+	\item Create colored contours of Pressure, Temperature, and Mach number.
+	\item Plot non-dimensionalized Pressure, Temperature, and Mach number along the centerline of the domain using \textbf{Plot Over Line}.
 	\item Comment on the results.
 \end{enumerate}
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

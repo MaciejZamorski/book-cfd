@@ -2352,59 +2352,32 @@ In both of the previous sections, we looked at implicit solvers for {\it linear}
 \begin{equation}
 	\frac{u_i^{t+1} - u_{i}^t}{\Delta t} + \frac{1}{2\Delta x}\left( \left(u_i^{t+1} \right)^2 - \left( u_{i-1}^{t+1} \right)^2 \right) =  0.
 \end{equation}
-Putting all of the known solution values on the right-hand side and unknown solution values at the next time step on the left-hand side yields
+Starting from a suitable initial guess for $\vec{u}^{t+1}$, which we will denote as $\vec{u}^{k}$ where $k$ here denotes an iteration number, we can compute the resulting residual at any gridpoint as
 \begin{equation}
-	u_i^{t+1} + \frac{\Delta t}{2\Delta x}\left( \left(u_i^{t+1} \right)^2 - \left( u_{i-1}^{t+1} \right)^2 \right) =  u_{i}^t,
+	r_i = \frac{u_i^{k} - u_{i}^t}{\Delta t} + \frac{1}{2\Delta x}\left( \left(u_i^{k} \right)^2 - \left( u_{i-1}^{k} \right)^2 \right).
 \end{equation}
-which rearranges to
-\begin{equation}
-	\left(1 + \frac{\Delta t}{2\Delta x}u_i^{t+1} \right)u_i^{t+1} - \left(\frac{\Delta t}{2\Delta x} u_{i-1}^{t+1}\right) u_{i-1}^{t+1}  =  u_{i}^t,
-\end{equation}
-and has the following Jacobian matrix
-\begin{equation}
-	A = 
-	\begin{bmatrix}
-	    1 + \frac{\Delta t}{2\Delta x}u_i^{t+1} & 0 & 0 & \dots  & - \left(\frac{\Delta t}{2\Delta x} u_{i-1}^{t+1}\right) \\
-	    - \left(\frac{\Delta t}{2\Delta x} u_{i-1}^{t+1}\right) & 1 + \frac{\Delta t}{2\Delta x}u_i^{t+1} & 0 & \dots  & 0 \\
-			0 & - \left(\frac{\Delta t}{2\Delta x} u_{i-1}^{t+1}\right) & 1 + \frac{\Delta t}{2\Delta x}u_i^{t+1} & \dots  & 0 \\
-	    \vdots & \vdots & \vdots & \ddots & \vdots \\
-	    0 & 0 & \dots & - \left(\frac{\Delta t}{2\Delta x} u_{i-1}^{t+1}\right)  & 1 + \frac{\Delta t}{2\Delta x}u_i^{t+1}
-	\end{bmatrix},
-\end{equation}
-which is now a function of the unknown solution at the next time step. However, we do not yet know the solution at the next time step, so we cannot actually construct the Jacobian matrix and, therefore, we cannot solve directly for the solution at the next time step.
+From this we can compute the unsteady residual array $\vec{r}(\vec{u}^{k})$, which determines how well our initial guess satisfies the system of equations. Our objective is to find a value of $\vec{u}^{k}$ such that this residual is zero. Once this is achieved we have found a solution and we can take $\vec{u}^{t+1} = \vec{u}^{k}$.
 
-To get around this problem, we can use {\it Newton-Raphson} iterations. First assume that the Jacobian matrix can be {\it approximated} using the current known solution as
+One of the most powerful approaches to solving this is to use Newton-Raphson. Starting with $\vec{u}^{k}$, our current guess of the solution we will iterate by attempting to enforce that the next iterated values satisfies
 \begin{equation}
-	A_0 = 
+	\vec{r}(\vec{u}^{k+1}) = 0.
+\end{equation}
+Via the application of Newton-Raphson we obtain the following expression
+\begin{equation}
+	\vec{u}^{k+1} = \vec{u}^{k} - \left(\frac{\partial \vec{r}}{\partial \vec{u}^k}\right)^{-1} \vec{r}(\vec{u}^{k}),
+\end{equation}
+where the Jacobian matrix, for the current Burgers equation discretization, is given by
+\begin{equation}
+	\frac{\partial \vec{r}}{\partial \vec{u}^k} = 
 	\begin{bmatrix}
-	    1 + \frac{\Delta t}{2\Delta x}u_i^{t} & 0 & 0 & \dots  & - \left(\frac{\Delta t}{2\Delta x} u_{i-1}^{t}\right) \\
-	    - \left(\frac{\Delta t}{2\Delta x} u_{i-1}^{t}\right) & 1 + \frac{\Delta t}{2\Delta x}u_i^{t} & 0 & \dots  & 0 \\
-			0 & - \left(\frac{\Delta t}{2\Delta x} u_{i-1}^{t}\right) & 1 + \frac{\Delta t}{2\Delta x}u_i^{t} & \dots  & 0 \\
+	    1 + \frac{\Delta t}{2\Delta x}u_i^{k} & 0 & 0 & \dots  & - \left(\frac{\Delta t}{2\Delta x} u_{i-1}^{k}\right) \\
+	    - \left(\frac{\Delta t}{2\Delta x} u_{i-1}^{k}\right) & 1 + \frac{\Delta t}{2\Delta x}u_i^{k} & 0 & \dots  & 0 \\
+			0 & - \left(\frac{\Delta t}{2\Delta x} u_{i-1}^{k}\right) & 1 + \frac{\Delta t}{2\Delta x}u_i^{k} & \dots  & 0 \\
 	    \vdots & \vdots & \vdots & \ddots & \vdots \\
-	    0 & 0 & \dots & - \left(\frac{\Delta t}{2\Delta x} u_{i-1}^{t}\right)  & 1 + \frac{\Delta t}{2\Delta x}u_i^{t}
-	\end{bmatrix},
+	    0 & 0 & \dots & - \left(\frac{\Delta t}{2\Delta x} u_{i-1}^{k}\right)  & 1 + \frac{\Delta t}{2\Delta x}u_i^{k}
+	\end{bmatrix}.
 \end{equation}
-where the subscript on $A_0$ denotes that this Jacobian is approximated using the current known solution at time $t$. This is referred to as a {\it linearization} of the system of equations, and we say that the Jacobian matrix has been linearized about the current solution $\vec{u}^t$. From this linearization, the solution at $t+1$ can be estimated by solving the linear system
-\begin{equation}
-	A_0 \vec{u}^{t+1}_1 = \vec{u}^t,
-\end{equation}
-where the subscript in $\vec{u}^{t+1}_1$ denotes that this is the first iterated approximation of the solution at the next time step. Then, the Jacobian matrix can be approximated by linearizing it about this first estimated solution instead of $\vec{u}^t$, yielding the following linear system of equations
-\begin{equation}
-	A_1 \vec{u}^{t+1}_2 = \vec{u}^t,
-\end{equation}
-and this procedure can be repeated in the following form
-\begin{equation}
-	A_k \vec{u}^{t+1}_{k+1} = \vec{u}^t,
-\end{equation}
-where $k$ denotes the current iteration. This procedure is repeated until
-\begin{equation}
-	\vec{u}^{t+1}_{k+1} \approx \vec{u}^{t+1}_{k},
-\end{equation}
-at which point the solution at the next time step is taken to be
-\begin{equation}
-	\vec{u}^{t+1} = \vec{u}^{t+1}_{k+1},
-\end{equation}
-and the entire procedure is then repeated for each subsequent time step. Hence, for non-linear equations, we need to solve multiple linear systems for each time step, following Newton-Raphson, which can significantly increase their computational cost relative to linear systems. Furthermore, convergence of Newton-Raphson is not guaranteed. Hence, non-linear systems often require smaller time steps relative to linear systems to maintain stability of the iterative method.
+Hence, the general procedure for solving nonlinear systems of equations is to start by guessing a solution $\vec{u}^{t+1}$, which is stored as $\vec{u}^{k}$. Typically a good initial guess is that $\vec{u}^{k} = \vec{u}^{t}$. Using this initial guess the residual and Jacobian matrices are computed and, via application of Newton-Raphson, an improved guess $\vec{u}^{k+1}$ is obtained. This procedure is then repeated until $\vec{r}(\vec{u}^{k}) \approx 0$, at which point we take $\vec{u}^{t+1} = \vec{u}^{k}$. In the case of linear systems only one Newton iterations is required. However, for non-linear systems such as Burgers or Navier-Stokes, several Newton iterations are typically required for sufficient convergence.
 
 \chapter{Iterative Methods}
 In this implicit time stepping section we reduced each time step to the solution of a linear system of $N$ equations of the form 

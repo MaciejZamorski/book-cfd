@@ -2289,10 +2289,10 @@ where, for the case of periodic boundary conditions
 	A = 
 	\begin{bmatrix}
 	    1+\sigma & 0 & 0 & \dots  & \sigma \\
-	    \sigma & 1+\sigma & 0 & \dots  & 0 \\
-			0 & \sigma & 1+\sigma & \dots  & 0 \\
+	    -\sigma & 1+\sigma & 0 & \dots  & 0 \\
+			0 & -\sigma & 1+\sigma & \dots  & 0 \\
 	    \vdots & \vdots & \vdots & \ddots & \vdots \\
-	    0 & 0 & \dots & \sigma  & 1+\sigma
+	    0 & 0 & \dots & -\sigma  & 1+\sigma
 	\end{bmatrix},
 \end{equation}
 is referred to as the Jacobian matrix, and
@@ -2370,14 +2370,14 @@ where the Jacobian matrix, for the current Burgers equation discretization, is g
 \begin{equation}
 	\frac{\partial \vec{r}}{\partial \vec{u}^k} = 
 	\begin{bmatrix}
-	    1 + \frac{\Delta t}{2\Delta x}u_i^{k} & 0 & 0 & \dots  & - \left(\frac{\Delta t}{2\Delta x} u_{i-1}^{k}\right) \\
-	    - \left(\frac{\Delta t}{2\Delta x} u_{i-1}^{k}\right) & 1 + \frac{\Delta t}{2\Delta x}u_i^{k} & 0 & \dots  & 0 \\
-			0 & - \left(\frac{\Delta t}{2\Delta x} u_{i-1}^{k}\right) & 1 + \frac{\Delta t}{2\Delta x}u_i^{k} & \dots  & 0 \\
+	    1 + \frac{\Delta t}{\Delta x}u_i^{k} & 0 & 0 & \dots  & - \left(\frac{\Delta t}{\Delta x} u_{i-1}^{k}\right) \\
+	    - \left(\frac{\Delta t}{\Delta x} u_{i-1}^{k}\right) & 1 + \frac{\Delta t}{\Delta x}u_i^{k} & 0 & \dots  & 0 \\
+			0 & - \left(\frac{\Delta t}{\Delta x} u_{i-1}^{k}\right) & 1 + \frac{\Delta t}{\Delta x}u_i^{k} & \dots  & 0 \\
 	    \vdots & \vdots & \vdots & \ddots & \vdots \\
-	    0 & 0 & \dots & - \left(\frac{\Delta t}{2\Delta x} u_{i-1}^{k}\right)  & 1 + \frac{\Delta t}{2\Delta x}u_i^{k}
+	    0 & 0 & \dots & - \left(\frac{\Delta t}{\Delta x} u_{i-1}^{k}\right)  & 1 + \frac{\Delta t}{\Delta x}u_i^{k}
 	\end{bmatrix}.
 \end{equation}
-Hence, the general procedure for solving nonlinear systems of equations is to start by guessing a solution $\vec{u}^{t+1}$, which is stored as $\vec{u}^{k}$. Typically a good initial guess is that $\vec{u}^{k} = \vec{u}^{t}$. Using this initial guess the residual and Jacobian matrices are computed and, via application of Newton-Raphson, an improved guess $\vec{u}^{k+1}$ is obtained. This procedure is then repeated until $\vec{r}(\vec{u}^{k}) \approx 0$, at which point we take $\vec{u}^{t+1} = \vec{u}^{k}$. In the case of linear systems only one Newton iterations is required. However, for non-linear systems such as Burgers or Navier-Stokes, several Newton iterations are typically required for sufficient convergence.
+Hence, the general procedure for solving nonlinear systems of equations is to start by guessing a solution $\vec{u}^{t+1}$, which is stored as $\vec{u}^{k}$. Typically, a good initial guess is that $\vec{u}^{k} = \vec{u}^{t}$. Using this initial guess, the residual and Jacobian matrices are computed and, via application of Newton-Raphson, an improved guess $\vec{u}^{k+1}$ is obtained. This procedure is then repeated until $\vec{r}(\vec{u}^{k}) \approx 0$, at which point we take $\vec{u}^{t+1} = \vec{u}^{k}$. In the case of linear systems, only one Newton iterations is required. However, for non-linear systems such as Burgers or Navier-Stokes, several Newton iterations are typically required for sufficient convergence.
 
 \chapter{Iterative Methods}
 In this implicit time stepping section we reduced each time step to the solution of a linear system of $N$ equations of the form 

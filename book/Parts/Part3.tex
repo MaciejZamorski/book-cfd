@@ -2912,10 +2912,10 @@ are the heat fluxes, $k$ is the thermal conductivity and
 \end{equation}
 We note that, unlike the Euler equations, we cannot obtain the viscous fluxes directly from the solution, since they also require the gradients of the velocity components and temperature. To obtain these gradients, we will simply use central differences in the middle of the domain. For example, for the gradient of $u$ the following finite difference methods can be used
 \begin{equation}
-	\frac{\partial u}{\partial x} = \frac{u_{i-1,j}^t - 2 u_{i,j}^t + u_{i+1,j}^t}{\Delta x^2},
+	\frac{\partial u}{\partial x} = \frac{u_{i+1,j}^t - u_{i-1,j}^t}{2 \Delta x},
 \end{equation}
 \begin{equation}
-	\frac{\partial u}{\partial y} = \frac{u_{i,j-1}^t - 2 u_{i,j}^t + u_{i,j+1}^t}{\Delta y^2}.
+	\frac{\partial u}{\partial y} = \frac{u_{i,j+1}^t - u_{i,j-1}^t}{2 \Delta y}.
 \end{equation}
 However, these finite difference methods will not work for computing the velocity and temperature gradients of the solution at the boundaries of the domain, since they would require points outside of the computational domain. Instead, one-sided stencils can be used at the wall. For example, the following stencil can be used on the left-hand side boundary of the domain
 \begin{equation}
@@ -2925,3 +2925,5 @@ and along the length of each wall, we will take the derivative to be zero. For e
 \begin{equation}
 	\frac{\partial u}{\partial y} = 0.
 \end{equation}
+
+Using these stencils we now have the solution vector at each grid point in the domain, and derivatives of the velocity and temperature field at each point in the domain. Now, at every point the inviscid and viscous fluxes can be computed. With these obtained, the same finite difference stencils can be applied to get the divergence of these fluxes, completing the right hand side of the conservation law. Finally, the solution and be advanced in time using a suitable explicit Runge-Kutta method for the temporal term.

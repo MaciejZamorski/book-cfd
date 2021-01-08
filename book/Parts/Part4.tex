@@ -7,7 +7,7 @@
 \chapter{Introduction}
 \label{ch:intro for tutorials}
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-\section{Gmsh}
+\section*{Gmsh}
 \begin{gmshnote}
 	To read all about Gmsh and download its source, executables, and license please \href{http://gmsh.info}{\underline{click here}}.
 \end{gmshnote}
@@ -37,14 +37,14 @@ After building the geometry and defining the boundary conditions via the \textbf
 \end{itemize}
 There is another module named \textbf{Solver}, which allows a numerical solver to be accessed directly from within Gmsh. In the context of the current book, this will not be used.
 
-\section{SU2}
+\section*{SU2}
 \begin{su2note}
 	To read all about SU2 and download its source, executables, and license please \href{https://su2code.github.io/}{\underline{click here}}.
 \end{su2note}
 As discussed in the Physics and Numerics parts of this book, ultimately, an approximate solution to the Navier-Stokes or RANS equations is obtained by solving a discrete system of equations on a computational grid or mesh. SU2 is an open-source CFD solver built specifically for this task. SU2 is written in C++, and its primary applications are computational aerodynamics and shape optimization. SU2 is generally user-friendly, and pre-compiled versions are available for all major operating systems (Windows, Mac, Linux). In the following tutorials, we will demonstrate the utility of SU2 as a CFD tool for computational aerodynamics.
 
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-\section{Paraview}
+\section*{Paraview}
 \begin{paraviewnote}
 	To read all about Paraview and download its source, executables, and license please \href{https://www.paraview.org/}{\underline{click here}}.
 \end{paraviewnote}
@@ -54,7 +54,7 @@ After SU2 runs, it generates a set of data files, which includes the complete fl
  \chapter{Inviscid NACA 0012}
 \label{ch:Inviscid NACA 0012}
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-\section{Required Files}
+\section*{Required Files}
 \begin{su2note}
 	Use the following links to download the same version of SU2 for Windows (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/windows/SU2_Windows.zip}{\underline{click here}}) or Mac (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/osx/SU2_Mac.zip}{\underline{click here}}), the required configuration and mesh files (\href{https://gitlab.com/bvermeir/book-cfd/blob/master/tutorial/tut1_inviscid_naca0012/naca0012.zip}{\underline{click here}}), and the reference dataset (\href{https://gitlab.com/bvermeir/book-cfd/blob/master/tutorial/tut1_inviscid_naca0012/experimental_values.zip}{\underline{click here}}).
 \end{su2note}
@@ -62,7 +62,7 @@ After SU2 runs, it generates a set of data files, which includes the complete fl
 	Use the following links to download the same version of Paraview for Windows (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/windows/ParaView-5.4.0-Qt5-OpenGL2-Windows-64bit.exe}{\underline{click here}}) or Mac (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/osx/ParaView-5.4.0-Qt5-OpenGL2-MPI-OSX10.8-64bit.dmg}{\underline{click here}}).
 \end{paraviewnote}
 
-\section{Problem Description}
+\section*{Problem Description}
 In this tutorial, we are going to demonstrate how to simulate transonic inviscid flow around a NACA 0012 airfoil. Under the assumption of inviscid flow, the Euler equations will be used. Please note that this assumption is only reasonably valid at high Reynolds numbers and low angles of attack since the contribution of the viscous terms in the Navier-Stokes equations is minimal in this case. The flow specifications are provided as
 \begin{itemize}
     \item Pressure = 101,325 Pa
@@ -72,7 +72,7 @@ In this tutorial, we are going to demonstrate how to simulate transonic inviscid
 \end{itemize}
 This tutorial has two parts: Flow Solution and Post-Processing. In the first part we will explain how to manage the required files and settings in SU2, and then run the simulation. In the second part we will demonstrate how to use Paraview to visualize the data files generated in the first step using SU2.
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-\section{Flow solution}
+\section*{Flow solution}
 To run this simulation, SU2 needs two files: a configuration file (\texttt{.cfg}) and a mesh file (\texttt{.su2}). Links to the required files and executables are provided at the start of this tutorial. The files include:
 \begin{enumerate}
 \item \texttt{inv\_NACA 0012.cfg}: the configuration file.
@@ -103,7 +103,7 @@ The SU2 solver will commence solving the problem and will print out the residual
 \end{itemize}
 Please keep in mind that every time you run SU2, the output data will be overwritten. Hence, before launching a new simulation you should backup your files in another directory.
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-\section{Post-Processing}
+\section*{Post-Processing}
 In this section, we will explain how to use Paraview to visualize the solution files generated by SU2. First of all, install Paraview using the links at the start of this tutorial. Once that is complete, perform the following steps to visualize the results:
 %--------------------------------------------------------------
 \subsection{Load the Solution File}
@@ -325,7 +325,7 @@ As shown in Figure \ref{fig1:forcefile2}, the aerodynamic forces are expressed i
 	\label{fig1:forcefile2}
 \end{figure}
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-\section{Questions}
+\section*{Questions}
 1. Run the provided default NACA 0012 test case at $Ma=0.8$.
 \begin{enumerate}[label=(\alph*)]
     \item Plot and comment on the mesh.
@@ -346,7 +346,7 @@ As shown in Figure \ref{fig1:forcefile2}, the aerodynamic forces are expressed i
 \chapter{Supersonic Wedge}
 \label{ch:Supersonic Wedge}
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-\section{Required Files}
+\section*{Required Files}
 \begin{su2note}
 	Use the following links to download the same version of SU2 for Windows (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/windows/SU2_Windows.zip}{\underline{click here}}) or Mac (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/osx/SU2_Mac.zip}{\underline{click here}}), and the required configuration and mesh files (\href{https://gitlab.com/bvermeir/book-cfd/blob/master/tutorial/tut2_supersonic_wedge/wedge.zip}{\underline{click here}}).
 \end{su2note}
@@ -354,7 +354,7 @@ As shown in Figure \ref{fig1:forcefile2}, the aerodynamic forces are expressed i
 	Use the following links to download the same version of Paraview for Windows (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/windows/ParaView-5.4.0-Qt5-OpenGL2-Windows-64bit.exe}{\underline{click here}}) or Mac (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/osx/ParaView-5.4.0-Qt5-OpenGL2-MPI-OSX10.8-64bit.dmg}{\underline{click here}}).
 \end{paraviewnote}
 
-\section{Problem Description}
+\section*{Problem Description}
 In this tutorial, we are going to demonstrate how to simulate supersonic inviscid flow past a simple 2D wedge. This wedge generates an oblique-shock wave moving outwards from its surface. Assuming the Reynolds number is high, and that the fluid is an ideal gas, we will be using the Euler equations. The domain is approximated using a structured mesh with 3,750 nodes. The domain consists of a flat upper wall, and a lower wall with an inclined a wedge starting at $x/L=1/3$, where $L$ is the length of the duct. The wedge angle is taken to be 10 degrees, and the inlet flow parameters are
 \begin{itemize}
     \item Pressure = 101,325 Pa
@@ -364,7 +364,7 @@ In this tutorial, we are going to demonstrate how to simulate supersonic invisci
 \end{itemize}
 This tutorial has two parts: Flow Solution and Post-processing. In the first part, we will explain how to manage the prerequisite files and settings, and how to run the CFD simulation using SU2. In the second part, we explain how to use Paraview to visualize the data obtained from SU2.
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-\section{Flow solution}
+\section*{Flow solution}
 To run this simulation, SU2 needs two files: a configuration file (\texttt{.cfg}) and a mesh file (\texttt{.su2}). Links to the required files and executables are provided at the start of this tutorial. The files include:
 \begin{enumerate}
     \item \texttt{inv\_wedge\_HLLC.cfg} which is a configuration file.
@@ -393,7 +393,7 @@ The SU2 solver will commence solving the problem and will print out the residual
 \end{itemize}
 Please keep in mind that every time you run SU2, the output data will be overwritten. Hence, before launching a new simulation you should backup your files in another directory.
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-\section{Post-Processing}
+\section*{Post-Processing}
 In this section, we explain how to use Paraview to visualize the solution generated by SU2. First of all, install paraview (if not already done) using the links at the start of this tutorial. Once that is complete, perform the following steps to visualize the results:
 %--------------------------------------------------------------
 \subsection{Load the Solution File:}
@@ -641,7 +641,7 @@ To plot a variable over an arbitrary line in space, you can take the following s
 \end{figure}
 
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-\section{Questions}
+\section*{Questions}
 1. Run the default case as provided which uses 2ND\_ORDER and the HLLC Riemann solver.
 \begin{enumerate}[label=(\alph*)]
     \item Create coloured contours of Pressure and Mach number in the entire domain.
@@ -659,7 +659,7 @@ To plot a variable over an arbitrary line in space, you can take the following s
 \chapter{Inviscid ONERA M6}
 \label{ch:Inviscid ONERA M6}
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-\section{Required Files}
+\section*{Required Files}
 \begin{su2note}
 	Use the following links to download the same version of SU2 for Windows (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/windows/SU2_Windows.zip}{\underline{click here}}) or Mac (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/osx/SU2_Mac.zip}{\underline{click here}}), and the required configuration and mesh files (\href{https://gitlab.com/bvermeir/book-cfd/blob/master/tutorial/tut3_invisicd_oneram6/oneram6_inviscid.zip}{\underline{click here}}).
 \end{su2note}
@@ -667,7 +667,7 @@ To plot a variable over an arbitrary line in space, you can take the following s
 	Use the following links to download the same version of Paraview for Windows (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/windows/ParaView-5.4.0-Qt5-OpenGL2-Windows-64bit.exe}{\underline{click here}}) or Mac (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/osx/ParaView-5.4.0-Qt5-OpenGL2-MPI-OSX10.8-64bit.dmg}{\underline{click here}}).
 \end{paraviewnote}
 
-\section{Problem Description}
+\section*{Problem Description}
 In this tutorial, we are going to explain how to simulate transonic inviscid flow around the three-dimensional ONERA M6 wing. This is a commonly used benchmark problem for computational aerodynamics due to the availability of experimental data and its relatively simple geometry. In this tutorial, the computational domain is discretized using an unstructured mesh with of 582,752 tetrahedral elements. The flow specification is as follows:
 \begin{itemize}
     \item Pressure = 101,325 Pa
@@ -678,7 +678,7 @@ In this tutorial, we are going to explain how to simulate transonic inviscid flo
 
 This tutorial has two parts: Flow Solution and Post-processing. In the first part, we will explain how to manage the prerequisite files and settings and how to run the CFD simulation using SU2. In the second part, we explain how to use Paraview to visualize the data obtained from SU2.
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-\section{Flow solution}
+\section*{Flow solution}
 In the configuration file, you can manually adjust the multigrid control parameters. For the tutorial case, you will see that the number of multigrid levels is set to 0, \texttt{MGLEVEL=0}. In the assigned questions, the number of multigrid levels will be changed by adjusting this \texttt{MGLEVEL} parameter. You can also select the multigrid cycle type by choosing one of either \texttt{MGCYCLE (V Cycle, W Cycle or Full MG Cycle)}. Another parameter that can be controlled is the total number of iterations. This can be modified by changing the value of \texttt{EXT\_ITER}. For this example, it will be kept at 200 for demonstration purposes, but depending on the method used, more iterations may be required to reach convergence. We will post-process the results to obtain the pressure coefficient and Mach number contours, as well as the lift coefficient ($C_L$), and drag coefficient ($C_D$) of the ONERA M6 wing. We will also explore the rate of convergence as a function of the number of multigrid levels used.
 
 To run the simulation, SU2 needs two files: the configuration file (\texttt{.cfg}) and the mesh file (\texttt{.su2}). Links to the required files and executables are provided at the start of this tutorial. The files include:
@@ -711,7 +711,7 @@ The solver will begin solving the problem and will print out the residuals at ev
 \end{itemize}
 Please keep in mind that every time you run SU2, the output data will be overwritten. Hence, before launching a new simulation you should backup your files in another directory.
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-\section{Post-processing}
+\section*{Post-processing}
 In this section, we will explain how to use Paraview to visualize the results produced by SU2.
 %--------------------------------------------------------------
 \subsection{Load the Solution File:}
@@ -900,7 +900,7 @@ Now, we can plot the predicted lift coefficient, drag coefficient, and density r
     \label{fig3:res_vs_itr}
 \end{figure}
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-\section{Questions}
+\section*{Questions}
 1. Run the simulation without multigrid (\texttt{MGLEVEL=0}).
 \begin{enumerate}[label=(\alph*)]
     \item Follow the procedure in the guideline document to run the simulation and record the number of iterations and wall-clock time for the simulation to converge.
@@ -917,7 +917,7 @@ Now, we can plot the predicted lift coefficient, drag coefficient, and density r
 \chapter{Laminar Cylinder}
 \label{ch:Laminar Cylinder}
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-\section{Required Files}
+\section*{Required Files}
 \begin{su2note}
 	Use the following links to download the same version of SU2 for Windows (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/windows/SU2_Windows.zip}{\underline{click here}}) or Mac (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/osx/SU2_Mac.zip}{\underline{click here}}), and the required configuration and mesh files for the steady case (\href{https://gitlab.com/bvermeir/book-cfd/blob/master/tutorial/tut4_laminar_cylinder/cylinder_steady.zip}{\underline{click here}}), unsteady case (\href{https://gitlab.com/bvermeir/book-cfd/blob/master/tutorial/tut4_laminar_cylinder/cylinder_unsteady.zip}{\underline{click here}}), and the reference datasets (\href{https://gitlab.com/bvermeir/book-cfd/blob/master/tutorial/tut4_laminar_cylinder/experimental_values.zip}{\underline{click here}}).
 \end{su2note}
@@ -925,7 +925,7 @@ Now, we can plot the predicted lift coefficient, drag coefficient, and density r
 	Use the following links to download the same version of Paraview for Windows (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/windows/ParaView-5.4.0-Qt5-OpenGL2-Windows-64bit.exe}{\underline{click here}}) or Mac (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/osx/ParaView-5.4.0-Qt5-OpenGL2-MPI-OSX10.8-64bit.dmg}{\underline{click here}}).
 \end{paraviewnote}
 
-\section{Problem Description}
+\section*{Problem Description}
 In this tutorial, we will explain how to simulate external viscous flow past a 2D cylinder. To simulate this, the Navier-Stokes equations will be solved in both steady and unsteady forms, depending on the chosen Reynolds number. For this type of flow, the wake is expected to remain steady up to a Reynolds number of around 46. At higher Reynolds numbers, the flow becomes unsteady with oscillating vortices being shed in its wake. This is known as a Von-Karman vortex street, which is a well-known phenomenon in fluid mechanics. The computational domain for this tutorial uses an O-topology mesh with the cylinder in the center of the domain. The outer boundary is situated at a radial distance of 15$D$, where $D$ is cylinder diameter. The resulting mesh is composed of 26,192 triangular elements. The elements around the surface of the cylinder are refined to resolve the viscous boundary layer in this region.  For this example, the flow specifications are provided as follows:
 \begin{itemize}
     \item Pressure = 101,325Pa
@@ -937,7 +937,7 @@ In this tutorial, we will explain how to simulate external viscous flow past a 2
 \end{itemize}
 This tutorial has two parts: Flow Solution and Post-processing. In the first part, we will explain how to manage the prerequisite files and settings, and how to run the CFD simulation using SU2. In the second part, we explain how to use Paraview to visualize the data obtained from SU2.
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-\section{Flow solution}
+\section*{Flow solution}
 To run this simulation, SU2 needs two files: a configuration file (\texttt{.cfg}) and a mesh file (\texttt{.su2}). Links to the required files and executables are provided at the start of this tutorial. The files include:
 \begin{enumerate}
     \item \texttt{lam\_cylinder.cfg} as a configuration file.
@@ -968,7 +968,7 @@ SU2 will begin solving the problem, and will print out the residuals at every it
 \end{itemize}
 Please keep in mind that every time you run SU2, the output data will be overwritten. Hence, before launching a new simulation you should backup your files in another directory.
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-\section{Post-processing}
+\section*{Post-processing}
 In this section, we will explain how to use Paraview to visualize the data produced by SU2.
 %--------------------------------------------------------------
 \subsection{Load the Solution File:}
@@ -1256,7 +1256,7 @@ When the Reynolds number is high enough, the wake behind the cylinder becomes un
 \end{figure}
 Plotting $C_L$ or $C_D$ as a function of time demonstrates that the shedding amplitude grows, and then remains quasi-steady. The non-dimensional Strouhal number of this vortex shedding can now calculated from $St=\frac{f D}{U}$, where $f$, $D$ and $U$ are the shedding frequency, cylinder diameter, and free-stream velocity, respectively. The shedding frequency can be found manually by determining the time interval between vortex shedding events in the $C_L$ time history, within the quasi-steady region.
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-\section{Questions}
+\section*{Questions}
 1. Run the laminar flow over a cylinder as per the tutorial case but at $Re$ = 10, 20, and 40.
 \begin{enumerate}[label=(\alph*)]
     \item Plot Mach contours with streamlines for $Re$ = 10, 20, and 40
@@ -1274,7 +1274,7 @@ Plotting $C_L$ or $C_D$ as a function of time demonstrates that the shedding amp
 \chapter{Turbulent ONERA M6}
 \label{ch:Turbulent ONERA M6}
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-\section{Required Files}
+\section*{Required Files}
 \begin{su2note}
 	Use the following links to download the same version of SU2 for Windows (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/windows/SU2_Windows.zip}{\underline{click here}}) or Mac (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/osx/SU2_Mac.zip}{\underline{click here}}), the required configuration and mesh files (\href{https://gitlab.com/bvermeir/book-cfd/blob/master/tutorial/tut5_turbulent_oneram6/oneram6_turbulent.zip}{\underline{click here}}), and reference dataset (\href{https://gitlab.com/bvermeir/book-cfd/blob/master/tutorial/tut5_turbulent_oneram6/experimental_values.zip}{\underline{click here}}).
 \end{su2note}
@@ -1282,7 +1282,7 @@ Plotting $C_L$ or $C_D$ as a function of time demonstrates that the shedding amp
 	Use the following links to download the same version of Paraview for Windows (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/windows/ParaView-5.4.0-Qt5-OpenGL2-Windows-64bit.exe}{\underline{click here}}) or Mac (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/osx/ParaView-5.4.0-Qt5-OpenGL2-MPI-OSX10.8-64bit.dmg}{\underline{click here}}).
 \end{paraviewnote}
 
-\section{Problem Description}
+\section*{Problem Description}
 In this tutorial, we will demonstrate how to simulate transonic viscous flow past a three-dimensional wing. We will use the ONERA M6 again, and detailed information is given in the previous tutorial for inviscid flow in Chapter \ref{ch:Inviscid ONERA M6}. We will use the Reynolds-Averaged Navier-Stokes (RANS) equations and compare the Spalart-Almaras (SA) and $k-\omega$ Shear Stress Transport (SST) turbulence models for turbulent eddy viscosity. The computational domain uses a structured mesh with 43,008 hexahedral elements. Note that this mesh is relatively coarse to allow for relatively short computation time. The flow specifications are provided as follows:
 \begin{itemize}
     \item Temperature = 288.15 K
@@ -1292,7 +1292,7 @@ In this tutorial, we will demonstrate how to simulate transonic viscous flow pas
 \end{itemize}
 This tutorial has two parts: Flow Solution and Post-processing. In the first part, we will explain how to manage the prerequisite files and settings and how to run the CFD simulation using SU2. In the second part, we explain how to use Paraview to visualize the data obtained from SU2.
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-\section{Flow solution}
+\section*{Flow solution}
 To run this simulation, SU2 needs two files: a configuration file (\texttt{.cfg}) and a mesh file (\texttt{.su2}). Links to the required files and executables are provided at the start of this tutorial. The files include
 \begin{enumerate}
 \item \texttt{turb\_ONERAM6.cfg} as a configuration file.
@@ -1323,7 +1323,7 @@ SU2 will begin solving the problem and will print out the residuals at every ite
 \end{itemize}
 Please keep in mind that every time you run SU2, the output data will be overwritten. Hence, before launching a new simulation you should backup your files in another directory.
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-\section{Post-processing}
+\section*{Post-processing}
 In this section we demonstrate how to use Paraview to visualize the data produced by SU2.
 %--------------------------------------------------------------
 \subsection{Load the Solution File:}
@@ -1565,7 +1565,7 @@ If you would like to try plotting in other software (i.e. Microsoft Excel), you 
 	\item The \texttt{.csv} file does not keep the equations but only the values at each cell. Therefore, to keep the equations, you can save the file as \texttt{.xlsx}.
 \end{enumerate}
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-\section{Questions}
+\section*{Questions}
 1. Plot and comment on the mesh and compare it with the one used for the inviscid ONERA M6. To view the mesh use both the \texttt{flow.vtk} and \texttt{surface\_flow.vtk} files to view the mesh structure from different directions. \\
 2. Run the Onera M6 with Spalart-Allmaras the (SA) turbulence model as described in the tutorial documentation. Plot the pressure coefficient contour and contour lines of the wing surface. \\
 3. Perform Q.2 again but with $k-\omega$ SST turbulence model. \\
@@ -1575,7 +1575,7 @@ If you would like to try plotting in other software (i.e. Microsoft Excel), you 
 \chapter{Mesh Generation Using Gmsh}
 \label{ch:Mesh Generation Unisg Gmsh}
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-\section{Required Files}
+\section*{Required Files}
 \begin{gmshnote}
 	Use the following links to download the same version of Gmsh for Windows (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/windows/gmsh-3.0.5-Windows64.zip}{\underline{click here}}) or Mac (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/osx/gmsh-3.0.5-MacOSX.dmg}{\underline{click here}}).
 \end{gmshnote}
@@ -1583,10 +1583,10 @@ If you would like to try plotting in other software (i.e. Microsoft Excel), you 
 	Use the following links to download the python file for this toturial (\href{https://gitlab.com/bvermeir/book-cfd/blob/master/tutorial/tut6_mesh_generation/gmshconverter.py}{\underline{click here}}).
 \end{pythonnote}
 
-\section{Problem Description}
+\section*{Problem Description}
 In this tutorial, we are going to explain how to generate a mesh for inviscid flow around an airfoil.
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-\section{Airfoil Coordinate Preparation}
+\section*{Airfoil Coordinate Preparation}
 To generate the mesh, we first need access to the coordinates defining the desired airfoil's geometry. These are typically obtained from reference material, or from the shape parameterization of standard airfoil families, such as the NACA series. In this tutorial, we will use AirfoilTools.com (Figure \ref{fig6:gmsh1}) to obtain a set of coordinates for our airfoil. For example, we can select either the \textbf{NACA 4 digit generator} or \textbf{NACA 5 digit generator} on this website. Here, we will demonstrate mesh generation for a NACA2312 using the \textbf{NACA 4 digit generator} (Figure \ref{fig6:gmsh2}).
 To get started, you can take the following steps:
 \begin{enumerate}[label=\arabic*)]
@@ -1619,7 +1619,7 @@ To get started, you can take the following steps:
 	\item Copy the coordinates into it and finally, go to \textbf{File} $\rightarrow$ \textbf{Save as} and choose a suitable filename, such as \texttt{naca2312.dat}.
 \end{enumerate}
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-\section{Converting Coordinates to Gmsh format}
+\section*{Converting Coordinates to Gmsh format}
 Gmsh uses a native .geo file format, which is a readable list of instructions to build the airfoil geometry, and then mesh it. Points in Gmsh can be defined in the .geo file as: \\
 \texttt{Point(1)=\{1.00000000, 0.00000000, 0.00000000, 1.000\};}, \\
 where, the number in \texttt{Point(1)} shows the index of the corresponding point, and the first three numbers in brackets indicate the point coordinates in space (its $x$, $y$, and $z$ components). Additionally, the last number is the scale of the mesh distribution around the corresponding point, which is 1 by default. Keep in mind that the coordinates saved in the \textit{naca2312}.dat include only the $x$ and $y$ coordinates, whereas Gmsh also requires the $z$ coordinate. Hence, for a two-dimensional case we must also add zero for the $z$ component to the \texttt{naca2312.dat} file. Since it can be time-consuming to input all of the airfoil geometry points into Gmsh, we have included with this tutorial a small Python script that reads the \texttt{naca2312.dat} file, converts the coordinates into Gmsh format, and them exports a new \texttt{.geo} file with all of the points connected using a spline. To use this converter, copy the \texttt{gmshconverter.py} script file into the folder you saved \texttt{naca2312.dat}, and then open a terminal window and enter the following commands:
@@ -1637,7 +1637,7 @@ where, the number in \texttt{Point(1)} shows the index of the corresponding poin
 \end{table}\\
 After completing these steps, the \texttt{.geo} file is saved in the same directory and is ready to be loaded into Gmsh.
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-\section{Mesh Design Using Gmsh}
+\section*{Mesh Design Using Gmsh}
 In this section, we will show how to use Gmsh. In order to get started, you can take the following steps:
 \begin{enumerate}[label=\arabic*)]
 	\setcounter{enumi}{0}
@@ -1863,7 +1863,7 @@ Once the mesh generation is completed, we need to save it in a format that can b
     \label{fig6:gmsh20}
 \end{figure}
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-\section{Run Tutorial In Chapter\ref{ch:Inviscid NACA 0012} Using New Mesh}
+\section*{Run Tutorial In Chapter\ref{ch:Inviscid NACA 0012} Using New Mesh}
 To demonstrate how to use this mesh, we will repeat the tutorial in Section (\ref{ch:Inviscid NACA 0012}) but using this new NACA 2312 mesh. To choose the new mesh, and to change the names of boundary conditions, you can open the SU2 configuration (\texttt{.cfg}) file. For example, open the \texttt{inv\_NACA 0012.cfg} file and search for \texttt{INPUT/OUTPUT INFORMATION}. According to Figure \ref{fig6:gmsh24}, in \texttt{MESH\_FILENAME} under \texttt{INPUT/OUTPUT INFORMATION}, you can change the filename of mesh you are going to use, in this case using \texttt{naca2312.su2}.
 \begin{figure}[ht]
     \centering
@@ -1880,7 +1880,7 @@ Additionally, if you would like to use a different name for the physical boundar
     \label{fig6:gmsh25}
 \end{figure}
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-\section{Questions}
+\section*{Questions}
 1. Run the provided default NACA2312 test case at the provided Ma = 0.8.
 \begin{enumerate}[label=(\alph*)]
     \item Plot and comment on the mesh.
@@ -1899,7 +1899,7 @@ Additionally, if you would like to use a different name for the physical boundar
 \chapter{Shock Waves}
 \label{ch:Shock Waves}
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-\section{Required Files}
+\section*{Required Files}
 \begin{su2note}
 	Use the following links to download the same version of SU2 for Windows (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/windows/SU2_Windows.zip}{\underline{click here}}) or Mac (\href{https://users.encs.concordia.ca/~bvermeir/book/executables/osx/SU2_Mac.zip}{\underline{click here}}).
 	The required configuration and mesh files for normal shock detection (\href{https://gitlab.com/bvermeir/book-cfd/blob/master/tutorial/tut7_shock_wave/normal_shock.zip}{\underline{click here}}).
@@ -1910,7 +1910,7 @@ Additionally, if you would like to use a different name for the physical boundar
 \end{paraviewnote}
 
 
-\section{Problem Description}
+\section*{Problem Description}
 When the speed of flow is much less than the speed of sound ($Ma<0.3$), the density of flow remains constant. However, when the speed of flow is higher ($0.3<Ma<1$), then the compressibility effect becomes an important matter. For subsonic compressible flows, the entropy remains constant and the flow process is reversible. On the other hand, when the flow speed exceeds the speed of sound ($Ma>1$), the flow experiences abrupt changes in volume, and hence notable changes in density. In this case, the flow process becomes irreversible, and hence, the entropy increases. This significant and fast change in the density of gas flow is the main reason for the shock formation. Shocks are a small region in the gas where the flow properties change significantly. When shock happens, the static pressure and temperature increases, while the Mach number decreases. It is worth mentioning that if the shock waves are perpendicular to the flow direction, then this shock is called a normal shock. Another type of shock, which is not perpendicular to the flow direction is called an oblique shock, which is usually formed in supersonic jet flows.
 
 In this tutorial, we are going to demonstrate how to simulate a supersonic inviscid flow inside of a Converging-Diverging (CD) nozzle. For simplicity, this nozzle is assumed to have a rectangular cross-sectional area with a depth of 1m. Other geometry specifications are set as follows: 
@@ -1938,7 +1938,7 @@ Usually, the static pressure and temperature at the inlet of the nozzle are give
 \end{itemize}
 This tutorial has two parts: Flow Solution and Post-processing. In the first part, we will explain how to manage the prerequisite files and settings, and how to run the CFD simulation using SU2. In the second part, we explain how to use Paraview to visualize the data obtained from SU2.
 %+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-\section{Flow solution}
+\section*{Flow solution}
 To run this simulation, SU2 needs two files: a configuration file (\texttt{.cfg}) and a mesh file (\texttt{.su2}). Links to the required files and executables are provided at the start of this tutorial. The files include:
 \begin{enumerate}
 	\item \texttt{inv\_normal\_shock.cfg} which is a configuration file.
@@ -1967,7 +1967,7 @@ The SU2 solver will commence solving the problem and will print out the residual
 \end{itemize}
 Please keep in mind that every time you run SU2, the output data will be overwritten. Hence, before launching a new simulation you should backup your files in another directory.
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-\section{Post-Processing}
+\section*{Post-Processing}
 In this section, we explain how to use Paraview to visualize the solution generated by SU2. First of all, install paraview (if not already done) using the links at the start of this tutorial. Once that is complete, perform the following steps to visualize the results:
 %--------------------------------------------------------------
 \subsection{Load the Solution File:}
@@ -2106,7 +2106,7 @@ Since static temperature and pressure as well as the speed of gas flow have diff
 	\label{fig7:spreadsheet}
 \end{figure}
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-\section{Questions}
+\section*{Questions}
 1. Run the default case as provided which uses JST Riemann solver and detect flow regime represented by curve \textbf{(c)} in Figure \ref{fig7:cdnozzle}.
 \begin{enumerate}[label=(\alph*)]
 	\item Create colored contours of Pressure, Temperature, and Mach number.

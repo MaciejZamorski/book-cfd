@@ -22,7 +22,8 @@ def _get_colors(n, start=0.2, end=1, rev=True, cmap='gist_heat'):
         return cmap(np.linspace(start, end, n))
     return cmap(np.linspace(start, end, n))   
 
-def convert_to_graph(fig, ax, use_min_xaxis=False, keep_ticks=False):
+def convert_to_graph(fig, ax, use_min_xaxis=False, use_min_yaxis=False,
+                     keep_ticks=False, equal_aspect=False):
     # Taken from
     xmin, xmax = ax.get_xlim()
     ymin, ymax = ax.get_ylim()
@@ -33,8 +34,9 @@ def convert_to_graph(fig, ax, use_min_xaxis=False, keep_ticks=False):
 
     # removing the axis ticks
     if not keep_ticks:
-        plt.xticks([])  # labels
-        plt.yticks([])
+        ax.set_xticks([])
+        ax.set_yticks([])
+        
     ax.tick_params(axis=u'both', which=u'both',length=0)
     ax.xaxis.set_ticks_position('none')  # tick markers
     ax.yaxis.set_ticks_position('none')
@@ -59,12 +61,23 @@ def convert_to_graph(fig, ax, use_min_xaxis=False, keep_ticks=False):
         yminn = ymin
     else:
         yminn = 0
+
+    if use_min_yaxis:
+        xminn = xmin
+    else:
+        xminn = 0
+
+    if equal_aspect:
+        yhl = yhl*1.5
+        hw = yhw
+        hl = yhl
+
     # draw x and y axis
     ax.arrow(xmin, yminn, xmax-xmin, 0., fc='k', ec='k', lw=lw, 
             head_width=hw, head_length=hl, overhang=ohg, 
             length_includes_head=True, clip_on=False)
 
-    ax.arrow(xmin, ymin, 0, ymax-ymin, fc='k', ec='k', lw=lw, 
+    ax.arrow(xminn, yminn, 0, ymax-yminn, fc='k', ec='k', lw=lw, 
             head_width=yhw, head_length=yhl, overhang=ohg, 
             length_includes_head=True, clip_on=False)
 
@@ -1949,6 +1962,389 @@ def itermethods_sor():
     plt.show()
     fig.savefig('itermethods_sor.pdf')
 
+def nlsc_characteristics_example():
+    # Plots characteristic lines for example with 1, 1-x, 0 ICs
+    fig, ax = plt.subplots(figsize=(4, 3))
+    
+    for x1 in np.linspace(-1, 0, 5):
+        ax.plot([x1, x1 + 1.0], [0, 1], 'k')
+        ax.plot([x1 + 1.0, 1], [0, 1], 'k')
+        ax.plot([x1 + 2.0, x1 + 2.0], [0, 1], 'k')
+
+    ax.text(0, 1.075, r'$t$', ha='center', va='bottom')
+    ax.text(2.15, 0, r'$x$', ha='left', va='center')             
+    ax.set_xlim(-1, 2.1)
+    ax.text(0, -0.02, r'$x=0$', va='top', ha='center')
+    ax.text(1, -0.02, r'$x=1$', va='top', ha='center')
+
+    ax.set_aspect('equal')
+    fig, ax = convert_to_graph(fig, ax, equal_aspect='True')
+
+    plt.tight_layout()
+    plt.show()
+
+    fig.savefig('nonlinear_scalar_characteristics.pdf')
+
+def nlsc_entropy_condition():
+
+    figs = [plt.figure(figsize=(4, 3)) for i in range(3)]
+    axes = [fig.add_subplot() for fig in figs]
+
+    # Draw characteristic lines for all
+    for i, ax in enumerate(axes):
+        for x1 in np.linspace(-1, 0, 5):
+            if i == 0:
+                ax.plot(0.25, 0.65, '*k')
+            ax.plot([x1 + 1.0, x1 + 2.0], [0, 1], 'k')
+            ax.plot([x1, x1], [0, 1], 'k')
+
+        ax.set_aspect('equal')
+
+    # Draw entropy-violating characteristics
+    p = 0.5
+    axes[1].plot([0, p], [0, 2*p], 'k')
+    
+    for x in [0.2, 0.4]:
+        axes[1].plot([x, 1-x], [2*x, 1], 'k')
+        axes[1].plot([x, x], [2*x, 1], 'k')
+
+    # Draw entropy-satisfying characteristics
+    x = np.linspace(0, 2, 5)
+    for xx in x[1:-1]:
+        axes[2].plot([0, 0.5*xx], [0, 1], 'k')
+
+    c = 0
+    for fig, ax in zip(figs, axes):
+        fig, ax = convert_to_graph(fig, ax, equal_aspect=True)
+        ax.text(0, 1.075, r'$t$', ha='center', va='bottom')
+        ax.text(2.05, 0, r'$x$', ha='left', va='center') 
+        ax.text(0, -0.02, r'$x=0$', va='top', ha='center')
+        ax.set_xlim(-1.02, 2.2)
+        fig.savefig(f'nonlinear_scalar_entropycond_{c}.pdf')
+        c += 1
+    plt.show()
+
+def nlsc_example_u0():
+    fig, ax = plt.subplots(figsize=(4, 3))
+
+    ax.plot([-1, 0], [1, 1], color=red)
+    ax.plot([0, 1], [1, 0], color=red)
+    ax.plot([1, 2], [0, 0], color=red)
+
+    ax.set_xlim(-1, 2.1)
+    ax.set_ylim(-0.01, 1.1)
+    ax.set_aspect('equal')
+    fig, ax = convert_to_graph(fig, ax, equal_aspect=True)
+
+    # y and x axis labels
+    ax.text(0, 1.1, r'$u$', va='bottom', ha='center')
+    ax.text(2.15, 0, r'$x$', va='center', ha='left' )
+    ax.text(0, -0.02, r'$x=0$', va='top', ha='center')
+    ax.text(1, -0.02, r'$x=1$', va='top', ha='center')
+
+    plt.tight_layout()
+    plt.show()
+    fig.savefig('nonlinear_scalar_example_u0.pdf')
+
+def nlsc_example_u1():
+    fig, ax = plt.subplots(figsize=(4, 3))
+
+    ax.plot([-1, 1], [1, 1], color=red)
+    ax.plot([1, 1], [0, 1], 'k--', lw=0.7)
+    ax.plot([1, 2], [0, 0], color=red)
+
+    ax.set_xlim(-1, 2.1)
+    ax.set_ylim(-0.01, 1.1)
+
+    ax.set_aspect('equal')
+    fig, ax = convert_to_graph(fig, ax, equal_aspect=True)
+
+    # y and x axis labels
+    ax.text(0, 1.1, r'$u$', va='bottom', ha='center')
+    ax.text(2.15, 0, r'$x$', va='center', ha='left' )
+    ax.text(0, -0.02, r'$x=0$', va='top', ha='center')
+    ax.text(1, -0.02, r'$x=1$', va='top', ha='center')
+
+    plt.tight_layout()
+    plt.show()
+    fig.savefig('nonlinear_scalar_example_uf.pdf')
+
+def sod_shock_tube():
+    fig, ax = plt.subplots()
+    ax.plot([0, 1], [0, 0], 'k', lw=1.5)
+    ax.plot([0, 1], [0.25, 0.25], 'k', lw=1.5)
+    ax.plot([0.5, 0.5], [0, 0.25], '--k')
+    rectangle1 = plt.Rectangle((0, 0), 1, -0.025, hatch='////', facecolor='#ededed', edgecolor='#d6d6d6')
+    rectangle2 = plt.Rectangle((0, 0.25), 1, 0.025, hatch='////', facecolor='#ededed', edgecolor='#d6d6d6')
+    ax.add_artist(rectangle1)
+    ax.add_artist(rectangle2)
+    ax.set_ylim(-0.025, 0.275)
+    ax.set_aspect('equal')
+    fig, ax = remove_axes(fig, ax)
+
+    ax.text(0.25, 0.125, r'\begin{align*}\rho_L\\ v_L\\ p_L\end{align*}', va='center')
+    ax.text(0.75, 0.125, r'\begin{align*}\rho_R\\ v_R\\ p_R\end{align*}', va='center')
+
+    plt.savefig('sod_shock_tube.pdf')
+
+def sod_shock_tube_solution():
+    fig, ax = plt.subplots(figsize=(9,3), ncols=3)
+    x, rho, u, p = np.loadtxt('../notebooks/data/sod-shock-tube.txt').T
+
+    loc =  [0.26335680867601535, 
+            0.4859454374877634, 
+            0.6854905240097902, 
+            0.8504311464060357]
+    
+    centers = [0.5*(0 + loc[0]),
+               0.5*(loc[0] + loc[1]), 
+               0.5*(loc[1] + loc[2]), 
+               0.5*(loc[2] + loc[3]),
+               0.5*(loc[3] + 1.0)]
+
+    # Redefine x between
+    ax[0].plot(x, rho, red)
+    ax[1].plot(x, u, red)
+    ax[2].plot(x, p, red)
+
+    labels = ['A', 'B', 'C', 'D', 'E']
+    for ax_ in ax:
+        for xloc in loc:
+            ax_.plot([xloc, xloc], [-0.02, 1.02], '--', color=darkgray, lw=0.5)
+    for xc, label in zip(centers, labels):
+        ax[0].text(xc, -0.02, label, ha='center', va='bottom')
+
+    labels = [r'$\rho$', '$v$', '$p$']
+    for ax_, label in zip(ax, labels):
+        ax_.set_xlabel('$x$')
+        ax_.set_ylabel(label)
+
+        ax_.set_ylim(-0.02, 1.02)
+        ax_.margins(y=0)
+
+    plt.tight_layout()
+    # plt.show()
+    plt.savefig('sod_shock_tube_solution.pdf')
+
+def euler_characteristics():
+    figs = [plt.figure(figsize=(3.5, 2)) for i in range(4)]
+    ax = [fig.add_subplot() for fig in figs]
+    # Case 1
+    # Expansion waves
+    angles = np.array([42.5, 45, 47.5])/180*np.pi
+    for angle in angles:
+        x = -np.cos(angle)
+        y = np.sin(angle)
+        ax[0].plot([0, x], [0, y], 'k', lw=0.75)
+    ax[0].text(-np.cos(np.pi/4), np.cos(np.pi/4), r'$\lambda_1$', va='bottom', ha='right')
+
+    # Contact discontinuity
+    angle = 7*np.pi/16
+    ax[0].plot([0, np.cos(angle)], [0, np.sin(angle)], '--k', lw=1)
+    ax[0].text(np.cos(angle), np.sin(angle), r'$\lambda_2$', va='bottom', ha='center')
+
+    # Shock
+    angle = 5*np.pi/16
+    ax[0].plot([0, np.cos(angle)], [0, np.sin(angle)], 'k', lw=2)
+    ax[0].text(np.cos(angle), np.sin(angle), r'$\lambda_3$', va='bottom', ha='left')
+
+    # Case 2
+    # Expansion waves
+    angles = np.array([42.5, 45, 47.5])/180*np.pi
+    for angle in angles:
+        x = np.cos(angle)
+        y = np.sin(angle)
+        ax[1].plot([0, x], [0, y], 'k', lw=0.75)
+    ax[1].text(np.cos(np.pi/4), np.cos(np.pi/4), r'$\lambda_3$', va='bottom', ha='left')
+
+    # Contact discontinuity
+    angle = 7*np.pi/16
+    ax[1].plot([0, np.cos(angle)], [0, np.sin(angle)], '--k', lw=1)
+    ax[1].text(np.cos(angle), np.sin(angle), r'$\lambda_2$', va='bottom', ha='center')
+    
+    # Shock
+    angle = 5*np.pi/16
+    ax[1].plot([0, -np.cos(angle)], [0, np.sin(angle)], 'k', lw=2)
+    ax[1].text(-np.cos(angle), np.sin(angle), r'$\lambda_1$', va='bottom', ha='right')
+
+    # Case 3
+    # Shock wave
+    angle = 5*np.pi/16
+    ax[2].plot([0, -np.cos(angle)], [0, np.sin(angle)], 'k', lw=2)
+    ax[2].text(-np.cos(angle), np.sin(angle), r'$\lambda_1$', va='bottom', ha='right')
+
+    # Contact discontinuity
+    angle = 7*np.pi/16
+    ax[2].plot([0, np.cos(angle)], [0, np.sin(angle)], '--k', lw=1)
+    ax[2].text(np.cos(angle), np.sin(angle), r'$\lambda_2$', va='bottom', ha='center')
+
+    # Shock wave
+    angle = 5*np.pi/16
+    ax[2].plot([0, np.cos(angle)], [0, np.sin(angle)], 'k', lw=2)
+    ax[2].text(np.cos(angle), np.sin(angle), r'$\lambda_3$', va='bottom', ha='left')
+
+    # Case 4
+    # Expansion wave
+    angles = np.array([42.5, 45, 47.5])/180*np.pi
+    for angle in angles:
+        x = -np.cos(angle)
+        y = np.sin(angle)
+        ax[3].plot([0, x], [0, y], 'k', lw=0.75)
+    ax[3].text(-np.cos(np.pi/4), np.cos(np.pi/4), r'$\lambda_1$', va='bottom', ha='right')
+
+    # Contact discontinuity
+    angle = 7*np.pi/16
+    ax[3].plot([0, np.cos(angle)], [0, np.sin(angle)], '--k', lw=1)
+    ax[3].text(np.cos(angle), np.sin(angle), r'$\lambda_2$', va='bottom', ha='center')
+
+    # Expansion wave
+    angles = np.array([42.5, 45, 47.5])/180*np.pi
+    for angle in angles:
+        x = np.cos(angle)
+        y = np.sin(angle)
+        ax[3].plot([0, x], [0, y], 'k', lw=0.75)
+    ax[3].text(np.cos(np.pi/4), np.cos(np.pi/4), r'$\lambda_3$', va='bottom', ha='left')
+
+    counter = 0
+    for fig, ax_ in zip(figs, ax):
+        ax_.arrow(0, 0, 0, 0.9, 
+                  fc='k', lw=0.5, head_width=0.05, head_length=0.05, 
+                  length_includes_head=True, color='k')
+        ax_.arrow(-0.9, 0, 1.8, 0, 
+                  fc='k', lw=0.5, head_width=0.05, head_length=0.05, 
+                  length_includes_head=True, color='k')
+
+        ax_.text(0, 0.9, '$t$', va='bottom', ha='center')
+        ax_.text(0.9, 0, '$x$', va='center')
+        ax_.set_xlim(-0.9, 0.9)
+        ax_.set_aspect('equal')
+        fig, ax_ = remove_axes(fig, ax_)
+
+        fig.tight_layout()
+        fig.savefig(f'euler_characteristics_{counter}.pdf')
+        counter += 1
+    plt.show()
+
+def muscl_scheme():
+    um2 = 0.4
+    um1 = 0.5
+    ui = 0.75
+    up1 = 0.6
+
+    di = ui - um1
+    dip1 = up1 - ui
+    dim1 = um1 - um2
+
+    url = ui + 0.5*di
+    urr = up1 - 0.5*dip1
+
+    ulr = ui - 0.5*di
+    ull = um1 + 0.5*dim1
+
+    u0l = um1 - 0.5*dim1 
+    u0r = up1 + 0.5*dip1
+    fig, ax = plt.subplots(figsize=(5.4, 3.5))
+
+    x = [0, 1/3, 2/3, 1]
+    ax.hlines([um1, ui, up1], x[:-1], x[1:], lw=1.4)
+    ax.plot(np.array([[0, 1/3], [1/3, 2/3], [2/3, 1]]).T, 
+            np.array([[u0l, ull], [ulr, url], [urr, u0r]]).T, '_--k', lw=1)
+
+    ax.plot([x[2], x[2]], [0, url], 'k--', lw=0.75)
+    ax.vlines(x, 0, [um1, ui, ui, up1], lw=1)
+    xc = np.array(x[:-1]) + 1/6
+    ax.plot(xc, [um1, ui, up1], 'ok', lw=1)
+
+    ax.text(x[1]-0.01, ull, r'$u_{i-1/2}^L$', va='bottom', ha='right')
+    ax.text(x[1]+0.015, ulr-0.02, r'$u_{i-1/2}^R$', va='center', ha='left')
+
+    ax.text(x[2]-0.01, url, r'$u_{i+1/2}^L$', va='bottom', ha='right')
+    ax.text(x[2]+0.01, urr, r'$u_{i+1/2}^R$', va='bottom', ha='left')
+
+    ax.text(xc[0], um1+0.01, r'$u_{i-1}$', va='bottom', ha='center')
+    ax.text(xc[1], ui+0.01, r'$u_i$', va='bottom', ha='center')
+    ax.text(xc[2], up1+0.01, r'$u_{i+1}$', va='bottom', ha='center')
+
+    ax.set_ylim(0, 1)
+    ax.set_xlim(-0.1, 1.1)
+    fig, ax = convert_to_graph(fig, ax, use_min_yaxis=True)
+    plt.xticks(x[1:3],[r'$x_{i-1/2}$', r'$x_{i+1/2}$'])
+    fig.savefig('muscl_scheme.pdf')
+
+def multigrid():
+    fig, ax = plt.subplots(figsize=(7, 3))
+
+    # V-cycle
+    d = 0.25
+    x = np.arange(0, 5*d, d) 
+    y = [1, 0.5, 0, 0.5, 1]
+    ax.plot(x, y, 'ko-')
+
+    # W-cycle
+    x0 = 1.5
+    x = np.arange(0, 7*d, d) + x0
+    y = [1, 0.5, 0, 0.5, 0, 0.5, 1]
+    ax.plot(x, y, 'ko-')
+
+    # Full-cycle
+    x0 = 3.2
+    x = np.arange(0, 9*d, d) + x0
+    y = [0, 0.5, 0, 0.5, 1, 0.5, 0, 0.5, 1]
+    ax.plot(x, y, 'ko-')
+
+    ax.hlines([0, 0.5, 1], -0.25, max(x)+0.25, ls='--', lw=0.75)
+    ax.set_ylim(-0.1, 1.25)
+    ax.text(0.5, 1.1, 'W-cycle', ha='center')
+    ax.text(2.25, 1.1, 'V-cycle', ha='center')
+    ax.text(4.25, 1.1, 'Full cycle', ha='center')
+
+    fig, ax = remove_axes(fig, ax)
+    plt.yticks([1.0, 0.5, 0], [r'$\Omega_h$', r'$\Omega_{2h}$', r'$\Omega_{4h}$'])
+    fig.savefig('multigrid.pdf')
+    # plt.show()
+
+def lid_cavity_flow():
+    fig, ax = plt.subplots(figsize=(6, 5))
+    ax.set_aspect('equal')
+
+
+    rectangle = plt.Rectangle((-0.25, 1), 1.5, 0.05, facecolor='k', edgecolor='k')
+    ax.add_artist(rectangle)
+    rectangle = plt.Rectangle((-0.25, 1), 1.5, -1.2,  hatch='///', facecolor='#ededed', edgecolor='#dbdbdb')
+    ax.add_artist(rectangle)
+    rectangle = plt.Rectangle((-0.25, 0.89), 0.14, -1.1, facecolor='white', edgecolor=None)
+    ax.add_artist(rectangle)
+    rectangle = plt.Rectangle((1.25, 0.89), -0.14, -1.1, facecolor='white', edgecolor=None)
+    ax.add_artist(rectangle)
+    rectangle = plt.Rectangle((-0.25, -0.11), 1.5, -1.1, facecolor='white', edgecolor=None)
+    ax.add_artist(rectangle)
+    rectangle = plt.Rectangle((0, 1), 1, -1, facecolor='white', edgecolor=None)
+    ax.add_artist(rectangle)
+    # ax.plot([-0.25, 1.25], [1, 1])
+    # ax.plot([-0.25, 1.25], [1.05, 1.05])
+
+    ax.plot([0, 0, 1, 1], [1, 0, 0, 1], 'k')
+
+    ax.arrow(-0.05, 0, 0, 1,  fc='k', lw=0.5, head_width=0.03, head_length=0.04,length_includes_head=True, color='k')
+    ax.arrow(-0.05, 1, 0, -1,  fc='k', lw=0.5, head_width=0.03, head_length=0.04,length_includes_head=True, color='k')
+    ax.arrow(0, -0.05, 1, 0,  fc='k', lw=0.5, head_width=0.03, head_length=0.04,length_includes_head=True, color='k')
+    ax.arrow(1, -0.05, -1, 0,  fc='k', lw=0.5, head_width=0.03, head_length=0.04,length_includes_head=True, color='k')
+
+    ax.arrow(0.4, 1.075, 0.2, 0,  fc='k', lw=0.5, head_width=0.03, head_length=0.04,length_includes_head=True, color='k')
+
+    ax.text(-0.055, 0.5, '$L_y$', ha='right', va='center')
+    ax.text(0.5, -0.065, '$L_x$', ha='center', va='top')
+    ax.text(0.5, 1.075, '$u_w$', ha='center', va='bottom')
+
+    ax.text(0.99, 0.5, '$u_b = 0$\n$v_b = 0$', ha='right', va='center')
+    ax.text(0.5, 0.01, '$u_b = 0$\n$v_b = 0$', ha='center', va='bottom')
+    ax.text(0.01, 0.5, '$u_b = 0$\n$v_b = 0$', ha='left', va='center')
+    ax.text(0.5, 0.99, '$u_b = u_w$\n$v_b = 0$', ha='center', va='top')
+    ax.set_xlim(-0.25, 1.25)
+    ax.set_ylim(-0.25, 1.15)
+    
+    fig, ax = remove_axes(fig, ax)
+    fig.savefig('cavity_flow.pdf')
 
 def main():
 
@@ -2014,7 +2410,20 @@ def main():
     # riem_linacoustics_u0()
     # riem_linacoustics_sol()
 
-    itermethods_sor()
+    # itermethods_sor()
+
+    # Nonlinear hyperbolic problems
+    # nlsc_characteristics_example()
+    # nlsc_entropy_condition()
+    # nlsc_example_u0()
+    # nlsc_example_u1()
+    # sod_shock_tube()
+    # sod_shock_tube_solution()
+    # euler_characteristics()
+
+    # muscl_scheme()
+    # multigrid()
+    lid_cavity_flow()
 
 if __name__ == '__main__':
     plt.style.use('style.mplstyle')

@@ -6,7 +6,7 @@ font.size : 13
 font.family : serif
 font.serif : Times New Roman
 text.usetex : True
-text.latex.preamble :  \usepackage{txfonts}
+text.latex.preamble :  \usepackage{amsmath} \usepackage{txfonts}
 savefig.bbox : tight
 savefig.pad_inches: 0.01
 

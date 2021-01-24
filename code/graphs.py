@@ -2292,10 +2292,10 @@ def multigrid():
     y = [0, 0.5, 0, 0.5, 1, 0.5, 0, 0.5, 1]
     ax.plot(x, y, 'ko-')
 
-    ax.hlines([0, 0.5, 1], -0.25, max(x)+0.25, ls='--', lw=0.75)
+    ax.hlines([0, 0.5, 1], -0.25, max(x)+0.25, 'k',  ls='--', lw=0.75)
     ax.set_ylim(-0.1, 1.25)
-    ax.text(0.5, 1.1, 'W-cycle', ha='center')
-    ax.text(2.25, 1.1, 'V-cycle', ha='center')
+    ax.text(0.5, 1.1, 'V-cycle', ha='center')
+    ax.text(2.25, 1.1, 'W-cycle', ha='center')
     ax.text(4.25, 1.1, 'Full cycle', ha='center')
 
     fig, ax = remove_axes(fig, ax)

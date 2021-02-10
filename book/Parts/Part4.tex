@@ -1863,8 +1863,8 @@ Once the mesh generation is completed, we need to save it in a format that can b
     \label{fig6:gmsh20}
 \end{figure}
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-\section*{Run Tutorial In Chapter\ref{ch:Inviscid NACA 0012} Using New Mesh}
-To demonstrate how to use this mesh, we will repeat the tutorial in Section (\ref{ch:Inviscid NACA 0012}) but using this new NACA 2312 mesh. To choose the new mesh, and to change the names of boundary conditions, you can open the SU2 configuration (\texttt{.cfg}) file. For example, open the \texttt{inv\_NACA 0012.cfg} file and search for \texttt{INPUT/OUTPUT INFORMATION}. According to Figure \ref{fig6:gmsh24}, in \texttt{MESH\_FILENAME} under \texttt{INPUT/OUTPUT INFORMATION}, you can change the filename of mesh you are going to use, in this case using \texttt{naca2312.su2}.
+\section*{Run Tutorial In Chapter \ref{ch:Inviscid NACA 0012} Using the New Mesh}
+To demonstrate how to use this mesh, we will repeat the tutorial in Chapter \ref{ch:Inviscid NACA 0012} but using this new NACA 2312 mesh. To choose the new mesh, and to change the names of boundary conditions, you can open the SU2 configuration (\texttt{.cfg}) file. For example, open the \texttt{inv\_NACA 0012.cfg} file and search for \texttt{INPUT/OUTPUT INFORMATION}. According to Figure \ref{fig6:gmsh24}, in \texttt{MESH\_FILENAME} under \texttt{INPUT/OUTPUT INFORMATION}, you can change the filename of mesh you are going to use, in this case using \texttt{naca2312.su2}.
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.85\textwidth]{tut06/gmsh24.pdf}
@@ -1872,7 +1872,7 @@ To demonstrate how to use this mesh, we will repeat the tutorial in Section (\re
     \label{fig6:gmsh24}
 \end{figure}
 
-Additionally, if you would like to use a different name for the physical boundaries in the Gmsh, you should change the boundary names in the configuration file as well. To do this, search for \texttt{BOUNDARY CONDITION DEFINITION} in \texttt{inv\_NACA 0012.cfg}. As shown in Figure \ref{fig6:gmsh25}, you can change the names of your boundaries to be the same as those used in Gmsh when you defined your Physical Lines/Curves. In this case, \texttt{MARKER\_EULER} and \texttt{MARKER\_FAR} correspond to the wall boundary for the upper and lower surfaces of the airfoil, and the far-field boundary, respectively. After having these changes, you can continue with the rest of the steps, similar to Section (\ref{ch:Inviscid NACA 0012}).
+Additionally, if you would like to use a different name for the physical boundaries in the Gmsh, you should change the boundary names in the configuration file as well. To do this, search for \texttt{BOUNDARY CONDITION DEFINITION} in \texttt{inv\_NACA 0012.cfg}. As shown in Figure \ref{fig6:gmsh25}, you can change the names of your boundaries to be the same as those used in Gmsh when you defined your Physical Lines/Curves. In this case, \texttt{MARKER\_EULER} and \texttt{MARKER\_FAR} correspond to the wall boundary for the upper and lower surfaces of the airfoil, and the far-field boundary, respectively. After having these changes, you can continue with the rest of the steps, similar to Chapter \ref{ch:Inviscid NACA 0012}.
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.85\textwidth]{tut06/gmsh25.pdf}
@@ -1881,19 +1881,19 @@ Additionally, if you would like to use a different name for the physical boundar
 \end{figure}
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 \section*{Questions}
-1. Run the provided default NACA2312 test case at the provided Ma = 0.8.
+1. Run the provided default NACA2312 test case at the provided $Ma = 0.8$.
 \begin{enumerate}[label=(\alph*)]
     \item Plot and comment on the mesh.
     \item Plot and comment on the pressure contours around the airfoil.
     \item Plot and comment on the pressure coefficient on the surface of the airfoil.
 \end{enumerate}
-2. Re-run the default NACA2312 case but change the Mach number to Ma = 0.3 and run several simulations using alpha = 0, 2, 4, 6, 8, 10, 12, 14, 16 degrees.
+2. Re-run the default NACA2312 case but change the Mach number to $Ma = 0.3$ and run several simulations using alpha = 0, 2, 4, 6, 8, 10, 12, 14, 16 degrees.
 \begin{enumerate}[label=(\alph*)]
-    \item Plots Cl vs alpha alongside the provided experimental data\cite{ladson1988effects} in the test case folder.
-    \item Repeat 1.b with Ma = 0.3 for the alpha = 0, 8, 16 degree cases.
+    \item Plot $C_l$ vs alpha alongside the provided experimental data\cite{ladson1988effects} in the test case folder.
+    \item Repeat 1.b with $Ma = 0.3$ for the alpha = 0, 8, 16 degree cases.
     \item Repeat 1.c with for the alpha = 0, 8, 16 degree cases.
 \end{enumerate}
-3. Discuss the differences exist between the results of this tutorial and the results of Chapter\ref{ch:Inviscid NACA 0012}. What is the major difference and what could be the reason for that?
+3. Discuss the differences between the results of this tutorial and the results in Chapter \ref{ch:Inviscid NACA 0012}. What is the major difference and what could be the reason for that?
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 \chapter{Shock Waves}
